@@ -43,6 +43,15 @@ class ProgramTableRepositoryImp @Inject constructor(
             }
     }
 
+    override suspend fun insertProgramTableAndSetAsActive(programTable: ProgramTable): Resource<ProgramTable> {
+        return try {
+            programTableDao.insertAndSetAsActive(programTable.toEntity())
+            Resource.Success(programTable)
+        }catch (e: Exception){
+            Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
     override suspend fun setProgramTableActive(programTable: ProgramTable): Resource<Unit> {
         return try {
             programTableDao.setProgramTableActive(programTable.toEntity())

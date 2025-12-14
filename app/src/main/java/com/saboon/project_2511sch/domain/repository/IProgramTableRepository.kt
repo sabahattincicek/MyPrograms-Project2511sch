@@ -11,6 +11,7 @@ interface IProgramTableRepository {
     fun getActiveProgramTable(): Flow<Resource<ProgramTable>>
     fun getAllProgramTables(): Flow<Resource<List<ProgramTable>>>
 
+    suspend fun insertProgramTableAndSetAsActive(programTable: ProgramTable): Resource<ProgramTable>
     suspend fun setProgramTableActive(programTable: ProgramTable): Resource<Unit>
 
 }
