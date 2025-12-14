@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
             dialog.show(childFragmentManager, "ProgramTableSelectorDialog")
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SET_ACTIVE, this){requestKey, result ->
+        childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SELECT_ACTIVE, this){ requestKey, result ->
             val selectedProgramTable = BundleCompat.getParcelable(result,
                 DialogFragmentProgramTableSelector.RESULT_KEY_PROGRAM_TABLE, ProgramTable::class.java)
             if (selectedProgramTable != null){
