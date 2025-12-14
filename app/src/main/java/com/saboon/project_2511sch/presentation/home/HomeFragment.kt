@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.BundleCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -60,6 +61,17 @@ class HomeFragment : Fragment() {
         binding.imDropdownProgramTableList.setOnClickListener {
             val dialog = DialogFragmentProgramTableSelector.newInstance(null)
             dialog.show(childFragmentManager, "ProgramTableSelectorDialog")
+        }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SET_ACTIVE, this){requestKey, result ->
+            val selectedProgramTable = BundleCompat.getParcelable(result,
+                DialogFragmentProgramTableSelector.RESULT_KEY_PROGRAM_TABLE, ProgramTable::class.java)
+            if (selectedProgramTable != null){
+                // TODO: make selected programTable active and reload ui
+            }
+            else{
+                // TODO: get default or recent active programTable from database
+            }
         }
     }
 
