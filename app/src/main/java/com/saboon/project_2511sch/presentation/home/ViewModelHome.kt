@@ -6,6 +6,8 @@ import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.usecase.home.GetHomeDisplayItemsUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.GetActiveProgramTableUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.GetAllProgramTablesUseCase
+import com.saboon.project_2511sch.domain.usecase.programtable.SetAllProgramTablesInactiveUseCase
+import com.saboon.project_2511sch.domain.usecase.programtable.UpdateProgramTableUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +19,9 @@ import javax.inject.Inject
 class ViewModelHome @Inject constructor(
     private val getActiveProgramTableUseCase: GetActiveProgramTableUseCase,
     private val getHomeDisplayItemsUseCase: GetHomeDisplayItemsUseCase,
-    private val getAllProgramTablesUseCase: GetAllProgramTablesUseCase
+    private val getAllProgramTablesUseCase: GetAllProgramTablesUseCase,
+    private val setAllProgramTablesInactiveUseCase: SetAllProgramTablesInactiveUseCase,
+    private val updateProgramTableUseCase: UpdateProgramTableUseCase
 ): ViewModel() {
 
     private val _activeProgramTableState = MutableStateFlow<Resource<ProgramTable>>(Resource.Idle())
@@ -39,6 +43,22 @@ class ViewModelHome @Inject constructor(
                 }
             }catch (e: Exception){
                 _activeProgramTableState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+            }
+        }
+    }
+
+    fun setProgramTableActive(programTable: ProgramTable){
+        viewModelScope.launch {
+            try {
+                val result = setAllProgramTablesInactiveUseCase.invoke()
+                if (result is Resource.Success){
+                    val updatedProgramTable = programTable.copy(
+                        isActive = true
+                    )
+                    updateProgramTableUseCase.invoke(updatedProgramTable)
+                }
+            }catch (e: Exception){
+
             }
         }
     }
