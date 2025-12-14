@@ -58,7 +58,8 @@ class HomeFragment : Fragment() {
 
 
         binding.imDropdownProgramTableList.setOnClickListener {
-
+            val dialog = DialogFragmentProgramTableSelector.newInstance(null)
+            dialog.show(childFragmentManager, "ProgramTableSelectorDialog")
         }
     }
 
