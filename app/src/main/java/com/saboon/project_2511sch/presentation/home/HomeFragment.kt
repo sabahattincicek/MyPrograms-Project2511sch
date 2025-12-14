@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
             viewModelHome.getAllProgramTables()
         }
 
-        // Use viewLifecycleOwner for safety. This ensures the listener only works when the view is active.
+
         childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SELECT_ACTIVE, viewLifecycleOwner) { requestKey, result ->
             Log.d(tag, "Result received from ProgramTableSelectorDialog with key: $requestKey")
             val selectedProgramTable = BundleCompat.getParcelable(result,
@@ -72,7 +72,6 @@ class HomeFragment : Fragment() {
             if (selectedProgramTable != null) {
                 Log.i(tag, "Program table selected: '${selectedProgramTable.title}'. Setting it as active and refreshing.")
                 viewModelHome.setProgramTableActive(selectedProgramTable)
-                viewModelHome.getActiveProgramTable()
             } else {
                 Log.w(tag, "Received a null program table from the dialog.")
                 // TODO: get default or recent active programTable from database

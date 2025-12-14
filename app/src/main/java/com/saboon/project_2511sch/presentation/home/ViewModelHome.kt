@@ -6,12 +6,13 @@ import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.usecase.home.GetHomeDisplayItemsUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.GetActiveProgramTableUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.GetAllProgramTablesUseCase
-import com.saboon.project_2511sch.domain.usecase.programtable.SetAllProgramTablesInactiveUseCase
+import com.saboon.project_2511sch.domain.usecase.programtable.SetProgramTableActiveUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.UpdateProgramTableUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +21,7 @@ class ViewModelHome @Inject constructor(
     private val getActiveProgramTableUseCase: GetActiveProgramTableUseCase,
     private val getHomeDisplayItemsUseCase: GetHomeDisplayItemsUseCase,
     private val getAllProgramTablesUseCase: GetAllProgramTablesUseCase,
-    private val setAllProgramTablesInactiveUseCase: SetAllProgramTablesInactiveUseCase,
+    private val setProgramTableActiveUseCase: SetProgramTableActiveUseCase,
     private val updateProgramTableUseCase: UpdateProgramTableUseCase
 ): ViewModel() {
 
@@ -50,13 +51,7 @@ class ViewModelHome @Inject constructor(
     fun setProgramTableActive(programTable: ProgramTable){
         viewModelScope.launch {
             try {
-                val result = setAllProgramTablesInactiveUseCase.invoke()
-                if (result is Resource.Success){
-                    val updatedProgramTable = programTable.copy(
-                        isActive = true
-                    )
-                    updateProgramTableUseCase.invoke(updatedProgramTable)
-                }
+                setProgramTableActiveUseCase.invoke(programTable)
             }catch (e: Exception){
 
             }
@@ -67,9 +62,8 @@ class ViewModelHome @Inject constructor(
         viewModelScope.launch {
             try {
                 _programTablesState.value = Resource.Loading()
-                getAllProgramTablesUseCase.invoke().collect { resource ->
-                    _programTablesState.value = resource
-                }
+                val result = getAllProgramTablesUseCase.invoke().first()
+                _programTablesState.value = result
             }catch (e: Exception){
                 _programTablesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
             }

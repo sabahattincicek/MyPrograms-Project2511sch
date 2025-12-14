@@ -9,6 +9,7 @@ class InsertNewProgramTableUseCase @Inject constructor(
     private val programTableRepository: IProgramTableRepository
 ){
     suspend operator fun invoke(programTable: ProgramTable): Resource<ProgramTable>{
-        return programTableRepository.insertProgramTableAndSetAsActive(programTable)
+        val activeProgramTable = programTable.copy(isActive = true)
+        return programTableRepository.insertProgramTableAndSetAsActive(activeProgramTable)
     }
 }
