@@ -53,14 +53,14 @@ class HomeFragment : Fragment() {
         setupRecyclerAdapter()
         observeActiveProgramTableState()
         observeDisplayItemsState()
+        observeAllProgramTablesState()
 
         Log.d(tag, "onViewCreated: Requesting active program table from ViewModel.")
         viewModelHome.getActiveProgramTable()
 
 
         binding.imDropdownProgramTableList.setOnClickListener {
-            val dialog = DialogFragmentProgramTableSelector.newInstance(null)
-            dialog.show(childFragmentManager, "ProgramTableSelectorDialog")
+            viewModelHome.getAllProgramTables()
         }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SELECT_ACTIVE, this){ requestKey, result ->
@@ -104,6 +104,26 @@ class HomeFragment : Fragment() {
                                 viewModelHome.getDisplayItems(programTable)
                             } else {
                                 Log.w(tag, "observeActiveProgramTableState: Success, but data is null.")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeAllProgramTablesState(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelHome.programTableState.collect { resource ->
+                    when(resource) {
+                        is Resource.Error<*> -> {}
+                        is Resource.Idle<*> -> {}
+                        is Resource.Loading<*> -> {}
+                        is Resource.Success<*> -> {
+                            if (resource.data != null){
+                                val dialog = DialogFragmentProgramTableSelector.newInstance(resource.data)
+                                dialog.show(childFragmentManager, "ProgramTableSelectorDialog")
                             }
                         }
                     }
