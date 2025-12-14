@@ -67,7 +67,8 @@ class HomeFragment : Fragment() {
             val selectedProgramTable = BundleCompat.getParcelable(result,
                 DialogFragmentProgramTableSelector.RESULT_KEY_PROGRAM_TABLE, ProgramTable::class.java)
             if (selectedProgramTable != null){
-                // TODO: make selected programTable active and reload ui
+                viewModelHome.setProgramTableActive(selectedProgramTable)
+                viewModelHome.getActiveProgramTable()
             }
             else{
                 // TODO: get default or recent active programTable from database
