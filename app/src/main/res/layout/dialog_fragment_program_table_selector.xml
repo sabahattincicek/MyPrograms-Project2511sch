@@ -18,6 +18,8 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            app:navigationIconTint="?attr/colorOnSurface"
             android:minHeight="?attr/actionBarSize"
             app:title="@string/select_program_table" />
     </com.google.android.material.appbar.AppBarLayout>
