@@ -34,6 +34,13 @@ interface ProgramTableDao {
     @Query("UPDATE program_tables SET is_active = 1 WHERE id = :id")
     suspend fun setActiveById(id: String)
 
+
+    @Transaction
+    suspend fun insertAndSetAsActive(programTableEntity: ProgramTableEntity){
+        setAllToInactive()
+        insert(programTableEntity)
+    }
+
     @Transaction
     suspend fun setProgramTableActive(programTableEntity: ProgramTableEntity) {
         setAllToInactive()
