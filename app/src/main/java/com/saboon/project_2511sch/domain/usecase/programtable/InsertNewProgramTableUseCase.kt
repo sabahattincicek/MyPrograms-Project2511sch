@@ -9,8 +9,6 @@ class InsertNewProgramTableUseCase @Inject constructor(
     private val programTableRepository: IProgramTableRepository
 ){
     suspend operator fun invoke(programTable: ProgramTable): Resource<ProgramTable>{
-        val result = programTableRepository.setInactiveAllProgramTable()
-        if (result is Resource.Error) return Resource.Error(result.message?:"setAllProgramTableToInactive: Unknown Error.")
-        return programTableRepository.insertProgramTable(programTable)
+        return programTableRepository.insertProgramTableAndSetAsActive(programTable)
     }
 }
