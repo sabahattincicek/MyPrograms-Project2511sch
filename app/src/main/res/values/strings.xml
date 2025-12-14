@@ -125,6 +125,7 @@
     <string name="schedule_updated_successfully">Schedule updated successfully.</string>
     <string name="course_deleted_successfully">Course deleted successfully.</string>
     <string name="select_date">Select Date</string>
+    <string name="select_program_table">Select a program table</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>

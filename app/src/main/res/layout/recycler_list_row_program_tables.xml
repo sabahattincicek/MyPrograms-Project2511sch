@@ -20,12 +20,14 @@
             android:id="@+id/tvProgramTableTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Program Title"
             android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tvProgramTableDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Program Description"
             android:textSize="14sp"/>
     </LinearLayout>
 
