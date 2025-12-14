@@ -1,0 +1,34 @@
+package com.saboon.project_2511sch.util
+
+import java.util.Date
+
+object IdGenerator {
+
+    fun generateUserId(userName: String = "userName"): String{
+        val dateMillis = System.currentTimeMillis().toString()
+        val date = System.currentTimeMillis().toFormattedString("yyyyMMdd_HHmmss")
+        val uuid = java.util.UUID.randomUUID().toString()
+        return "${dateMillis}_${date}_${userName}_${uuid}"
+    }
+
+    fun generateProgramTableId(programTableTitle: String): String{
+        val dateMillis = System.currentTimeMillis().toString()
+        val date = System.currentTimeMillis().toFormattedString("yyyyMMdd_HHmmss")
+        val uuid = java.util.UUID.randomUUID().toString()
+        return "${dateMillis}_${date}_${programTableTitle}_${uuid}"
+    }
+
+    fun generateCourseId(courseTitle: String): String{
+        val dateMillis = System.currentTimeMillis().toString()
+        val date = System.currentTimeMillis().toFormattedString("yyyyMMdd_HHmmss")
+        val uuid = java.util.UUID.randomUUID().toString()
+        return "${dateMillis}_${date}_${courseTitle}_${uuid}"
+    }
+
+    fun generateScheduleId(scheduleTitle: String): String{
+        val dateMillis = System.currentTimeMillis().toString()
+        val date = System.currentTimeMillis().toFormattedString("yyyyMMdd_HHmmss")
+        val uuid = java.util.UUID.randomUUID().toString()
+        return "${dateMillis}_${date}_${scheduleTitle}_${uuid}"
+    }
+}

@@ -1,0 +1,28 @@
+# Android Studio - Sık Kullanılan Kısayollar (Windows/Linux | macOS)
+
+## Satır ve İmleç Yönetimi
+- İmlecin olduğu satırı yukarı/aşağı taşıma: Alt + Shift + Yukarı/Aşağı Ok | ⌥ + ⇧ + Yukarı/Aşağı Ok
+- Satırın altına yeni boş satır ekleme: Shift + Enter | ⇧ + ↩
+- Satırın üstüne yeni boş satır ekleme: Ctrl + Alt + Enter | ⌥ + ⌘ + ↩
+- Satırı kopyalama (çoğaltma): Ctrl + D | ⌘ + D
+- Satırı silme: Ctrl + Y | ⌘ + ⌫ (Backspace)
+
+## Kod Düzenleme ve Navigasyon
+- Kodu yeniden formatlama (biçimlendirme): Ctrl + Alt + L | ⌥ + ⌘ + L
+- Import'ları optimize etme (gereksizleri silme): Ctrl + Alt + O | ⌃ + ⌥ + O
+- Yeniden adlandırma (Refactor -> Rename): Shift + F6 | ⇧ + F6
+- Tanıma gitme (Go to Declaration): Ctrl + B veya Ctrl + Click | ⌘ + B veya ⌘ + Click
+- Kullanımları bulma (Find Usages): Alt + F7 | ⌥ + F7
+- Hata düzeltme ve önerileri gösterme (Quick Fix): Alt + Enter | ⌥ + ↩
+- Satırı yoruma alma/çıkarma: Ctrl + / | ⌘ + /
+- Seçili bloğu yoruma alma/çıkarma: Ctrl + Shift + / | ⌥ + ⌘ + /
+
+## Arama
+- Her yerde arama (Search Everywhere): Çift Shift (Shift'e iki kez bas)
+- Dosya içinde arama: Ctrl + F | ⌘ + F
+- Dosyalar arasında metin arama (Find in Files): Ctrl + Shift + F | ⇧ + ⌘ + F
+
+## Genel
+- Son düzenleme yapılan yere git: Ctrl + Shift + Backspace | ⇧ + ⌘ + ⌫
+- Parametre bilgilerini göster: Ctrl + P | ⌘ + P
+- Bir seçimi genişletme/daraltma: Ctrl + W / Ctrl + Shift + W | ⌥ + Yukarı Ok / ⌥ + Aşağı Ok

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:navigationIcon="@drawable/baseline_close_24"
+                    app:navigationIconTint="?attr/colorOnSurface"
+                    app:title="@string/program_table" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/program_table"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="5dp"
+                        android:background="?attr/colorOnSurface" />
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:hint="@string/hint_title"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:hint="@string/hint_description"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:lines="4"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/color"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="5dp"
+                        android:background="?attr/colorOnSurface" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_radioGroup_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radio_color1"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:checked="true"
+                        android:button="@null"
+                        android:background="@drawable/bg_radiobutton_color_picker_color_custom_1"
+                        android:textAlignment="center"
+                        android:text="@string/modelColor_1"
+                        android:tag="modelColor_1"
+                        android:layout_weight="1"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_color2"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:button="@null"
+                        android:background="@drawable/bg_radiobutton_color_picker_color_custom_2"
+                        android:textAlignment="center"
+                        android:text="@string/modelColor_2"
+                        android:tag="modelColor_2"
+                        android:layout_weight="1"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_color3"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:button="@null"
+                        android:background="@drawable/bg_radiobutton_color_picker_color_custom_3"
+                        android:textAlignment="center"
+                        android:text="@string/modelColor_3"
+                        android:tag="modelColor_3"
+                        android:layout_weight="1"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_color4"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:button="@null"
+                        android:background="@drawable/bg_radiobutton_color_picker_color_custom_4"
+                        android:textAlignment="center"
+                        android:text="@string/modelColor_4"
+                        android:tag="modelColor_4"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_radioGroup_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radio_color5"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:checked="false"
+                        android:button="@null"
+                        android:background="@drawable/bg_radiobutton_color_picker_color_custom_5"
+                        android:textAlignment="center"
+                        android:text="@string/modelColor_5"
+                        android:tag="modelColor_5"
+                        android:layout_weight="1"/>
+
+                    <RadioButton
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:id="@+id/radio_color6"
+                        android:button="@null"
+                        android:background="@drawable/bg_radiobutton_color_picker_color_custom_6"
+                        android:textAlignment="center"
+                        android:text="@string/modelColor_6"
+                        android:tag="modelColor_6"
+                        android:layout_weight="1"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_color7"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:button="@null"
+                        android:background="@drawable/bg_radiobutton_color_picker_color_custom_7"
+                        android:textAlignment="center"
+                        android:text="@string/modelColor_7"
+                        android:tag="modelColor_7"
+                        android:layout_weight="1"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_color8"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:button="@null"
+                        android:background="@drawable/bg_radiobutton_color_picker_color_custom_8"
+                        android:textAlignment="center"
+                        android:text="@string/modelColor_8"
+                        android:tag="modelColor_8"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="@android:string/cancel" />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="@string/save" />
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

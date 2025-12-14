@@ -1,0 +1,145 @@
+<resources>
+    <string name="app_name">My Programs</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Create User Screen -->
+    <string name="app_logo">App Logo</string>
+    <string name="title_create_user">Create User</string>
+    <string name="subtitle_create_user">Enter your details to get started</string>
+    <string name="subtitle_sign_in_user">Welcome back to My Programs</string>
+
+    <!-- Input Fields -->
+    <string name="hint_first_name">First Name</string>
+    <string name="hint_last_name">Last Name</string>
+    <string name="hint_email">Email (Optional)</string>
+
+    <!-- Buttons -->
+    <string name="btn_create_local_user">Create Local User</string>
+    <string name="btn_create_remote_user">Create Remote User</string>
+    <string name="btn_already_have_account">Already have an account? Sign In</string>
+
+    <!-- Descriptions -->
+    <string name="text_or">OR</string>
+    <string name="description_remote_user">Want to synchronize your data across multiple devices? Create a remote account to securely backup your timetables, exams, and schedules in the cloud and access them anywhere, anytime.</string>
+
+    <!-- Validation Messages -->
+    <string name="error_first_name_required">First name is required</string>
+    <string name="error_last_name_required">Last name is required</string>
+    <string name="error_invalid_email">Please enter a valid email</string>
+    <string name="btn_create_account">Create Account</string>
+    <string name="hint_second_name">Second Name</string>
+    <string name="hint_organization">Organization</string>
+    <string name="organization_helper_text">School, Workplace, Company, etc.</string>
+    <string name="agree_terms_condition">By continuing, you agree to the&#160;</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="already_have_account">Already have Account</string>
+    <string name="sign_in">Sign In</string>
+    <string name="if_want_sync">Create an account to store your data on a remote server and access it across all your devices. Click for more info.</string>
+    <string name="or">OR</string>
+    <string name="more_info">More info</string>
+    <string name="title_create_remote_user">Create Remote User</string>
+    <string name="email">E Mail</string>
+    <string name="hint_user_name">User Name</string>
+    <string name="password">Password</string>
+    <string name="password_helper">At least 6 character</string>
+    <string name="sign_up_with_google">SIGN UP WITH GOOGLE</string>
+    <string name="title_signin_remote_user">Sign In Remote User</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="hint_user_role">Role</string>
+    <string name="user_role_helper_text">Student, Teacher, etc.</string>
+    <string name="appBarTitle_programTables">Program Tables</string>
+    <string name="addProgram">Add Program Table</string>
+    <string name="more">More</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="Title">Title</string>
+    <string name="hint_title">Title</string>
+    <string name="cance">Cancel</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="youShoulTypeATitle">You should type a title.</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="enter_a_title_for_your_program_table">Enter a title for your program table</string>
+    <string name="create_new_program_table">Create New Program</string>
+    <string name="enter_a_description_for_your_program_table">Enter description for your program table.</string>
+    <string name="hint_description">Description</string>
+    <string name="color">Color</string>
+    <string name="failed_get_to_user_information">Failed to get user information.</string>
+    <string name="failed_to_get_user_information">Failed to get user information.</string>
+    <string name="program_table_added_successfully">Program table added successfully.</string>
+    <string name="program_tables">Program Tables</string>
+    <string name="home">Home</string>
+    <string name="notes">Notes</string>
+    <string name="profile">Profile</string>
+    <string name="red">Red</string>
+    <string name="yellow">Yellow</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="purple">Purple</string>
+    <string name="brown">Brown</string>
+    <string name="cyan">Cyan</string>
+    <string name="orange">Orange</string>
+    <string name="program_table">Program Table</string>
+    <string name="program_table_deleted_successfully">Program table deleted successfully.</string>
+    <string name="program_table_updated_successfully">Program updated successfully.</string>
+    <string name="appBarTitle_courses">Courses</string>
+    <string name="add">Add</string>
+    <string name="create_new_course">Create New Course</string>
+    <string name="course">Course</string>
+    <string name="people">People</string>
+    <string name="hint_people">People</string>
+    <string name="you_could_type_teacher_or_assistant">You could type teacher or assistant etc.</string>
+    <string name="for_multiple_people_separate_with_commas">For multiple people, separate with commas</string>
+    <string name="course_added_successfully">Course added successfully</string>
+    <string name="appBarTitle_courseDetails">Course Details</string>
+    <string name="schedules">Schedules</string>
+    <string name="description">Description</string>
+    <string name="files">Files</string>
+    <string name="modelColor_1">Red</string>
+    <string name="modelColor_2">Blue</string>
+    <string name="modelColor_3">Green</string>
+    <string name="modelColor_4">Yellow</string>
+    <string name="modelColor_5">Orange</string>
+    <string name="modelColor_6">Purple</string>
+    <string name="modelColor_7">Brown</string>
+    <string name="modelColor_8">Cyan</string>
+    <string name="create_new_schedule">Create New Schedule</string>
+    <string name="schedule">Schedule</string>
+    <string name="date">Date</string>
+    <string name="Repeat">Repeat</string>
+    <string name="hint_date">Date</string>
+    <string name="repeat">Repeat</string>
+    <string name="time">Time</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="hint_start">Start</string>
+    <string name="hint_end">End</string>
+    <string name="reminder">Reminder</string>
+    <string name="hint_reminder">Reminder</string>
+    <string name="reminderInfo">You will receive notification.</string>
+    <string name="place">Place</string>
+    <string name="hint_place">Place</string>
+    <string name="schedule_added_successfully">Schedule added successfully.</string>
+    <string name="schedule_updated_successfully">Schedule updated successfully.</string>
+    <string name="course_deleted_successfully">Course deleted successfully.</string>
+    <string name="select_date">Select Date</string>
+
+    <string-array name="recurrence_options">
+        <item>Does not repeat</item>
+        <item>Repeats daily</item>
+        <item>Repeats weekly</item>
+        <item>Repeats monthly</item>
+        <item>Repeats yearly</item>
+    </string-array>
+
+    <string-array name="reminder_options">
+        <item>No reminder</item>
+        <item>On Time</item>
+        <item>10 minutes before</item>
+        <item>30 minutes before</item>
+        <item>1 hour before</item>
+        <item>1 day before</item>
+    </string-array>
+</resources>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/createLocalUserFragment"
+        android:name="com.saboon.project_2511sch.presentation.auth.CreateLocalUserFragment"
+        android:label="fragment_create_local_user"
+        tools:layout="@layout/fragment_create_local_user" >
+        <action
+            android:id="@+id/action_createLocalUserFragment_to_createRemoteUserFragment"
+            app:destination="@id/createRemoteUserFragment" />
+        <action
+            android:id="@+id/action_createLocalUserFragment_to_signinRemoteUserFragment"
+            app:destination="@id/signinRemoteUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createRemoteUserFragment"
+        android:name="com.saboon.project_2511sch.presentation.auth.CreateRemoteUserFragment"
+        android:label="fragment_create_remote_user"
+        tools:layout="@layout/fragment_create_remote_user" >
+        <action
+            android:id="@+id/action_createRemoteUserFragment_to_createLocalUserFragment"
+            app:destination="@id/createLocalUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signinRemoteUserFragment"
+        android:name="com.saboon.project_2511sch.presentation.auth.SigninRemoteUserFragment"
+        android:label="fragment_signin_remote_user"
+        tools:layout="@layout/fragment_signin_remote_user" >
+        <action
+            android:id="@+id/action_signinRemoteUserFragment_to_createLocalUserFragment"
+            app:destination="@id/createLocalUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/programTableFragment"
+        android:name="com.saboon.project_2511sch.presentation.programtable.ProgramTableFragment"
+        android:label="fragment_program_table"
+        tools:layout="@layout/fragment_program_table" >
+        <action
+            android:id="@+id/action_programTableFragment_to_courseFragment"
+            app:destination="@id/courseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/courseFragment"
+        android:name="com.saboon.project_2511sch.presentation.course.CourseFragment"
+        android:label="fragment_course"
+        tools:layout="@layout/fragment_course" >
+        <argument
+            android:name="programTable"
+            app:argType="com.saboon.project_2511sch.domain.model.ProgramTable"/>
+        <action
+            android:id="@+id/action_courseFragment_to_programTableFragment"
+            app:destination="@id/programTableFragment" />
+        <action
+            android:id="@+id/action_courseFragment_to_courseDetailsFragment"
+            app:destination="@id/courseDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.saboon.project_2511sch.presentation.main.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/courseDetailsFragment"
+        android:name="com.saboon.project_2511sch.presentation.course.CourseDetailsFragment"
+        android:label="fragment_course_details"
+        tools:layout="@layout/fragment_course_details" >
+        <action
+            android:id="@+id/action_courseDetailsFragment_to_courseFragment"
+            app:destination="@id/courseFragment" />
+        <argument
+            android:name="programTable"
+            app:argType="com.saboon.project_2511sch.domain.model.ProgramTable" />
+        <argument
+            android:name="course"
+            app:argType="com.saboon.project_2511sch.domain.model.Course" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.saboon.project_2511sch.presentation.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+</navigation>
