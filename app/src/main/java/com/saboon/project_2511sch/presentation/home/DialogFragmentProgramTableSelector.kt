@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -40,6 +41,9 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
 
         setupRecyclerAdapter()
 
+        val programTableList = arguments?.let { BundleCompat.getParcelableArrayList(it, ARG_PROGRAM_TABLE_LIST, ProgramTable::class.java) }
+
+        recyclerAdapterDialogFragmentHome.submitList(programTableList)
 
         binding.topAppBar.setNavigationOnClickListener {
             dismiss()
