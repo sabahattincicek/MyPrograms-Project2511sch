@@ -34,77 +34,81 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(tag, "onCreate: Fragment created.")
+        Log.d(tag, "onCreate: Fragment is being created.")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(tag, "onCreateView: Inflating layout.")
+        Log.d(tag, "onCreateView: Layout is being inflated.")
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(tag, "onViewCreated: View created, setting up UI and observers.")
+        Log.d(tag, "onViewCreated: View has been created. Setting up UI and observers.")
 
         setupRecyclerAdapter()
         observeActiveProgramTableState()
         observeDisplayItemsState()
         observeAllProgramTablesState()
 
-        Log.d(tag, "onViewCreated: Requesting active program table from ViewModel.")
+        Log.i(tag, "onViewCreated: Triggering initial data load by getting active program table.")
         viewModelHome.getActiveProgramTable()
 
-
         binding.imDropdownProgramTableList.setOnClickListener {
+            Log.d(tag, "Dropdown icon clicked. Requesting all program tables to show dialog.")
             viewModelHome.getAllProgramTables()
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SELECT_ACTIVE, this){ requestKey, result ->
+        // Use viewLifecycleOwner for safety. This ensures the listener only works when the view is active.
+        childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SELECT_ACTIVE, viewLifecycleOwner) { requestKey, result ->
+            Log.d(tag, "Result received from ProgramTableSelectorDialog with key: $requestKey")
             val selectedProgramTable = BundleCompat.getParcelable(result,
                 DialogFragmentProgramTableSelector.RESULT_KEY_PROGRAM_TABLE, ProgramTable::class.java)
-            if (selectedProgramTable != null){
+
+            if (selectedProgramTable != null) {
+                Log.i(tag, "Program table selected: '${selectedProgramTable.title}'. Setting it as active and refreshing.")
                 viewModelHome.setProgramTableActive(selectedProgramTable)
                 viewModelHome.getActiveProgramTable()
-            }
-            else{
+            } else {
+                Log.w(tag, "Received a null program table from the dialog.")
                 // TODO: get default or recent active programTable from database
             }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(tag, "onDestroy: Fragment is being destroyed.")
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(tag, "onDestroyView: View is being destroyed, nullifying binding to prevent memory leaks.")
         _binding = null
     }
 
     private fun observeActiveProgramTableState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d(tag, "observeActiveProgramTableState: Collecting active program table state.")
+                Log.d(tag, "Subscribing to activeProgramTable state flow.")
                 viewModelHome.activeProgramTable.collect { result ->
                     when (result) {
                         is Resource.Error<*> -> {
-                            Log.e(tag, "observeActiveProgramTableState: Error - ${result.message}")
+                            Log.e(tag, "ActiveProgramTable State: Error - ${result.message}")
                         }
                         is Resource.Idle<*> -> {
-                            Log.d(tag, "observeActiveProgramTableState: State is Idle.")
+                            Log.d(tag, "ActiveProgramTable State: Idle.")
                         }
                         is Resource.Loading<*> -> {
-                            Log.d(tag, "observeActiveProgramTableState: State is Loading.")
+                            Log.d(tag, "ActiveProgramTable State: Loading.")
                         }
                         is Resource.Success<*> -> {
                             if (result.data != null) {
-                                Log.i(tag, "observeActiveProgramTableState: Success - Active program table found: '${result.data.title}'. Fetching display items.")
+                                Log.i(tag, "ActiveProgramTable State: Success - Found active table: '${result.data.title}'.")
                                 programTable = result.data
                                 binding.tvProgramTable.text = programTable.title
                                 viewModelHome.getDisplayItems(programTable)
                             } else {
-                                Log.w(tag, "observeActiveProgramTableState: Success, but data is null.")
+                                Log.w(tag, "ActiveProgramTable State: Success, but data is null.")
                             }
                         }
                     }
@@ -113,18 +117,28 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun observeAllProgramTablesState(){
+    private fun observeAllProgramTablesState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                Log.d(tag, "Subscribing to allProgramTables state flow.")
                 viewModelHome.programTableState.collect { resource ->
-                    when(resource) {
-                        is Resource.Error<*> -> {}
-                        is Resource.Idle<*> -> {}
-                        is Resource.Loading<*> -> {}
+                    when (resource) {
+                        is Resource.Error<*> -> {
+                            Log.e(tag, "AllProgramTables State: Error - ${resource.message}")
+                        }
+                        is Resource.Idle<*> -> {
+                            Log.d(tag, "AllProgramTables State: Idle.")
+                        }
+                        is Resource.Loading<*> -> {
+                            Log.d(tag, "AllProgramTables State: Loading.")
+                        }
                         is Resource.Success<*> -> {
-                            if (resource.data != null){
+                            if (resource.data != null) {
+                                Log.i(tag, "AllProgramTables State: Success - Received ${resource.data.size} tables. Showing dialog.")
                                 val dialog = DialogFragmentProgramTableSelector.newInstance(resource.data)
-                                dialog.show(childFragmentManager, "ProgramTableSelectorDialog")
+                                dialog.show(childFragmentManager, "ProgramSelectorDialogFragment")
+                            } else {
+                                Log.w(tag, "AllProgramTables State: Success, but data is null.")
                             }
                         }
                     }
@@ -136,21 +150,21 @@ class HomeFragment : Fragment() {
     private fun observeDisplayItemsState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d(tag, "observeDisplayItemsState: Collecting display items state.")
+                Log.d(tag, "Subscribing to displayItems state flow.")
                 viewModelHome.displayItemsState.collect { result ->
                     when (result) {
                         is Resource.Error<*> -> {
-                            Log.e(tag, "observeDisplayItemsState: Error - ${result.message}")
+                            Log.e(tag, "DisplayItems State: Error - ${result.message}")
                         }
                         is Resource.Idle<*> -> {
-                            Log.d(tag, "observeDisplayItemsState: State is Idle.")
+                            Log.d(tag, "DisplayItems State: Idle.")
                         }
                         is Resource.Loading<*> -> {
-                            Log.d(tag, "observeDisplayItemsState: State is Loading.")
+                            Log.d(tag, "DisplayItems State: Loading.")
                         }
                         is Resource.Success<*> -> {
                             val itemCount = result.data?.size ?: 0
-                            Log.i(tag, "observeDisplayItemsState: Success - Submitting $itemCount items to adapter.")
+                            Log.i(tag, "DisplayItems State: Success - Submitting $itemCount items to adapter.")
                             recyclerAdapterHome.submitList(result.data)
                         }
                     }
@@ -160,7 +174,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerAdapter() {
-        Log.d(tag, "setupRecyclerAdapter: Initializing RecyclerAdapterHome.")
+        Log.d(tag, "setupRecyclerAdapter: Initializing and setting up RecyclerAdapterHome.")
         recyclerAdapterHome = RecyclerAdapterHome()
         binding.programRecyclerView.apply {
             adapter = recyclerAdapterHome
