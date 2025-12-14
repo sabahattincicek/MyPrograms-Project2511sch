@@ -66,14 +66,14 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
     }
 
     companion object{
-        const val ARG_PROGRAM_TABLE = "program_table_selector_dialog_fragment_arg_program_table"
+        const val ARG_PROGRAM_TABLE_LIST = "program_table_selector_dialog_fragment_arg_program_table_list"
         const val REQUEST_KEY_SELECT_ACTIVE = "program_table_selector_dialog_fragment_request_key_select_active"
         const val RESULT_KEY_PROGRAM_TABLE = "program_table_selector_dialog_fragment_result_key_program_table"
 
-        fun newInstance(programTable: ProgramTable?): DialogFragmentProgramTableSelector{
+        fun newInstance(programTableList: List<ProgramTable?>): DialogFragmentProgramTableSelector{
             val fragment = DialogFragmentProgramTableSelector()
             fragment.arguments = bundleOf(
-                ARG_PROGRAM_TABLE to programTable
+                ARG_PROGRAM_TABLE_LIST to programTableList
             )
             return fragment
         }
