@@ -43,12 +43,12 @@ class ProgramTableRepositoryImp @Inject constructor(
             }
     }
 
-    override suspend fun setInactiveAllProgramTable(): Resource<Unit> {
-        try {
-            programTableDao.setAllToInactive()
-            return Resource.Success(Unit)
+    override suspend fun setProgramTableActive(programTable: ProgramTable): Resource<Unit> {
+        return try {
+            programTableDao.setProgramTableActive(programTable.toEntity())
+            Resource.Success(Unit)
         }catch (e: Exception){
-            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+            Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
         }
     }
 

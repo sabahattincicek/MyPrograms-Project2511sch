@@ -10,6 +10,7 @@ interface IProgramTableRepository {
     suspend fun updateProgramTable(programTable: ProgramTable) : Resource<Unit>
     fun getActiveProgramTable(): Flow<Resource<ProgramTable>>
     fun getAllProgramTables(): Flow<Resource<List<ProgramTable>>>
-    suspend fun setInactiveAllProgramTable() : Resource<Unit>
+
+    suspend fun setProgramTableActive(programTable: ProgramTable): Resource<Unit>
 
 }
