@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.usecase.home.GetHomeDisplayItemsUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.GetActiveProgramTableUseCase
+import com.saboon.project_2511sch.domain.usecase.programtable.GetAllProgramTablesUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,11 +16,15 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewModelHome @Inject constructor(
     private val getActiveProgramTableUseCase: GetActiveProgramTableUseCase,
-    private val getHomeDisplayItemsUseCase: GetHomeDisplayItemsUseCase
+    private val getHomeDisplayItemsUseCase: GetHomeDisplayItemsUseCase,
+    private val getAllProgramTablesUseCase: GetAllProgramTablesUseCase
 ): ViewModel() {
 
     private val _activeProgramTableState = MutableStateFlow<Resource<ProgramTable>>(Resource.Idle())
     val activeProgramTable = _activeProgramTableState.asStateFlow()
+
+    private val _programTablesState = MutableStateFlow<Resource<List<ProgramTable>>>(Resource.Idle())
+    val programTableState = _programTablesState.asStateFlow()
 
     private val _displayItemsState = MutableStateFlow<Resource<List<HomeDisplayItem>>>(Resource.Idle())
     val displayItemsState = _displayItemsState.asStateFlow()
@@ -34,6 +39,19 @@ class ViewModelHome @Inject constructor(
                 }
             }catch (e: Exception){
                 _activeProgramTableState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+            }
+        }
+    }
+
+    fun getAllProgramTables(){
+        viewModelScope.launch {
+            try {
+                _programTablesState.value = Resource.Loading()
+                getAllProgramTablesUseCase.invoke().collect { resource ->
+                    _programTablesState.value = resource
+                }
+            }catch (e: Exception){
+                _programTablesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
             }
         }
     }
