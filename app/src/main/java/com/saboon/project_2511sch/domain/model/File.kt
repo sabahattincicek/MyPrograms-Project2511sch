@@ -14,7 +14,7 @@ data class File(
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis(),
     val isDeleted: Boolean = false,
-    val version: Int = 1,
+    val rowVersion: Int = 1,
 
     val title: String?,
     val description: String?,
