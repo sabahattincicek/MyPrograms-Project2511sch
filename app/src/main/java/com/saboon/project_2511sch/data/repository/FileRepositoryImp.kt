@@ -1,6 +1,7 @@
 package com.saboon.project_2511sch.data.repository
 
 import com.saboon.project_2511sch.data.local.dao.FileDao
+import com.saboon.project_2511sch.data.local.mapper.toEntity
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.domain.repository.IFileRepository
 import com.saboon.project_2511sch.util.Resource
