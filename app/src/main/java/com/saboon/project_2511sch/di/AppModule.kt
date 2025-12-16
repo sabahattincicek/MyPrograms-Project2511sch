@@ -54,4 +54,8 @@ object AppModule {
     @Provides
     fun provideScheduleDao(database: Database) = database.scheduleDao()
 
+    @Singleton
+    @Provides
+    fun provideFileDao(database: Database) = database.fileDao()
+
 }
