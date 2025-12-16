@@ -73,7 +73,7 @@
                     android:maxLines="1"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginStart="16dp"/>
+                    android:layout_marginStart="8dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -85,14 +85,14 @@
                     android:maxLines="1"
                     android:visibility="visible"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginStart="16dp"/>
+                    android:layout_marginStart="8dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginTop="24dp"
                     android:orientation="horizontal">
 
@@ -129,7 +129,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/baseline_horizontal_rule_24"
-                                android:tint="?attr/colorOnCustomColor1Container"/>
+                                app:tint="?attr/colorOnCustomColor1Container" />
                             <TextView
                                 android:id="@+id/tv_absence_count"
                                 android:layout_width="0dp"
@@ -150,6 +150,49 @@
                 </LinearLayout>
 
             </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="16dp"
+            android:background="?attr/colorPrimary"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:elevation="20dp"
+            app:cardCornerRadius="50dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:paddingStart="3dp"
+                android:paddingEnd="3dp"
+                android:background="?attr/colorCustomColor1Container">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginEnd="3dp"
+                    android:maxLines="1"
+                    android:text="Lorem Ipsum Dolor"
+                    android:textColor="?attr/colorOnCustomColor1Container"/>
+
+                <Button
+                    android:id="@+id/btn_files"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/files"/>
+
+            </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
         <View
