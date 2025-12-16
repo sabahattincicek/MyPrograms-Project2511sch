@@ -28,4 +28,5 @@ abstract class Database(): RoomDatabase() {
     abstract fun courseDao(): CourseDao
     abstract fun scheduleDao(): ScheduleDao
 
+    abstract fun fileDao(): FileDao
 }
