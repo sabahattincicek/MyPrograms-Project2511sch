@@ -5,18 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "files",
-//    // Foreign Key ile Course'a bağlıyoruz.
-//    // Bir Course silindiğinde, ona ait tüm dosyaların da silinmesini sağlıyoruz (onDelete = CASCADE).
-//    foreignKeys = [
-//        ForeignKey(
-//            entity = CourseEntity::class,
-//            parentColumns = ["id"],
-//            childColumns = ["course_id"],
-//            onDelete = ForeignKey.CASCADE
-//        )
-//    ]
-)
+@Entity(tableName = "files")
 data class FileEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "program_table_id") val programTableId: String,
