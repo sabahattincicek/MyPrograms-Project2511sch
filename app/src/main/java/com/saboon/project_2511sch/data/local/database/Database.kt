@@ -3,6 +3,7 @@ package com.saboon.project_2511sch.data.local.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.saboon.project_2511sch.data.local.dao.CourseDao
+import com.saboon.project_2511sch.data.local.dao.FileDao
 import com.saboon.project_2511sch.data.local.dao.ProgramTableDao
 import com.saboon.project_2511sch.data.local.dao.ScheduleDao
 import com.saboon.project_2511sch.data.local.dao.UserDao
