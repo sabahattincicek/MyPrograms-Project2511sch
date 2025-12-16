@@ -11,7 +11,7 @@ class FileRepositoryImp @Inject constructor(
 ): IFileRepository {
     override suspend fun insertFile(file: File): Resource<File> {
        try {
-            fileDao.insert(file)
+            fileDao.insert(file.toEntity())
            return Resource.Success(file)
         }catch (e: Exception){
            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
