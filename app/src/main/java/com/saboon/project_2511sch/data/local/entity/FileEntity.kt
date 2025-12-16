@@ -20,6 +20,7 @@ import androidx.room.PrimaryKey
 data class FileEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "program_table_id") val programTableId: String,
+    @ColumnInfo(name = "course_id") val courseId: String,
     @ColumnInfo(name = "create_by_user_id") val createdByUserId: String? = null,
     @ColumnInfo(name = "updated_by_user_id") val updatedByUserId: String? = null,
 
