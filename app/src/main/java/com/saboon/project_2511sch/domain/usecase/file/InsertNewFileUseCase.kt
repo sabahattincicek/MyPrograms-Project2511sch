@@ -5,7 +5,7 @@ import com.saboon.project_2511sch.domain.repository.IFileRepository
 import com.saboon.project_2511sch.util.Resource
 import javax.inject.Inject
 
-class InsertFileUseCase @Inject constructor(
+class InsertNewFileUseCase @Inject constructor(
     private val fileRepository: IFileRepository
 ) {
     suspend operator fun invoke(file: File): Resource<File>{
