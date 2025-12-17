@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.navArgs
@@ -42,8 +43,27 @@ class FileFragment : Fragment() {
 
         course = args.course
 
-        binding.fabAddNewFile.setOnClickListener {
-            // TODO: get android file selector and select file
+        binding.fabAddNewFile.setOnClickListener { anchorView ->
+            val popup = PopupMenu(requireContext(), anchorView)
+            popup.menuInflater.inflate(R.menu.add_file_menu, popup.menu)
+            popup.setOnMenuItemClickListener { item -> 
+                when(item.itemId){
+                    R.id.action_add_file -> {
+                        // TODO: add necessary code for "add file" option.
+                        true
+                    }
+                    R.id.action_add_note -> {
+                        // TODO: add necessary code for "add note" option
+                        true
+                    }
+                    R.id.action_add_link -> {
+                        // TODO: add necessary code for "add link" option
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popup.show()
         }
     }
 
