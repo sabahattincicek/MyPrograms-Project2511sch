@@ -1,10 +1,13 @@
 package com.saboon.project_2511sch.presentation.file
 
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -13,6 +16,10 @@ import androidx.navigation.fragment.navArgs
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.domain.model.File
+import com.saboon.project_2511sch.util.IdGenerator
+import java.io.FileOutputStream
+import java.io.File as JavaFile
 
 class FileFragment : Fragment() {
 
@@ -23,7 +30,17 @@ class FileFragment : Fragment() {
 
     private lateinit var course: Course
 
-    private val viewModelFile : ViewModel by viewModels()
+    private val viewModelFile : ViewModelFile by viewModels()
+
+    private val selectFileLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()){uri ->
+            if (uri != null){
+                saveFileFromUri(uri)
+            }
+            else{
+
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +72,7 @@ class FileFragment : Fragment() {
             popup.setOnMenuItemClickListener { item -> 
                 when(item.itemId){
                     R.id.action_add_file -> {
-                        // TODO: add necessary code for "add file" option.
+                        selectFileLauncher.launch(arrayOf("*/*"))
                         true
                     }
                     R.id.action_add_note -> {
@@ -70,6 +87,55 @@ class FileFragment : Fragment() {
                 }
             }
             popup.show()
+        }
+    }
+
+    private fun saveFileFromUri(uri: Uri){
+        val contentResolver = requireContext().contentResolver
+        var fileName = "unknown_file"
+        var fileSize = 0L
+
+        // 1. Dosyanın adını ve boyutunu ContentResolver ile sorgula.
+        contentResolver.query(uri, null, null, null).use { cursor ->
+            if (cursor!!.moveToFirst()){
+                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                if (nameIndex != -1) fileName = cursor.getString(nameIndex)
+                if (sizeIndex != -1) fileSize = cursor.getLong(sizeIndex)
+            }
+        }
+
+        try {
+            // 2. Seçilen dosyanın içeriğini okumak için bir InputStream aç.
+            val inputStream = contentResolver.openInputStream(uri)
+
+            // 3. Dosyayı kopyalamak için kendi özel depolama alanımızda yeni bir dosya oluştur.
+            val newFileName = "${System.currentTimeMillis()}_${fileName}"
+            val newFile = JavaFile(requireContext().filesDir, newFileName)
+            val outputStream = FileOutputStream(newFile)
+
+            // 4. İçeriği byte byte kopyala.
+            inputStream?.copyTo(outputStream)
+
+            // 5. Kaynakları serbest bırakmak için akışları kapat.
+            inputStream?.close()
+            outputStream.close()
+
+            // 6. Kopyalama başarılı. Şimdi veritabanına kaydedilecek File nesnesini oluştur.
+            val newFileObject = File(
+                id = IdGenerator.generateFileId(newFile.name),
+                programTableId = course.programTableId,
+                courseId = course.id,
+                title = fileName,
+                description = null,
+                fileType = contentResolver.getType(uri)?: "application/octet-stream",
+                filePath = newFile.absolutePath,
+                sizeInBytes = fileSize
+            )
+
+            viewModelFile.insertNewFile(newFileObject)
+        }catch (e: Exception){
+
         }
     }
 
