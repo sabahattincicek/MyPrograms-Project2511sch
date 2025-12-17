@@ -23,10 +23,12 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Resource
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.FileOutputStream
 import java.io.File as JavaFile
 
+@AndroidEntryPoint
 class FileFragment : Fragment() {
 
     private var _binding: FragmentFileBinding?=null
@@ -72,7 +74,7 @@ class FileFragment : Fragment() {
         setupRecyclerAdapter()
         observeFilesState()
 
-        viewModelFile.getAllFilesByCourseId(course.id)
+//        viewModelFile.getAllFilesByCourseId(course.id)
 
         binding.toolbar.subtitle = course.title
 
