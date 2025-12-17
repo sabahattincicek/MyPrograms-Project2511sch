@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentFileBinding
@@ -42,6 +43,11 @@ class FileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         course = args.course
+        binding.toolbar.subtitle = course.title
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         binding.fabAddNewFile.setOnClickListener { anchorView ->
             val popup = PopupMenu(requireContext(), anchorView)
