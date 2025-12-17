@@ -1,7 +1,9 @@
 package com.saboon.project_2511sch.data.local.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.migration.AutoMigrationSpec
 import com.saboon.project_2511sch.data.local.dao.CourseDao
 import com.saboon.project_2511sch.data.local.dao.FileDao
 import com.saboon.project_2511sch.data.local.dao.ProgramTableDao
@@ -21,9 +23,13 @@ import com.saboon.project_2511sch.data.local.entity.UserEntity
         ScheduleEntity::class,
         FileEntity::class
     ],
-    version = 2,
-    exportSchema = false)
+//    autoMigrations = [AutoMigration(from = 1, to = 2, spec = com.saboon.project_2511sch.data.local.database.Database.AutoMigration_1_2::class)],
+    version = 1,
+    exportSchema = true)
 abstract class Database(): RoomDatabase() {
+
+//    class AutoMigration_1_2 : AutoMigrationSpec
+
     abstract fun userDao(): UserDao
     abstract fun programDao(): ProgramTableDao
     abstract fun courseDao(): CourseDao

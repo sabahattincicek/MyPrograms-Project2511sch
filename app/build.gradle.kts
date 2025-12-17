@@ -9,6 +9,8 @@ plugins {
 
     id("com.google.devtools.ksp") version "2.2.10-2.0.2"
     id("com.google.dagger.hilt.android")
+
+    id("androidx.room") version "2.8.4"
 }
 
 android {
@@ -47,6 +49,10 @@ android {
         viewBinding = true
         dataBinding = true
     }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
