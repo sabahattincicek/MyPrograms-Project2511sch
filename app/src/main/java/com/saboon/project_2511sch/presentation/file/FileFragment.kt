@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.navArgs
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentFileBinding
@@ -18,6 +20,8 @@ class FileFragment : Fragment() {
     private val args : FileFragmentArgs by navArgs()
 
     private lateinit var course: Course
+
+    private val viewModelFile : ViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,10 @@ class FileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         course = args.course
+
+        binding.fabAddNewFile.setOnClickListener {
+            // TODO: get android file selector and select file
+        }
     }
 
     override fun onDestroyView() {
