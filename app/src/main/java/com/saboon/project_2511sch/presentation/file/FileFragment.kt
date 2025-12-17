@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
@@ -31,6 +32,8 @@ class FileFragment : Fragment() {
     private lateinit var course: Course
 
     private val viewModelFile : ViewModelFile by viewModels()
+
+    private lateinit var recyclerAdapter: RecyclerAdapterFile
 
     private val selectFileLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()){uri ->
@@ -60,6 +63,9 @@ class FileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         course = args.course
+
+        setupRecyclerAdapter()
+
         binding.toolbar.subtitle = course.title
 
         binding.toolbar.setNavigationOnClickListener {
@@ -87,6 +93,14 @@ class FileFragment : Fragment() {
                 }
             }
             popup.show()
+        }
+    }
+
+    private fun setupRecyclerAdapter(){
+        recyclerAdapter = RecyclerAdapterFile()
+        binding.programRecyclerView.apply {
+            adapter = recyclerAdapter
+            layoutManager = LinearLayoutManager(context)
         }
     }
 
