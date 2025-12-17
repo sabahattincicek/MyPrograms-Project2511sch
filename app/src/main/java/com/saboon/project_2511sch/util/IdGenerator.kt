@@ -31,4 +31,11 @@ object IdGenerator {
         val uuid = java.util.UUID.randomUUID().toString()
         return "${dateMillis}_${date}_${scheduleTitle}_${uuid}"
     }
+
+    fun generateFileId(fileTitle: String): String{
+        val dateMillis = System.currentTimeMillis()
+        val date = dateMillis.toFormattedString("yyyyMMdd_HHmmss")
+        val uuid = UUID.randomUUID().toString()
+        return "${dateMillis}_${date}_${fileTitle}_${uuid}"
+    }
 }
