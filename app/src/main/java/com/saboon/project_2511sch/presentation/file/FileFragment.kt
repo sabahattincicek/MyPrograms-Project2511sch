@@ -10,7 +10,10 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +22,8 @@ import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.IdGenerator
+import com.saboon.project_2511sch.util.Resource
+import kotlinx.coroutines.launch
 import java.io.FileOutputStream
 import java.io.File as JavaFile
 
@@ -65,6 +70,9 @@ class FileFragment : Fragment() {
         course = args.course
 
         setupRecyclerAdapter()
+        observeFilesState()
+
+        viewModelFile.getAllFilesByCourseId(course.id)
 
         binding.toolbar.subtitle = course.title
 
@@ -150,6 +158,23 @@ class FileFragment : Fragment() {
             viewModelFile.insertNewFile(newFileObject)
         }catch (e: Exception){
 
+        }
+    }
+
+    private fun observeFilesState(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelFile.filesState.collect { resource ->
+                    when(resource) {
+                        is Resource.Error<*> -> {}
+                        is Resource.Idle<*> -> {}
+                        is Resource.Loading<*> -> {}
+                        is Resource.Success<*> -> {
+                            recyclerAdapter.submitList(resource.data)
+                        }
+                    }
+                }
+            }
         }
     }
 
