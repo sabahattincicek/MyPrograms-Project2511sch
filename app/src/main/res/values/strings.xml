@@ -126,6 +126,9 @@
     <string name="course_deleted_successfully">Course deleted successfully.</string>
     <string name="select_date">Select Date</string>
     <string name="select_program_table">Select a program table</string>
+    <string name="add_note">Add Note</string>
+    <string name="add_file">Add File</string>
+    <string name="add_link">Add Link</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
