@@ -1,6 +1,7 @@
 package com.saboon.project_2511sch.presentation.file
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -18,6 +19,38 @@ class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder
         fun bind(item: File){
             binding.tvTitle.text = item.title
             binding.tvDate.text = item.createdAt.toFormattedString("dd.MM.yyyy")
+
+            when{
+                item.fileType.startsWith("image/") -> {
+                    binding.tvFileType.visibility = View.GONE
+                    binding.ivFilePreview.visibility = View.VISIBLE
+                    // ÖNEMLİ: Dosya yolundan resim yüklemek için Coil veya Glide gibi
+                    // bir kütüphane kullanın. Bu, performansı ve bellek yönetimini
+                    // otomatik olarak halleder.
+
+                    // Örnek (Coil ile):
+                    // binding.ivFilePreview.load(JavaFile(file.filePath))
+                }
+
+                item.fileType == "application/pdf" -> {
+                    binding.ivFilePreview.visibility = View.GONE
+                    binding.tvFileType.visibility = View.VISIBLE
+                    binding.tvFileType.text = "PDF"
+                }
+
+                else -> {
+                    binding.ivFilePreview.visibility = View.GONE
+                    binding.tvFileType.visibility = View.VISIBLE
+
+                    val extension = item.title?.substringAfterLast('.',"")?.uppercase()
+                    if (extension!!.isNotBlank()){
+                        binding.tvFileType.text = extension
+                    }
+                    else {
+                        binding.tvFileType.text = "FILE"
+                    }
+                }
+            }
         }
     }
     class FileDiffCallback : DiffUtil.ItemCallback<File>(){
