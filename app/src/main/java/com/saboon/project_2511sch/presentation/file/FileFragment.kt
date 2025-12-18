@@ -1,5 +1,6 @@
 package com.saboon.project_2511sch.presentation.file
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -120,6 +122,12 @@ class FileFragment : Fragment() {
     private fun setupRecyclerAdapter() {
         Log.d(TAG, "setupRecyclerAdapter: Initializing and setting up RecyclerAdapterFile.")
         recyclerAdapter = RecyclerAdapterFile()
+
+        recyclerAdapter.onItemClickListener = { clickedFile ->
+            Log.i(TAG, "File item clicked: ${clickedFile.title}")
+            openFile(clickedFile)
+        }
+
         binding.programRecyclerView.apply {
             adapter = recyclerAdapter
             layoutManager = LinearLayoutManager(context)
@@ -170,6 +178,40 @@ class FileFragment : Fragment() {
 
         } catch (e: Exception) {
             Log.e(TAG, "saveFileFromUri: Failed to save or copy file.", e)
+        }
+    }
+
+    private fun openFile(file: File){
+        try {
+            // 1. Modelimizdeki dosya yolundan bir java.io.File nesnesi oluştur.
+            val fileToOpen = JavaFile(file.filePath)
+
+            if (!fileToOpen.exists()){
+                Log.e(TAG, "File not found at path: ${file.filePath}")
+                Toast.makeText(context, "Error: File not found.", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            // 2. FileProvider kullanarak güvenli, paylaşılabilir bir content:// Uri'si al.
+            // Buradaki "authorities" string'i, Manifest'teki ile birebir aynı olmalıdır.
+            val fileUri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.provider",
+                fileToOpen
+            )
+
+            // 3. Dosyayı görüntülemek için bir ACTION_VIEW Intent'i oluştur.
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(fileUri, file.fileType)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+            Log.i(TAG, "Attempting to open file with URI: $fileUri and type: ${file.fileType}")
+            startActivity(intent)
+        }catch (e: Exception) {
+            // Cihazda bu dosya türünü açacak bir uygulama yüklü değilse bu hata alınır.
+            Log.e(TAG, "Error opening file: ${file.title}", e)
+            Toast.makeText(requireContext(), "No application available to open this file type.", Toast.LENGTH_SHORT).show()
         }
     }
 
