@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -77,8 +77,9 @@ class FileFragment : Fragment() {
 
         setupRecyclerAdapter()
         observeFilesState()
+        observeInsertNewFileEvent()
 
-        Log.i(TAG, "onViewCreated: Requesting initial file list for course ID: ${course.id}")
+        Log.i(TAG, "onViewCreated: Requesting initial file list for course ID: ${'"'}${course.id}${'"'}")
         viewModelFile.getAllFilesByCourseId(course.id)
 
         binding.toolbar.subtitle = course.title
@@ -145,13 +146,13 @@ class FileFragment : Fragment() {
         try {
             // YORUM SATIRI KALDIRILDI: Bu adımlar dosya kopyalama için kritiktir.
             val inputStream = contentResolver.openInputStream(uri)
-            val newFileName = "${System.currentTimeMillis()}_${fileName}"
+            val newFileName = "${'"'}${System.currentTimeMillis()}_${fileName}${'"'}"
             val newFile = JavaFile(requireContext().filesDir, newFileName)
             val outputStream = FileOutputStream(newFile)
             inputStream?.copyTo(outputStream)
             inputStream?.close()
             outputStream.close()
-            Log.i(TAG, "saveFileFromUri: File successfully copied to internal storage at: ${newFile.absolutePath}")
+            Log.i(TAG, "saveFileFromUri: File successfully copied to internal storage at: ${'"'}${newFile.absolutePath}${'"'}")
 
             val newFileObject = File(
                 id = IdGenerator.generateFileId(fileName),
@@ -179,7 +180,7 @@ class FileFragment : Fragment() {
                 viewModelFile.filesState.collect { resource ->
                     when (resource) {
                         is Resource.Error<*> -> {
-                            Log.e(TAG, "FilesState: Error - ${resource.message}")
+                            Log.e(TAG, "FilesState: Error - ${'"'}${resource.message}${'"'}")
                         }
                         is Resource.Idle<*> -> {
                             Log.d(TAG, "FilesState: Idle.")
@@ -191,6 +192,33 @@ class FileFragment : Fragment() {
                             val itemCount = resource.data?.size ?: 0
                             Log.i(TAG, "FilesState: Success - Submitting $itemCount files to adapter.")
                             recyclerAdapter.submitList(resource.data)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private fun observeInsertNewFileEvent(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelFile.insertNewFileEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error<*> -> {
+                            Log.e(TAG, "InsertFileEvent: Error - ${'"'}${resource.message}${'"'}")
+                            Toast.makeText(context, resource.message, Toast.LENGTH_LONG).show()
+                        }
+                        is Resource.Idle<*> -> {
+                             Log.d(TAG, "InsertFileEvent: Idle.")
+                        }
+                        is Resource.Loading<*> -> {
+                            Log.d(TAG, "InsertFileEvent: Loading...")
+                            // TODO: Show a loading indicator to the user
+                        }
+                        is Resource.Success<*> -> {
+                            Log.i(TAG, "InsertFileEvent: Success - File '${'"'}${resource.data?.title}${'"'}' saved.")
+                            Toast.makeText(context, "File saved successfully", Toast.LENGTH_SHORT).show()
+                            // The filesState Flow will automatically update the list.
                         }
                     }
                 }
