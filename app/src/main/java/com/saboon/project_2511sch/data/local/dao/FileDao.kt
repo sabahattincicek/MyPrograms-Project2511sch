@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.saboon.project_2511sch.data.local.entity.FileEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -15,6 +16,9 @@ interface FileDao {
 
     @Delete
     suspend fun delete(file: FileEntity)
+
+    @Update
+    suspend fun update(file: FileEntity)
 
     @Query("SELECT * FROM files WHERE course_id = :id")
     fun getFilesByCourseId(id: String): Flow<List<FileEntity>>
