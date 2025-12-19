@@ -8,5 +8,7 @@ interface IFileRepository {
 
     suspend fun insertFile(file: File): Resource<File>
 
+    suspend fun deleteFile(file: File): Resource<File>
+
     fun getFilesByCourseId(id: String): Flow<Resource<List<File>>>
 }
