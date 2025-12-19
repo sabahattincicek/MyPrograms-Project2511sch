@@ -1,12 +1,13 @@
 package com.saboon.project_2511sch.domain.repository
 
+import android.net.Uri
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface IFileRepository {
 
-    suspend fun insertFile(file: File): Resource<File>
+    suspend fun insertFile(file: File, uri: Uri): Resource<File>
 
     suspend fun deleteFile(file: File): Resource<File>
 

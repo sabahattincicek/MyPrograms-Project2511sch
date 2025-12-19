@@ -1,5 +1,6 @@
 package com.saboon.project_2511sch.data.repository
 
+import android.net.Uri
 import com.saboon.project_2511sch.data.local.dao.FileDao
 import com.saboon.project_2511sch.data.local.entity.FileEntity
 import com.saboon.project_2511sch.data.local.mapper.toDomain
@@ -17,7 +18,7 @@ import java.io.File as JavaFile
 class FileRepositoryImp @Inject constructor(
     private val fileDao: FileDao,
 ): IFileRepository {
-    override suspend fun insertFile(file: File): Resource<File> {
+    override suspend fun insertFile(file: File, uri: Uri): Resource<File> {
        try {
             fileDao.insert(file.toEntity())
            return Resource.Success(file)
