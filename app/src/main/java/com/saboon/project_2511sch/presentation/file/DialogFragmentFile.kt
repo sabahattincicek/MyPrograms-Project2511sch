@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
+import com.saboon.project_2511sch.util.IdGenerator
 
 class DialogFragmentFile: DialogFragment() {
 
@@ -53,8 +55,33 @@ class DialogFragmentFile: DialogFragment() {
             binding.tvFileType.text = file!!.fileType
             binding.tvFileSize.text = file!!.sizeInBytes.toString()
         }
-        else{
 
+        binding.btnSave.setOnClickListener {
+            if (isEditMode){
+                val updatedFile = file!!.copy(
+                    title = binding.etTitle.text.toString(),
+                    description = binding.etDescription.text.toString()
+                )
+                setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(
+                    RESULT_KEY_FILE to updatedFile
+                ))
+                dismiss()
+            }else{
+                val newFile = File(
+                    id = IdGenerator.generateFileId(binding.etTitle.text.toString()),
+                    programTableId = course.programTableId,
+                    courseId = course.id,
+                    title = binding.etTitle.text.toString(),
+                    description = binding.etDescription.text.toString(),
+                    fileType = "TODO()",
+                    filePath = "TODO()",
+                    sizeInBytes = 0L
+                )
+                setFragmentResult(REQUEST_KEY_CREATE, bundleOf(
+                    RESULT_KEY_FILE to newFile
+                ))
+                dismiss()
+            }
         }
     }
 
