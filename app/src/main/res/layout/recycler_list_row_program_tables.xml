@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:layout_margin="2dp"
@@ -21,14 +22,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Program Title"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tvProgramTableDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Program Description"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
     </LinearLayout>
 
     <ImageView
@@ -39,6 +40,6 @@
         android:padding="5dp"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_more_vert_24"
-        android:tint="?attr/colorOnSurface"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="center_vertical"
+        app:tint="?attr/colorOnSurface" />
 </LinearLayout>
