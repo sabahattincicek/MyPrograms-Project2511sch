@@ -87,7 +87,7 @@ class CourseFragment : Fragment() {
                 menu: Menu,
                 menuInflater: MenuInflater
             ) {
-                menuInflater.inflate(R.menu.toolbar_menu_action_add, menu)
+                menuInflater.inflate(R.menu.menu_action_add, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

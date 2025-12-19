@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.File
+import com.saboon.project_2511sch.domain.usecase.file.DeleteFileUseCase
 import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesByCourseIdUseCase
 import com.saboon.project_2511sch.domain.usecase.file.InsertNewFileUseCase
 import com.saboon.project_2511sch.util.Resource
@@ -18,13 +19,17 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewModelFile @Inject constructor(
     private val insertNewFileUseCase: InsertNewFileUseCase,
-    private val getAllFilesByCourseIdUseCase: GetAllFilesByCourseIdUseCase
+    private val getAllFilesByCourseIdUseCase: GetAllFilesByCourseIdUseCase,
+    private val deleteFileUseCase: DeleteFileUseCase
 ) : ViewModel() {
 
     private val TAG = "ViewModelFile"
 
     private val _insertNewFileEvent = Channel<Resource<File>>()
     val insertNewFileEvent = _insertNewFileEvent.receiveAsFlow()
+
+    private val _deleteFileEvent = Channel<Resource<File>>()
+    val deleteFileEvent = _deleteFileEvent.receiveAsFlow()
 
     private val _filesState = MutableStateFlow<Resource<List<File>>>(Resource.Idle())
     val filesState = _filesState.asStateFlow()
@@ -41,6 +46,18 @@ class ViewModelFile @Inject constructor(
             } catch (e: Exception) {
                 Log.e(TAG, "insertNewFile: Exception caught while inserting file.", e)
                 _insertNewFileEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+            }
+        }
+    }
+
+    fun deleteFile(file: File) {
+        viewModelScope.launch {
+            try {
+                _deleteFileEvent.send(Resource.Loading())
+                val result = deleteFileUseCase.invoke(file)
+                _deleteFileEvent.send(result)
+            }catch (e: Exception){
+                _deleteFileEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }

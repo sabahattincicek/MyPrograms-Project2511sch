@@ -17,7 +17,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
-            app:menu="@menu/toolbar_menu_action_add"
+            app:menu="@menu/menu_action_add"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             app:title="@string/appBarTitle_programTables" />

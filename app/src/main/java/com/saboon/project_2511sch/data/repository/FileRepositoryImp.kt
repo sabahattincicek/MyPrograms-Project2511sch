@@ -10,7 +10,9 @@ import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 import javax.inject.Inject
+import java.io.File as JavaFile
 
 class FileRepositoryImp @Inject constructor(
     private val fileDao: FileDao,
@@ -21,6 +23,19 @@ class FileRepositoryImp @Inject constructor(
            return Resource.Success(file)
         }catch (e: Exception){
            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
+    override suspend fun deleteFile(file: File): Resource<File> {
+        try {
+            val fileToDelete = JavaFile(file.filePath)
+            if (fileToDelete.exists() && !fileToDelete.delete()){
+                return Resource.Error("Failed to delete physical file at ${file.filePath}")
+            }
+            fileDao.delete(file.toEntity())
+            return Resource.Success(file)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
     }
 

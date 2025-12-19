@@ -3,9 +3,11 @@ package com.saboon.project_2511sch.presentation.file
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.RecyclerListRowFileBinding
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.toFormattedString
@@ -14,8 +16,9 @@ class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder
 
 
     var onItemClickListener: ((File) -> Unit)? = null
+    var onMenuItemClickListener: ((File, Int) -> Unit)? = null
 
-    class FileViewHolder(private val binding: RecyclerListRowFileBinding): RecyclerView.ViewHolder(binding.root){
+    class FileViewHolder(val binding: RecyclerListRowFileBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: File){
             binding.tvTitle.text = item.title
             binding.tvDate.text = item.createdAt.toFormattedString("dd.MM.yyyy")
@@ -85,6 +88,16 @@ class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder
         holder.bind(item)
         holder.itemView.setOnClickListener {
             onItemClickListener?.invoke(item)
+        }
+
+        holder.binding.ivFileMoreMenu.setOnClickListener { anchorView ->
+            val popup = PopupMenu(anchorView.context, anchorView)
+            popup.inflate(R.menu.menu_action_edit_delete)
+            popup.setOnMenuItemClickListener { menuItem ->
+                onMenuItemClickListener?.invoke(item, menuItem.itemId)
+                true
+            }
+            popup.show()
         }
     }
 }
