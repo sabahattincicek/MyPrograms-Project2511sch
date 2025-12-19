@@ -81,6 +81,7 @@ class FileFragment : Fragment() {
         setupRecyclerAdapter()
         observeFilesState()
         observeInsertNewFileEvent()
+        observeDeleteFileEvent()
 
         Log.i(TAG, "onViewCreated: Requesting initial file list for course ID: ${'"'}${course.id}${'"'}")
         viewModelFile.getAllFilesByCourseId(course.id)
@@ -278,7 +279,11 @@ class FileFragment : Fragment() {
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-
+                            val deletedFile = resource.data
+                            if (deletedFile != null){
+                                Log.i(TAG, "DeleteFileEvent: Success - '${deletedFile.title}' deleted successfully.")
+                                Toast.makeText(context, "'${deletedFile.title}' deleted", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
