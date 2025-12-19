@@ -10,5 +10,7 @@ interface IFileRepository {
 
     suspend fun deleteFile(file: File): Resource<File>
 
+    suspend fun updateFile(file: File): Resource<File>
+
     fun getFilesByCourseId(id: String): Flow<Resource<List<File>>>
 }
