@@ -129,6 +129,9 @@
     <string name="add_note">Add Note</string>
     <string name="add_file">Add File</string>
     <string name="add_link">Add Link</string>
+    <string name="file">File</string>
+    <string name="file_type">File Type</string>
+    <string name="file_size">Size</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
