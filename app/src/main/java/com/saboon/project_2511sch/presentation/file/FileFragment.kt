@@ -53,7 +53,8 @@ class FileFragment : Fragment() {
         Log.d(TAG, "File picker result received.")
         if (uri != null) {
             Log.i(TAG, "File selected by user with URI: $uri")
-            saveFileFromUri(uri)
+            val dialog = DialogFragmentFile.newInstance(course, uri, null)
+            dialog.show(childFragmentManager, "CreateFileFragmentDialog")
         } else {
             Log.d(TAG, "File selection was cancelled by the user.")
         }
@@ -126,7 +127,11 @@ class FileFragment : Fragment() {
             val newFile = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_FILE, File::class.java)
             val uri = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_URI, Uri::class.java)
 
+            if(newFile != null && uri != null){
+                viewModelFile.insertNewFile(newFile, uri)
+            }else {
 
+            }
         }
     }
 
@@ -154,52 +159,52 @@ class FileFragment : Fragment() {
         }
     }
 
-    private fun saveFileFromUri(uri: Uri) {
-        Log.d(TAG, "saveFileFromUri: Starting to process URI: $uri")
-        val contentResolver = requireContext().contentResolver
-        var fileName = "unknown_file"
-        var fileSize = 0L
-
-        // 1. Dosyanın adını ve boyutunu ContentResolver ile sorgula.
-        contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-            if (cursor.moveToFirst()) {
-                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-                if (nameIndex != -1) fileName = cursor.getString(nameIndex)
-                if (sizeIndex != -1) fileSize = cursor.getLong(sizeIndex)
-                Log.d(TAG, "saveFileFromUri: File metadata retrieved - Name: $fileName, Size: $fileSize bytes")
-            }
-        }
-
-        try {
-            // YORUM SATIRI KALDIRILDI: Bu adımlar dosya kopyalama için kritiktir.
-            val inputStream = contentResolver.openInputStream(uri)
-            val newFileName = "${'"'}${System.currentTimeMillis()}_${fileName}${'"'}"
-            val newFile = JavaFile(requireContext().filesDir, newFileName)
-            val outputStream = FileOutputStream(newFile)
-            inputStream?.copyTo(outputStream)
-            inputStream?.close()
-            outputStream.close()
-            Log.i(TAG, "saveFileFromUri: File successfully copied to internal storage at: ${'"'}${newFile.absolutePath}${'"'}")
-
-            val newFileObject = File(
-                id = IdGenerator.generateFileId(fileName),
-                programTableId = course.programTableId,
-                courseId = course.id,
-                title = fileName,
-                description = null,
-                fileType = contentResolver.getType(uri) ?: "application/octet-stream",
-                filePath = newFile.absolutePath, // GÜNCELLENDİ: Gerçek dosya yolu
-                sizeInBytes = fileSize
-            )
-
-            Log.i(TAG, "saveFileFromUri: File model created. Passing to ViewModel to insert into DB: $newFileObject")
-            viewModelFile.insertNewFile(newFileObject)
-
-        } catch (e: Exception) {
-            Log.e(TAG, "saveFileFromUri: Failed to save or copy file.", e)
-        }
-    }
+//    private fun saveFileFromUri(uri: Uri) {
+//        Log.d(TAG, "saveFileFromUri: Starting to process URI: $uri")
+//        val contentResolver = requireContext().contentResolver
+//        var fileName = "unknown_file"
+//        var fileSize = 0L
+//
+//        // 1. Dosyanın adını ve boyutunu ContentResolver ile sorgula.
+//        contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+//            if (cursor.moveToFirst()) {
+//                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+//                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+//                if (nameIndex != -1) fileName = cursor.getString(nameIndex)
+//                if (sizeIndex != -1) fileSize = cursor.getLong(sizeIndex)
+//                Log.d(TAG, "saveFileFromUri: File metadata retrieved - Name: $fileName, Size: $fileSize bytes")
+//            }
+//        }
+//
+//        try {
+//            // YORUM SATIRI KALDIRILDI: Bu adımlar dosya kopyalama için kritiktir.
+//            val inputStream = contentResolver.openInputStream(uri)
+//            val newFileName = "${'"'}${System.currentTimeMillis()}_${fileName}${'"'}"
+//            val newFile = JavaFile(requireContext().filesDir, newFileName)
+//            val outputStream = FileOutputStream(newFile)
+//            inputStream?.copyTo(outputStream)
+//            inputStream?.close()
+//            outputStream.close()
+//            Log.i(TAG, "saveFileFromUri: File successfully copied to internal storage at: ${'"'}${newFile.absolutePath}${'"'}")
+//
+//            val newFileObject = File(
+//                id = IdGenerator.generateFileId(fileName),
+//                programTableId = course.programTableId,
+//                courseId = course.id,
+//                title = fileName,
+//                description = null,
+//                fileType = contentResolver.getType(uri) ?: "application/octet-stream",
+//                filePath = newFile.absolutePath, // GÜNCELLENDİ: Gerçek dosya yolu
+//                sizeInBytes = fileSize
+//            )
+//
+//            Log.i(TAG, "saveFileFromUri: File model created. Passing to ViewModel to insert into DB: $newFileObject")
+//            viewModelFile.insertNewFile(newFileObject)
+//
+//        } catch (e: Exception) {
+//            Log.e(TAG, "saveFileFromUri: Failed to save or copy file.", e)
+//        }
+//    }
 
     private fun openFile(file: File){
         try {
