@@ -70,7 +70,7 @@
 
         <ImageView
             android:background="@drawable/bg_basic_pressed_list_item"
-            android:id="@+id/ivProgramTableMoreMenu"
+            android:id="@+id/ivFileMoreMenu"
             android:layout_width="wrap_content"
             android:contentDescription="@string/more"
             android:padding="5dp"
