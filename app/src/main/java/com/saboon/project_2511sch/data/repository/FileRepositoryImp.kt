@@ -1,5 +1,9 @@
 package com.saboon.project_2511sch.data.repository
 
+import android.R
+import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
 import com.saboon.project_2511sch.data.local.dao.FileDao
 import com.saboon.project_2511sch.data.local.entity.FileEntity
 import com.saboon.project_2511sch.data.local.mapper.toDomain
@@ -7,19 +11,52 @@ import com.saboon.project_2511sch.data.local.mapper.toEntity
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.domain.repository.IFileRepository
 import com.saboon.project_2511sch.util.Resource
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.FileOutputStream
 import java.io.IOException
 import javax.inject.Inject
 import java.io.File as JavaFile
 
 class FileRepositoryImp @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val fileDao: FileDao,
 ): IFileRepository {
-    override suspend fun insertFile(file: File): Resource<File> {
+    override suspend fun insertFile(file: File, uri: Uri): Resource<File> {
+        val contentResolver = context.contentResolver
+
+        // Güvenlik ve tutarlılık için, dosya adını tekrar Uri'den okuyalım.
+        var originalFileName = "unknown_file"
+        contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()){
+                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (nameIndex != -1) originalFileName = cursor.getString(nameIndex)
+            }
+        }
+
        try {
-            fileDao.insert(file.toEntity())
+           // 1. Fiziksel dosyayı uygulamanın özel alanına kopyala
+           val inputStream = contentResolver.openInputStream(uri)
+           val newPhysicalFileName = "${System.currentTimeMillis()}_${originalFileName}"
+           val newLocalFile = JavaFile(context.filesDir, newPhysicalFileName)
+           val outputStream = FileOutputStream(newLocalFile)
+           inputStream?.copyTo(outputStream)
+           inputStream?.close()
+           outputStream.close()
+
+           val finalFileToSave = file.copy(
+               filePath = newLocalFile.absolutePath,
+               // Kullanıcı başlığı değiştirebilir, o yüzden orijinal adı değil,
+               // diyalogdan gelen 'title'ı kullanmaya devam etmeliyiz.
+               // Eğer diyalogdan gelen title boş ise, orijinal adı kullanabiliriz.
+               title = file.title?.takeIf { it.isNotBlank() } ?: originalFileName
+           )
+
+           // 3. Nihai nesneyi veritabanına kaydet
+           fileDao.insert(finalFileToSave.toEntity())
+
            return Resource.Success(file)
         }catch (e: Exception){
            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
@@ -33,6 +70,15 @@ class FileRepositoryImp @Inject constructor(
                 return Resource.Error("Failed to delete physical file at ${file.filePath}")
             }
             fileDao.delete(file.toEntity())
+            return Resource.Success(file)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
+    override suspend fun updateFile(file: File): Resource<File> {
+        try {
+            fileDao.update(file.toEntity())
             return Resource.Success(file)
         }catch (e: Exception){
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
