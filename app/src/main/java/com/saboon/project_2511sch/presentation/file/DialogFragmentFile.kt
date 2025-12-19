@@ -83,6 +83,10 @@ class DialogFragmentFile: DialogFragment() {
                 dismiss()
             }
         }
+
+        binding.btnCancel.setOnClickListener {
+            dismiss()
+        }
     }
 
     override fun onDestroyView() {
