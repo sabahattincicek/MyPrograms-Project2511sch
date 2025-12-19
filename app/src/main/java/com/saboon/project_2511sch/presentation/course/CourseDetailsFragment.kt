@@ -2,7 +2,6 @@ package com.saboon.project_2511sch.presentation.course
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -10,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -109,7 +107,7 @@ class CourseDetailsFragment : Fragment() {
                 menu: Menu,
                 menuInflater: MenuInflater
             ) {
-                menuInflater.inflate(R.menu.toolbar_menu_action_edit_delete, menu)
+                menuInflater.inflate(R.menu.menu_action_edit_delete, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
