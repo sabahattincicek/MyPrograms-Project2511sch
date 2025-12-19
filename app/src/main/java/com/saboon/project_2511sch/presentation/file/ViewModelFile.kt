@@ -1,5 +1,6 @@
 package com.saboon.project_2511sch.presentation.file
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,13 +40,13 @@ class ViewModelFile @Inject constructor(
     private val _filesState = MutableStateFlow<Resource<List<File>>>(Resource.Idle())
     val filesState = _filesState.asStateFlow()
 
-    fun insertNewFile(file: File) {
+    fun insertNewFile(file: File, uri: Uri) {
         Log.d(TAG, "insertNewFile: called with file title: ${file.title}")
         viewModelScope.launch {
             try {
                 Log.d(TAG, "insertNewFile: Sending Loading state.")
                 _insertNewFileEvent.send(Resource.Loading())
-                val result = insertNewFileUseCase.invoke(file)
+                val result = insertNewFileUseCase.invoke(file, uri)
                 Log.i(TAG, "insertNewFile: Received result from UseCase: $result")
                 _insertNewFileEvent.send(result)
             } catch (e: Exception) {
