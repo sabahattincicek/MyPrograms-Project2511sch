@@ -20,10 +20,10 @@ import com.saboon.project_2511sch.util.IdGenerator
 class DialogFragmentFile: DialogFragment() {
 
     private var _binding: DialogFragmentFileBinding?=null
-    private val binding = _binding!!
+    private val binding get() = _binding!!
 
     private lateinit var course: Course
-    private lateinit var uri: Uri
+    private var uri: Uri? = null
     private var file: File? = null
 
     private var fileName = ""
@@ -49,7 +49,7 @@ class DialogFragmentFile: DialogFragment() {
 
         arguments?.let {
             course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)!!
-            uri = BundleCompat.getParcelable(it, ARG_URI, Uri::class.java)!!
+            uri = BundleCompat.getParcelable(it, ARG_URI, Uri::class.java)
             file = BundleCompat.getParcelable(it, ARG_FILE, File::class.java)
         }
 
@@ -98,7 +98,7 @@ class DialogFragmentFile: DialogFragment() {
     private fun readMetaDateFromUri(){
         val contentResolver = requireContext().contentResolver
         uri.let{uri ->
-            contentResolver.query(uri,null, null, null, null)?.use { cursor ->
+            contentResolver.query(uri!!,null, null, null, null)?.use { cursor ->
                 if (cursor.moveToFirst()){
                     val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                     val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
@@ -127,7 +127,7 @@ class DialogFragmentFile: DialogFragment() {
         const val RESULT_KEY_FILE = "file_dialog_fragment_result_key_file"
         const val RESULT_KEY_URI = "file_dialog_fragment_result_key_uri"
 
-        fun newInstance(course: Course, uri: Uri, file: File?): DialogFragmentFile{
+        fun newInstance(course: Course, uri: Uri?, file: File?): DialogFragmentFile{
             val fragment = DialogFragmentFile()
             fragment.arguments = bundleOf(
                 ARG_COURSE to course,

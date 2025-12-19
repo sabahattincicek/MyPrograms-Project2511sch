@@ -70,8 +70,8 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideFileRepositoryImp(fileDao: FileDao): IFileRepository {
-        return FileRepositoryImp(fileDao)
+    fun provideFileRepositoryImp(@ApplicationContext context: Context, fileDao: FileDao): IFileRepository {
+        return FileRepositoryImp(context, fileDao)
     }
 
 }
