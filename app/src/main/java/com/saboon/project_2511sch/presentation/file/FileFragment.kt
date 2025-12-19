@@ -29,6 +29,7 @@ import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.File as JavaFile
 
 @AndroidEntryPoint
@@ -261,6 +262,23 @@ class FileFragment : Fragment() {
                             Log.i(TAG, "InsertFileEvent: Success - File '${'"'}${resource.data?.title}${'"'}' saved.")
                             Toast.makeText(context, "File saved successfully", Toast.LENGTH_SHORT).show()
                             // The filesState Flow will automatically update the list.
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeDeleteFileEvent(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelFile.deleteFileEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error<*> -> {}
+                        is Resource.Idle<*> -> {}
+                        is Resource.Loading<*> -> {}
+                        is Resource.Success<*> -> {
+
                         }
                     }
                 }
