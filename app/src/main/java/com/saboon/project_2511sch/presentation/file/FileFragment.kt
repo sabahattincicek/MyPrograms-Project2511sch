@@ -82,6 +82,7 @@ class FileFragment : Fragment() {
         observeFilesState()
         observeInsertNewFileEvent()
         observeDeleteFileEvent()
+        observeUpdateFileEvent()
 
         Log.i(TAG, "onViewCreated: Requesting initial file list for course ID: ${'"'}${course.id}${'"'}")
         viewModelFile.getAllFilesByCourseId(course.id)
@@ -293,6 +294,23 @@ class FileFragment : Fragment() {
                                 Log.i(TAG, "DeleteFileEvent: Success - '${deletedFile.title}' deleted successfully.")
                                 Toast.makeText(context, "'${deletedFile.title}' deleted", Toast.LENGTH_SHORT).show()
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeUpdateFileEvent(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelFile.updateFileEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error<*> -> {}
+                        is Resource.Idle<*> -> {}
+                        is Resource.Loading<*> -> {}
+                        is Resource.Success<*> -> {
+
                         }
                     }
                 }
