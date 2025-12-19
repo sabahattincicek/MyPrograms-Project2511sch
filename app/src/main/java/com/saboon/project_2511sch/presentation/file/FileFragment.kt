@@ -130,6 +130,15 @@ class FileFragment : Fragment() {
             openFile(clickedFile)
         }
 
+        recyclerAdapter.onMenuItemClickListener = { file, clickedItem ->
+            when(clickedItem){
+                R.id.action_edit -> {}
+                R.id.action_delete -> {
+                    viewModelFile.deleteFile(file)
+                }
+            }
+        }
+
         binding.programRecyclerView.apply {
             adapter = recyclerAdapter
             layoutManager = LinearLayoutManager(context)
