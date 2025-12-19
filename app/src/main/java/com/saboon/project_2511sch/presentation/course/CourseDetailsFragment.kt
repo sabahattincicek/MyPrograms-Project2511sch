@@ -93,6 +93,11 @@ class CourseDetailsFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+        binding.btnFiles.setOnClickListener {
+            val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToFileFragment(course)
+            findNavController().navigate(action)
+        }
+
         binding.btnAddSchedule.setOnClickListener {
             val dialog = DialogFragmentSchedule.newInstance(course, null)
             dialog.show(childFragmentManager, "CreateNewSchedule")
