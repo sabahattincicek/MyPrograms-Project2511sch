@@ -1,6 +1,5 @@
 package com.saboon.project_2511sch.data.repository
 
-import android.R
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
@@ -80,6 +79,33 @@ class FileRepositoryImp @Inject constructor(
         try {
             fileDao.update(file.toEntity())
             return Resource.Success(file)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
+    override suspend fun insertNoteFile(note: File): Resource<File> {
+        val content = note.description ?: ""
+
+        try {
+            // 1. Yeni bir .html dosyası için isim oluştur.
+            val newFileName = "${System.currentTimeMillis()}_${note.title}.html"
+            val newLocalFile = JavaFile(context.filesDir, newFileName)
+
+            // 2. FileOutputStream kullanarak HTML içeriğini bu yeni dosyaya yaz.
+            val outputStream = FileOutputStream(newLocalFile)
+            outputStream.write(content.toByteArray())
+            outputStream.close()
+
+            // 3. Veritabanına kaydedilecek NİHAİ nesneyi, oluşturduğumuz
+            //    dosyanın kalıcı yolu ile güncelle.
+            val finalNoteToSave = note.copy(
+                filePath = newLocalFile.absolutePath
+            )
+
+            // 4. Bu nihai nesneyi veritabanına kaydet.
+            fileDao.insert(finalNoteToSave.toEntity())
+            return Resource.Success(finalNoteToSave)
         }catch (e: Exception){
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
