@@ -24,7 +24,7 @@ class FileRepositoryImp @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fileDao: FileDao,
 ): IFileRepository {
-    override suspend fun insertFile(file: File, uri: Uri): Resource<File> {
+    override suspend fun insertFileFromUri(file: File, uri: Uri): Resource<File> {
         val contentResolver = context.contentResolver
 
         // Güvenlik ve tutarlılık için, dosya adını tekrar Uri'den okuyalım.

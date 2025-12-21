@@ -10,6 +10,6 @@ class InsertNewFileUseCase @Inject constructor(
     private val fileRepository: IFileRepository
 ) {
     suspend operator fun invoke(file: File, uri: Uri): Resource<File>{
-        return fileRepository.insertFile(file, uri)
+        return fileRepository.insertFileFromUri(file, uri)
     }
 }
