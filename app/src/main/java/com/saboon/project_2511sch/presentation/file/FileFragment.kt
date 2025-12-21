@@ -3,7 +3,6 @@ package com.saboon.project_2511sch.presentation.file
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,12 +25,9 @@ import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
-import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.FileOutputStream
-import java.io.IOException
 import java.io.File as JavaFile
 
 @AndroidEntryPoint
@@ -110,7 +106,8 @@ class FileFragment : Fragment() {
                     }
                     R.id.action_add_note -> {
                         Log.d(TAG, "'Add Note' menu item clicked.")
-                        // TODO: add necessary code for "add note" option
+                        val dialog = DialogFragmentNote.newInstance(course, null)
+                        dialog.show(childFragmentManager, "NoteDialogFragment")
                         true
                     }
                     R.id.action_add_link -> {
@@ -139,6 +136,15 @@ class FileFragment : Fragment() {
             val file = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_FILE, File::class.java)
             if (file != null){
                 viewModelFile.updateFile(file)
+            }else{
+
+            }
+        }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentNote.REQUEST_KEY_CREATE, viewLifecycleOwner){requestKey, result ->
+            val note = BundleCompat.getParcelable(result, DialogFragmentNote.RESULT_KEY_NOTE, File::class.java)
+            if (note != null){
+                viewModelFile.insertNewNote(note)
             }else{
 
             }

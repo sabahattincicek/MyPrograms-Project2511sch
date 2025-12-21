@@ -1,6 +1,5 @@
 package com.saboon.project_2511sch.presentation.file
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -46,7 +45,7 @@ class DialogFragmentNote: DialogFragment() {
 
         arguments?.let {
             course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)!!
-            file = BundleCompat.getParcelable(it, ARG_FILE, File::class.java)
+            file = BundleCompat.getParcelable(it, ARG_NOTE, File::class.java)
         }
 
         val isEditMode = file != null
@@ -77,7 +76,7 @@ class DialogFragmentNote: DialogFragment() {
                                 description = content,
                                 sizeInBytes = content.toByteArray().size.toLong()
                             )
-                            setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(RESULT_KEY_FILE to updatedNoteFile))
+                            setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(RESULT_KEY_NOTE to updatedNoteFile))
                         }else{
                             val newNoteFile = File(
                                 id = IdGenerator.generateFileId(title),
@@ -89,7 +88,7 @@ class DialogFragmentNote: DialogFragment() {
                                 filePath = "",
                                 sizeInBytes = content.toByteArray().size.toLong()
                             )
-                            setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_FILE to newNoteFile))
+                            setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_NOTE to newNoteFile))
                         }
 
                         dismiss()
@@ -110,17 +109,16 @@ class DialogFragmentNote: DialogFragment() {
 
     companion object {
         const val ARG_COURSE = "note_dialog_fragment_arg_course"
-        const val ARG_URI = "note_dialog_fragment_arg_uri"
-        const val ARG_FILE = "note_dialog_fragment_arg_file"
+        const val ARG_NOTE = "note_dialog_fragment_arg_note"
         const val REQUEST_KEY_CREATE = "note_dialog_fragment_request_key_create"
         const val REQUEST_KEY_UPDATE = "note_dialog_fragment_request_key_update"
-        const val RESULT_KEY_FILE = "note_dialog_fragment_result_key_file"
+        const val RESULT_KEY_NOTE = "note_dialog_fragment_result_key_file"
 
-        fun newInstance(course: Course, file: File?): DialogFragmentNote{
+        fun newInstance(course: Course, note: File?): DialogFragmentNote{
             val fragment = DialogFragmentNote()
             fragment.arguments = bundleOf(
                 ARG_COURSE to course,
-                ARG_FILE to file
+                ARG_NOTE to note
             )
             return fragment
         }
