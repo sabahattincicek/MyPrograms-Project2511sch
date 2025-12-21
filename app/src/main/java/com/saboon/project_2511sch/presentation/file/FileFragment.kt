@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.FileProvider
 import androidx.core.os.BundleCompat
@@ -25,6 +26,7 @@ import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
+import com.saboon.project_2511sch.presentation.programtable.ProgramTableFragment
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -75,6 +77,9 @@ class FileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: View has been created. Setting up UI and observers.")
 
+        Log.d(TAG, "onViewCreated: Setting up toolbar.")
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+
         course = args.course
 
         setupRecyclerAdapter()
@@ -82,6 +87,7 @@ class FileFragment : Fragment() {
         observeInsertNewFileEvent()
         observeDeleteFileEvent()
         observeUpdateFileEvent()
+        observeInsertNewNoteEvent()
 
         Log.i(TAG, "onViewCreated: Requesting initial file list for course ID: ${course.id}")
         viewModelFile.getAllFilesByCourseId(course.id)
@@ -331,6 +337,32 @@ class FileFragment : Fragment() {
                         is Resource.Success<*> -> {
                             Log.i(TAG, "UpdateFileEvent: Success - '${resource.data?.title}' was updated.")
                             Toast.makeText(context, "File updated successfully", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeInsertNewNoteEvent(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelFile.insertNewNoteEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error<*> -> {
+                            Log.e(TAG, "InsertNoteEvent: Error - ${resource.message}")
+                            Toast.makeText(context, resource.message, Toast.LENGTH_LONG).show()
+                        }
+                        is Resource.Idle<*> -> {
+                            Log.d(TAG, "InsertNoteEvent: Idle.")
+                        }
+                        is Resource.Loading<*> -> {
+                            Log.d(TAG, "InsertNoteEvent: Loading...")
+                            Toast.makeText(context, "Saving note...", Toast.LENGTH_SHORT).show()
+                        }
+                        is Resource.Success<*> -> {
+                            Log.i(TAG, "InsertNoteEvent: Success - Note '${resource.data?.title}' saved.")
+                            Toast.makeText(context, "Note saved successfully", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

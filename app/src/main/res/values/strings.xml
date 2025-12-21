@@ -134,6 +134,7 @@
     <string name="file_size">Size</string>
     <string name="add_new_note">Add New Note</string>
     <string name="header">Header</string>
+    <string name="edit_note">Edit Note</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
