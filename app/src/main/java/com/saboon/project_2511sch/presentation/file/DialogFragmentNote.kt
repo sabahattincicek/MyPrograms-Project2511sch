@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.saboon.project_2511sch.R
@@ -15,6 +16,10 @@ import com.saboon.project_2511sch.domain.model.File
 class DialogFragmentNote: DialogFragment() {
     private var _binding : DialogFragmentNoteBinding?=null
     private val binding get() = _binding!!
+
+    private lateinit var course: Course
+    private var uri: Uri? = null
+    private var file: File? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +38,11 @@ class DialogFragmentNote: DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        arguments?.let {
+            course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)!!
+            uri = BundleCompat.getParcelable(it, ARG_URI, Uri::class.java)
+            file = BundleCompat.getParcelable(it, ARG_FILE, File::class.java)
+        }
 
     }
 
