@@ -3,15 +3,22 @@ package com.saboon.project_2511sch.presentation.file
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentNoteBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
+import com.saboon.project_2511sch.util.IdGenerator
 
 class DialogFragmentNote: DialogFragment() {
     private var _binding : DialogFragmentNoteBinding?=null
@@ -51,6 +58,51 @@ class DialogFragmentNote: DialogFragment() {
 
         }
 
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider{
+            override fun onCreateMenu(
+                menu: Menu,
+                menuInflater: MenuInflater
+            ) {
+                menuInflater.inflate(R.menu.menu_action_save, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId){
+                    R.id.action_save -> {
+                        val title = binding.etNoteTitle.text.toString()
+                        val content = binding.reEditor.html ?: ""
+
+                        if (isEditMode){
+                            val updatedNoteFile = file!!.copy(
+                                title = title,
+                                description = content,
+                                sizeInBytes = content.toByteArray().size.toLong()
+                            )
+                            setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(RESULT_KEY_FILE to updatedNoteFile))
+                        }else{
+                            val newNoteFile = File(
+                                id = IdGenerator.generateFileId(title),
+                                programTableId = course.programTableId,
+                                courseId = course.id,
+                                title = title,
+                                description = content,
+                                fileType = "text/html",
+                                filePath = "",
+                                sizeInBytes = content.toByteArray().size.toLong()
+                            )
+                            setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_FILE to newNoteFile))
+                        }
+
+                        dismiss()
+                        true
+                    }
+                    else -> false
+                }
+
+            }
+
+        })
     }
 
     override fun onDestroyView() {

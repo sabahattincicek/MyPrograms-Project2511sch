@@ -15,6 +15,7 @@
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/baseline_close_24"
             app:navigationIconTint="?attr/colorOnSurface"
+            app:menu="@menu/menu_action_save"
             app:title="@string/add_new_note"/>
 
     </com.google.android.material.appbar.AppBarLayout>
