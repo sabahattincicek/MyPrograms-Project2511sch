@@ -25,6 +25,7 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
+import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -160,7 +161,14 @@ class FileFragment : Fragment() {
                     dialog.show(childFragmentManager, "UpdateFileDialogFragment")
                 }
                 R.id.action_delete -> {
-                    viewModelFile.deleteFile(file)
+                    val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete Program", "Are you sure?")
+                    dialog.show(childFragmentManager, "DeleteDialogFragment")
+                    childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, viewLifecycleOwner){requestKey, result ->
+                        val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
+                        if (isYes) {
+                            viewModelFile.deleteFile(file)
+                        }
+                    }
                 }
             }
         }
