@@ -44,6 +44,13 @@ class DialogFragmentNote: DialogFragment() {
             file = BundleCompat.getParcelable(it, ARG_FILE, File::class.java)
         }
 
+        val isEditMode = file != null
+        if (isEditMode){
+            binding.etNoteTitle.setText(file!!.title)
+        }else{
+
+        }
+
     }
 
     override fun onDestroyView() {
