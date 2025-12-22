@@ -26,7 +26,6 @@ import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
-import com.saboon.project_2511sch.presentation.programtable.ProgramTableFragment
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -142,10 +141,10 @@ class FileFragment : Fragment() {
 
         childFragmentManager.setFragmentResultListener(DialogFragmentFile.REQUEST_KEY_UPDATE, viewLifecycleOwner){requestKey, result ->
             Log.d(TAG, "Result received from Update File Dialog with key: $requestKey")
-            val file = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_FILE, File::class.java)
-            if (file != null){
+            val UpdatedFile = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_FILE, File::class.java)
+            if (UpdatedFile != null){
                 Log.i(TAG, "Valid file received from dialog. Passing to ViewModel for update.")
-                viewModelFile.updateFile(file)
+                viewModelFile.updateFile(UpdatedFile)
             }else{
                 Log.w(TAG, "Received null file from Update File Dialog.")
             }
@@ -153,12 +152,23 @@ class FileFragment : Fragment() {
 
         childFragmentManager.setFragmentResultListener(DialogFragmentNote.REQUEST_KEY_CREATE, viewLifecycleOwner){requestKey, result ->
             Log.d(TAG, "Result received from Create Note Dialog with key: $requestKey")
-            val note = BundleCompat.getParcelable(result, DialogFragmentNote.RESULT_KEY_NOTE, File::class.java)
-            if (note != null){
+            val newNote = BundleCompat.getParcelable(result, DialogFragmentNote.RESULT_KEY_NOTE, File::class.java)
+            if (newNote != null){
                 Log.i(TAG, "Valid note file received from dialog. Passing to ViewModel.")
-                viewModelFile.insertNewNote(note)
+                viewModelFile.insertNewNote(newNote)
             }else{
                 Log.w(TAG, "Received null note from Create Note Dialog.")
+            }
+        }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentNote.REQUEST_KEY_UPDATE, viewLifecycleOwner){requestKey, result ->
+            Log.d(TAG, "Result received from Update Note Dialog with key: $requestKey")
+            val updatedNote = BundleCompat.getParcelable(result, DialogFragmentNote.RESULT_KEY_NOTE, File::class.java)
+            if (updatedNote != null){
+                Log.i(TAG, "Valid note file received from dialog. Passing to ViewModel.")
+                viewModelFile.updateFile(updatedNote)
+            }else{
+                Log.w(TAG, "Received null note from Updated Note Dialog.")
             }
         }
     }

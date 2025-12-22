@@ -113,7 +113,7 @@ class DialogFragmentNote: DialogFragment() {
 
         val typedValue = TypedValue()
 
-        requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceContainer, typedValue, true)
+        requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
         binding.reEditor.setEditorBackgroundColor(typedValue.data)
         binding.reEditor.setBackgroundColor(typedValue.data)
 
