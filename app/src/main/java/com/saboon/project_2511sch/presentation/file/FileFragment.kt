@@ -87,6 +87,7 @@ class FileFragment : Fragment() {
         observeDeleteFileEvent()
         observeUpdateFileEvent()
         observeInsertNewNoteEvent()
+        observeInsertNewLinkEvent()
 
         Log.i(TAG, "onViewCreated: Requesting initial file list for course ID: ${course.id}")
         viewModelFile.getAllFilesByCourseId(course.id)
@@ -396,6 +397,21 @@ class FileFragment : Fragment() {
                             Log.i(TAG, "InsertNoteEvent: Success - Note '${resource.data?.title}' saved.")
                             Toast.makeText(context, "Note saved successfully", Toast.LENGTH_SHORT).show()
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeInsertNewLinkEvent(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelFile.insertNewLinkEvent.collect { resource ->
+                    when (resource) {
+                        is Resource.Error<*> -> {}
+                        is Resource.Idle<*> -> {}
+                        is Resource.Loading<*> -> {}
+                        is Resource.Success<*> -> {}
                     }
                 }
             }
