@@ -2,6 +2,7 @@ package com.saboon.project_2511sch.presentation.file
 
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -108,6 +109,45 @@ class DialogFragmentNote: DialogFragment() {
                 }
                 else -> false
             }
+        }
+
+        val typedValue = TypedValue()
+
+        requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceContainer, typedValue, true)
+        binding.reEditor.setEditorBackgroundColor(typedValue.data)
+        binding.reEditor.setBackgroundColor(typedValue.data)
+
+        requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true)
+        binding.reEditor.setEditorFontColor(typedValue.data)
+
+        binding.reEditor.setPlaceholder("Insert text here...");
+
+        binding.actionUndo.setOnClickListener {
+            binding.reEditor.undo()
+        }
+        binding.actionRedo.setOnClickListener {
+            binding.reEditor.redo()
+        }
+        binding.actionBold.setOnClickListener {
+            binding.reEditor.setBold()
+        }
+        binding.actionItalic.setOnClickListener {
+            binding.reEditor.setItalic()
+        }
+        binding.actionUnderline.setOnClickListener {
+            binding.reEditor.setUnderline()
+        }
+        binding.actionStrikethrough.setOnClickListener {
+            binding.reEditor.setStrikeThrough()
+        }
+        binding.actionBullet.setOnClickListener {
+            binding.reEditor.setBullets()
+        }
+        binding.actionIndentIncrease.setOnClickListener {
+            binding.reEditor.setIndent()
+        }
+        binding.actionIndentDecrease.setOnClickListener {
+
         }
     }
 
