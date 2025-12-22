@@ -135,6 +135,10 @@
     <string name="add_new_note">Add New Note</string>
     <string name="header">Header</string>
     <string name="edit_note">Edit Note</string>
+    <string name="add_new_link">Add New Link</string>
+    <string name="link">Link</string>
+    <string name="hint_url">URL</string>
+    <string name="edit_link">Edit Link</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>

@@ -87,6 +87,7 @@ class FileFragment : Fragment() {
         observeDeleteFileEvent()
         observeUpdateFileEvent()
         observeInsertNewNoteEvent()
+        observeInsertNewLinkEvent()
 
         Log.i(TAG, "onViewCreated: Requesting initial file list for course ID: ${course.id}")
         viewModelFile.getAllFilesByCourseId(course.id)
@@ -117,7 +118,8 @@ class FileFragment : Fragment() {
                     }
                     R.id.action_add_link -> {
                         Log.d(TAG, "'Add Link' menu item clicked.")
-                        // TODO: add necessary code for "add link" option
+                        val dialog = DialogFragmentLink.newInstance(course, null)
+                        dialog.show(childFragmentManager, "LinkDialogFragment_createLink")
                         true
                     }
                     else -> false
@@ -171,6 +173,25 @@ class FileFragment : Fragment() {
                 Log.w(TAG, "Received null note from Updated Note Dialog.")
             }
         }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentLink.REQUEST_KEY_CREATE, viewLifecycleOwner){requestKey, result ->
+            val newLink = BundleCompat.getParcelable(result, DialogFragmentLink.RESULT_KEY_LINK, File::class.java)
+            if (newLink != null){
+                viewModelFile.insertNewLink(newLink)
+            }else{
+
+            }
+        }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentLink.REQUEST_KEY_UPDATE, viewLifecycleOwner){requestKey, result ->
+            val updatedLink = BundleCompat.getParcelable(result, DialogFragmentLink.RESULT_KEY_LINK, File::class.java)
+            if (updatedLink != null){
+                viewModelFile.updateFile(updatedLink)
+            }
+            else{
+
+            }
+        }
     }
 
     private fun setupRecyclerAdapter() {
@@ -179,13 +200,20 @@ class FileFragment : Fragment() {
 
         recyclerAdapter.onItemClickListener = { clickedFile ->
             Log.i(TAG, "File item clicked: ${clickedFile.title}")
-            if (clickedFile.fileType == "app/note"){
-                Log.i(TAG, "Note item clicked: ${clickedFile.title}. Opening Note Editor.")
-                val dialog = DialogFragmentNote.newInstance(course, clickedFile)
-                dialog.show(childFragmentManager, "NoteDialogFragment_editMode")
-            }else{
-                Log.i(TAG, "File item clicked: ${clickedFile.title}. Opening with system viewer.")
-                openFile(clickedFile)
+            when (clickedFile.fileType){
+                "app/note" -> {
+                    Log.i(TAG, "Note item clicked: ${clickedFile.title}. Opening Note Editor.")
+                    val dialog = DialogFragmentNote.newInstance(course, clickedFile)
+                    dialog.show(childFragmentManager, "NoteDialogFragment_editMode")
+                }
+                "app/link" -> {
+                    val dialog = DialogFragmentLink.newInstance(course, clickedFile)
+                    dialog.show(childFragmentManager, "LinkDialogFragment_editMode")
+                }
+                else -> {
+                    Log.i(TAG, "File item clicked: ${clickedFile.title}. Opening with system viewer.")
+                    openFile(clickedFile)
+                }
             }
         }
 
@@ -376,6 +404,21 @@ class FileFragment : Fragment() {
                             Log.i(TAG, "InsertNoteEvent: Success - Note '${resource.data?.title}' saved.")
                             Toast.makeText(context, "Note saved successfully", Toast.LENGTH_SHORT).show()
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeInsertNewLinkEvent(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelFile.insertNewLinkEvent.collect { resource ->
+                    when (resource) {
+                        is Resource.Error<*> -> {}
+                        is Resource.Idle<*> -> {}
+                        is Resource.Loading<*> -> {}
+                        is Resource.Success<*> -> {}
                     }
                 }
             }

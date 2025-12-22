@@ -111,6 +111,15 @@ class FileRepositoryImp @Inject constructor(
         }
     }
 
+    override suspend fun insertLinkFile(link: File): Resource<File> {
+        try {
+            fileDao.insert(link.toEntity())
+            return Resource.Success(link)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
     override fun getFilesByCourseId(id: String): Flow<Resource<List<File>>> {
         return fileDao.getFilesByCourseId(id)
             .map<List<FileEntity>, Resource<List<File>>> { entities ->

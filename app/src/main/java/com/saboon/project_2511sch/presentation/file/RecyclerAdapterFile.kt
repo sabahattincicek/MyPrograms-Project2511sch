@@ -47,6 +47,12 @@ class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder
                     binding.tvFileType.text = "NOTE"
                 }
 
+                item.fileType == "app/link" -> {
+                    binding.ivFilePreview.visibility = View.GONE
+                    binding.tvFileType.visibility = View.VISIBLE
+                    binding.tvFileType.text = "LINK"
+                }
+
                 else -> {
                     binding.ivFilePreview.visibility = View.GONE
                     binding.tvFileType.visibility = View.VISIBLE
