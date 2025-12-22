@@ -15,5 +15,7 @@ interface IFileRepository {
 
     suspend fun insertNoteFile(note: File): Resource<File>
 
+    suspend fun insertLinkFile(link: File): Resource<File>
+
     fun getFilesByCourseId(id: String): Flow<Resource<List<File>>>
 }
