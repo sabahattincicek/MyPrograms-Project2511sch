@@ -117,7 +117,8 @@ class FileFragment : Fragment() {
                     }
                     R.id.action_add_link -> {
                         Log.d(TAG, "'Add Link' menu item clicked.")
-                        // TODO: add necessary code for "add link" option
+                        val dialog = DialogFragmentLink.newInstance(course, null)
+                        dialog.show(childFragmentManager, "LinkDialogFragment_createLink")
                         true
                     }
                     else -> false
@@ -169,6 +170,15 @@ class FileFragment : Fragment() {
                 viewModelFile.updateFile(updatedNote)
             }else{
                 Log.w(TAG, "Received null note from Updated Note Dialog.")
+            }
+        }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentLink.REQUEST_KEY_CREATE, viewLifecycleOwner){requestKey, result ->
+            val newLink = BundleCompat.getParcelable(result, DialogFragmentLink.RESULT_KEY_LINK, File::class.java)
+            if (newLink != null){
+                viewModelFile.insertNewLink(newLink)
+            }else{
+
             }
         }
     }
