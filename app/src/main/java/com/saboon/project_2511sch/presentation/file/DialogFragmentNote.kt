@@ -95,7 +95,7 @@ class DialogFragmentNote: DialogFragment() {
                             courseId = course.id,
                             title = title,
                             description = content,
-                            fileType = "text/html",
+                            fileType = "app/note",
                             filePath = "",
                             sizeInBytes = content.toByteArray().size.toLong()
                         )
