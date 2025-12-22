@@ -8,6 +8,7 @@ import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.domain.usecase.file.DeleteFileUseCase
 import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesByCourseIdUseCase
 import com.saboon.project_2511sch.domain.usecase.file.InsertNewFileUseCase
+import com.saboon.project_2511sch.domain.usecase.file.InsertNewNoteUseCase
 import com.saboon.project_2511sch.domain.usecase.file.UpdateFileUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ class ViewModelFile @Inject constructor(
     private val getAllFilesByCourseIdUseCase: GetAllFilesByCourseIdUseCase,
     private val deleteFileUseCase: DeleteFileUseCase,
     private val updateFileUseCase: UpdateFileUseCase,
+    private val insertNewNoteUseCase: InsertNewNoteUseCase,
 ) : ViewModel() {
 
     private val TAG = "ViewModelFile"
@@ -36,6 +38,9 @@ class ViewModelFile @Inject constructor(
 
     private val _updateFileEvent = Channel<Resource<File>>()
     val updateFileEvent = _updateFileEvent.receiveAsFlow()
+
+    private val _insertNewNoteEvent = Channel<Resource<File>>()
+    val insertNewNoteEvent = _insertNewNoteEvent.receiveAsFlow()
 
     private val _filesState = MutableStateFlow<Resource<List<File>>>(Resource.Idle())
     val filesState = _filesState.asStateFlow()
@@ -76,6 +81,18 @@ class ViewModelFile @Inject constructor(
                 _updateFileEvent.send(result)
             }catch (e: Exception){
                 _updateFileEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+            }
+        }
+    }
+
+    fun insertNewNote(note: File){
+        viewModelScope.launch {
+            try {
+                _insertNewNoteEvent.send(Resource.Loading())
+                val result = insertNewNoteUseCase.invoke(note)
+                _insertNewNoteEvent.send(result)
+            }catch (e: Exception){
+                _insertNewNoteEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }

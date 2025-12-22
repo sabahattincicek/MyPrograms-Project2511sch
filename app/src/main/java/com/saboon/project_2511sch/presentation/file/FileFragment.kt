@@ -3,7 +3,6 @@ package com.saboon.project_2511sch.presentation.file
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.FileProvider
 import androidx.core.os.BundleCompat
@@ -26,12 +26,9 @@ import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
-import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.FileOutputStream
-import java.io.IOException
 import java.io.File as JavaFile
 
 @AndroidEntryPoint
@@ -79,6 +76,9 @@ class FileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: View has been created. Setting up UI and observers.")
 
+        Log.d(TAG, "onViewCreated: Setting up toolbar.")
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+
         course = args.course
 
         setupRecyclerAdapter()
@@ -86,8 +86,9 @@ class FileFragment : Fragment() {
         observeInsertNewFileEvent()
         observeDeleteFileEvent()
         observeUpdateFileEvent()
+        observeInsertNewNoteEvent()
 
-        Log.i(TAG, "onViewCreated: Requesting initial file list for course ID: ${'"'}${course.id}${'"'}")
+        Log.i(TAG, "onViewCreated: Requesting initial file list for course ID: ${course.id}")
         viewModelFile.getAllFilesByCourseId(course.id)
 
         binding.toolbar.subtitle = course.title
@@ -110,7 +111,8 @@ class FileFragment : Fragment() {
                     }
                     R.id.action_add_note -> {
                         Log.d(TAG, "'Add Note' menu item clicked.")
-                        // TODO: add necessary code for "add note" option
+                        val dialog = DialogFragmentNote.newInstance(course, null)
+                        dialog.show(childFragmentManager, "NoteDialogFragment")
                         true
                     }
                     R.id.action_add_link -> {
@@ -125,22 +127,48 @@ class FileFragment : Fragment() {
         }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentFile.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
+            Log.d(TAG, "Result received from Create File Dialog with key: $requestKey")
             val newFile = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_FILE, File::class.java)
             val uri = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_URI, Uri::class.java)
 
             if(newFile != null && uri != null){
+                Log.i(TAG, "Valid file and URI received from dialog. Passing to ViewModel.")
                 viewModelFile.insertNewFile(newFile, uri)
             }else {
-
+                Log.w(TAG, "Received null file or URI from Create File Dialog. File: $newFile, URI: $uri")
             }
         }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentFile.REQUEST_KEY_UPDATE, viewLifecycleOwner){requestKey, result ->
-            val file = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_FILE, File::class.java)
-            if (file != null){
-                viewModelFile.updateFile(file)
+            Log.d(TAG, "Result received from Update File Dialog with key: $requestKey")
+            val UpdatedFile = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_FILE, File::class.java)
+            if (UpdatedFile != null){
+                Log.i(TAG, "Valid file received from dialog. Passing to ViewModel for update.")
+                viewModelFile.updateFile(UpdatedFile)
             }else{
+                Log.w(TAG, "Received null file from Update File Dialog.")
+            }
+        }
 
+        childFragmentManager.setFragmentResultListener(DialogFragmentNote.REQUEST_KEY_CREATE, viewLifecycleOwner){requestKey, result ->
+            Log.d(TAG, "Result received from Create Note Dialog with key: $requestKey")
+            val newNote = BundleCompat.getParcelable(result, DialogFragmentNote.RESULT_KEY_NOTE, File::class.java)
+            if (newNote != null){
+                Log.i(TAG, "Valid note file received from dialog. Passing to ViewModel.")
+                viewModelFile.insertNewNote(newNote)
+            }else{
+                Log.w(TAG, "Received null note from Create Note Dialog.")
+            }
+        }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentNote.REQUEST_KEY_UPDATE, viewLifecycleOwner){requestKey, result ->
+            Log.d(TAG, "Result received from Update Note Dialog with key: $requestKey")
+            val updatedNote = BundleCompat.getParcelable(result, DialogFragmentNote.RESULT_KEY_NOTE, File::class.java)
+            if (updatedNote != null){
+                Log.i(TAG, "Valid note file received from dialog. Passing to ViewModel.")
+                viewModelFile.updateFile(updatedNote)
+            }else{
+                Log.w(TAG, "Received null note from Updated Note Dialog.")
             }
         }
     }
@@ -151,22 +179,29 @@ class FileFragment : Fragment() {
 
         recyclerAdapter.onItemClickListener = { clickedFile ->
             Log.i(TAG, "File item clicked: ${clickedFile.title}")
-            openFile(clickedFile)
+            if (clickedFile.fileType == "app/note"){
+                Log.i(TAG, "Note item clicked: ${clickedFile.title}. Opening Note Editor.")
+                val dialog = DialogFragmentNote.newInstance(course, clickedFile)
+                dialog.show(childFragmentManager, "NoteDialogFragment_editMode")
+            }else{
+                Log.i(TAG, "File item clicked: ${clickedFile.title}. Opening with system viewer.")
+                openFile(clickedFile)
+            }
         }
 
         recyclerAdapter.onMenuItemClickListener = { file, clickedItem ->
             when(clickedItem){
-                R.id.action_edit -> {
-                    val dialog = DialogFragmentFile.newInstance(course, null, file)
-                    dialog.show(childFragmentManager, "UpdateFileDialogFragment")
-                }
                 R.id.action_delete -> {
-                    val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete Program", "Are you sure?")
+                    Log.d(TAG, "Delete menu clicked for file: ${file.title}")
+                    val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete File", "Are you sure you want to delete '${file.title}'?")
                     dialog.show(childFragmentManager, "DeleteDialogFragment")
                     childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, viewLifecycleOwner){requestKey, result ->
                         val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
                         if (isYes) {
+                            Log.i(TAG, "Deletion confirmed for file: ${file.title}. Calling ViewModel.")
                             viewModelFile.deleteFile(file)
+                        } else {
+                            Log.d(TAG, "Deletion cancelled for file: ${file.title}.")
                         }
                     }
                 }
@@ -221,13 +256,15 @@ class FileFragment : Fragment() {
                 viewModelFile.filesState.collect { resource ->
                     when (resource) {
                         is Resource.Error<*> -> {
-                            Log.e(TAG, "FilesState: Error - ${'"'}${resource.message}${'"'}")
+                            Log.e(TAG, "FilesState: Error - ${resource.message}")
+                            // Optionally show a persistent error message in the UI
                         }
                         is Resource.Idle<*> -> {
                             Log.d(TAG, "FilesState: Idle.")
                         }
                         is Resource.Loading<*> -> {
                             Log.d(TAG, "FilesState: Loading.")
+                            // TODO: Show a loading indicator, e.g., a ProgressBar
                         }
                         is Resource.Success<*> -> {
                             val itemCount = resource.data?.size ?: 0
@@ -246,7 +283,7 @@ class FileFragment : Fragment() {
                 viewModelFile.insertNewFileEvent.collect { resource ->
                     when(resource) {
                         is Resource.Error<*> -> {
-                            Log.e(TAG, "InsertFileEvent: Error - ${'"'}${resource.message}${'"'}")
+                            Log.e(TAG, "InsertFileEvent: Error - ${resource.message}")
                             Toast.makeText(context, resource.message, Toast.LENGTH_LONG).show()
                         }
                         is Resource.Idle<*> -> {
@@ -254,10 +291,10 @@ class FileFragment : Fragment() {
                         }
                         is Resource.Loading<*> -> {
                             Log.d(TAG, "InsertFileEvent: Loading...")
-                            // TODO: Show a loading indicator to the user
+                            Toast.makeText(context, "Saving file...", Toast.LENGTH_SHORT).show()
                         }
                         is Resource.Success<*> -> {
-                            Log.i(TAG, "InsertFileEvent: Success - File '${'"'}${resource.data?.title}${'"'}' saved.")
+                            Log.i(TAG, "InsertFileEvent: Success - File '${resource.data?.title}' saved.")
                             Toast.makeText(context, "File saved successfully", Toast.LENGTH_SHORT).show()
                             // The filesState Flow will automatically update the list.
                         }
@@ -272,15 +309,20 @@ class FileFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModelFile.deleteFileEvent.collect { resource ->
                     when(resource) {
-                        is Resource.Error<*> -> {}
-                        is Resource.Idle<*> -> {}
-                        is Resource.Loading<*> -> {}
+                        is Resource.Error<*> -> {
+                            Log.e(TAG, "DeleteFileEvent: Error - ${resource.message}")
+                            Toast.makeText(context, resource.message, Toast.LENGTH_LONG).show()
+                        }
+                        is Resource.Idle<*> -> {
+                             Log.d(TAG, "DeleteFileEvent: Idle.")
+                        }
+                        is Resource.Loading<*> -> {
+                            Log.d(TAG, "DeleteFileEvent: Loading...")
+                            Toast.makeText(context, "Deleting file...", Toast.LENGTH_SHORT).show()
+                        }
                         is Resource.Success<*> -> {
-                            val deletedFile = resource.data
-                            if (deletedFile != null){
-                                Log.i(TAG, "DeleteFileEvent: Success - '${deletedFile.title}' deleted successfully.")
-                                Toast.makeText(context, "'${deletedFile.title}' deleted", Toast.LENGTH_SHORT).show()
-                            }
+                            Log.i(TAG, "DeleteFileEvent: Success - '${resource.data?.title}' was deleted.")
+                            Toast.makeText(context, "File deleted", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -293,11 +335,46 @@ class FileFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModelFile.updateFileEvent.collect { resource ->
                     when(resource) {
-                        is Resource.Error<*> -> {}
-                        is Resource.Idle<*> -> {}
-                        is Resource.Loading<*> -> {}
+                        is Resource.Error<*> -> {
+                            Log.e(TAG, "UpdateFileEvent: Error - ${resource.message}")
+                            Toast.makeText(context, resource.message, Toast.LENGTH_LONG).show()
+                        }
+                        is Resource.Idle<*> -> {
+                            Log.d(TAG, "UpdateFileEvent: Idle.")
+                        }
+                        is Resource.Loading<*> -> {
+                            Log.d(TAG, "UpdateFileEvent: Loading...")
+                            Toast.makeText(context, "Updating file...", Toast.LENGTH_SHORT).show()
+                        }
                         is Resource.Success<*> -> {
+                            Log.i(TAG, "UpdateFileEvent: Success - '${resource.data?.title}' was updated.")
+                            Toast.makeText(context, "File updated successfully", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
+    }
 
+    private fun observeInsertNewNoteEvent(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelFile.insertNewNoteEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error<*> -> {
+                            Log.e(TAG, "InsertNoteEvent: Error - ${resource.message}")
+                            Toast.makeText(context, resource.message, Toast.LENGTH_LONG).show()
+                        }
+                        is Resource.Idle<*> -> {
+                            Log.d(TAG, "InsertNoteEvent: Idle.")
+                        }
+                        is Resource.Loading<*> -> {
+                            Log.d(TAG, "InsertNoteEvent: Loading...")
+                            Toast.makeText(context, "Saving note...", Toast.LENGTH_SHORT).show()
+                        }
+                        is Resource.Success<*> -> {
+                            Log.i(TAG, "InsertNoteEvent: Success - Note '${resource.data?.title}' saved.")
+                            Toast.makeText(context, "Note saved successfully", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

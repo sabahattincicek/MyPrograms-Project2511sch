@@ -53,7 +53,7 @@
     <string name="more">More</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-    <string name="Title">Title</string>
+    <string name="title">Title</string>
     <string name="hint_title">Title</string>
     <string name="cance">Cancel</string>
     <string name="cancel">Cancel</string>
@@ -132,6 +132,9 @@
     <string name="file">File</string>
     <string name="file_type">File Type</string>
     <string name="file_size">Size</string>
+    <string name="add_new_note">Add New Note</string>
+    <string name="header">Header</string>
+    <string name="edit_note">Edit Note</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
