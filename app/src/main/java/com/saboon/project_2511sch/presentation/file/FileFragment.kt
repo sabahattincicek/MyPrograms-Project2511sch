@@ -169,7 +169,14 @@ class FileFragment : Fragment() {
 
         recyclerAdapter.onItemClickListener = { clickedFile ->
             Log.i(TAG, "File item clicked: ${clickedFile.title}")
-            openFile(clickedFile)
+            if (clickedFile.fileType == "app/note"){
+                Log.i(TAG, "Note item clicked: ${clickedFile.title}. Opening Note Editor.")
+                val dialog = DialogFragmentNote.newInstance(course, clickedFile)
+                dialog.show(childFragmentManager, "NoteDialogFragment_editMode")
+            }else{
+                Log.i(TAG, "File item clicked: ${clickedFile.title}. Opening with system viewer.")
+                openFile(clickedFile)
+            }
         }
 
         recyclerAdapter.onMenuItemClickListener = { file, clickedItem ->

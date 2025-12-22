@@ -41,6 +41,12 @@ class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder
                     binding.tvFileType.text = "PDF"
                 }
 
+                item.fileType == "app/note" -> {
+                    binding.ivFilePreview.visibility = View.GONE
+                    binding.tvFileType.visibility = View.VISIBLE
+                    binding.tvFileType.text = "NOTE"
+                }
+
                 else -> {
                     binding.ivFilePreview.visibility = View.GONE
                     binding.tvFileType.visibility = View.VISIBLE
