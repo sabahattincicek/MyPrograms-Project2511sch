@@ -98,7 +98,7 @@ class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder
 
         holder.binding.ivFileMoreMenu.setOnClickListener { anchorView ->
             val popup = PopupMenu(anchorView.context, anchorView)
-            popup.inflate(R.menu.menu_action_edit_delete)
+            popup.inflate(R.menu.menu_action_delete)
             popup.setOnMenuItemClickListener { menuItem ->
                 onMenuItemClickListener?.invoke(item, menuItem.itemId)
                 true

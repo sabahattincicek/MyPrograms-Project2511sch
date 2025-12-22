@@ -181,11 +181,6 @@ class FileFragment : Fragment() {
 
         recyclerAdapter.onMenuItemClickListener = { file, clickedItem ->
             when(clickedItem){
-                R.id.action_edit -> {
-                    Log.d(TAG, "Edit menu clicked for file: ${file.title}")
-                    val dialog = DialogFragmentFile.newInstance(course, null, file)
-                    dialog.show(childFragmentManager, "UpdateFileDialogFragment")
-                }
                 R.id.action_delete -> {
                     Log.d(TAG, "Delete menu clicked for file: ${file.title}")
                     val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete File", "Are you sure you want to delete '${file.title}'?")
