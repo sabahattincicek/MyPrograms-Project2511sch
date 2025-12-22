@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.domain.usecase.file.DeleteFileUseCase
 import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesByCourseIdUseCase
+import com.saboon.project_2511sch.domain.usecase.file.InsertNewLinkFileUseCase
 import com.saboon.project_2511sch.domain.usecase.file.InsertNewFileUseCase
 import com.saboon.project_2511sch.domain.usecase.file.InsertNewNoteUseCase
 import com.saboon.project_2511sch.domain.usecase.file.UpdateFileUseCase
@@ -26,6 +27,7 @@ class ViewModelFile @Inject constructor(
     private val deleteFileUseCase: DeleteFileUseCase,
     private val updateFileUseCase: UpdateFileUseCase,
     private val insertNewNoteUseCase: InsertNewNoteUseCase,
+    private val insertNewLinkUseCase: InsertNewLinkFileUseCase,
 ) : ViewModel() {
 
     private val TAG = "ViewModelFile"
@@ -41,6 +43,9 @@ class ViewModelFile @Inject constructor(
 
     private val _insertNewNoteEvent = Channel<Resource<File>>()
     val insertNewNoteEvent = _insertNewNoteEvent.receiveAsFlow()
+
+    private val _insertNewLinkEvent = Channel<Resource<File>>()
+    val insertNewLinkEvent = _insertNewLinkEvent.receiveAsFlow()
 
     private val _filesState = MutableStateFlow<Resource<List<File>>>(Resource.Idle())
     val filesState = _filesState.asStateFlow()
@@ -93,6 +98,18 @@ class ViewModelFile @Inject constructor(
                 _insertNewNoteEvent.send(result)
             }catch (e: Exception){
                 _insertNewNoteEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+            }
+        }
+    }
+
+    fun insertNewLink(link: File){
+        viewModelScope.launch {
+            try {
+                _insertNewLinkEvent.send(Resource.Loading())
+                val result = insertNewLinkUseCase.invoke(link)
+                _insertNewLinkEvent.send(result)
+            }catch (e: Exception){
+                _insertNewLinkEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }

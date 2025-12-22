@@ -5,7 +5,7 @@ import com.saboon.project_2511sch.domain.repository.IFileRepository
 import com.saboon.project_2511sch.util.Resource
 import javax.inject.Inject
 
-class InsertLinkFileUseCase @Inject constructor(
+class InsertNewLinkFileUseCase @Inject constructor(
     private val fileRepository: IFileRepository
 ) {
     suspend operator fun invoke(link: File): Resource<File>{
