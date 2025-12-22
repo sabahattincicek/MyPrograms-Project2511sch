@@ -181,6 +181,16 @@ class FileFragment : Fragment() {
 
             }
         }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentLink.REQUEST_KEY_UPDATE, viewLifecycleOwner){requestKey, result ->
+            val updatedLink = BundleCompat.getParcelable(result, DialogFragmentLink.RESULT_KEY_LINK, File::class.java)
+            if (updatedLink != null){
+                viewModelFile.updateFile(updatedLink)
+            }
+            else{
+
+            }
+        }
     }
 
     private fun setupRecyclerAdapter() {
