@@ -24,7 +24,7 @@ class Project2511schApplication : Application(), Configuration.Provider {
         val notificationManager = getSystemService(NotificationManager::class.java)
         val channel = NotificationChannel(
             "schedule_reminders", // Bu ID, AlarmReceiver'da kullanilanla AYNI OLMALI
-            "Schedule Reminders",
+            "Task Reminders",
             NotificationManager.IMPORTANCE_HIGH
         )
         channel.description = "Shows notification for upcoming schedules."

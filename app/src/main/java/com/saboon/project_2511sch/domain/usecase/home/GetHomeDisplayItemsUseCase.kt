@@ -3,7 +3,7 @@ package com.saboon.project_2511sch.domain.usecase.home
 import android.icu.util.Calendar
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
-import com.saboon.project_2511sch.domain.model.Schedule
+import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
 import com.saboon.project_2511sch.domain.repository.IScheduleRepository
@@ -43,7 +43,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private fun generateAndGroupDisplayList(
         programTable: ProgramTable,
         courses: List<Course>,
-        schedules: List<Schedule>
+        tasks: List<Task>
     ): List<HomeDisplayItem> {
         val finalEvents = mutableListOf<HomeDisplayItem.ContentItem>()
         val courseMap = courses.associateBy { it.id }
@@ -53,7 +53,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         calendar.add(Calendar.DAY_OF_YEAR, 30)
         val endDate = calendar.timeInMillis
 
-        schedules.forEach { schedule ->
+        tasks.forEach { schedule ->
             val course = courseMap[schedule.courseId]
             if (course != null) {
                 if (schedule.recurrenceRule.isBlank()) {
@@ -62,7 +62,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                             occurrenceId = "single_${schedule.id}",
                             programTable = programTable,
                             course = course,
-                            schedule = schedule
+                            task = schedule
                         )
                     )
                 }
@@ -78,7 +78,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                                     occurrenceId = occurrenceId,
                                     programTable = programTable,
                                     course = course,
-                                    schedule = occurrenceSchedule
+                                    task = occurrenceSchedule
                                 )
                             )
                         }
@@ -89,14 +89,14 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         }
 
 
-        finalEvents.sortBy { it.schedule.startTime }
-        finalEvents.sortBy { it.schedule.date }
+        finalEvents.sortBy { it.task.startTime }
+        finalEvents.sortBy { it.task.date }
 
         val displayItemsWithHeaders = mutableListOf<HomeDisplayItem>()
         var lastHeaderDate: Long? = null
 
         finalEvents.forEach { event ->
-            val eventDay = getDayStartMillis(event.schedule.date)
+            val eventDay = getDayStartMillis(event.task.date)
             if (eventDay != lastHeaderDate){
                 displayItemsWithHeaders.add(HomeDisplayItem.HeaderItem(date = eventDay))
                 lastHeaderDate = eventDay

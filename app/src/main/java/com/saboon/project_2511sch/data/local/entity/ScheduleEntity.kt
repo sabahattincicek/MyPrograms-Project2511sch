@@ -3,7 +3,6 @@ package com.saboon.project_2511sch.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.saboon.project_2511sch.domain.model.Schedule
 
 @Entity(tableName = "schedules")
 data class ScheduleEntity(

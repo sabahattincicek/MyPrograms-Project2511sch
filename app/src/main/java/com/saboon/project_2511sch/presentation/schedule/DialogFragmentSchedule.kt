@@ -13,7 +13,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentScheduleBinding
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.Schedule
+import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.TimePickers
 import com.saboon.project_2511sch.util.toFormattedString
@@ -24,7 +24,7 @@ class DialogFragmentSchedule: DialogFragment() {
     private val binding get() = _binding!!
 
     private lateinit var course: Course
-    private var schedule: Schedule? = null
+    private var task: Task? = null
 
     private var selectedDateMillis: Long = System.currentTimeMillis()
     private var selectedStartTimeMillis: Long = System.currentTimeMillis()
@@ -50,9 +50,9 @@ class DialogFragmentSchedule: DialogFragment() {
                     this.course = course
                 }
             }
-            BundleCompat.getParcelable(it,ARG_SCHEDULE, Schedule::class.java).let{ schedule ->
+            BundleCompat.getParcelable(it,ARG_SCHEDULE, Task::class.java).let{ schedule ->
                 if (schedule != null){
-                    this.schedule = schedule
+                    this.task = schedule
                 }
             }
         }
@@ -74,29 +74,29 @@ class DialogFragmentSchedule: DialogFragment() {
         binding.actvReminder.setAdapter(reminderAdapter)
 
 
-        val isEditMode = schedule != null
+        val isEditMode = task != null
         if(isEditMode){
-            selectedRecurrenceRule = schedule!!.recurrenceRule
-            selectedDateMillis = schedule!!.date
-            selectedStartTimeMillis = schedule!!.startTime
-            selectedEndTimeMillis = schedule!!.endTime
-            selectedRemindBeforeMinutes = schedule!!.remindBefore
+            selectedRecurrenceRule = task!!.recurrenceRule
+            selectedDateMillis = task!!.date
+            selectedStartTimeMillis = task!!.startTime
+            selectedEndTimeMillis = task!!.endTime
+            selectedRemindBeforeMinutes = task!!.remindBefore
 
-            binding.etTitle.setText(schedule!!.title)
-            binding.etDescription.setText(schedule!!.description)
+            binding.etTitle.setText(task!!.title)
+            binding.etDescription.setText(task!!.description)
             binding.actvRepeat.setText(mapRuleToDisplayString(selectedRecurrenceRule, recurrenceOptions), false)
             binding.etDate.setText(selectedDateMillis.toFormattedString("dd MMMM yyyy"))
             binding.etTimeStart.setText(selectedStartTimeMillis.toFormattedString("HH:mm"))
             binding.etTimeEnd.setText(selectedEndTimeMillis.toFormattedString("HH:mm"))
             binding.actvReminder.setText(mapMinutesToDisplayString(selectedRemindBeforeMinutes, reminderOptions), false)
-            binding.etPlace.setText(schedule!!.place)
+            binding.etPlace.setText(task!!.place)
         }
 
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.action_delete -> {
-                    if (schedule != null){
-                        setFragmentResult(REQUEST_KEY_DELETE, bundleOf(RESULT_KEY_SCHEDULE to schedule))
+                    if (task != null){
+                        setFragmentResult(REQUEST_KEY_DELETE, bundleOf(RESULT_KEY_SCHEDULE to task))
                         dismiss()
                     }
                     true
@@ -107,7 +107,7 @@ class DialogFragmentSchedule: DialogFragment() {
 
         binding.btnSave.setOnClickListener {
             if(isEditMode){
-                val updatedSchedule = schedule!!.copy(
+                val updatedSchedule = task!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     date = selectedDateMillis,
@@ -123,7 +123,7 @@ class DialogFragmentSchedule: DialogFragment() {
                 ))
                 dismiss()
             }else{
-                val newSchedule = Schedule(
+                val newTask = Task(
                     id = IdGenerator.generateScheduleId(binding.etTitle.text.toString()),
                     courseId = course.id,
                     programTableId = course.programTableId,
@@ -138,7 +138,7 @@ class DialogFragmentSchedule: DialogFragment() {
                 )
 
                 setFragmentResult(REQUEST_KEY_CREATE, bundleOf(
-                    RESULT_KEY_SCHEDULE to newSchedule
+                    RESULT_KEY_SCHEDULE to newTask
                 ))
                 dismiss()
             }
@@ -233,11 +233,11 @@ class DialogFragmentSchedule: DialogFragment() {
         const val REQUEST_KEY_DELETE = "schedule_dialog_fragment_request_key_delete"
         const val RESULT_KEY_SCHEDULE = "schedule_dialog_fragment_result_key_schedule"
 
-        fun newInstance(course: Course, schedule: Schedule?): DialogFragmentSchedule{
+        fun newInstance(course: Course, task: Task?): DialogFragmentSchedule{
             val fragment = DialogFragmentSchedule()
             fragment.arguments = bundleOf(
                 ARG_COURSE to course,
-                ARG_SCHEDULE to schedule
+                ARG_SCHEDULE to task
             )
             return fragment
         }

@@ -21,7 +21,7 @@
 
     <!-- Descriptions -->
     <string name="text_or">OR</string>
-    <string name="description_remote_user">Want to synchronize your data across multiple devices? Create a remote account to securely backup your timetables, exams, and schedules in the cloud and access them anywhere, anytime.</string>
+    <string name="description_remote_user">Want to synchronize your data across multiple devices? Create a remote account to securely backup your timetables, exams, and tasks in the cloud and access them anywhere, anytime.</string>
 
     <!-- Validation Messages -->
     <string name="error_first_name_required">First name is required</string>
@@ -94,7 +94,7 @@
     <string name="for_multiple_people_separate_with_commas">For multiple people, separate with commas</string>
     <string name="course_added_successfully">Course added successfully</string>
     <string name="appBarTitle_courseDetails">Course Details</string>
-    <string name="schedules">Schedules</string>
+    <string name="tasks">Schedules</string>
     <string name="description">Description</string>
     <string name="files">Files</string>
     <string name="modelColor_1">Red</string>
@@ -106,7 +106,7 @@
     <string name="modelColor_7">Brown</string>
     <string name="modelColor_8">Cyan</string>
     <string name="create_new_schedule">Create New Schedule</string>
-    <string name="schedule">Schedule</string>
+    <string name="task">Schedule</string>
     <string name="date">Date</string>
     <string name="Repeat">Repeat</string>
     <string name="hint_date">Date</string>

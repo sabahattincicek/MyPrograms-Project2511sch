@@ -20,7 +20,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentCourseDetailsBinding
-import com.saboon.project_2511sch.domain.model.Schedule
+import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.presentation.schedule.DialogFragmentSchedule
 import com.saboon.project_2511sch.presentation.schedule.RecyclerAdapterSchedule
 import com.saboon.project_2511sch.presentation.schedule.ViewModelSchedule
@@ -143,23 +143,23 @@ class CourseDetailsFragment : Fragment() {
         }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentSchedule.REQUEST_KEY_CREATE, this){ requestKey, result ->
-            val newSchedule = BundleCompat.getParcelable(result, DialogFragmentSchedule.RESULT_KEY_SCHEDULE, Schedule::class.java)
-            if (newSchedule != null){
-                viewModelSchedule.insertNewSchedule(newSchedule)
+            val newTask = BundleCompat.getParcelable(result, DialogFragmentSchedule.RESULT_KEY_SCHEDULE, Task::class.java)
+            if (newTask != null){
+                viewModelSchedule.insertNewSchedule(newTask)
             }
         }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentSchedule.REQUEST_KEY_UPDATE, this){ requestKey, result ->
-            val updatedSchedule = BundleCompat.getParcelable(result, DialogFragmentSchedule.RESULT_KEY_SCHEDULE,Schedule::class.java)
-            if(updatedSchedule != null){
-                viewModelSchedule.updateSchedule(updatedSchedule)
+            val updatedTask = BundleCompat.getParcelable(result, DialogFragmentSchedule.RESULT_KEY_SCHEDULE,Task::class.java)
+            if(updatedTask != null){
+                viewModelSchedule.updateSchedule(updatedTask)
             }
         }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentSchedule.REQUEST_KEY_DELETE, this){ requestKey, result ->
-            val deletedSchedule = BundleCompat.getParcelable(result, DialogFragmentSchedule.RESULT_KEY_SCHEDULE, Schedule::class.java)
-            if (deletedSchedule != null){
-                viewModelSchedule.deleteSchedule(deletedSchedule)
+            val deletedTask = BundleCompat.getParcelable(result, DialogFragmentSchedule.RESULT_KEY_SCHEDULE, Task::class.java)
+            if (deletedTask != null){
+                viewModelSchedule.deleteSchedule(deletedTask)
             }
         }
 
@@ -297,7 +297,7 @@ class CourseDetailsFragment : Fragment() {
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            Toast.makeText(context, "Schedule deleted", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Task deleted", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -308,7 +308,7 @@ class CourseDetailsFragment : Fragment() {
     private fun observeSchedulesState(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSchedule.scheduleState.collect { resource ->
+                viewModelSchedule.taskState.collect { resource ->
                     when(resource) {
                         is Resource.Error<*> -> {
                             Toast.makeText(requireContext(), resource.message, Toast.LENGTH_LONG).show()

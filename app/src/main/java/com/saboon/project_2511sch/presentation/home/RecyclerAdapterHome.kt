@@ -1,18 +1,15 @@
 package com.saboon.project_2511sch.presentation.home
 
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.databinding.RecyclerListRowHomeBinding
 import com.saboon.project_2511sch.databinding.RecyclerListRowHomeHeaderBinding
 import com.saboon.project_2511sch.util.toFormattedString
-import androidx.core.graphics.toColorInt
 import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.util.ModelColors
 
@@ -35,7 +32,7 @@ class RecyclerAdapterHome : ListAdapter<HomeDisplayItem, RecyclerView.ViewHolder
         fun bind(item: HomeDisplayItem.ContentItem){
             val programTable = item.programTable
             val course = item.course
-            val schedule = item.schedule
+            val schedule = item.task
 
             binding.tvCourseTitle.text = course.title
             binding.tvCoursePeople.text = course.people

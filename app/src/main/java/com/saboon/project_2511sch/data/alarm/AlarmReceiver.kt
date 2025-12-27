@@ -12,13 +12,12 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
-import com.saboon.project_2511sch.domain.model.Schedule
+import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.toFormattedString
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
-import java.util.Calendar
 
 class AlarmReceiver: BroadcastReceiver() {
 
@@ -40,13 +39,13 @@ class AlarmReceiver: BroadcastReceiver() {
         val alarmAction = intent.action
         val programTable = BundleCompat.getParcelable(extras, "EXTRA_PROGRAM_TABLE", ProgramTable::class.java)
         val course = BundleCompat.getParcelable(extras, "EXTRA_COURSE", Course::class.java)
-        val schedule = BundleCompat.getParcelable(extras, "EXTRA_SCHEDULE", Schedule::class.java)
-        if (programTable == null || course == null || schedule == null) {
+        val task = BundleCompat.getParcelable(extras, "EXTRA_SCHEDULE", Task::class.java)
+        if (programTable == null || course == null || task == null) {
             Log.e(tag, "One or more of the parcelable objects were null. Aborting.")
             return
         }
 
-        Log.i(tag, "Processing alarm for schedule: '${schedule.title}' (ID: ${schedule.id})")
+        Log.i(tag, "Processing alarm for task: '${task.title}' (ID: ${task.id})")
 
         val hiltEntryPoint = EntryPointAccessors.fromApplication(context.applicationContext, AlarmSchedulerEntryPoint::class.java)
         val alarmScheduler = hiltEntryPoint.alarmScheduler()
@@ -54,13 +53,13 @@ class AlarmReceiver: BroadcastReceiver() {
         when(alarmAction){
             AlarmSchedulerImp.ACTION_REMINDER -> {
                 Log.d(tag, "Handling a REMINDER alarm.")
-                showReminderNotification(context, programTable, course, schedule)
-                alarmScheduler.rescheduleReminder(programTable, course, schedule)
+                showReminderNotification(context, programTable, course, task)
+                alarmScheduler.rescheduleReminder(programTable, course, task)
             }
             AlarmSchedulerImp.ACTION_ABSENCE_CHECK -> {
                 Log.d(tag, "Handling an ABSENCE_CHECK alarm.")
-                showAbsenceCheckNotification(context, programTable, course, schedule)
-                alarmScheduler.rescheduleAbsenceReminder(programTable, course, schedule)
+                showAbsenceCheckNotification(context, programTable, course, task)
+                alarmScheduler.rescheduleAbsenceReminder(programTable, course, task)
             }
             else -> {
                 Log.w(tag, "Unknown or missing alarm action: $alarmAction")
@@ -68,16 +67,16 @@ class AlarmReceiver: BroadcastReceiver() {
         }
     }
 
-    private fun showReminderNotification(context: Context, programTable: ProgramTable, course: Course, schedule: Schedule){
-        val notificationId = schedule.id.hashCode()
+    private fun showReminderNotification(context: Context, programTable: ProgramTable, course: Course, task: Task){
+        val notificationId = task.id.hashCode()
         val notificationManager = context.getSystemService(NotificationManager::class.java)
         val notification = NotificationCompat.Builder(context, "schedule_reminders")
             .setSmallIcon(R.drawable.baseline_add_24) // TODO: Change icon
-            .setContentTitle("Upcoming: ${schedule.title ?: "Event"}")
-            .setContentText("For course '${course.title ?: "your course"}' at ${schedule.startTime.toFormattedString("HH:mm")}.")
+            .setContentTitle("Upcoming: ${task.title ?: "Event"}")
+            .setContentText("For course '${course.title ?: "your course"}' at ${task.startTime.toFormattedString("HH:mm")}.")
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("Event: ${schedule.title}\nCourse: ${course.title}\nTime: ${schedule.startTime.toFormattedString("HH:mm")}\nDescription: ${schedule.description}")
+                    .bigText("Event: ${task.title}\nCourse: ${course.title}\nTime: ${task.startTime.toFormattedString("HH:mm")}\nDescription: ${task.description}")
             )
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
@@ -87,8 +86,8 @@ class AlarmReceiver: BroadcastReceiver() {
         Log.i(tag, "Reminder notification posted with ID: $notificationId")
     }
 
-    private fun showAbsenceCheckNotification(context: Context, programTable: ProgramTable, course: Course, schedule: Schedule) {
-        val notificationId = schedule.id.hashCode() + 2 // Use a different ID for this notification type if needed
+    private fun showAbsenceCheckNotification(context: Context, programTable: ProgramTable, course: Course, task: Task) {
+        val notificationId = task.id.hashCode() + 2 // Use a different ID for this notification type if needed
 
         // "Yes" action
         val yesIntent = Intent(context, NotificationActionReceiver::class.java).apply {
@@ -118,7 +117,7 @@ class AlarmReceiver: BroadcastReceiver() {
         val notification = NotificationCompat.Builder(context, "schedule_reminders")
             .setSmallIcon(R.drawable.baseline_add_24) // TODO: Change icon
             .setContentTitle("Attendance Check")
-            .setContentText("Did you attend '${schedule.title}'?")
+            .setContentText("Did you attend '${task.title}'?")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .addAction(0, "Yes", yesPendingIntent)
             .addAction(0, "No", noPendingIntent)

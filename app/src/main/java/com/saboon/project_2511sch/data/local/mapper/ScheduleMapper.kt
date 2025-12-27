@@ -1,10 +1,10 @@
 package com.saboon.project_2511sch.data.local.mapper
 
 import com.saboon.project_2511sch.data.local.entity.ScheduleEntity
-import com.saboon.project_2511sch.domain.model.Schedule
+import com.saboon.project_2511sch.domain.model.Task
 
-fun ScheduleEntity.toDomain(): Schedule {
-    return Schedule(
+fun ScheduleEntity.toDomain(): Task {
+    return Task(
         id = id,
         courseId = courseId,
         programTableId = programTableId,
@@ -25,7 +25,7 @@ fun ScheduleEntity.toDomain(): Schedule {
     )
 }
 
-fun Schedule.toEntity(): ScheduleEntity {
+fun Task.toEntity(): ScheduleEntity {
     return ScheduleEntity(
         id = id,
         courseId = courseId,

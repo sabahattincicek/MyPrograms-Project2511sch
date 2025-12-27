@@ -29,7 +29,7 @@
                     app:navigationIcon="@drawable/baseline_close_24"
                     app:navigationIconTint="?attr/colorOnSurface"
                     app:subtitle="@string/course"
-                    app:title="@string/schedule"/>
+                    app:title="@string/task"/>
             </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -46,7 +46,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/schedule"
+                    android:text="@string/task"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
                     android:textStyle="bold" />

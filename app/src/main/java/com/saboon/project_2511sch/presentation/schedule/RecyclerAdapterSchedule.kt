@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.R
-import com.saboon.project_2511sch.domain.model.Schedule
+import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.toFormattedString
 
-class RecyclerAdapterSchedule: ListAdapter<Schedule, RecyclerAdapterSchedule.ScheduleViewHolder>(ScheduleDiffCallback()) {
+class RecyclerAdapterSchedule: ListAdapter<Task, RecyclerAdapterSchedule.ScheduleViewHolder>(ScheduleDiffCallback()) {
 
-    var onItemClickListener:((Schedule) -> Unit)? = null
+    var onItemClickListener:((Task) -> Unit)? = null
 
     class ScheduleViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val scheduleTitle: TextView = view.findViewById(R.id.tv_title)
@@ -24,17 +24,17 @@ class RecyclerAdapterSchedule: ListAdapter<Schedule, RecyclerAdapterSchedule.Sch
         val schedulePlace: TextView = view.findViewById(R.id.tv_place)
     }
 
-    class ScheduleDiffCallback: DiffUtil.ItemCallback<Schedule>() {
+    class ScheduleDiffCallback: DiffUtil.ItemCallback<Task>() {
         override fun areItemsTheSame(
-            oldItem: Schedule,
-            newItem: Schedule
+            oldItem: Task,
+            newItem: Task
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: Schedule,
-            newItem: Schedule
+            oldItem: Task,
+            newItem: Task
         ): Boolean {
             return oldItem == newItem
         }
