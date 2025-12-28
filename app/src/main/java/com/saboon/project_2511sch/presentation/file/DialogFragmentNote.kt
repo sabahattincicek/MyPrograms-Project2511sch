@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.course_file
+package com.saboon.project_2511sch.presentation.file
 
 import android.os.Bundle
 import android.util.Log
@@ -16,14 +16,14 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.IdGenerator
 
-class DialogFragmentCourseNote: DialogFragment() {
+class DialogFragmentNote: DialogFragment() {
     private var _binding : DialogFragmentNoteBinding?=null
     private val binding get() = _binding!!
 
     private lateinit var course: Course
     private var file: File? = null
 
-    private val TAG = "DialogFragmentCourseNote"
+    private val TAG = "DialogFragmentNote"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -158,8 +158,8 @@ class DialogFragmentCourseNote: DialogFragment() {
         const val REQUEST_KEY_UPDATE = "note_dialog_fragment_request_key_update"
         const val RESULT_KEY_NOTE = "note_dialog_fragment_result_key_note"
 
-        fun newInstance(course: Course, note: File?): DialogFragmentCourseNote{
-            val fragment = DialogFragmentCourseNote()
+        fun newInstance(course: Course, note: File?): DialogFragmentNote{
+            val fragment = DialogFragmentNote()
             fragment.arguments = bundleOf(
                 ARG_COURSE to course,
                 ARG_NOTE to note

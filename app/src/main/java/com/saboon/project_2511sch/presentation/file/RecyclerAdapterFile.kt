@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.course_file
+package com.saboon.project_2511sch.presentation.file
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +12,13 @@ import com.saboon.project_2511sch.databinding.RecyclerListRowFileBinding
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.toFormattedString
 
-class RecyclerAdapterCourseFile : ListAdapter<File, RecyclerAdapterCourseFile.CourseFileViewHolder>(FileDiffCallback()) {
+class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder>(FileDiffCallback()) {
 
 
     var onItemClickListener: ((File) -> Unit)? = null
     var onMenuItemClickListener: ((File, Int) -> Unit)? = null
 
-    class CourseFileViewHolder(val binding: RecyclerListRowFileBinding): RecyclerView.ViewHolder(binding.root){
+    class FileViewHolder(val binding: RecyclerListRowFileBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: File){
             binding.tvTitle.text = item.title
             binding.tvDate.text = item.createdAt.toFormattedString("dd.MM.yyyy")
@@ -87,13 +87,13 @@ class RecyclerAdapterCourseFile : ListAdapter<File, RecyclerAdapterCourseFile.Co
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CourseFileViewHolder {
+    ): FileViewHolder {
         val binding = RecyclerListRowFileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CourseFileViewHolder(binding)
+        return FileViewHolder(binding)
     }
 
     override fun onBindViewHolder(
-        holder: CourseFileViewHolder,
+        holder: FileViewHolder,
         position: Int
     ) {
         val item = getItem(position)

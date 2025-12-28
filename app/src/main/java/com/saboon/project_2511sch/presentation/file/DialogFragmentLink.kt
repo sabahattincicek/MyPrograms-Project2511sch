@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.course_file
+package com.saboon.project_2511sch.presentation.file
 
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +15,7 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.IdGenerator
 
-class DialogFragmentCourseLink: DialogFragment() {
+class DialogFragmentLink: DialogFragment() {
 
     private var _binding: DialogFragmentLinkBinding?=null
     private val binding get() = _binding!!
@@ -23,7 +23,7 @@ class DialogFragmentCourseLink: DialogFragment() {
     private lateinit var course: Course
     private var file: File? = null
 
-    private val TAG = "DialogFragmentCourseLink"
+    private val TAG = "DialogFragmentLink"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,8 +106,8 @@ class DialogFragmentCourseLink: DialogFragment() {
         const val REQUEST_KEY_UPDATE = "link_dialog_fragment_request_key_update"
         const val RESULT_KEY_LINK = "link_dialog_fragment_result_key_link"
 
-        fun newInstance(course: Course, link: File?): DialogFragmentCourseLink{
-            val fragment = DialogFragmentCourseLink()
+        fun newInstance(course: Course, link: File?): DialogFragmentLink{
+            val fragment = DialogFragmentLink()
             fragment.arguments = bundleOf(
                 ARG_COURSE to course,
                 ARG_LINK to link

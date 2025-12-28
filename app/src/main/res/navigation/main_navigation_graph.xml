@@ -86,7 +86,7 @@
             app:argType="com.saboon.project_2511sch.domain.model.Course" />
         <action
             android:id="@+id/action_courseDetailsFragment_to_fileFragment"
-            app:destination="@id/courseFileFragment" />
+            app:destination="@id/fileFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -94,10 +94,10 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
-        android:id="@+id/courseFileFragment"
-        android:name="com.saboon.project_2511sch.presentation.course_file.CourseFileFragment"
+        android:id="@+id/fileFragment"
+        android:name="com.saboon.project_2511sch.presentation.file.FileFragment"
         android:label="fragment_file"
-        tools:layout="@layout/fragment_course_file" >
+        tools:layout="@layout/fragment_file" >
         <action
             android:id="@+id/action_fileFragment_to_courseDetailsFragment"
             app:destination="@id/courseDetailsFragment" />

@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.course_file
+package com.saboon.project_2511sch.presentation.file
 
 import android.content.Intent
 import android.net.Uri
@@ -22,7 +22,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
-import com.saboon.project_2511sch.databinding.FragmentCourseFileBinding
+import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
@@ -32,26 +32,26 @@ import kotlinx.coroutines.launch
 import java.io.File as JavaFile
 
 @AndroidEntryPoint
-class CourseFileFragment : Fragment() {
+class FileFragment : Fragment() {
 
-    private var _binding: FragmentCourseFileBinding?=null
+    private var _binding: FragmentFileBinding?=null
     private val binding get() = _binding!!
 
-    private val args : CourseFileFragmentArgs by navArgs()
+    private val args : FileFragmentArgs by navArgs()
 
     private lateinit var course: Course
 
-    private val viewModelCourseFile : ViewModelCourseFile by viewModels()
+    private val viewModelFile : ViewModelFile by viewModels()
 
-    private lateinit var recyclerAdapter: RecyclerAdapterCourseFile
+    private lateinit var recyclerAdapter: RecyclerAdapterFile
 
-    private val TAG = "CourseFileFragment"
+    private val TAG = "FileFragment"
 
     private val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         Log.d(TAG, "File picker result received.")
         if (uri != null) {
             Log.i(TAG, "File selected by user with URI: $uri")
-            val dialog = DialogFragmentCourseFile.newInstance(course, uri, null)
+            val dialog = DialogFragmentFile.newInstance(course, uri, null)
             dialog.show(childFragmentManager, "CreateFileFragmentDialog")
         } else {
             Log.d(TAG, "File selection was cancelled by the user.")
@@ -68,7 +68,7 @@ class CourseFileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         Log.d(TAG, "onCreateView: Layout is being inflated.")
-        _binding = FragmentCourseFileBinding.inflate(inflater, container, false)
+        _binding = FragmentFileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -90,7 +90,7 @@ class CourseFileFragment : Fragment() {
         observeInsertNewLinkEvent()
 
         Log.i(TAG, "onViewCreated: Requesting initial file list for course ID: ${course.id}")
-        viewModelCourseFile.getAllFilesByCourseId(course.id)
+        viewModelFile.getAllFilesByCourseId(course.id)
 
         binding.toolbar.subtitle = course.title
 
@@ -112,13 +112,13 @@ class CourseFileFragment : Fragment() {
                     }
                     R.id.action_add_note -> {
                         Log.d(TAG, "'Add Note' menu item clicked.")
-                        val dialog = DialogFragmentCourseNote.newInstance(course, null)
+                        val dialog = DialogFragmentNote.newInstance(course, null)
                         dialog.show(childFragmentManager, "NoteDialogFragment")
                         true
                     }
                     R.id.action_add_link -> {
                         Log.d(TAG, "'Add Link' menu item clicked.")
-                        val dialog = DialogFragmentCourseLink.newInstance(course, null)
+                        val dialog = DialogFragmentLink.newInstance(course, null)
                         dialog.show(childFragmentManager, "LinkDialogFragment_createLink")
                         true
                     }
@@ -128,65 +128,65 @@ class CourseFileFragment : Fragment() {
             popup.show()
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentCourseFile.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
+        childFragmentManager.setFragmentResultListener(DialogFragmentFile.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
             Log.d(TAG, "Result received from Create File Dialog with key: $requestKey")
-            val newFile = BundleCompat.getParcelable(result, DialogFragmentCourseFile.RESULT_KEY_FILE, File::class.java)
-            val uri = BundleCompat.getParcelable(result, DialogFragmentCourseFile.RESULT_KEY_URI, Uri::class.java)
+            val newFile = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_FILE, File::class.java)
+            val uri = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_URI, Uri::class.java)
 
             if(newFile != null && uri != null){
                 Log.i(TAG, "Valid file and URI received from dialog. Passing to ViewModel.")
-                viewModelCourseFile.insertNewFile(newFile, uri)
+                viewModelFile.insertNewFile(newFile, uri)
             }else {
                 Log.w(TAG, "Received null file or URI from Create File Dialog. File: $newFile, URI: $uri")
             }
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentCourseFile.REQUEST_KEY_UPDATE, viewLifecycleOwner){ requestKey, result ->
+        childFragmentManager.setFragmentResultListener(DialogFragmentFile.REQUEST_KEY_UPDATE, viewLifecycleOwner){ requestKey, result ->
             Log.d(TAG, "Result received from Update File Dialog with key: $requestKey")
-            val UpdatedFile = BundleCompat.getParcelable(result, DialogFragmentCourseFile.RESULT_KEY_FILE, File::class.java)
+            val UpdatedFile = BundleCompat.getParcelable(result, DialogFragmentFile.RESULT_KEY_FILE, File::class.java)
             if (UpdatedFile != null){
                 Log.i(TAG, "Valid file received from dialog. Passing to ViewModel for update.")
-                viewModelCourseFile.updateFile(UpdatedFile)
+                viewModelFile.updateFile(UpdatedFile)
             }else{
                 Log.w(TAG, "Received null file from Update File Dialog.")
             }
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentCourseNote.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
+        childFragmentManager.setFragmentResultListener(DialogFragmentNote.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
             Log.d(TAG, "Result received from Create Note Dialog with key: $requestKey")
-            val newNote = BundleCompat.getParcelable(result, DialogFragmentCourseNote.RESULT_KEY_NOTE, File::class.java)
+            val newNote = BundleCompat.getParcelable(result, DialogFragmentNote.RESULT_KEY_NOTE, File::class.java)
             if (newNote != null){
                 Log.i(TAG, "Valid note file received from dialog. Passing to ViewModel.")
-                viewModelCourseFile.insertNewNote(newNote)
+                viewModelFile.insertNewNote(newNote)
             }else{
                 Log.w(TAG, "Received null note from Create Note Dialog.")
             }
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentCourseNote.REQUEST_KEY_UPDATE, viewLifecycleOwner){ requestKey, result ->
+        childFragmentManager.setFragmentResultListener(DialogFragmentNote.REQUEST_KEY_UPDATE, viewLifecycleOwner){ requestKey, result ->
             Log.d(TAG, "Result received from Update Note Dialog with key: $requestKey")
-            val updatedNote = BundleCompat.getParcelable(result, DialogFragmentCourseNote.RESULT_KEY_NOTE, File::class.java)
+            val updatedNote = BundleCompat.getParcelable(result, DialogFragmentNote.RESULT_KEY_NOTE, File::class.java)
             if (updatedNote != null){
                 Log.i(TAG, "Valid note file received from dialog. Passing to ViewModel.")
-                viewModelCourseFile.updateFile(updatedNote)
+                viewModelFile.updateFile(updatedNote)
             }else{
                 Log.w(TAG, "Received null note from Updated Note Dialog.")
             }
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentCourseLink.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
-            val newLink = BundleCompat.getParcelable(result, DialogFragmentCourseLink.RESULT_KEY_LINK, File::class.java)
+        childFragmentManager.setFragmentResultListener(DialogFragmentLink.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
+            val newLink = BundleCompat.getParcelable(result, DialogFragmentLink.RESULT_KEY_LINK, File::class.java)
             if (newLink != null){
-                viewModelCourseFile.insertNewLink(newLink)
+                viewModelFile.insertNewLink(newLink)
             }else{
 
             }
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentCourseLink.REQUEST_KEY_UPDATE, viewLifecycleOwner){ requestKey, result ->
-            val updatedLink = BundleCompat.getParcelable(result, DialogFragmentCourseLink.RESULT_KEY_LINK, File::class.java)
+        childFragmentManager.setFragmentResultListener(DialogFragmentLink.REQUEST_KEY_UPDATE, viewLifecycleOwner){ requestKey, result ->
+            val updatedLink = BundleCompat.getParcelable(result, DialogFragmentLink.RESULT_KEY_LINK, File::class.java)
             if (updatedLink != null){
-                viewModelCourseFile.updateFile(updatedLink)
+                viewModelFile.updateFile(updatedLink)
             }
             else{
 
@@ -195,19 +195,19 @@ class CourseFileFragment : Fragment() {
     }
 
     private fun setupRecyclerAdapter() {
-        Log.d(TAG, "setupRecyclerAdapter: Initializing and setting up RecyclerAdapterCourseFile.")
-        recyclerAdapter = RecyclerAdapterCourseFile()
+        Log.d(TAG, "setupRecyclerAdapter: Initializing and setting up RecyclerAdapterFile.")
+        recyclerAdapter = RecyclerAdapterFile()
 
         recyclerAdapter.onItemClickListener = { clickedFile ->
             Log.i(TAG, "File item clicked: ${clickedFile.title}")
             when (clickedFile.fileType){
                 "app/note" -> {
                     Log.i(TAG, "Note item clicked: ${clickedFile.title}. Opening Note Editor.")
-                    val dialog = DialogFragmentCourseNote.newInstance(course, clickedFile)
+                    val dialog = DialogFragmentNote.newInstance(course, clickedFile)
                     dialog.show(childFragmentManager, "NoteDialogFragment_editMode")
                 }
                 "app/link" -> {
-                    val dialog = DialogFragmentCourseLink.newInstance(course, clickedFile)
+                    val dialog = DialogFragmentLink.newInstance(course, clickedFile)
                     dialog.show(childFragmentManager, "LinkDialogFragment_editMode")
                 }
                 else -> {
@@ -227,7 +227,7 @@ class CourseFileFragment : Fragment() {
                         val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
                         if (isYes) {
                             Log.i(TAG, "Deletion confirmed for file: ${file.title}. Calling ViewModel.")
-                            viewModelCourseFile.deleteFile(file)
+                            viewModelFile.deleteFile(file)
                         } else {
                             Log.d(TAG, "Deletion cancelled for file: ${file.title}.")
                         }
@@ -281,7 +281,7 @@ class CourseFileFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 Log.d(TAG, "Subscribing to filesState flow.")
-                viewModelCourseFile.filesState.collect { resource ->
+                viewModelFile.filesState.collect { resource ->
                     when (resource) {
                         is Resource.Error<*> -> {
                             Log.e(TAG, "FilesState: Error - ${resource.message}")
@@ -308,7 +308,7 @@ class CourseFileFragment : Fragment() {
     private fun observeInsertNewFileEvent(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourseFile.insertNewFileEvent.collect { resource ->
+                viewModelFile.insertNewFileEvent.collect { resource ->
                     when(resource) {
                         is Resource.Error<*> -> {
                             Log.e(TAG, "InsertFileEvent: Error - ${resource.message}")
@@ -335,7 +335,7 @@ class CourseFileFragment : Fragment() {
     private fun observeDeleteFileEvent(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourseFile.deleteFileEvent.collect { resource ->
+                viewModelFile.deleteFileEvent.collect { resource ->
                     when(resource) {
                         is Resource.Error<*> -> {
                             Log.e(TAG, "DeleteFileEvent: Error - ${resource.message}")
@@ -361,7 +361,7 @@ class CourseFileFragment : Fragment() {
     private fun observeUpdateFileEvent(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourseFile.updateFileEvent.collect { resource ->
+                viewModelFile.updateFileEvent.collect { resource ->
                     when(resource) {
                         is Resource.Error<*> -> {
                             Log.e(TAG, "UpdateFileEvent: Error - ${resource.message}")
@@ -387,7 +387,7 @@ class CourseFileFragment : Fragment() {
     private fun observeInsertNewNoteEvent(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourseFile.insertNewNoteEvent.collect { resource ->
+                viewModelFile.insertNewNoteEvent.collect { resource ->
                     when(resource) {
                         is Resource.Error<*> -> {
                             Log.e(TAG, "InsertNoteEvent: Error - ${resource.message}")
@@ -413,7 +413,7 @@ class CourseFileFragment : Fragment() {
     private fun observeInsertNewLinkEvent(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourseFile.insertNewLinkEvent.collect { resource ->
+                viewModelFile.insertNewLinkEvent.collect { resource ->
                     when (resource) {
                         is Resource.Error<*> -> {}
                         is Resource.Idle<*> -> {}
