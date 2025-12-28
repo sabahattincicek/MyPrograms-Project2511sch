@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.domain.usecase.file.DeleteFileUseCase
 import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesByCourseIdUseCase
+import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesUseCase
 import com.saboon.project_2511sch.domain.usecase.file.InsertNewLinkFileUseCase
 import com.saboon.project_2511sch.domain.usecase.file.InsertNewFileUseCase
 import com.saboon.project_2511sch.domain.usecase.file.InsertNewNoteUseCase
@@ -28,6 +29,7 @@ class ViewModelCourseFile @Inject constructor(
     private val updateFileUseCase: UpdateFileUseCase,
     private val insertNewNoteUseCase: InsertNewNoteUseCase,
     private val insertNewLinkUseCase: InsertNewLinkFileUseCase,
+    private val getAllFilesUseCase: GetAllFilesUseCase
 ) : ViewModel() {
 
     private val TAG = "ViewModelCourseFile"
@@ -126,6 +128,19 @@ class ViewModelCourseFile @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "getAllFilesByCourseId: Exception caught while getting files.", e)
+                _filesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+            }
+        }
+    }
+
+    fun getAllFiles(){
+        viewModelScope.launch {
+            try {
+                _filesState.value = Resource.Loading()
+                val result = getAllFilesUseCase.invoke().collect { resource ->
+                    _filesState.value = resource
+                }
+            }catch (e: Exception){
                 _filesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
             }
         }
