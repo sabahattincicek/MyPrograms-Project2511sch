@@ -158,7 +158,7 @@ class DialogFragmentNote: DialogFragment() {
         const val REQUEST_KEY_UPDATE = "note_dialog_fragment_request_key_update"
         const val RESULT_KEY_NOTE = "note_dialog_fragment_result_key_note"
 
-        fun newInstance(course: Course, note: File?): DialogFragmentNote{
+        fun newInstance(course: Course?, note: File?): DialogFragmentNote{
             val fragment = DialogFragmentNote()
             fragment.arguments = bundleOf(
                 ARG_COURSE to course,
