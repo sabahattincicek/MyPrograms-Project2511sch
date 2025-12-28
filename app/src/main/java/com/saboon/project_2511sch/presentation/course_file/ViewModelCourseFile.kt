@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.file
+package com.saboon.project_2511sch.presentation.course_file
 
 import android.net.Uri
 import android.util.Log
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewModelFile @Inject constructor(
+class ViewModelCourseFile @Inject constructor(
     private val insertNewFileUseCase: InsertNewFileUseCase,
     private val getAllFilesByCourseIdUseCase: GetAllFilesByCourseIdUseCase,
     private val deleteFileUseCase: DeleteFileUseCase,
@@ -30,7 +30,7 @@ class ViewModelFile @Inject constructor(
     private val insertNewLinkUseCase: InsertNewLinkFileUseCase,
 ) : ViewModel() {
 
-    private val TAG = "ViewModelFile"
+    private val TAG = "ViewModelCourseFile"
 
     private val _insertNewFileEvent = Channel<Resource<File>>()
     val insertNewFileEvent = _insertNewFileEvent.receiveAsFlow()

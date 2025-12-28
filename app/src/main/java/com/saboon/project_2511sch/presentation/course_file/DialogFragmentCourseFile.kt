@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.file
+package com.saboon.project_2511sch.presentation.course_file
 
 import android.net.Uri
 import android.os.Bundle
@@ -17,7 +17,7 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.IdGenerator
 
-class DialogFragmentFile: DialogFragment() {
+class DialogFragmentCourseFile: DialogFragment() {
 
     private var _binding: DialogFragmentFileBinding?=null
     private val binding get() = _binding!!
@@ -127,8 +127,8 @@ class DialogFragmentFile: DialogFragment() {
         const val RESULT_KEY_FILE = "file_dialog_fragment_result_key_file"
         const val RESULT_KEY_URI = "file_dialog_fragment_result_key_uri"
 
-        fun newInstance(course: Course, uri: Uri?, file: File?): DialogFragmentFile{
-            val fragment = DialogFragmentFile()
+        fun newInstance(course: Course, uri: Uri?, file: File?): DialogFragmentCourseFile{
+            val fragment = DialogFragmentCourseFile()
             fragment.arguments = bundleOf(
                 ARG_COURSE to course,
                 ARG_URI to uri,

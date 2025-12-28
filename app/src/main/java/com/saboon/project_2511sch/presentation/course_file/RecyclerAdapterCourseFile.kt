@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.file
+package com.saboon.project_2511sch.presentation.course_file
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +12,7 @@ import com.saboon.project_2511sch.databinding.RecyclerListRowFileBinding
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.toFormattedString
 
-class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder>(FileDiffCallback()) {
+class RecyclerAdapterCourseFile : ListAdapter<File, RecyclerAdapterCourseFile.FileViewHolder>(FileDiffCallback()) {
 
 
     var onItemClickListener: ((File) -> Unit)? = null

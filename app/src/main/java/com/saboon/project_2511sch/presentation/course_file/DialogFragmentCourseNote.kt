@@ -1,35 +1,29 @@
-package com.saboon.project_2511sch.presentation.file
+package com.saboon.project_2511sch.presentation.course_file
 
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.Lifecycle
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentNoteBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.IdGenerator
 
-class DialogFragmentNote: DialogFragment() {
+class DialogFragmentCourseNote: DialogFragment() {
     private var _binding : DialogFragmentNoteBinding?=null
     private val binding get() = _binding!!
 
     private lateinit var course: Course
     private var file: File? = null
 
-    private val TAG = "DialogFragmentNote"
+    private val TAG = "DialogFragmentCourseNote"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -164,8 +158,8 @@ class DialogFragmentNote: DialogFragment() {
         const val REQUEST_KEY_UPDATE = "note_dialog_fragment_request_key_update"
         const val RESULT_KEY_NOTE = "note_dialog_fragment_result_key_note"
 
-        fun newInstance(course: Course, note: File?): DialogFragmentNote{
-            val fragment = DialogFragmentNote()
+        fun newInstance(course: Course, note: File?): DialogFragmentCourseNote{
+            val fragment = DialogFragmentCourseNote()
             fragment.arguments = bundleOf(
                 ARG_COURSE to course,
                 ARG_NOTE to note
