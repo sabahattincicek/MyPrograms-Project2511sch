@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.domain.usecase.file.DeleteFileUseCase
 import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesByCourseIdUseCase
+import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesByProgramTableIdUseCase
 import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesUseCase
 import com.saboon.project_2511sch.domain.usecase.file.InsertNewLinkFileUseCase
 import com.saboon.project_2511sch.domain.usecase.file.InsertNewFileUseCase
@@ -23,13 +24,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewModelFile @Inject constructor(
-    private val insertNewFileUseCase: InsertNewFileUseCase,
-    private val getAllFilesByCourseIdUseCase: GetAllFilesByCourseIdUseCase,
     private val deleteFileUseCase: DeleteFileUseCase,
     private val updateFileUseCase: UpdateFileUseCase,
+    private val insertNewFileUseCase: InsertNewFileUseCase,
     private val insertNewNoteUseCase: InsertNewNoteUseCase,
     private val insertNewLinkUseCase: InsertNewLinkFileUseCase,
-    private val getAllFilesUseCase: GetAllFilesUseCase
+    private val getAllFilesByCourseIdUseCase: GetAllFilesByCourseIdUseCase,
+    private val getAllFilesByProgramTableIdUseCase: GetAllFilesByProgramTableIdUseCase,
+    private val getAllFilesUseCase: GetAllFilesUseCase,
 ) : ViewModel() {
 
     private val TAG = "ViewModelFile"
@@ -128,6 +130,19 @@ class ViewModelFile @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "getAllFilesByCourseId: Exception caught while getting files.", e)
+                _filesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+            }
+        }
+    }
+
+    fun getAllFilesByProgramTableId(id: String){
+        viewModelScope.launch {
+            try {
+                _filesState.value = Resource.Loading()
+                val result = getAllFilesByProgramTableIdUseCase.invoke(id).collect { resource ->
+                    _filesState.value = resource
+                }
+            }catch (e: Exception){
                 _filesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
             }
         }
