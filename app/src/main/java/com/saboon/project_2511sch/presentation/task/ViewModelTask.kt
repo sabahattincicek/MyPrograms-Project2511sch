@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.schedule
+package com.saboon.project_2511sch.presentation.task
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewModelSchedule @Inject constructor(
+class ViewModelTask @Inject constructor(
     private val insertNewScheduleUseCase: InsertNewScheduleUseCase,
     private val updateScheduleUseCase: UpdateScheduleUseCase,
     private val deleteScheduleUseCase: DeleteScheduleUseCase,

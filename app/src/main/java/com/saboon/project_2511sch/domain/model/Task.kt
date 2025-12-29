@@ -25,13 +25,3 @@ data class Task(
     val remindBefore: Int,
     val recurrenceRule: String
 ) : Parcelable
-
-
-enum class TaskType {
-    OTHER,
-    LESSON,
-    EXAM,
-    HOMEWORK,
-    PROJECT,
-    PRESENTATION
-}

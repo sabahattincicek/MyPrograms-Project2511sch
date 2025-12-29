@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.schedule
+package com.saboon.project_2511sch.presentation.task
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +18,7 @@ import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.TimePickers
 import com.saboon.project_2511sch.util.toFormattedString
 
-class DialogFragmentSchedule: DialogFragment() {
+class DialogFragmentTask: DialogFragment() {
 
     private var _binding: DialogFragmentScheduleBinding?= null
     private val binding get() = _binding!!
@@ -233,8 +233,8 @@ class DialogFragmentSchedule: DialogFragment() {
         const val REQUEST_KEY_DELETE = "schedule_dialog_fragment_request_key_delete"
         const val RESULT_KEY_SCHEDULE = "schedule_dialog_fragment_result_key_schedule"
 
-        fun newInstance(course: Course, task: Task?): DialogFragmentSchedule{
-            val fragment = DialogFragmentSchedule()
+        fun newInstance(course: Course, task: Task?): DialogFragmentTask{
+            val fragment = DialogFragmentTask()
             fragment.arguments = bundleOf(
                 ARG_COURSE to course,
                 ARG_SCHEDULE to task
