@@ -47,16 +47,6 @@ class FileFragment : Fragment() {
 
     private val TAG = "FileFragment"
 
-    private val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-        Log.d(TAG, "File picker result received.")
-        if (uri != null) {
-            Log.i(TAG, "File selected by user with URI: $uri")
-            val dialog = DialogFragmentFile.newInstance(course, uri, null)
-            dialog.show(childFragmentManager, "CreateFileFragmentDialog")
-        } else {
-            Log.d(TAG, "File selection was cancelled by the user.")
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,6 +97,16 @@ class FileFragment : Fragment() {
                 when (item.itemId) {
                     R.id.action_add_file -> {
                         Log.d(TAG, "'Add File' menu item clicked. Launching file picker.")
+                        val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+                            Log.d(TAG, "File picker result received.")
+                            if (uri != null) {
+                                Log.i(TAG, "File selected by user with URI: $uri")
+                                val dialog = DialogFragmentFile.newInstanceForCreate(course, uri)
+                                dialog.show(childFragmentManager, "CreateFileFragmentDialog")
+                            } else {
+                                Log.d(TAG, "File selection was cancelled by the user.")
+                            }
+                        }
                         selectFileLauncher.launch(arrayOf("*/*"))
                         true
                     }
