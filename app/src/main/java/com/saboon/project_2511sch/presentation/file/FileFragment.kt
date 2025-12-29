@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.FileProvider
 import androidx.core.os.BundleCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -88,6 +89,27 @@ class FileFragment : Fragment() {
             configureForCourseMode(course!!)
         } else {
             configureForAllFilesMode()
+        }
+
+        binding.etSearch.doAfterTextChanged {
+            val query = it.toString().trim()
+            // Get the current list from the ViewModel's state.
+            // We only filter if the current state is Success and has data.
+            val originalList = (viewModelFile.filesState.value as? Resource.Success<List<File>>)?.data
+            if(originalList != null){
+                if (query.isNotEmpty()){
+                    val filteredList = originalList.filter { file ->
+                        val titleMatches = file.title?.contains(query, true) == true
+                        val descriptionMatches = file.title?.contains(query, true) == true
+                        val courseTitleMatches = file.courseId?.contains(query, true) == true
+                        val programTableTitleMatches = file.programTableId?.contains(query, true) == true
+                        titleMatches || descriptionMatches || courseTitleMatches || programTableTitleMatches
+                    }
+                    recyclerAdapter.submitList(filteredList)
+                }else{
+                    recyclerAdapter.submitList(originalList)
+                }
+            }
         }
     }
 
