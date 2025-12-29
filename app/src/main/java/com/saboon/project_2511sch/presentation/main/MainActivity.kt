@@ -20,10 +20,14 @@ class MainActivity : AppCompatActivity() {
     private val bottomNavVisibleDestinations = setOf(
         R.id.homeFragment,
         R.id.programTableFragment,
-        R.id.menuId2,
+        R.id.fileFragment,
         R.id.menuId3,
         R.id.courseFragment,
         R.id.courseDetailsFragment,
+    )
+
+    private val bottomNavHiddenDestionation = setOf(
+        R.id.splashFragment
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,10 +41,10 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id in bottomNavVisibleDestinations) {
-                binding.bottomNavigationView.visibility = View.VISIBLE
-            } else {
+            if (destination.id in bottomNavHiddenDestionation) {
                 binding.bottomNavigationView.visibility = View.GONE
+            } else {
+                binding.bottomNavigationView.visibility = View.VISIBLE
             }
         }
     }

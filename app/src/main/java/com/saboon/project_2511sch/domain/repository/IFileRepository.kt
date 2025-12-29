@@ -18,4 +18,8 @@ interface IFileRepository {
     suspend fun insertLinkFile(link: File): Resource<File>
 
     fun getFilesByCourseId(id: String): Flow<Resource<List<File>>>
+
+    fun getFilesByProgramTableId(id: String): Flow<Resource<List<File>>>
+
+    fun getAllFiles(): Flow<Resource<List<File>>>
 }

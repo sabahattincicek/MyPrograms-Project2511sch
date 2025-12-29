@@ -103,6 +103,8 @@
             app:destination="@id/courseDetailsFragment" />
         <argument
             android:name="course"
-            app:argType="com.saboon.project_2511sch.domain.model.Course" />
+            app:argType="com.saboon.project_2511sch.domain.model.Course"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>

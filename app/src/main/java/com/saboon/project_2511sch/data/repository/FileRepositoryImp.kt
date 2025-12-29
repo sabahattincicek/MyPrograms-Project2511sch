@@ -129,4 +129,24 @@ class FileRepositoryImp @Inject constructor(
                 emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
             }
     }
+
+    override fun getFilesByProgramTableId(id: String): Flow<Resource<List<File>>> {
+        return fileDao.getFilesByProgramTableId(id)
+            .map<List<FileEntity>, Resource<List<File>>> { entities ->
+                Resource.Success(entities.map { it.toDomain() })
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
+            }
+    }
+
+    override fun getAllFiles(): Flow<Resource<List<File>>> {
+        return fileDao.getAllFiles()
+            .map<List<FileEntity>, Resource<List<File>>> { entities ->
+                Resource.Success(entities.map { it.toDomain() })
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
+            }
+    }
 }
