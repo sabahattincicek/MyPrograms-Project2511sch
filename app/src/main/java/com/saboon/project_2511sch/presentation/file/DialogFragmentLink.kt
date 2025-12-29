@@ -44,7 +44,7 @@ class DialogFragmentLink: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let{
-            course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)!!
+            course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)
             file = BundleCompat.getParcelable(it, ARG_LINK, File::class.java)
         }
 
