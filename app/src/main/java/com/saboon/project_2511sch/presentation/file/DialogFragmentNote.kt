@@ -20,7 +20,7 @@ class DialogFragmentNote: DialogFragment() {
     private var _binding : DialogFragmentNoteBinding?=null
     private val binding get() = _binding!!
 
-    private lateinit var course: Course
+    private var course: Course? = null
     private var file: File? = null
 
     private val TAG = "DialogFragmentNote"
@@ -46,9 +46,8 @@ class DialogFragmentNote: DialogFragment() {
         Log.d(TAG, "onViewCreated: View created, processing arguments.")
 
         arguments?.let {
-            course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)!!
+            course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)
             file = BundleCompat.getParcelable(it, ARG_NOTE, File::class.java)
-            Log.d(TAG, "Arguments received. Course: ${course.title}, Existing Note: ${file?.title ?: "null"}")
         }
 
         val isEditMode = file != null
@@ -59,6 +58,7 @@ class DialogFragmentNote: DialogFragment() {
             binding.reEditor.html = file!!.description
         }else{
             Log.i(TAG, "Operating in Create Mode.")
+            requireNotNull(course) {"Course must be provided for create mode"}
             binding.toolbar.title = getString(R.string.add_new_note)
         }
 
@@ -75,7 +75,7 @@ class DialogFragmentNote: DialogFragment() {
                     val title = binding.etNoteTitle.text.toString()
                     val content = binding.reEditor.html ?: ""
 
-                    if (file != null) { // Edit Mode
+                    if (isEditMode) { // Edit Mode
                         val updatedNoteFile = file!!.copy(
                             title = title,
                             description = content,
@@ -86,8 +86,8 @@ class DialogFragmentNote: DialogFragment() {
                     } else { // Create Mode
                         val newNoteFile = File(
                             id = IdGenerator.generateFileId(title),
-                            programTableId = course.programTableId,
-                            courseId = course.id,
+                            programTableId = course!!.programTableId,
+                            courseId = course!!.id,
                             title = title,
                             description = content,
                             fileType = "app/note",
@@ -158,13 +158,20 @@ class DialogFragmentNote: DialogFragment() {
         const val REQUEST_KEY_UPDATE = "note_dialog_fragment_request_key_update"
         const val RESULT_KEY_NOTE = "note_dialog_fragment_result_key_note"
 
-        fun newInstance(course: Course?, note: File?): DialogFragmentNote{
-            val fragment = DialogFragmentNote()
-            fragment.arguments = bundleOf(
-                ARG_COURSE to course,
-                ARG_NOTE to note
-            )
-            return fragment
+        fun newInstanceForCreate(course: Course): DialogFragmentNote{
+            return DialogFragmentNote().apply {
+                arguments = bundleOf(
+                    ARG_COURSE to course
+                )
+            }
+        }
+
+        fun newInstanceForEdit(note: File): DialogFragmentNote{
+            return DialogFragmentNote().apply {
+                arguments = bundleOf(
+                    ARG_NOTE to note
+                )
+            }
         }
     }
 }

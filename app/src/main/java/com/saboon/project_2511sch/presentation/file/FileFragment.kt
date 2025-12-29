@@ -112,7 +112,7 @@ class FileFragment : Fragment() {
                     }
                     R.id.action_add_note -> {
                         Log.d(TAG, "'Add Note' menu item clicked.")
-                        val dialog = DialogFragmentNote.newInstance(course, null)
+                        val dialog = DialogFragmentNote.newInstanceForCreate(course)
                         dialog.show(childFragmentManager, "NoteDialogFragment")
                         true
                     }
@@ -203,7 +203,7 @@ class FileFragment : Fragment() {
             when (clickedFile.fileType){
                 "app/note" -> {
                     Log.i(TAG, "Note item clicked: ${clickedFile.title}. Opening Note Editor.")
-                    val dialog = DialogFragmentNote.newInstance(course, clickedFile)
+                    val dialog = DialogFragmentNote.newInstanceForEdit(clickedFile)
                     dialog.show(childFragmentManager, "NoteDialogFragment_editMode")
                 }
                 "app/link" -> {
