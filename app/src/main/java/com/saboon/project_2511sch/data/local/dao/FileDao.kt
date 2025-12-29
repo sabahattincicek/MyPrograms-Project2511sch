@@ -23,6 +23,9 @@ interface FileDao {
     @Query("SELECT * FROM files WHERE course_id = :id")
     fun getFilesByCourseId(id: String): Flow<List<FileEntity>>
 
+    @Query("SELECT * FROM files WHERE program_table_id = :id")
+    fun getFilesByProgramTableId(id: String): Flow<List<FileEntity>>
+
     @Query("SELECT * FROM files")
     fun getAllFiles(): Flow<List<FileEntity>>
 }
