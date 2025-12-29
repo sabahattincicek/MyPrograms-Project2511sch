@@ -118,7 +118,7 @@ class FileFragment : Fragment() {
                     }
                     R.id.action_add_link -> {
                         Log.d(TAG, "'Add Link' menu item clicked.")
-                        val dialog = DialogFragmentLink.newInstance(course, null)
+                        val dialog = DialogFragmentLink.newInstanceForCreate(course)
                         dialog.show(childFragmentManager, "LinkDialogFragment_createLink")
                         true
                     }
@@ -207,7 +207,7 @@ class FileFragment : Fragment() {
                     dialog.show(childFragmentManager, "NoteDialogFragment_editMode")
                 }
                 "app/link" -> {
-                    val dialog = DialogFragmentLink.newInstance(course, clickedFile)
+                    val dialog = DialogFragmentLink.newInstanceForEdit(clickedFile)
                     dialog.show(childFragmentManager, "LinkDialogFragment_editMode")
                 }
                 else -> {

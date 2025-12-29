@@ -20,7 +20,7 @@ class DialogFragmentLink: DialogFragment() {
     private var _binding: DialogFragmentLinkBinding?=null
     private val binding get() = _binding!!
 
-    private lateinit var course: Course
+    private var course: Course? = null
     private var file: File? = null
 
     private val TAG = "DialogFragmentLink"
@@ -54,6 +54,7 @@ class DialogFragmentLink: DialogFragment() {
             binding.etTitle.setText(file!!.title)
             binding.etUrl.setText(file!!.description)
         }else{
+            requireNotNull(course) { "Course must be provided for create mode" }
             binding.toolbar.title = getString(R.string.add_new_link)
         }
 
@@ -67,7 +68,7 @@ class DialogFragmentLink: DialogFragment() {
                     val title = binding.etTitle.text.toString()
                     val url = binding.etUrl.text.toString()
 
-                    if (file != null){ //Edit Mode
+                    if (isEditMode){ //Edit Mode
                         val updatedLinkFile = file!!.copy(
                             title = title,
                             description = url
@@ -76,8 +77,8 @@ class DialogFragmentLink: DialogFragment() {
                     }else{ //Create Mode
                         val newLinkFile = File(
                             id = IdGenerator.generateFileId(title),
-                            programTableId = course.programTableId,
-                            courseId = course.id,
+                            programTableId = course!!.programTableId,
+                            courseId = course!!.id,
                             title = title,
                             description = url,
                             fileType = "app/link",
@@ -106,13 +107,19 @@ class DialogFragmentLink: DialogFragment() {
         const val REQUEST_KEY_UPDATE = "link_dialog_fragment_request_key_update"
         const val RESULT_KEY_LINK = "link_dialog_fragment_result_key_link"
 
-        fun newInstance(course: Course, link: File?): DialogFragmentLink{
-            val fragment = DialogFragmentLink()
-            fragment.arguments = bundleOf(
-                ARG_COURSE to course,
-                ARG_LINK to link
-            )
-            return fragment
+        fun newInstanceForCreate(course: Course): DialogFragmentLink{
+            return DialogFragmentLink().apply {
+                arguments = bundleOf(
+                    ARG_COURSE to course
+                )
+            }
+        }
+        fun newInstanceForEdit(link: File): DialogFragmentLink{
+            return DialogFragmentLink().apply {
+                arguments = bundleOf(
+                    ARG_LINK to link
+                )
+            }
         }
     }
 
