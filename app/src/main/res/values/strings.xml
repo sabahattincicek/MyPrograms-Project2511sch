@@ -139,6 +139,9 @@
     <string name="link">Link</string>
     <string name="hint_url">URL</string>
     <string name="edit_link">Edit Link</string>
+    <string name="title_save_your_data_to_the_cloud">Save Your Data to the Cloud</string>
+    <string name="subtitle_why_create_account">Why create an account?</string>
+    <string name="account_benefits_description">By creating a free account, you can:\n• Securely back up your schedules and files.\n• Access your data from any device, anytime.\n• Restore your data easily if you change phones.</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
