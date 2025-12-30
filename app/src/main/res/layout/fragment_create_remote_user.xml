@@ -52,22 +52,28 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- User Name Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilUserName"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <!-- Create Account Divider -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="@string/hint_user_name">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etUserName"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginEnd="16dp"
+                android:text="@string/title_create_your_account"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="?attr/colorOnSurface" />
+        </LinearLayout>
 
         <!-- Email Input -->
         <com.google.android.material.textfield.TextInputLayout

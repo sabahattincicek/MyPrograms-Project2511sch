@@ -31,7 +31,7 @@
     <string name="hint_second_name">Second Name</string>
     <string name="hint_organization">Organization</string>
     <string name="organization_helper_text">School, Workplace, Company, etc.</string>
-    <string name="agree_terms_condition">By continuing, you agree to the&#160;</string>
+    <string name="agree_terms_condition">By continuing, you agree to the</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="already_have_account">Already have Account</string>
     <string name="sign_in">Sign In</string>
@@ -142,6 +142,7 @@
     <string name="title_save_your_data_to_the_cloud">Save Your Data to the Cloud</string>
     <string name="subtitle_why_create_account">Why create an account?</string>
     <string name="account_benefits_description">By creating a free account, you can:\n• Securely back up your schedules and files.\n• Access your data from any device, anytime.\n• Restore your data easily if you change phones.</string>
+    <string name="title_create_your_account">Create Your Account</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
