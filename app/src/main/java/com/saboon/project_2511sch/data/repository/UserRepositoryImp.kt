@@ -17,38 +17,23 @@ import javax.inject.Inject
 class UserRepositoryImp @Inject constructor(
     private val userDao: UserDao
 ) : IUserRepository{
-    /**
-     * Inserts a new user into the local database.
-     * Since the application is designed to support only a single local user at a time,
-     * this function first deletes any existing user from the table before inserting the new one.
-     * @param user The user object to be inserted.
-     */
-    override suspend fun insertUser(user: User): Resource<Unit> {
-        try{
-            userDao.setAllUserInactive()
-            userDao.insertUser(user.toEntity())
-            return Resource.Success(Unit)
+    override suspend fun insert(user: User): Resource<User> {
+        try {
+            userDao.insert(user.toEntity())
+            return Resource.Success(user)
         }catch (e: Exception){
-            return Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
     }
 
     override fun getAllUsers(): Flow<Resource<List<User>>> {
         return userDao.getAllUsers()
-            .map<List<UserEntity>, Resource<List<User>>> { userEntities ->
-                Resource.Success(userEntities.map{it.toDomain()})
+            .map<List<UserEntity>, Resource<List<User>>> { entities ->
+                Resource.Success(entities.map { it.toDomain() })
             }
             .catch { e ->
-                emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
             }
     }
 
-    override suspend fun getActiveUser(): Resource<User> {
-        try{
-            val userEntity = userDao.getActiveUser()
-            return Resource.Success(userEntity.toDomain())
-        }catch (e: Exception){
-            return Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
-        }
-    }
 }

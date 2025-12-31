@@ -12,21 +12,9 @@ import kotlinx.coroutines.flow.Flow
 interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: UserEntity)
-
-    @Query("DELETE FROM users")
-    suspend fun deleteAllUsers()
+    suspend fun insert(user: UserEntity)
 
     @Query("SELECT * FROM users")
     fun getAllUsers(): Flow<List<UserEntity>>
-
-    @Query("SELECT * FROM users WHERE is_active = 1 LIMIT 1")
-    suspend fun getActiveUser(): UserEntity
-
-    @Query("UPDATE users SET is_active = 0")
-    suspend fun setAllUserInactive()
-
-    @Query("UPDATE users SET is_active = 0 WHERE id != :id")
-    suspend fun setAllUserInactiveExceptUser(id: String)
 
 }
