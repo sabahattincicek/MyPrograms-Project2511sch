@@ -143,6 +143,21 @@
     <string name="subtitle_why_create_account">Why create an account?</string>
     <string name="account_benefits_description">By creating a free account, you can:\n• Securely back up your schedules and files.\n• Access your data from any device, anytime.\n• Restore your data easily if you change phones.</string>
     <string name="title_create_your_account">Create Your Account</string>
+    <string name="account">Account</string>
+    <string name="role">Role</string>
+    <string name="full_name">Full Name</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="academic_level">Academic Level</string>
+    <string name="organization">Organization</string>
+    <string name="name">Name</string>
+    <string name="settings">Settings</string>
+    <string name="export_data">Export Data</string>
+    <string name="import_data">Import Data</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="delete_all_data">Delete All Data</string>
+    <string name="app_version">App Version: 1.0.0</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
