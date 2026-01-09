@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.domain.usecase.schedule
+package com.saboon.project_2511sch.domain.usecase.task
 
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.IScheduleRepository

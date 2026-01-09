@@ -6,10 +6,10 @@ import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.usecase.schedule.DeleteScheduleUseCase
-import com.saboon.project_2511sch.domain.usecase.schedule.GetSchedulesByCourseIdUseCase
-import com.saboon.project_2511sch.domain.usecase.schedule.InsertNewScheduleUseCase
-import com.saboon.project_2511sch.domain.usecase.schedule.UpdateScheduleUseCase
+import com.saboon.project_2511sch.domain.usecase.task.DeleteScheduleUseCase
+import com.saboon.project_2511sch.domain.usecase.task.GetSchedulesByCourseIdUseCase
+import com.saboon.project_2511sch.domain.usecase.task.InsertNewScheduleUseCase
+import com.saboon.project_2511sch.domain.usecase.task.UpdateScheduleUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
