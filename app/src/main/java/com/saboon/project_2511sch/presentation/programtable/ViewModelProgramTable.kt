@@ -8,7 +8,6 @@ import com.saboon.project_2511sch.domain.usecase.programtable.DeleteProgramTable
 import com.saboon.project_2511sch.domain.usecase.programtable.GetAllProgramTablesUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.InsertNewProgramTableUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.UpdateProgramTableUseCase
-import com.saboon.project_2511sch.domain.usecase.user.GetAllUsersUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

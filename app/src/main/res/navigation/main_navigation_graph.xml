@@ -6,36 +6,6 @@
     app:startDestination="@id/splashFragment">
 
     <fragment
-        android:id="@+id/createLocalUserFragment"
-        android:name="com.saboon.project_2511sch.presentation.auth.CreateLocalUserFragment"
-        android:label="fragment_create_local_user"
-        tools:layout="@layout/fragment_create_local_user" >
-        <action
-            android:id="@+id/action_createLocalUserFragment_to_createRemoteUserFragment"
-            app:destination="@id/createRemoteUserFragment" />
-        <action
-            android:id="@+id/action_createLocalUserFragment_to_signinRemoteUserFragment"
-            app:destination="@id/signinRemoteUserFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/createRemoteUserFragment"
-        android:name="com.saboon.project_2511sch.presentation.auth.CreateRemoteUserFragment"
-        android:label="fragment_create_remote_user"
-        tools:layout="@layout/fragment_create_remote_user" >
-        <action
-            android:id="@+id/action_createRemoteUserFragment_to_createLocalUserFragment"
-            app:destination="@id/createLocalUserFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/signinRemoteUserFragment"
-        android:name="com.saboon.project_2511sch.presentation.auth.SigninRemoteUserFragment"
-        android:label="fragment_signin_remote_user"
-        tools:layout="@layout/fragment_signin_remote_user" >
-        <action
-            android:id="@+id/action_signinRemoteUserFragment_to_createLocalUserFragment"
-            app:destination="@id/createLocalUserFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/programTableFragment"
         android:name="com.saboon.project_2511sch.presentation.programtable.ProgramTableFragment"
         android:label="fragment_program_table"

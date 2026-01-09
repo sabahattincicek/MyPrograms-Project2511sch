@@ -158,6 +158,17 @@
     <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
     <string name="delete_all_data">Delete All Data</string>
     <string name="app_version">App Version: 1.0.0</string>
+    <string name="let_s_get_to_know_you">Let\'s Get to Know You!</string>
+    <string name="tell_us_a_little_about_yourself_to_personalize_your_experience">Tell us a little about yourself to personalize your experience.</string>
+    <string name="what_should_we_call_you">What should we call you?</string>
+    <string name="where_do_you_study_school_university">Where do you study? (School/University)</string>
+    <string name="your_field_of_study_or_major">Your field of study or major</string>
+    <string name="what_are_your_dreams_or_goals">What are your dreams or goals?</string>
+    <string name="let_s_start">Let\'s Start!</string>
+    <string name="skip_for_now">Skip For Now</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="create_account">Create Account</string>
+    <string name="skip_without_account">Skip Without Account</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
