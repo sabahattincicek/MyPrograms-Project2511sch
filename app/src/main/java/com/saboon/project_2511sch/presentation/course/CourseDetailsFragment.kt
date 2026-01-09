@@ -200,6 +200,7 @@ class CourseDetailsFragment : Fragment() {
         val themeAwareOnCustomContainerColor = MaterialColors.getColor(requireContext(), onCustomContainerColorAttr, Color.BLACK)
 
         binding.llCourseInfo.setBackgroundColor(themeAwareCustomContainerColor)
+        binding.llFilesContainer.setBackgroundColor(themeAwareCustomContainerColor)
 
         binding.tvTitleCourse.setTextColor(themeAwareOnCustomContainerColor)
         binding.tvPersonPrimary.setTextColor(themeAwareOnCustomContainerColor)
@@ -209,6 +210,10 @@ class CourseDetailsFragment : Fragment() {
         binding.tvAbsenceCount.setTextColor(themeAwareOnCustomContainerColor)
         binding.btnAbsenceDecrease.setColorFilter(themeAwareOnCustomContainerColor)
         binding.btnAbsenceIncrease.setColorFilter(themeAwareOnCustomContainerColor)
+
+        binding.btnFiles.setBackgroundColor(themeAwareOnCustomContainerColor)
+        binding.btnFiles.setTextColor(themeAwareCustomContainerColor)
+        binding.tvFile.setTextColor(themeAwareCustomContainerColor)
     }
 
     private fun observeUpdateCourseEvent(){
