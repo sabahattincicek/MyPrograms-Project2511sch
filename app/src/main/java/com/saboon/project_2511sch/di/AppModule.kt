@@ -49,4 +49,8 @@ object AppModule {
     @Provides
     fun provideFileDao(database: Database) = database.fileDao()
 
+    @Singleton
+    @Provides
+    fun provideTaskDao(database: Database) = database.taskDao()
+
 }
