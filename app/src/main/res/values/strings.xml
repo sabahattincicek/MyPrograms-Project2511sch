@@ -31,7 +31,7 @@
     <string name="hint_second_name">Second Name</string>
     <string name="hint_organization">Organization</string>
     <string name="organization_helper_text">School, Workplace, Company, etc.</string>
-    <string name="agree_terms_condition">By continuing, you agree to the&#160;</string>
+    <string name="agree_terms_condition">By continuing, you agree to the</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="already_have_account">Already have Account</string>
     <string name="sign_in">Sign In</string>
@@ -139,6 +139,36 @@
     <string name="link">Link</string>
     <string name="hint_url">URL</string>
     <string name="edit_link">Edit Link</string>
+    <string name="title_save_your_data_to_the_cloud">Save Your Data to the Cloud</string>
+    <string name="subtitle_why_create_account">Why create an account?</string>
+    <string name="account_benefits_description">By creating a free account, you can:\n• Securely back up your schedules and files.\n• Access your data from any device, anytime.\n• Restore your data easily if you change phones.</string>
+    <string name="title_create_your_account">Create Your Account</string>
+    <string name="account">Account</string>
+    <string name="role">Role</string>
+    <string name="full_name">Full Name</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="academic_level">Academic Level</string>
+    <string name="organization">Organization</string>
+    <string name="name">Name</string>
+    <string name="settings">Settings</string>
+    <string name="export_data">Export Data</string>
+    <string name="import_data">Import Data</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="delete_all_data">Delete All Data</string>
+    <string name="app_version">App Version: 1.0.0</string>
+    <string name="let_s_get_to_know_you">Let\'s Get to Know You!</string>
+    <string name="tell_us_a_little_about_yourself_to_personalize_your_experience">Tell us a little about yourself to personalize your experience.</string>
+    <string name="what_should_we_call_you">What should we call you?</string>
+    <string name="where_do_you_study_school_university">Where do you study? (School/University)</string>
+    <string name="your_field_of_study_or_major">Your field of study or major</string>
+    <string name="what_are_your_dreams_or_goals">What are your dreams or goals?</string>
+    <string name="let_s_start">Let\'s Start!</string>
+    <string name="skip_for_now">Skip For Now</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="create_account">Create Account</string>
+    <string name="skip_without_account">Skip Without Account</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>

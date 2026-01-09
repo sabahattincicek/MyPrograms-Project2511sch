@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.schedule
+package com.saboon.project_2511sch.presentation.task
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.toFormattedString
 
-class RecyclerAdapterSchedule: ListAdapter<Task, RecyclerAdapterSchedule.ScheduleViewHolder>(ScheduleDiffCallback()) {
+class RecyclerAdapterTask: ListAdapter<Task, RecyclerAdapterTask.ScheduleViewHolder>(ScheduleDiffCallback()) {
 
     var onItemClickListener:((Task) -> Unit)? = null
 

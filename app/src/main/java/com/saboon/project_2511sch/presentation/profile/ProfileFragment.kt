@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.auth
+package com.saboon.project_2511sch.presentation.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.saboon.project_2511sch.R
-import com.saboon.project_2511sch.databinding.FragmentCreateRemoteUserBinding
+import com.saboon.project_2511sch.databinding.FragmentProfileBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 
-class CreateRemoteUserFragment : Fragment() {
+@AndroidEntryPoint
+class ProfileFragment : Fragment() {
 
-    private var _binding: FragmentCreateRemoteUserBinding?= null
+
+    private var _binding: FragmentProfileBinding? =null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,12 +27,12 @@ class CreateRemoteUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentCreateRemoteUserBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

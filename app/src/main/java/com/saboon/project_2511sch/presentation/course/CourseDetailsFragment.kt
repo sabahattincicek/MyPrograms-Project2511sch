@@ -21,9 +21,9 @@ import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentCourseDetailsBinding
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.presentation.schedule.DialogFragmentSchedule
-import com.saboon.project_2511sch.presentation.schedule.RecyclerAdapterSchedule
-import com.saboon.project_2511sch.presentation.schedule.ViewModelSchedule
+import com.saboon.project_2511sch.presentation.task.DialogFragmentTask
+import com.saboon.project_2511sch.presentation.task.RecyclerAdapterTask
+import com.saboon.project_2511sch.presentation.task.ViewModelTask
 import com.saboon.project_2511sch.util.ModelColors
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,12 +45,12 @@ class CourseDetailsFragment : Fragment() {
     private val args : CourseDetailsFragmentArgs by navArgs()
 
     private val viewModelCourse : ViewModelCourse by viewModels()
-    private val viewModelSchedule: ViewModelSchedule by viewModels()
+    private val viewModelTask: ViewModelTask by viewModels()
 
     private lateinit var programTable: ProgramTable
     private lateinit var course: Course
 
-    private lateinit var scheduleRecyclerAdapter: RecyclerAdapterSchedule
+    private lateinit var scheduleRecyclerAdapter: RecyclerAdapterTask
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +85,7 @@ class CourseDetailsFragment : Fragment() {
         observeUpdateCourseEvent()
 
 
-        viewModelSchedule.getSchedulesByCourseId(course.id)
+        viewModelTask.getSchedulesByCourseId(course.id)
 
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -97,7 +97,7 @@ class CourseDetailsFragment : Fragment() {
         }
 
         binding.btnAddSchedule.setOnClickListener {
-            val dialog = DialogFragmentSchedule.newInstance(course, null)
+            val dialog = DialogFragmentTask.newInstance(course, null)
             dialog.show(childFragmentManager, "CreateNewSchedule")
         }
 
@@ -142,24 +142,24 @@ class CourseDetailsFragment : Fragment() {
             }
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentSchedule.REQUEST_KEY_CREATE, this){ requestKey, result ->
-            val newTask = BundleCompat.getParcelable(result, DialogFragmentSchedule.RESULT_KEY_SCHEDULE, Task::class.java)
+        childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_CREATE, this){ requestKey, result ->
+            val newTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE, Task::class.java)
             if (newTask != null){
-                viewModelSchedule.insertNewSchedule(newTask)
+                viewModelTask.insertNewSchedule(newTask)
             }
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentSchedule.REQUEST_KEY_UPDATE, this){ requestKey, result ->
-            val updatedTask = BundleCompat.getParcelable(result, DialogFragmentSchedule.RESULT_KEY_SCHEDULE,Task::class.java)
+        childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_UPDATE, this){ requestKey, result ->
+            val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE,Task::class.java)
             if(updatedTask != null){
-                viewModelSchedule.updateSchedule(updatedTask)
+                viewModelTask.updateSchedule(updatedTask)
             }
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentSchedule.REQUEST_KEY_DELETE, this){ requestKey, result ->
-            val deletedTask = BundleCompat.getParcelable(result, DialogFragmentSchedule.RESULT_KEY_SCHEDULE, Task::class.java)
+        childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_DELETE, this){ requestKey, result ->
+            val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE, Task::class.java)
             if (deletedTask != null){
-                viewModelSchedule.deleteSchedule(deletedTask)
+                viewModelTask.deleteSchedule(deletedTask)
             }
         }
 
@@ -172,9 +172,9 @@ class CourseDetailsFragment : Fragment() {
     }
 
     private fun setupRecyclerAdapter(){
-        scheduleRecyclerAdapter = RecyclerAdapterSchedule()
+        scheduleRecyclerAdapter = RecyclerAdapterTask()
         scheduleRecyclerAdapter.onItemClickListener = {schedule ->
-            val dialog = DialogFragmentSchedule.newInstance(course, schedule)
+            val dialog = DialogFragmentTask.newInstance(course, schedule)
             dialog.show(childFragmentManager, "UpdateScheduleDialog")
         }
         binding.rvSchedules.apply{
@@ -200,6 +200,7 @@ class CourseDetailsFragment : Fragment() {
         val themeAwareOnCustomContainerColor = MaterialColors.getColor(requireContext(), onCustomContainerColorAttr, Color.BLACK)
 
         binding.llCourseInfo.setBackgroundColor(themeAwareCustomContainerColor)
+        binding.llFilesContainer.setBackgroundColor(themeAwareCustomContainerColor)
 
         binding.tvTitleCourse.setTextColor(themeAwareOnCustomContainerColor)
         binding.tvPersonPrimary.setTextColor(themeAwareOnCustomContainerColor)
@@ -209,6 +210,10 @@ class CourseDetailsFragment : Fragment() {
         binding.tvAbsenceCount.setTextColor(themeAwareOnCustomContainerColor)
         binding.btnAbsenceDecrease.setColorFilter(themeAwareOnCustomContainerColor)
         binding.btnAbsenceIncrease.setColorFilter(themeAwareOnCustomContainerColor)
+
+        binding.btnFiles.setBackgroundColor(themeAwareOnCustomContainerColor)
+        binding.btnFiles.setTextColor(themeAwareCustomContainerColor)
+        binding.tvFile.setTextColor(themeAwareCustomContainerColor)
     }
 
     private fun observeUpdateCourseEvent(){
@@ -252,7 +257,7 @@ class CourseDetailsFragment : Fragment() {
     private fun observeInsertNewScheduleEvent(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSchedule.insertNewScheduleEvent.collect { event ->
+                viewModelTask.insertNewScheduleEvent.collect { event ->
                     when(event) {
                         is Resource.Error<*> -> {
                             Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
@@ -260,7 +265,7 @@ class CourseDetailsFragment : Fragment() {
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            viewModelSchedule.setupAlarmForSchedule(programTable, course, event.data!!)
+                            viewModelTask.setupAlarmForSchedule(programTable, course, event.data!!)
                             Toast.makeText(context, getString(R.string.schedule_added_successfully), Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -271,7 +276,7 @@ class CourseDetailsFragment : Fragment() {
     private fun observeUpdateScheduleEvent(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSchedule.updateScheduleEvent.collect { event ->
+                viewModelTask.updateScheduleEvent.collect { event ->
                     when(event) {
                         is Resource.Error<*> -> {
                             Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
@@ -279,7 +284,7 @@ class CourseDetailsFragment : Fragment() {
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            viewModelSchedule.setupAlarmForSchedule(programTable, course, event.data!!)
+                            viewModelTask.setupAlarmForSchedule(programTable, course, event.data!!)
                             Toast.makeText(context, getString(R.string.schedule_updated_successfully), Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -291,7 +296,7 @@ class CourseDetailsFragment : Fragment() {
     private fun observeDeleteScheduleEvent(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSchedule.deleteScheduleEvent.collect { event ->
+                viewModelTask.deleteScheduleEvent.collect { event ->
                     when(event) {
                         is Resource.Error<*> -> {}
                         is Resource.Idle<*> -> {}
@@ -308,7 +313,7 @@ class CourseDetailsFragment : Fragment() {
     private fun observeSchedulesState(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSchedule.taskState.collect { resource ->
+                viewModelTask.taskState.collect { resource ->
                     when(resource) {
                         is Resource.Error<*> -> {
                             Toast.makeText(requireContext(), resource.message, Toast.LENGTH_LONG).show()
