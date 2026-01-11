@@ -17,6 +17,7 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val programTableId: String,
         override val title: String?,
         override val description: String?,
+        override val type: TaskType,
 
         val date: Long,
         val dateRangeStart: Long,
@@ -25,8 +26,8 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         val timeStart: Long,
         val timeEnd: Long,
         val remindBefore: Int,
-        val place: String?
-        ): Parcelable, Task()
+        val place: String?,
+    ): Parcelable, Task()
 
     @Parcelize
     data class Exam(
@@ -39,6 +40,7 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val programTableId: String,
         override val title: String?,
         override val description: String?,
+        override val type: TaskType,
 
         val date: Long,
         val timeStart: Long,
@@ -61,12 +63,12 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val programTableId: String,
         override val title: String?,
         override val description: String?,
+        override val type: TaskType,
 
         val dueDate: Long,
         val remindBefore: Int = 0,
         val link: String?,
         val submissionType: SubmissionType,
-
     ): Parcelable, Task()
 }
 

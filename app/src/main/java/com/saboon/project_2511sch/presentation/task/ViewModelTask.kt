@@ -6,15 +6,14 @@ import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.usecase.task.DeleteScheduleUseCase
-import com.saboon.project_2511sch.domain.usecase.task.GetSchedulesByCourseIdUseCase
-import com.saboon.project_2511sch.domain.usecase.task.InsertNewScheduleUseCase
-import com.saboon.project_2511sch.domain.usecase.task.UpdateScheduleUseCase
+import com.saboon.project_2511sch.domain.usecase.task.DeleteTaskUseCase
+import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemsUseCase
+import com.saboon.project_2511sch.domain.usecase.task.InsertNewTaskUseCase
+import com.saboon.project_2511sch.domain.usecase.task.UpdateTaskUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -22,10 +21,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewModelTask @Inject constructor(
-    private val insertNewScheduleUseCase: InsertNewScheduleUseCase,
-    private val updateScheduleUseCase: UpdateScheduleUseCase,
-    private val deleteScheduleUseCase: DeleteScheduleUseCase,
-    private val getSchedulesByCourseIdUseCase: GetSchedulesByCourseIdUseCase,
+    private val insertNewTaskUseCase: InsertNewTaskUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
+    private val getTaskDisplayItemsUseCase: GetTaskDisplayItemsUseCase,
     private val alarmScheduler: IAlarmScheduler
 ): ViewModel() {
     private val _insertNewTaskEvent = Channel<Resource<Task>>()
@@ -37,13 +36,16 @@ class ViewModelTask @Inject constructor(
     private val _deleteTaskEvent = Channel<Resource<Task>>()
     val deleteScheduleEvent = _deleteTaskEvent.receiveAsFlow()
 
-    private val _schedulesState = MutableStateFlow<Resource<List<Task>>>(Resource.Idle())
-    val taskState: StateFlow<Resource<List<Task>>> = _schedulesState.asStateFlow()
-    fun insertNewSchedule(task: Task){
+    private val _taskState = MutableStateFlow<Resource<List<Task>>>(Resource.Idle())
+    val taskState = _taskState.asStateFlow()
+
+    private val _taskDisplayItemsState = MutableStateFlow<Resource<List<TaskDisplayItem>>>(Resource.Idle())
+    val taskDisplayItemsState = _taskDisplayItemsState.asStateFlow()
+    fun insertNewTask(task: Task){
         viewModelScope.launch {
             try {
                 _insertNewTaskEvent.send(Resource.Loading())
-                val insertResult = insertNewScheduleUseCase.invoke(task)
+                val insertResult = insertNewTaskUseCase.invoke(task)
                 _insertNewTaskEvent.send(insertResult)
             }catch (e: Exception){
                 _insertNewTaskEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
@@ -51,11 +53,11 @@ class ViewModelTask @Inject constructor(
         }
     }
 
-    fun updateSchedule(task: Task){
+    fun updateTask(task: Task){
         viewModelScope.launch {
             try {
                 _updateTaskEvent.send(Resource.Loading())
-                val updateResult = updateScheduleUseCase.invoke(task)
+                val updateResult = updateTaskUseCase.invoke(task)
                 _updateTaskEvent.send(updateResult)
             }catch (e: Exception){
                 _updateTaskEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
@@ -63,11 +65,11 @@ class ViewModelTask @Inject constructor(
         }
     }
 
-    fun deleteSchedule(task: Task){
+    fun deleteTask(task: Task){
         viewModelScope.launch {
             try {
                 _deleteTaskEvent.send(Resource.Loading())
-                val deleteResult = deleteScheduleUseCase.invoke(task)
+                val deleteResult = deleteTaskUseCase.invoke(task)
                 _deleteTaskEvent.send(deleteResult)
                 alarmScheduler.cancel(task)
             }catch (e: Exception){
@@ -76,15 +78,15 @@ class ViewModelTask @Inject constructor(
         }
     }
 
-    fun getSchedulesByCourseId(id: String){
+    fun getTaskDisplayItems(course: Course){
         viewModelScope.launch {
-            try{
-                _schedulesState.value = Resource.Loading()
-                getSchedulesByCourseIdUseCase.invoke(id).collect { resource ->
-                    _schedulesState.value = resource
+            try {
+                _taskDisplayItemsState.value = Resource.Loading()
+                getTaskDisplayItemsUseCase.invoke(course).collect { resource ->
+                    _taskDisplayItemsState.value = resource
                 }
             }catch (e: Exception){
-                _schedulesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+                _taskDisplayItemsState.value = Resource.Error(e.localizedMessage?:"An unexpected error occurred in ViewModel.")
             }
         }
     }

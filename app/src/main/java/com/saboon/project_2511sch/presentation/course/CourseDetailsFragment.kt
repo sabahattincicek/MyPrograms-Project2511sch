@@ -50,13 +50,8 @@ class CourseDetailsFragment : Fragment() {
     private lateinit var programTable: ProgramTable
     private lateinit var course: Course
 
-    private lateinit var scheduleRecyclerAdapter: RecyclerAdapterTask
+    private lateinit var taskRecyclerAdapter: RecyclerAdapterTask
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,15 +72,15 @@ class CourseDetailsFragment : Fragment() {
         
         setupRecyclerAdapter()
         applyDataToView()
-        observeSchedulesState()
         observeInsertNewScheduleEvent()
         observeUpdateScheduleEvent()
         observeDeleteScheduleEvent()
         observeDeleteCourseEvent()
         observeUpdateCourseEvent()
+        observeTaskDisplayItemsState()
 
 
-        viewModelTask.getSchedulesByCourseId(course.id)
+        viewModelTask.getTaskDisplayItems(course)
 
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -145,21 +140,21 @@ class CourseDetailsFragment : Fragment() {
         childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_CREATE, this){ requestKey, result ->
             val newTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE, Task::class.java)
             if (newTask != null){
-                viewModelTask.insertNewSchedule(newTask)
+                viewModelTask.insertNewTask(newTask)
             }
         }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_UPDATE, this){ requestKey, result ->
             val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE,Task::class.java)
             if(updatedTask != null){
-                viewModelTask.updateSchedule(updatedTask)
+                viewModelTask.updateTask(updatedTask)
             }
         }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_DELETE, this){ requestKey, result ->
             val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE, Task::class.java)
             if (deletedTask != null){
-                viewModelTask.deleteSchedule(deletedTask)
+                viewModelTask.deleteTask(deletedTask)
             }
         }
 
@@ -172,13 +167,13 @@ class CourseDetailsFragment : Fragment() {
     }
 
     private fun setupRecyclerAdapter(){
-        scheduleRecyclerAdapter = RecyclerAdapterTask()
-        scheduleRecyclerAdapter.onItemClickListener = {schedule ->
+        taskRecyclerAdapter = RecyclerAdapterTask()
+        taskRecyclerAdapter.onItemClickListener = { schedule ->
             val dialog = DialogFragmentTask.newInstance(course, schedule)
             dialog.show(childFragmentManager, "UpdateScheduleDialog")
         }
         binding.rvSchedules.apply{
-            adapter = scheduleRecyclerAdapter
+            adapter = taskRecyclerAdapter
             layoutManager = LinearLayoutManager(context)
         }
     }
@@ -310,18 +305,16 @@ class CourseDetailsFragment : Fragment() {
         }
     }
 
-    private fun observeSchedulesState(){
+    private fun observeTaskDisplayItemsState(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelTask.taskState.collect { resource ->
+                viewModelTask.taskDisplayItemsState.collect { resource ->
                     when(resource) {
-                        is Resource.Error<*> -> {
-                            Toast.makeText(requireContext(), resource.message, Toast.LENGTH_LONG).show()
-                        }
+                        is Resource.Error<*> -> {}
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            scheduleRecyclerAdapter.submitList(resource.data)
+                            taskRecyclerAdapter.submitList(resource.data)
                         }
                     }
                 }

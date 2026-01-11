@@ -2,6 +2,7 @@ package com.saboon.project_2511sch.data.local.mapper
 
 import com.saboon.project_2511sch.data.local.entity.TaskExamEntity
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.domain.model.TaskType
 
 fun TaskExamEntity.toDomain(): Task.Exam{
     return Task.Exam(
@@ -13,6 +14,7 @@ fun TaskExamEntity.toDomain(): Task.Exam{
         programTableId = programTableId,
         title = title,
         description = description,
+        type = type,
         date = date,
         timeStart = timeStart,
         timeEnd = timeEnd,
@@ -20,7 +22,7 @@ fun TaskExamEntity.toDomain(): Task.Exam{
         remindBefore = remindBefore,
         place = place,
         targetScore = targetScore,
-        achievedScore = achievedScore
+        achievedScore = achievedScore,
     )
 }
 
@@ -34,6 +36,7 @@ fun Task.Exam.toEntity(): TaskExamEntity{
         programTableId = programTableId,
         title = title,
         description = description,
+        type = type,
         date = date,
         timeStart = timeStart,
         timeEnd = timeEnd,

@@ -26,52 +26,52 @@ class AlarmSchedulerImp(
     }
 
     override fun scheduleReminder(programTable: ProgramTable, course: Course, task: Task) {
-        Log.d(tag, "[Initial Task] Setting REMINDER for '${task.title}'")
-
-        val triggerAtMillis = calculateCombinedTime(task.date, task.startTime) - (task.remindBefore * 60 * 1000)
-
-        if (task.remindBefore > -1 && triggerAtMillis > System.currentTimeMillis()) {
-            val reminderIntent = createIntent(programTable, course, task).apply {
-                action = ACTION_REMINDER
-                data = "task://${task.id}#reminder".toUri()
-            }
-            setAlarm(triggerAtMillis, reminderIntent, task.id.hashCode())
-        } else {
-            Log.w(tag, "[Initial Task] Reminder alarm SKIPPED for '${task.title}'.")
-        }
+//        Log.d(tag, "[Initial Task] Setting REMINDER for '${task.title}'")
+//
+//        val triggerAtMillis = calculateCombinedTime(task.date, task.startTime) - (task.remindBefore * 60 * 1000)
+//
+//        if (task.remindBefore > -1 && triggerAtMillis > System.currentTimeMillis()) {
+//            val reminderIntent = createIntent(programTable, course, task).apply {
+//                action = ACTION_REMINDER
+//                data = "task://${task.id}#reminder".toUri()
+//            }
+//            setAlarm(triggerAtMillis, reminderIntent, task.id.hashCode())
+//        } else {
+//            Log.w(tag, "[Initial Task] Reminder alarm SKIPPED for '${task.title}'.")
+//        }
     }
 
     override fun scheduleAbsenceReminder(programTable: ProgramTable, course: Course, task: Task) {
-        Log.d(tag, "[Initial Task] Setting ABSENCE CHECK for '${task.title}'")
-        val triggerAtMillis = calculateCombinedTime(task.date, task.endTime)
-
-        if (triggerAtMillis > System.currentTimeMillis()) {
-            val absenceIntent = createIntent(programTable, course, task).apply {
-                action = ACTION_ABSENCE_CHECK
-                data = "task://${task.id}#absence".toUri()
-            }
-            setAlarm(triggerAtMillis, absenceIntent, task.id.hashCode() + 1)
-        } else {
-            Log.w(tag, "[Initial Task] Absence alarm SKIPPED for '${task.title}'.")
-        }
+//        Log.d(tag, "[Initial Task] Setting ABSENCE CHECK for '${task.title}'")
+//        val triggerAtMillis = calculateCombinedTime(task.date, task.endTime)
+//
+//        if (triggerAtMillis > System.currentTimeMillis()) {
+//            val absenceIntent = createIntent(programTable, course, task).apply {
+//                action = ACTION_ABSENCE_CHECK
+//                data = "task://${task.id}#absence".toUri()
+//            }
+//            setAlarm(triggerAtMillis, absenceIntent, task.id.hashCode() + 1)
+//        } else {
+//            Log.w(tag, "[Initial Task] Absence alarm SKIPPED for '${task.title}'.")
+//        }
     }
 
     override fun rescheduleReminder(programTable: ProgramTable, course: Course, currentTask: Task) {
-        val nextTriggerDate = calculateNextTriggerDate(currentTask) ?: return
-        val nextSchedule = currentTask.copy(date = nextTriggerDate)
-
-        Log.d(tag, "[Reschedule] Setting next REMINDER for '${nextSchedule.title}'")
-
-        scheduleReminder(programTable, course, nextSchedule)
+//        val nextTriggerDate = calculateNextTriggerDate(currentTask) ?: return
+//        val nextSchedule = currentTask.copy(date = nextTriggerDate)
+//
+//        Log.d(tag, "[Reschedule] Setting next REMINDER for '${nextSchedule.title}'")
+//
+//        scheduleReminder(programTable, course, nextSchedule)
     }
 
     override fun rescheduleAbsenceReminder(programTable: ProgramTable, course: Course, currentTask: Task) {
-        val nextTriggerDate = calculateNextTriggerDate(currentTask) ?: return
-        val nextSchedule = currentTask.copy(date = nextTriggerDate)
-
-        Log.d(tag, "[Reschedule] Setting next ABSENCE CHECK for '${nextSchedule.title}'")
-
-        scheduleAbsenceReminder(programTable, course, nextSchedule)
+//        val nextTriggerDate = calculateNextTriggerDate(currentTask) ?: return
+//        val nextSchedule = currentTask.copy(date = nextTriggerDate)
+//
+//        Log.d(tag, "[Reschedule] Setting next ABSENCE CHECK for '${nextSchedule.title}'")
+//
+//        scheduleAbsenceReminder(programTable, course, nextSchedule)
     }
 
     override fun cancel(task: Task) {
@@ -134,18 +134,18 @@ class AlarmSchedulerImp(
         }.timeInMillis
     }
 
-    private fun calculateNextTriggerDate(task: Task): Long? {
-        if (task.recurrenceRule.isBlank()) {
-            Log.d(tag, "No recurrence rule. Not rescheduling.")
-            return null
-        }
-        val calendar = Calendar.getInstance().apply { timeInMillis = task.date }
-        return when (task.recurrenceRule) {
-            "FREQ=DAILY" -> calendar.apply { add(Calendar.DAY_OF_YEAR, 1) }.timeInMillis
-            "FREQ=WEEKLY" -> calendar.apply { add(Calendar.WEEK_OF_YEAR, 1) }.timeInMillis
-            "FREQ=MONTHLY" -> calendar.apply { add(Calendar.MONTH, 1) }.timeInMillis
-            "FREQ=YEARLY" -> calendar.apply { add(Calendar.YEAR, 1) }.timeInMillis
-            else -> null
-        }
-    }
+//    private fun calculateNextTriggerDate(task: Task): Long? {
+//        if (task.recurrenceRule.isBlank()) {
+//            Log.d(tag, "No recurrence rule. Not rescheduling.")
+//            return null
+//        }
+//        val calendar = Calendar.getInstance().apply { timeInMillis = task.date }
+//        return when (task.recurrenceRule) {
+//            "FREQ=DAILY" -> calendar.apply { add(Calendar.DAY_OF_YEAR, 1) }.timeInMillis
+//            "FREQ=WEEKLY" -> calendar.apply { add(Calendar.WEEK_OF_YEAR, 1) }.timeInMillis
+//            "FREQ=MONTHLY" -> calendar.apply { add(Calendar.MONTH, 1) }.timeInMillis
+//            "FREQ=YEARLY" -> calendar.apply { add(Calendar.YEAR, 1) }.timeInMillis
+//            else -> null
+//        }
+//    }
 }

@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.saboon.project_2511sch.domain.model.SubmissionType
+import com.saboon.project_2511sch.domain.model.TaskType
 
 @Entity(
     tableName = "task_homeworks",
@@ -33,6 +34,7 @@ data class TaskHomeworkEntity(
     @ColumnInfo(name = "program_table_id") val programTableId: String,
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "description") val description: String?,
+    @ColumnInfo(name = "type") val type: TaskType,
 
     @ColumnInfo(name = "due_date") val dueDate: Long,
     @ColumnInfo(name = "remind_before") val remindBefore: Int,

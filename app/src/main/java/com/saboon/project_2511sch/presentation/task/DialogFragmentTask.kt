@@ -76,20 +76,20 @@ class DialogFragmentTask: DialogFragment() {
 
         val isEditMode = task != null
         if(isEditMode){
-            selectedRecurrenceRule = task!!.recurrenceRule
-            selectedDateMillis = task!!.date
-            selectedStartTimeMillis = task!!.startTime
-            selectedEndTimeMillis = task!!.endTime
-            selectedRemindBeforeMinutes = task!!.remindBefore
-
-            binding.etTitle.setText(task!!.title)
-            binding.etDescription.setText(task!!.description)
-            binding.actvRepeat.setText(mapRuleToDisplayString(selectedRecurrenceRule, recurrenceOptions), false)
-            binding.etDate.setText(selectedDateMillis.toFormattedString("dd MMMM yyyy"))
-            binding.etTimeStart.setText(selectedStartTimeMillis.toFormattedString("HH:mm"))
-            binding.etTimeEnd.setText(selectedEndTimeMillis.toFormattedString("HH:mm"))
-            binding.actvReminder.setText(mapMinutesToDisplayString(selectedRemindBeforeMinutes, reminderOptions), false)
-            binding.etPlace.setText(task!!.place)
+//            selectedRecurrenceRule = task!!.recurrenceRule
+//            selectedDateMillis = task!!.date
+//            selectedStartTimeMillis = task!!.startTime
+//            selectedEndTimeMillis = task!!.endTime
+//            selectedRemindBeforeMinutes = task!!.remindBefore
+//
+//            binding.etTitle.setText(task!!.title)
+//            binding.etDescription.setText(task!!.description)
+//            binding.actvRepeat.setText(mapRuleToDisplayString(selectedRecurrenceRule, recurrenceOptions), false)
+//            binding.etDate.setText(selectedDateMillis.toFormattedString("dd MMMM yyyy"))
+//            binding.etTimeStart.setText(selectedStartTimeMillis.toFormattedString("HH:mm"))
+//            binding.etTimeEnd.setText(selectedEndTimeMillis.toFormattedString("HH:mm"))
+//            binding.actvReminder.setText(mapMinutesToDisplayString(selectedRemindBeforeMinutes, reminderOptions), false)
+//            binding.etPlace.setText(task!!.place)
         }
 
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
@@ -107,40 +107,40 @@ class DialogFragmentTask: DialogFragment() {
 
         binding.btnSave.setOnClickListener {
             if(isEditMode){
-                val updatedSchedule = task!!.copy(
-                    title = binding.etTitle.text.toString(),
-                    description = binding.etDescription.text.toString(),
-                    date = selectedDateMillis,
-                    startTime = selectedStartTimeMillis,
-                    endTime = selectedEndTimeMillis,
-                    place = binding.etPlace.text.toString(),
-                    remindBefore = selectedRemindBeforeMinutes,
-                    recurrenceRule = selectedRecurrenceRule
-                )
-
-                setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(
-                    RESULT_KEY_SCHEDULE to updatedSchedule
-                ))
-                dismiss()
+//                val updatedSchedule = task!!.copy(
+//                    title = binding.etTitle.text.toString(),
+//                    description = binding.etDescription.text.toString(),
+//                    date = selectedDateMillis,
+//                    startTime = selectedStartTimeMillis,
+//                    endTime = selectedEndTimeMillis,
+//                    place = binding.etPlace.text.toString(),
+//                    remindBefore = selectedRemindBeforeMinutes,
+//                    recurrenceRule = selectedRecurrenceRule
+//                )
+//
+//                setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(
+//                    RESULT_KEY_SCHEDULE to updatedSchedule
+//                ))
+//                dismiss()
             }else{
-                val newTask = Task(
-                    id = IdGenerator.generateScheduleId(binding.etTitle.text.toString()),
-                    courseId = course.id,
-                    programTableId = course.programTableId,
-                    title = binding.etTitle.text.toString(),
-                    description = binding.etDescription.text.toString(),
-                    date = selectedDateMillis,
-                    startTime = selectedStartTimeMillis,
-                    endTime = selectedEndTimeMillis,
-                    place = binding.etPlace.text.toString(),
-                    remindBefore = selectedRemindBeforeMinutes,
-                    recurrenceRule = selectedRecurrenceRule
-                )
-
-                setFragmentResult(REQUEST_KEY_CREATE, bundleOf(
-                    RESULT_KEY_SCHEDULE to newTask
-                ))
-                dismiss()
+//                val newTask = Task(
+//                    id = IdGenerator.generateScheduleId(binding.etTitle.text.toString()),
+//                    courseId = course.id,
+//                    programTableId = course.programTableId,
+//                    title = binding.etTitle.text.toString(),
+//                    description = binding.etDescription.text.toString(),
+//                    date = selectedDateMillis,
+//                    startTime = selectedStartTimeMillis,
+//                    endTime = selectedEndTimeMillis,
+//                    place = binding.etPlace.text.toString(),
+//                    remindBefore = selectedRemindBeforeMinutes,
+//                    recurrenceRule = selectedRecurrenceRule
+//                )
+//
+//                setFragmentResult(REQUEST_KEY_CREATE, bundleOf(
+//                    RESULT_KEY_SCHEDULE to newTask
+//                ))
+//                dismiss()
             }
         }
 

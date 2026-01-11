@@ -30,26 +30,26 @@ class RecyclerAdapterHome : ListAdapter<HomeDisplayItem, RecyclerView.ViewHolder
 
     class ContentViewHolder(private val binding: RecyclerListRowHomeBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: HomeDisplayItem.ContentItem){
-            val programTable = item.programTable
-            val course = item.course
-            val schedule = item.task
-
-            binding.tvCourseTitle.text = course.title
-            binding.tvCoursePeople.text = course.people
-            binding.tvScheduleStartTime.text = schedule.startTime.toFormattedString("HH:mm")
-            binding.tvScheduleEndTime.text = schedule.endTime.toFormattedString("HH:mm")
-            binding.tvScheduleTitle.text = schedule.title
-            binding.tvSchedulePlace.text = schedule.place
-
-            val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor(course.color)
-            val themeAwareCustomContainerColor = MaterialColors.getColor(binding.root, customContainerColorAttr, Color.BLACK)
-            binding.llContainer.background = GradientDrawable(
-                GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.TRANSPARENT, themeAwareCustomContainerColor)
-            )
-            val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(course.color)
-            val themeAwareOnCustomContainerColor = MaterialColors.getColor(binding.root, onCustomContainerColorAttr, Color.BLACK)
-            binding.vSeparator.setBackgroundColor(themeAwareOnCustomContainerColor)
+//            val programTable = item.programTable
+//            val course = item.course
+//            val schedule = item.task
+//
+//            binding.tvCourseTitle.text = course.title
+//            binding.tvCoursePeople.text = course.people
+//            binding.tvScheduleStartTime.text = schedule.startTime.toFormattedString("HH:mm")
+//            binding.tvScheduleEndTime.text = schedule.endTime.toFormattedString("HH:mm")
+//            binding.tvScheduleTitle.text = schedule.title
+//            binding.tvSchedulePlace.text = schedule.place
+//
+//            val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor(course.color)
+//            val themeAwareCustomContainerColor = MaterialColors.getColor(binding.root, customContainerColorAttr, Color.BLACK)
+//            binding.llContainer.background = GradientDrawable(
+//                GradientDrawable.Orientation.LEFT_RIGHT,
+//                intArrayOf(Color.TRANSPARENT, themeAwareCustomContainerColor)
+//            )
+//            val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(course.color)
+//            val themeAwareOnCustomContainerColor = MaterialColors.getColor(binding.root, onCustomContainerColorAttr, Color.BLACK)
+//            binding.vSeparator.setBackgroundColor(themeAwareOnCustomContainerColor)
         }
     }
 

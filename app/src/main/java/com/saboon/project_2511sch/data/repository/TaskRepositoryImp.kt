@@ -1,10 +1,18 @@
 package com.saboon.project_2511sch.data.repository
 
 import com.saboon.project_2511sch.data.local.dao.TaskDao
+import com.saboon.project_2511sch.data.local.entity.TaskExamEntity
+import com.saboon.project_2511sch.data.local.entity.TaskHomeworkEntity
+import com.saboon.project_2511sch.data.local.entity.TaskLessonEntity
+import com.saboon.project_2511sch.data.local.mapper.toDomain
 import com.saboon.project_2511sch.data.local.mapper.toEntity
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.util.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TaskRepositoryImp @Inject constructor(
@@ -46,6 +54,27 @@ class TaskRepositoryImp @Inject constructor(
             return Resource.Success(task)
         }catch (e: Exception){
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
+    override fun getAllTasksByCourseId(id: String): Flow<Resource<List<Task>>> {
+        return combine<List<TaskLessonEntity>, List<TaskExamEntity>, List<TaskHomeworkEntity>, Resource<List<Task>>>(
+            taskDao.getAllLessonsByCourseId(id),
+            taskDao.getAllExamsByCourseId(id),
+            taskDao.getAllHomeworksByCourseId(id)
+        ) { lessons, exams, homeworks ->
+            // Convert entities to domain models and combine into one list
+            val allTasks = mutableListOf<Task>()
+            allTasks.addAll(lessons.map { it.toDomain() })
+            allTasks.addAll(exams.map { it.toDomain() })
+            allTasks.addAll(homeworks.map { it.toDomain() })
+
+            // Optionally sort by date/time if needed
+            // allTasks.sortBy { it.date }
+
+            Resource.Success(allTasks.toList())
+        }.catch { e ->
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         }
     }
 

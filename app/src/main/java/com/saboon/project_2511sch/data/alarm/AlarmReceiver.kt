@@ -68,22 +68,22 @@ class AlarmReceiver: BroadcastReceiver() {
     }
 
     private fun showReminderNotification(context: Context, programTable: ProgramTable, course: Course, task: Task){
-        val notificationId = task.id.hashCode()
-        val notificationManager = context.getSystemService(NotificationManager::class.java)
-        val notification = NotificationCompat.Builder(context, "schedule_reminders")
-            .setSmallIcon(R.drawable.baseline_add_24) // TODO: Change icon
-            .setContentTitle("Upcoming: ${task.title ?: "Event"}")
-            .setContentText("For course '${course.title ?: "your course"}' at ${task.startTime.toFormattedString("HH:mm")}.")
-            .setStyle(
-                NotificationCompat.BigTextStyle()
-                    .bigText("Event: ${task.title}\nCourse: ${course.title}\nTime: ${task.startTime.toFormattedString("HH:mm")}\nDescription: ${task.description}")
-            )
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
-            .build()
-        
-        notificationManager.notify(notificationId, notification)
-        Log.i(tag, "Reminder notification posted with ID: $notificationId")
+//        val notificationId = task.id.hashCode()
+//        val notificationManager = context.getSystemService(NotificationManager::class.java)
+//        val notification = NotificationCompat.Builder(context, "schedule_reminders")
+//            .setSmallIcon(R.drawable.baseline_add_24) // TODO: Change icon
+//            .setContentTitle("Upcoming: ${task.title ?: "Event"}")
+//            .setContentText("For course '${course.title ?: "your course"}' at ${task.startTime.toFormattedString("HH:mm")}.")
+//            .setStyle(
+//                NotificationCompat.BigTextStyle()
+//                    .bigText("Event: ${task.title}\nCourse: ${course.title}\nTime: ${task.startTime.toFormattedString("HH:mm")}\nDescription: ${task.description}")
+//            )
+//            .setPriority(NotificationCompat.PRIORITY_HIGH)
+//            .setAutoCancel(true)
+//            .build()
+//
+//        notificationManager.notify(notificationId, notification)
+//        Log.i(tag, "Reminder notification posted with ID: $notificationId")
     }
 
     private fun showAbsenceCheckNotification(context: Context, programTable: ProgramTable, course: Course, task: Task) {

@@ -7,12 +7,10 @@ import androidx.room.migration.AutoMigrationSpec
 import com.saboon.project_2511sch.data.local.dao.CourseDao
 import com.saboon.project_2511sch.data.local.dao.FileDao
 import com.saboon.project_2511sch.data.local.dao.ProgramTableDao
-import com.saboon.project_2511sch.data.local.dao.ScheduleDao
 import com.saboon.project_2511sch.data.local.dao.TaskDao
 import com.saboon.project_2511sch.data.local.entity.CourseEntity
 import com.saboon.project_2511sch.data.local.entity.FileEntity
 import com.saboon.project_2511sch.data.local.entity.ProgramTableEntity
-import com.saboon.project_2511sch.data.local.entity.ScheduleEntity
 import com.saboon.project_2511sch.data.local.entity.TaskExamEntity
 import com.saboon.project_2511sch.data.local.entity.TaskHomeworkEntity
 import com.saboon.project_2511sch.data.local.entity.TaskLessonEntity
@@ -21,7 +19,6 @@ import com.saboon.project_2511sch.data.local.entity.TaskLessonEntity
     entities = [
         ProgramTableEntity::class,
         CourseEntity::class,
-        ScheduleEntity::class,
         FileEntity::class,
         TaskLessonEntity::class,
         TaskExamEntity::class,
@@ -32,8 +29,6 @@ import com.saboon.project_2511sch.data.local.entity.TaskLessonEntity
 abstract class Database(): RoomDatabase() {
     abstract fun programDao(): ProgramTableDao
     abstract fun courseDao(): CourseDao
-    abstract fun scheduleDao(): ScheduleDao
     abstract fun fileDao(): FileDao
-
     abstract fun taskDao(): TaskDao
 }

@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.saboon.project_2511sch.domain.model.TaskType
 
 @Entity(
     tableName = "task_lessons",
@@ -32,6 +33,7 @@ data class TaskLessonEntity(
     @ColumnInfo(name = "program_table_id") val programTableId: String,
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "description") val description: String?,
+    @ColumnInfo(name = "type") val type: TaskType,
 
     @ColumnInfo(name = "date") val date: Long,
     @ColumnInfo(name = "date_range_start") val dateRangeStart: Long,
