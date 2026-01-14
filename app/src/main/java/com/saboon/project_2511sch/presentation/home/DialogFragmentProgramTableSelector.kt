@@ -8,7 +8,6 @@ import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentProgramTableSelectorBinding
@@ -20,7 +19,7 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
     private var _binding: DialogFragmentProgramTableSelectorBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var recyclerAdapterDialogFragmentHome: RecyclerAdapterDialogFragmentHome
+    private lateinit var recyclerAdapterDialogFragmentProgramTableSelector: RecyclerAdapterDialogFragmentProgramTableSelector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +42,7 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
 
         val programTableList = arguments?.let { BundleCompat.getParcelableArrayList(it, ARG_PROGRAM_TABLE_LIST, ProgramTable::class.java) }
 
-        recyclerAdapterDialogFragmentHome.submitList(programTableList)
+        recyclerAdapterDialogFragmentProgramTableSelector.submitList(programTableList)
 
         binding.topAppBar.setNavigationOnClickListener {
             dismiss()
@@ -56,15 +55,15 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
     }
 
     private fun setupRecyclerAdapter(){
-        recyclerAdapterDialogFragmentHome = RecyclerAdapterDialogFragmentHome()
-        recyclerAdapterDialogFragmentHome.onItemClickListener = {programTable ->
+        recyclerAdapterDialogFragmentProgramTableSelector = RecyclerAdapterDialogFragmentProgramTableSelector()
+        recyclerAdapterDialogFragmentProgramTableSelector.onItemClickListener = { programTable ->
             setFragmentResult(REQUEST_KEY_SELECT_ACTIVE, bundleOf(
                 RESULT_KEY_PROGRAM_TABLE to programTable
             ))
             dismiss()
         }
         binding.programRecyclerView.apply {
-            adapter = recyclerAdapterDialogFragmentHome
+            adapter = recyclerAdapterDialogFragmentProgramTableSelector
             layoutManager = LinearLayoutManager(context)
         }
     }

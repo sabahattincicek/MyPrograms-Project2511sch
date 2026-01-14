@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -21,7 +22,6 @@ import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentCourseDetailsBinding
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.presentation.task.DialogFragmentTask
 import com.saboon.project_2511sch.presentation.task.RecyclerAdapterTask
 import com.saboon.project_2511sch.presentation.task.ViewModelTask
 import com.saboon.project_2511sch.util.ModelColors
@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
+import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskLesson
 
 @AndroidEntryPoint
 class CourseDetailsFragment : Fragment() {
@@ -71,6 +72,7 @@ class CourseDetailsFragment : Fragment() {
         course = args.course
         
         setupRecyclerAdapter()
+        setupTaskLessonFragmentResultListeners()
         applyDataToView()
         observeInsertNewScheduleEvent()
         observeUpdateScheduleEvent()
@@ -91,9 +93,8 @@ class CourseDetailsFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        binding.btnAddSchedule.setOnClickListener {
-            val dialog = DialogFragmentTask.newInstance(course, null)
-            dialog.show(childFragmentManager, "CreateNewSchedule")
+        binding.btnAddSchedule.setOnClickListener { anchorView ->
+            showAddTaskMenu(anchorView)
         }
 
         val menuHost: MenuHost = requireActivity()
@@ -129,7 +130,7 @@ class CourseDetailsFragment : Fragment() {
                  viewModelCourse.deleteCourse(course)
             }
         }
-        
+
         childFragmentManager.setFragmentResultListener(DialogFragmentCourse.REQUEST_KEY_UPDATE, this){requestKey, result ->
             val updatedCourse = BundleCompat.getParcelable(result, DialogFragmentCourse.RESULT_KEY_COURSE,Course::class.java)
             if (updatedCourse != null){
@@ -137,26 +138,7 @@ class CourseDetailsFragment : Fragment() {
             }
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_CREATE, this){ requestKey, result ->
-            val newTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE, Task::class.java)
-            if (newTask != null){
-                viewModelTask.insertNewTask(newTask)
-            }
-        }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_UPDATE, this){ requestKey, result ->
-            val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE,Task::class.java)
-            if(updatedTask != null){
-                viewModelTask.updateTask(updatedTask)
-            }
-        }
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_DELETE, this){ requestKey, result ->
-            val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE, Task::class.java)
-            if (deletedTask != null){
-                viewModelTask.deleteTask(deletedTask)
-            }
-        }
 
         binding.btnAbsenceDecrease.setOnClickListener {
             viewModelCourse.decrementAbsence(course)
@@ -168,13 +150,42 @@ class CourseDetailsFragment : Fragment() {
 
     private fun setupRecyclerAdapter(){
         taskRecyclerAdapter = RecyclerAdapterTask()
-        taskRecyclerAdapter.onItemClickListener = { schedule ->
-            val dialog = DialogFragmentTask.newInstance(course, schedule)
-            dialog.show(childFragmentManager, "UpdateScheduleDialog")
+        taskRecyclerAdapter.onItemClickListener = { task ->
+            when(task) {
+                is Task.Lesson -> {
+                    val dialog = DialogFragmentTaskLesson.newInstanceForEdit(course, task)
+                    dialog.show(childFragmentManager, "UpdateScheduleDialog")
+                }
+                is Task.Exam -> {}
+                is Task.Homework -> {}
+            }
         }
         binding.rvSchedules.apply{
             adapter = taskRecyclerAdapter
             layoutManager = LinearLayoutManager(context)
+        }
+    }
+
+    private fun setupTaskLessonFragmentResultListeners(){
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskLesson.REQUEST_KEY_CREATE, this){ requestKey, result ->
+            val newTask = BundleCompat.getParcelable(result, DialogFragmentTaskLesson.RESULT_KEY_TASK, Task.Lesson::class.java)
+            if (newTask != null){
+                viewModelTask.insertNewTask(newTask)
+            }
+        }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskLesson.REQUEST_KEY_UPDATE, this){ requestKey, result ->
+            val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTaskLesson.RESULT_KEY_TASK,Task.Lesson::class.java)
+            if(updatedTask != null){
+                viewModelTask.updateTask(updatedTask)
+            }
+        }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskLesson.REQUEST_KEY_DELETE, this){ requestKey, result ->
+            val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTaskLesson.RESULT_KEY_TASK, Task.Lesson::class.java)
+            if (deletedTask != null){
+                viewModelTask.deleteTask(deletedTask)
+            }
         }
     }
 
@@ -209,6 +220,31 @@ class CourseDetailsFragment : Fragment() {
         binding.btnFiles.setBackgroundColor(themeAwareOnCustomContainerColor)
         binding.btnFiles.setTextColor(themeAwareCustomContainerColor)
         binding.tvFile.setTextColor(themeAwareCustomContainerColor)
+    }
+
+    private fun showAddTaskMenu(anchorView: View){
+        PopupMenu(requireContext(), anchorView).apply {
+            menuInflater.inflate(R.menu.menu_add_task, menu)
+            setOnMenuItemClickListener { item ->
+                when(item.itemId){
+                    R.id.action_add_lesson -> {
+                        val dialog = DialogFragmentTaskLesson.newInstanceForCreate(course)
+                        dialog.show(childFragmentManager, "dialogFragmentTaskLesson")
+                        true
+                    }
+                    R.id.action_add_exam -> {
+
+                        true
+                    }
+                    R.id.action_add_homework -> {
+
+                        true
+                    }
+                    else -> false
+                }
+            }
+            show()
+        }
     }
 
     private fun observeUpdateCourseEvent(){

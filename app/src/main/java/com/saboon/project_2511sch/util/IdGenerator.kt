@@ -1,6 +1,5 @@
 package com.saboon.project_2511sch.util
 
-import java.util.Date
 import java.util.UUID
 
 object IdGenerator {
@@ -26,11 +25,11 @@ object IdGenerator {
         return "${dateMillis}_${date}_${courseTitle}_${uuid}"
     }
 
-    fun generateScheduleId(scheduleTitle: String): String{
+    fun generateTaskId(taskTitle: String): String{
         val dateMillis = System.currentTimeMillis().toString()
         val date = System.currentTimeMillis().toFormattedString("yyyyMMdd_HHmmss")
         val uuid = java.util.UUID.randomUUID().toString()
-        return "${dateMillis}_${date}_${scheduleTitle}_${uuid}"
+        return "${dateMillis}_${date}_${taskTitle}_${uuid}"
     }
 
     fun generateFileId(fileTitle: String): String{

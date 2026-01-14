@@ -42,7 +42,7 @@ class RecyclerAdapterTask: ListAdapter<TaskDisplayItem, RecyclerView.ViewHolder>
                     binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
                     binding.tvContent1.text = task.title
                     binding.tvContent1Sub.text = task.description
-                    binding.tvContent2.text = task.date.toFormattedString("dddd")
+                    binding.tvContent2.text = task.date.toFormattedString("EEEE")
                     binding.tvContent2Sub.text = task.place
                 }
                 is Task.Exam -> {
@@ -87,6 +87,14 @@ class RecyclerAdapterTask: ListAdapter<TaskDisplayItem, RecyclerView.ViewHolder>
         when(holder){
             is HeaderViewHolder -> {holder.bind(item as TaskDisplayItem.HeaderItem)}
             is ContentViewHolder -> {holder.bind(item as TaskDisplayItem.ContentItem)}
+        }
+        holder.itemView.setOnClickListener {
+            when(item) {
+                is TaskDisplayItem.ContentItem -> {
+                    onItemClickListener?.invoke(item.task)
+                }
+                is TaskDisplayItem.HeaderItem -> {}
+            }
         }
     }
 
