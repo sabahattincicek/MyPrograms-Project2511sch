@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.databinding.RecyclerListRowDialogFragmentHomeBinding
 import com.saboon.project_2511sch.domain.model.ProgramTable
 
-class RecyclerAdapterDialogFragmentHome : ListAdapter<ProgramTable, RecyclerAdapterDialogFragmentHome.DialogFragmentHomeViewHolder>(
+class RecyclerAdapterDialogFragmentProgramTableSelector : ListAdapter<ProgramTable, RecyclerAdapterDialogFragmentProgramTableSelector.DialogFragmentHomeViewHolder>(
     DialogFragmentHomeDiffCallback()
 ) {
 

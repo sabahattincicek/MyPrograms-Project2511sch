@@ -5,16 +5,16 @@ import com.saboon.project_2511sch.data.alarm.AlarmSchedulerImp
 import com.saboon.project_2511sch.data.local.dao.CourseDao
 import com.saboon.project_2511sch.data.local.dao.FileDao
 import com.saboon.project_2511sch.data.local.dao.ProgramTableDao
-import com.saboon.project_2511sch.data.local.dao.ScheduleDao
+import com.saboon.project_2511sch.data.local.dao.TaskDao
 import com.saboon.project_2511sch.data.repository.CourseRepositoryImp
 import com.saboon.project_2511sch.data.repository.FileRepositoryImp
 import com.saboon.project_2511sch.data.repository.ProgramTableRepositoryImp
-import com.saboon.project_2511sch.data.repository.ScheduleRepositoryImp
+import com.saboon.project_2511sch.data.repository.TaskRepositoryImp
 import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.IFileRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
-import com.saboon.project_2511sch.domain.repository.IScheduleRepository
+import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import dagger.Provides
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -37,13 +37,6 @@ object RepositoryModule {
     fun provideCourseRepositoryImp(courseDao: CourseDao): ICourseRepository {
         return CourseRepositoryImp(courseDao)
     }
-
-    @Singleton
-    @Provides
-    fun provideScheduleRepositoryImp(scheduleDao: ScheduleDao): IScheduleRepository {
-        return ScheduleRepositoryImp(scheduleDao)
-    }
-
     @Singleton
     @Provides
     fun provideAlarmScheduler(@ApplicationContext context: Context): IAlarmScheduler{
@@ -54,6 +47,12 @@ object RepositoryModule {
     @Provides
     fun provideFileRepositoryImp(@ApplicationContext context: Context, fileDao: FileDao): IFileRepository {
         return FileRepositoryImp(context, fileDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTaskRepositoryImp(taskDao: TaskDao): ITaskRepository {
+        return TaskRepositoryImp(taskDao)
     }
 
 }

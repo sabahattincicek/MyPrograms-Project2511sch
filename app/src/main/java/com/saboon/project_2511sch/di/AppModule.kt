@@ -5,15 +5,12 @@ import androidx.room.Room
 import com.saboon.project_2511sch.data.alarm.AlarmSchedulerImp
 import com.saboon.project_2511sch.data.local.dao.CourseDao
 import com.saboon.project_2511sch.data.local.dao.ProgramTableDao
-import com.saboon.project_2511sch.data.local.dao.ScheduleDao
 import com.saboon.project_2511sch.data.local.database.Database
 import com.saboon.project_2511sch.data.repository.CourseRepositoryImp
 import com.saboon.project_2511sch.data.repository.ProgramTableRepositoryImp
-import com.saboon.project_2511sch.data.repository.ScheduleRepositoryImp
 import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
-import com.saboon.project_2511sch.domain.repository.IScheduleRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,10 +40,10 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideScheduleDao(database: Database) = database.scheduleDao()
+    fun provideFileDao(database: Database) = database.fileDao()
 
     @Singleton
     @Provides
-    fun provideFileDao(database: Database) = database.fileDao()
+    fun provideTaskDao(database: Database) = database.taskDao()
 
 }

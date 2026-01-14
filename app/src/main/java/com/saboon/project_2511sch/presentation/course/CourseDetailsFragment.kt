@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -21,7 +22,6 @@ import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentCourseDetailsBinding
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.presentation.task.DialogFragmentTask
 import com.saboon.project_2511sch.presentation.task.RecyclerAdapterTask
 import com.saboon.project_2511sch.presentation.task.ViewModelTask
 import com.saboon.project_2511sch.util.ModelColors
@@ -35,6 +35,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
+import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskExam
+import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskLesson
 
 @AndroidEntryPoint
 class CourseDetailsFragment : Fragment() {
@@ -50,13 +52,8 @@ class CourseDetailsFragment : Fragment() {
     private lateinit var programTable: ProgramTable
     private lateinit var course: Course
 
-    private lateinit var scheduleRecyclerAdapter: RecyclerAdapterTask
+    private lateinit var taskRecyclerAdapter: RecyclerAdapterTask
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,16 +73,18 @@ class CourseDetailsFragment : Fragment() {
         course = args.course
         
         setupRecyclerAdapter()
+        setupTaskLessonFragmentResultListeners()
+        setupTaskExamFragmentResultListeners()
         applyDataToView()
-        observeSchedulesState()
         observeInsertNewScheduleEvent()
         observeUpdateScheduleEvent()
         observeDeleteScheduleEvent()
         observeDeleteCourseEvent()
         observeUpdateCourseEvent()
+        observeTaskDisplayItemsState()
 
 
-        viewModelTask.getSchedulesByCourseId(course.id)
+        viewModelTask.getTaskDisplayItems(course)
 
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -96,9 +95,8 @@ class CourseDetailsFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        binding.btnAddSchedule.setOnClickListener {
-            val dialog = DialogFragmentTask.newInstance(course, null)
-            dialog.show(childFragmentManager, "CreateNewSchedule")
+        binding.btnAddSchedule.setOnClickListener { anchorView ->
+            showAddTaskMenu(anchorView)
         }
 
         val menuHost: MenuHost = requireActivity()
@@ -134,7 +132,7 @@ class CourseDetailsFragment : Fragment() {
                  viewModelCourse.deleteCourse(course)
             }
         }
-        
+
         childFragmentManager.setFragmentResultListener(DialogFragmentCourse.REQUEST_KEY_UPDATE, this){requestKey, result ->
             val updatedCourse = BundleCompat.getParcelable(result, DialogFragmentCourse.RESULT_KEY_COURSE,Course::class.java)
             if (updatedCourse != null){
@@ -142,26 +140,7 @@ class CourseDetailsFragment : Fragment() {
             }
         }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_CREATE, this){ requestKey, result ->
-            val newTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE, Task::class.java)
-            if (newTask != null){
-                viewModelTask.insertNewSchedule(newTask)
-            }
-        }
 
-        childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_UPDATE, this){ requestKey, result ->
-            val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE,Task::class.java)
-            if(updatedTask != null){
-                viewModelTask.updateSchedule(updatedTask)
-            }
-        }
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentTask.REQUEST_KEY_DELETE, this){ requestKey, result ->
-            val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTask.RESULT_KEY_SCHEDULE, Task::class.java)
-            if (deletedTask != null){
-                viewModelTask.deleteSchedule(deletedTask)
-            }
-        }
 
         binding.btnAbsenceDecrease.setOnClickListener {
             viewModelCourse.decrementAbsence(course)
@@ -172,14 +151,67 @@ class CourseDetailsFragment : Fragment() {
     }
 
     private fun setupRecyclerAdapter(){
-        scheduleRecyclerAdapter = RecyclerAdapterTask()
-        scheduleRecyclerAdapter.onItemClickListener = {schedule ->
-            val dialog = DialogFragmentTask.newInstance(course, schedule)
-            dialog.show(childFragmentManager, "UpdateScheduleDialog")
+        taskRecyclerAdapter = RecyclerAdapterTask()
+        taskRecyclerAdapter.onItemClickListener = { task ->
+            when(task) {
+                is Task.Lesson -> {
+                    val dialog = DialogFragmentTaskLesson.newInstanceForEdit(course, task)
+                    dialog.show(childFragmentManager, "UpdateTaskDialog")
+                }
+                is Task.Exam -> {
+                    val dialog = DialogFragmentTaskExam.newInstanceForEdit(course, task)
+                    dialog.show(childFragmentManager, "UpdateTaskDialog")
+                }
+                is Task.Homework -> {}
+            }
         }
         binding.rvSchedules.apply{
-            adapter = scheduleRecyclerAdapter
+            adapter = taskRecyclerAdapter
             layoutManager = LinearLayoutManager(context)
+        }
+    }
+
+    private fun setupTaskLessonFragmentResultListeners(){
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskLesson.REQUEST_KEY_CREATE, this){ requestKey, result ->
+            val newTask = BundleCompat.getParcelable(result, DialogFragmentTaskLesson.RESULT_KEY_TASK, Task.Lesson::class.java)
+            if (newTask != null){
+                viewModelTask.insertNewTask(newTask)
+            }
+        }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskLesson.REQUEST_KEY_UPDATE, this){ requestKey, result ->
+            val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTaskLesson.RESULT_KEY_TASK,Task.Lesson::class.java)
+            if(updatedTask != null){
+                viewModelTask.updateTask(updatedTask)
+            }
+        }
+
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskLesson.REQUEST_KEY_DELETE, this){ requestKey, result ->
+            val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTaskLesson.RESULT_KEY_TASK, Task.Lesson::class.java)
+            if (deletedTask != null){
+                viewModelTask.deleteTask(deletedTask)
+            }
+        }
+    }
+
+    private fun setupTaskExamFragmentResultListeners(){
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskExam.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
+            val newTask = BundleCompat.getParcelable(result, DialogFragmentTaskExam.RESULT_KEY_TASK, Task.Exam::class.java)
+            if (newTask != null){
+                viewModelTask.insertNewTask(newTask)
+            }
+        }
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskExam.REQUEST_KEY_UPDATE, this){ requestKey, result ->
+            val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTaskExam.RESULT_KEY_TASK,Task.Exam::class.java)
+            if(updatedTask != null){
+                viewModelTask.updateTask(updatedTask)
+            }
+        }
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskExam.REQUEST_KEY_DELETE, this){ requestKey, result ->
+            val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTaskExam.RESULT_KEY_TASK, Task.Exam::class.java)
+            if (deletedTask != null){
+                viewModelTask.deleteTask(deletedTask)
+            }
         }
     }
 
@@ -214,6 +246,32 @@ class CourseDetailsFragment : Fragment() {
         binding.btnFiles.setBackgroundColor(themeAwareOnCustomContainerColor)
         binding.btnFiles.setTextColor(themeAwareCustomContainerColor)
         binding.tvFile.setTextColor(themeAwareCustomContainerColor)
+    }
+
+    private fun showAddTaskMenu(anchorView: View){
+        PopupMenu(requireContext(), anchorView).apply {
+            menuInflater.inflate(R.menu.menu_add_task, menu)
+            setOnMenuItemClickListener { item ->
+                when(item.itemId){
+                    R.id.action_add_lesson -> {
+                        val dialog = DialogFragmentTaskLesson.newInstanceForCreate(course)
+                        dialog.show(childFragmentManager, "dialogFragmentTaskLesson")
+                        true
+                    }
+                    R.id.action_add_exam -> {
+                        val dialog = DialogFragmentTaskExam.newInstanceForCreate(course)
+                        dialog.show(childFragmentManager, "dialogFragmentTaskExam")
+                        true
+                    }
+                    R.id.action_add_homework -> {
+
+                        true
+                    }
+                    else -> false
+                }
+            }
+            show()
+        }
     }
 
     private fun observeUpdateCourseEvent(){
@@ -310,18 +368,16 @@ class CourseDetailsFragment : Fragment() {
         }
     }
 
-    private fun observeSchedulesState(){
+    private fun observeTaskDisplayItemsState(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelTask.taskState.collect { resource ->
+                viewModelTask.taskDisplayItemsState.collect { resource ->
                     when(resource) {
-                        is Resource.Error<*> -> {
-                            Toast.makeText(requireContext(), resource.message, Toast.LENGTH_LONG).show()
-                        }
+                        is Resource.Error<*> -> {}
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            scheduleRecyclerAdapter.submitList(resource.data)
+                            taskRecyclerAdapter.submitList(resource.data)
                         }
                     }
                 }

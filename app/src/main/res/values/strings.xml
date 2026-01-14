@@ -106,7 +106,7 @@
     <string name="modelColor_7">Brown</string>
     <string name="modelColor_8">Cyan</string>
     <string name="create_new_schedule">Create New Schedule</string>
-    <string name="task">Schedule</string>
+    <string name="task">Task</string>
     <string name="date">Date</string>
     <string name="Repeat">Repeat</string>
     <string name="hint_date">Date</string>
@@ -169,6 +169,17 @@
     <string name="already_have_an_account">Already have an account?</string>
     <string name="create_account">Create Account</string>
     <string name="skip_without_account">Skip Without Account</string>
+    <string name="date_range_start">Start Date</string>
+    <string name="date_range_end">End Date</string>
+    <string name="select_the_date_range_for_this_recurring_task">Select the date range for this recurring task.</string>
+    <string name="exam">Exam</string>
+    <string name="exam_type">Exam Type</string>
+    <string name="target_score">Target Score</string>
+    <string name="due_date">Due Date</string>
+    <string name="homework">Homework</string>
+    <string name="submission_type">Submission Type</string>
+    <string name="lesson">Lesson</string>
+    <string name="edit_task">Edit Task</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
@@ -185,5 +196,24 @@
         <item>30 minutes before</item>
         <item>1 hour before</item>
         <item>1 day before</item>
+    </string-array>
+
+    <string-array name="task_types">
+        <item>Lesson</item>
+        <item>Exam</item>
+        <item>Homework</item>
+    </string-array>
+
+    <string-array name="task_exam_types">
+        <item>Other</item>
+        <item>Midterm</item>
+        <item>Final</item>
+        <item>Quiz</item>
+    </string-array>
+
+    <string-array name="task_lesson_submission_types">
+        <item>Other</item>
+        <item>Online</item>
+        <item>Physical</item>
     </string-array>
 </resources>

@@ -7,6 +7,7 @@ import com.saboon.project_2511sch.domain.usecase.course.DecrementAbsenceUseCase
 import com.saboon.project_2511sch.domain.usecase.course.DeleteCourseUseCase
 import com.saboon.project_2511sch.domain.usecase.course.GetAllCoursesUseCase
 import com.saboon.project_2511sch.domain.usecase.course.GetCoursesWithProgramTableIdUseCase
+import com.saboon.project_2511sch.domain.usecase.course.IncrementAbsenceUseCase
 import com.saboon.project_2511sch.domain.usecase.course.InsertNewCourseUseCase
 import com.saboon.project_2511sch.domain.usecase.course.UpdateCourseUseCase
 import com.saboon.project_2511sch.util.Resource
@@ -25,7 +26,7 @@ class ViewModelCourse @Inject constructor(
     private val updateCourseUseCase: UpdateCourseUseCase,
     private val deleteCourseUseCase: DeleteCourseUseCase,
     private val decrementAbsenceUseCase: DecrementAbsenceUseCase,
-    private val incrementAbsenceUseCase: DecrementAbsenceUseCase,
+    private val incrementAbsenceUseCase: IncrementAbsenceUseCase,
     private val getAllCoursesUseCase: GetAllCoursesUseCase,
     private val getCoursesWithProgramTableIdUseCase: GetCoursesWithProgramTableIdUseCase
 ): ViewModel() {
