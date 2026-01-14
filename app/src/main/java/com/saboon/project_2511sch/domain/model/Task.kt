@@ -73,8 +73,10 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
 }
 
 enum class ExamType {
-    MIDTERM, FINAL, QUIZ
+    //dont forget edit the string array
+    OTHER, MIDTERM, FINAL, QUIZ
 }
 enum class SubmissionType {
-    ONLINE, PHYSICAL
+    //dont forget edit the string array
+    OTHER, ONLINE, PHYSICAL
 }

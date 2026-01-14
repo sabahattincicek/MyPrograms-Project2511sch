@@ -203,4 +203,17 @@
         <item>Exam</item>
         <item>Homework</item>
     </string-array>
+
+    <string-array name="task_exam_types">
+        <item>Other</item>
+        <item>Midterm</item>
+        <item>Final</item>
+        <item>Quiz</item>
+    </string-array>
+
+    <string-array name="task_lesson_submission_types">
+        <item>Other</item>
+        <item>Online</item>
+        <item>Physical</item>
+    </string-array>
 </resources>

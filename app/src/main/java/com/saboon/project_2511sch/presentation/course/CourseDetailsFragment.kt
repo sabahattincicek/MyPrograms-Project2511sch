@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
+import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskExam
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskLesson
 
 @AndroidEntryPoint
@@ -73,6 +74,7 @@ class CourseDetailsFragment : Fragment() {
         
         setupRecyclerAdapter()
         setupTaskLessonFragmentResultListeners()
+        setupTaskExamFragmentResultListeners()
         applyDataToView()
         observeInsertNewScheduleEvent()
         observeUpdateScheduleEvent()
@@ -154,9 +156,12 @@ class CourseDetailsFragment : Fragment() {
             when(task) {
                 is Task.Lesson -> {
                     val dialog = DialogFragmentTaskLesson.newInstanceForEdit(course, task)
-                    dialog.show(childFragmentManager, "UpdateScheduleDialog")
+                    dialog.show(childFragmentManager, "UpdateTaskDialog")
                 }
-                is Task.Exam -> {}
+                is Task.Exam -> {
+                    val dialog = DialogFragmentTaskExam.newInstanceForEdit(course, task)
+                    dialog.show(childFragmentManager, "UpdateTaskDialog")
+                }
                 is Task.Homework -> {}
             }
         }
@@ -183,6 +188,27 @@ class CourseDetailsFragment : Fragment() {
 
         childFragmentManager.setFragmentResultListener(DialogFragmentTaskLesson.REQUEST_KEY_DELETE, this){ requestKey, result ->
             val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTaskLesson.RESULT_KEY_TASK, Task.Lesson::class.java)
+            if (deletedTask != null){
+                viewModelTask.deleteTask(deletedTask)
+            }
+        }
+    }
+
+    private fun setupTaskExamFragmentResultListeners(){
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskExam.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
+            val newTask = BundleCompat.getParcelable(result, DialogFragmentTaskExam.RESULT_KEY_TASK, Task.Exam::class.java)
+            if (newTask != null){
+                viewModelTask.insertNewTask(newTask)
+            }
+        }
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskExam.REQUEST_KEY_UPDATE, this){ requestKey, result ->
+            val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTaskExam.RESULT_KEY_TASK,Task.Exam::class.java)
+            if(updatedTask != null){
+                viewModelTask.updateTask(updatedTask)
+            }
+        }
+        childFragmentManager.setFragmentResultListener(DialogFragmentTaskExam.REQUEST_KEY_DELETE, this){ requestKey, result ->
+            val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTaskExam.RESULT_KEY_TASK, Task.Exam::class.java)
             if (deletedTask != null){
                 viewModelTask.deleteTask(deletedTask)
             }
@@ -233,7 +259,8 @@ class CourseDetailsFragment : Fragment() {
                         true
                     }
                     R.id.action_add_exam -> {
-
+                        val dialog = DialogFragmentTaskExam.newInstanceForCreate(course)
+                        dialog.show(childFragmentManager, "dialogFragmentTaskExam")
                         true
                     }
                     R.id.action_add_homework -> {
