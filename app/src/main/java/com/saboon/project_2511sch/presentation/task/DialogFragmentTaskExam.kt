@@ -117,6 +117,7 @@ class DialogFragmentTaskExam: DialogFragment() {
                     date = selectedDateMillis,
                     timeStart = selectedTimeStartMillis,
                     timeEnd = selectedTimeEndMillis,
+                    remindBefore = selectedRemindBeforeMinutes,
                     examType = selectedExamType,
                     place = binding.etPlace.text.toString(),
                     targetScore = binding.etTargetScore.text.toString().toIntOrNull() ?: 0,
