@@ -22,95 +22,94 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/ll_time_container"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_schedule_startTime"
+                android:id="@+id/tv_date_1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:textAlignment="center"
-                android:maxLines="1"
-                android:text="09:00"
+                android:text="15:30"
                 android:textSize="18sp"/>
+
             <TextView
-                android:id="@+id/tv_schedule_endTime"
+                android:id="@+id/tv_date_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textAlignment="center"
-                android:text="09:00"/>
+                android:text="16:30"
+                android:textAlignment="center"/>
         </LinearLayout>
 
         <View
-            android:id="@+id/v_separator"
+            android:id="@+id/view_divider"
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="?attr/colorCustomColor1"/>
+            android:background="?attr/colorOnSurface"
+            android:layout_marginStart="8dp"/>
 
         <LinearLayout
-            android:id="@+id/ll_details_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="5">
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/ll_title_container"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_course_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textStart"
-                    android:paddingStart="5dp"
-                    android:maxLines="1"
-                    android:text="Akiskanlar mekanigi"
-                    android:textSize="18sp"/>
-                <TextView
-                    android:id="@+id/tv_course_people"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textStart"
-                    android:paddingStart="5dp"
-                    android:text="Ahmet Erdil"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_place_container"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_schedule_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
+                    android:id="@+id/tv_content_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:maxLines="1"
-                    android:paddingStart="5dp"
-                    android:text="Ders"/>
+                    android:ellipsize="end"
+                    android:text="Lesson, Title"
+                    android:textSize="18sp"/>
+
                 <TextView
-                    android:id="@+id/tv_schedule_place"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
+                    android:id="@+id/tv_content_1_sub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:maxLines="1"
-                    android:paddingStart="5dp"
-                    android:text="205"/>
+                    android:ellipsize="end"
+                    android:text="Titleasdg alkjsfdhlak jfhd lakjsd fhljhgfjhgf"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_content_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textEnd"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="carsamba"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/tv_content_2_sub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textEnd"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="207"/>
+            </LinearLayout>
 
         </LinearLayout>
 

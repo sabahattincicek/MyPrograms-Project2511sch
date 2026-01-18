@@ -112,6 +112,8 @@ class DialogFragmentTaskHomework: DialogFragment() {
                     submissionType = selectedSubmissionType,
                     remindBefore = selectedRemindBeforeMinutes
                 )
+                setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))
+                dismiss()
             }
         }
         binding.btnCancel.setOnClickListener {

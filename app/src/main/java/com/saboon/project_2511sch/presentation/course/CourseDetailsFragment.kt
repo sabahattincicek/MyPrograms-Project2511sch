@@ -290,7 +290,8 @@ class CourseDetailsFragment : Fragment() {
                         true
                     }
                     R.id.action_add_homework -> {
-
+                        val dialog = DialogFragmentTaskHomework.newInstanceForCreate(course)
+                        dialog.show(childFragmentManager, "dialogFragmentTaskHomework")
                         true
                     }
                     else -> false

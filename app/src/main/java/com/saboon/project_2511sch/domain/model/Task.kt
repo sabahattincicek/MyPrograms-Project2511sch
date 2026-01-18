@@ -20,8 +20,6 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val type: TaskType,
 
         val date: Long,
-        val dateRangeStart: Long,
-        val dateRangeEnd: Long,
         val recurrenceRule: String,
         val timeStart: Long,
         val timeEnd: Long,

@@ -70,17 +70,17 @@ class ViewModelHome @Inject constructor(
         }
     }
 
-//    fun getDisplayItems(programTable: ProgramTable){
-//        viewModelScope.launch {
-//            try {
-//                _displayItemsState.value = Resource.Loading()
-//                getHomeDisplayItemsUseCase.invoke(programTable).collect { resource ->
-//                    _displayItemsState.value = resource
-//                }
-//            }catch (e: Exception){
-//                _displayItemsState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-//            }
-//        }
-//    }
+    fun getDisplayItems(programTable: ProgramTable){
+        viewModelScope.launch {
+            try {
+                _displayItemsState.value = Resource.Loading()
+                getHomeDisplayItemsUseCase.invoke(programTable).collect { resource ->
+                    _displayItemsState.value = resource
+                }
+            }catch (e: Exception){
+                _displayItemsState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+            }
+        }
+    }
 
 }

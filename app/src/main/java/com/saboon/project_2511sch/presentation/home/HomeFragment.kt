@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
 
         setupRecyclerAdapter()
         observeActiveProgramTableState()
-//        observeHomeDisplayItemsState()
+        observeHomeDisplayItemsState()
         observeAllProgramTablesState()
 
         Log.i(tag, "onViewCreated: Triggering initial data load by getting active program table.")
@@ -105,7 +105,7 @@ class HomeFragment : Fragment() {
                                 Log.i(tag, "ActiveProgramTable State: Success - Found active table: '${result.data.title}'.")
                                 programTable = result.data
                                 binding.tvProgramTable.text = programTable.title
-//                                viewModelHome.getDisplayItems(programTable)
+                                viewModelHome.getDisplayItems(programTable)
                             } else {
                                 Log.w(tag, "ActiveProgramTable State: Success, but data is null.")
                             }

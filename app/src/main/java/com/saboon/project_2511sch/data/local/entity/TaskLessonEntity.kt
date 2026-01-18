@@ -36,8 +36,6 @@ data class TaskLessonEntity(
     @ColumnInfo(name = "type") val type: TaskType,
 
     @ColumnInfo(name = "date") val date: Long,
-    @ColumnInfo(name = "date_range_start") val dateRangeStart: Long,
-    @ColumnInfo(name = "date_range_end") val dateRangeEnd: Long,
     @ColumnInfo(name = "recurrence_rule") val recurrenceRule: String,
     @ColumnInfo(name = "time_start") val timeStart: Long,
     @ColumnInfo(name = "time_end") val timeEnd: Long,
