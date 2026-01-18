@@ -41,11 +41,11 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         val date: Long,
         val timeStart: Long,
         val timeEnd: Long,
-        val examType: ExamType,
         val remindBefore: Int,
+        val examType: String?,
         val place: String?,
-        val targetScore: Int,
-        val achievedScore: Int
+        val targetScore: Int?,
+        val achievedScore: Int?
     ): Parcelable, Task()
 
     @Parcelize

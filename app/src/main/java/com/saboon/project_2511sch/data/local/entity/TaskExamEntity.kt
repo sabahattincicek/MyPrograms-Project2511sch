@@ -34,14 +34,13 @@ data class TaskExamEntity(
     @ColumnInfo(name = "program_table_id") val programTableId: String,
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "description") val description: String?,
-    @ColumnInfo(name = "type") val type: TaskType,
 
     @ColumnInfo(name = "date") val date: Long,
     @ColumnInfo(name = "time_start") val timeStart: Long,
     @ColumnInfo(name = "time_end") val timeEnd: Long,
-    @ColumnInfo(name = "exam_type") val examType: ExamType,
     @ColumnInfo(name = "remind_before") val remindBefore: Int,
+    @ColumnInfo(name = "exam_type") val examType: String?,
     @ColumnInfo(name = "place") val place: String?,
-    @ColumnInfo(name = "target_score") val targetScore: Int,
-    @ColumnInfo(name = "achieved_score") val achievedScore: Int
+    @ColumnInfo(name = "target_score") val targetScore: Int?,
+    @ColumnInfo(name = "achieved_score") val achievedScore: Int?
 )
