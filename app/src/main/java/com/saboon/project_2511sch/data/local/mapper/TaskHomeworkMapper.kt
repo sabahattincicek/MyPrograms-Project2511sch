@@ -13,11 +13,9 @@ fun TaskHomeworkEntity.toDomain(): Task.Homework{
         programTableId = programTableId,
         title = title,
         description = description,
-        type = type,
         dueDate = dueDate,
+        dueTime = dueTime,
         remindBefore = remindBefore,
-        link = link,
-        submissionType = submissionType
     )
 }
 
@@ -31,10 +29,8 @@ fun Task.Homework.toEntity(): TaskHomeworkEntity{
         programTableId = programTableId,
         title = title,
         description = description,
-        type = type,
         dueDate = dueDate,
+        dueTime = dueTime,
         remindBefore = remindBefore,
-        link = link,
-        submissionType = submissionType
     )
 }

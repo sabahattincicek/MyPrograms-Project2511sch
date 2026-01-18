@@ -17,7 +17,6 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val programTableId: String,
         override val title: String?,
         override val description: String?,
-        override val type: TaskType,
 
         val date: Long,
         val recurrenceRule: String,
@@ -38,7 +37,6 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val programTableId: String,
         override val title: String?,
         override val description: String?,
-        override val type: TaskType,
 
         val date: Long,
         val timeStart: Long,
@@ -61,12 +59,10 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val programTableId: String,
         override val title: String?,
         override val description: String?,
-        override val type: TaskType,
 
         val dueDate: Long,
+        val dueTime: Long,
         val remindBefore: Int,
-        val link: String?,
-        val submissionType: SubmissionType,
     ): Parcelable, Task()
 }
 

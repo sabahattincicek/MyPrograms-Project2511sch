@@ -34,10 +34,8 @@ data class TaskHomeworkEntity(
     @ColumnInfo(name = "program_table_id") val programTableId: String,
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "description") val description: String?,
-    @ColumnInfo(name = "type") val type: TaskType,
 
     @ColumnInfo(name = "due_date") val dueDate: Long,
+    @ColumnInfo(name = "due_time") val dueTime: Long,
     @ColumnInfo(name = "remind_before") val remindBefore: Int,
-    @ColumnInfo(name = "link") val link: String?,
-    @ColumnInfo(name = "submission_type") val submissionType: SubmissionType,
 )
