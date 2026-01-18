@@ -78,5 +78,23 @@ class TaskRepositoryImp @Inject constructor(
         }
     }
 
+    override fun getAllTaskByProgramTableId(id: String): Flow<Resource<List<Task>>> {
+        return combine<List<TaskLessonEntity>, List<TaskExamEntity>, List<TaskHomeworkEntity>, Resource<List<Task>>>(
+            taskDao.getAllLessonsByProgramTableId(id),
+            taskDao.getAllExamsByProgramTableId(id),
+            taskDao.getAllHomeworksByProgramTableId(id)
+        ) { lessonEntities, examEntities, homeworkEntities ->
+            val allTasks = mutableListOf<Task>()
+            allTasks.addAll(lessonEntities.map { it.toDomain() })
+            allTasks.addAll(examEntities.map { it.toDomain() })
+            allTasks.addAll(homeworkEntities.map { it.toDomain() })
 
+            // Optionally sort by date/time if needed
+            // allTasks.sortBy { it.date }
+
+            Resource.Success(allTasks.toList())
+        }.catch { e ->
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+        }
+    }
 }

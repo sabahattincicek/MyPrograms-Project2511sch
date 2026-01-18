@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "277b970c77f552d9b87a99483d4ea1bc",
+    "identityHash": "437b40dca4d5c9e8b43098bffeec14ce",
     "entities": [
       {
         "tableName": "program_tables",
@@ -261,7 +261,7 @@
       },
       {
         "tableName": "task_lessons",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `type` TEXT NOT NULL, `date` INTEGER NOT NULL, `date_range_start` INTEGER NOT NULL, `date_range_end` INTEGER NOT NULL, `recurrence_rule` TEXT NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `type` TEXT NOT NULL, `date` INTEGER NOT NULL, `recurrence_rule` TEXT NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -318,18 +318,6 @@
           {
             "fieldPath": "date",
             "columnName": "date",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "dateRangeStart",
-            "columnName": "date_range_start",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "dateRangeEnd",
-            "columnName": "date_range_end",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -643,7 +631,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '277b970c77f552d9b87a99483d4ea1bc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '437b40dca4d5c9e8b43098bffeec14ce')"
     ]
   }
 }

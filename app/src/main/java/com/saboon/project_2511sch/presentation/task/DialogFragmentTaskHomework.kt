@@ -10,9 +10,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.saboon.project_2511sch.R
-import com.saboon.project_2511sch.databinding.DialogFragmentTaskExamBinding
+import com.saboon.project_2511sch.databinding.DialogFragmentTaskHomeworkBinding
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ExamType
+import com.saboon.project_2511sch.domain.model.SubmissionType
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.model.TaskType
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
@@ -20,20 +20,18 @@ import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
 import com.saboon.project_2511sch.util.toFormattedString
 
-class DialogFragmentTaskExam: DialogFragment() {
+class DialogFragmentTaskHomework: DialogFragment() {
 
-    private var _binding: DialogFragmentTaskExamBinding?=null
+    private var _binding: DialogFragmentTaskHomeworkBinding?=null
     private val binding get() = _binding!!
 
     private lateinit var dateTimePicker: Picker
 
     private var course: Course?= null
-    private var task: Task.Exam? = null
+    private var task: Task.Homework? = null
 
-    private var selectedExamType: ExamType = ExamType.OTHER
-    private var selectedDateMillis: Long = System.currentTimeMillis()
-    private var selectedTimeStartMillis: Long = System.currentTimeMillis()
-    private var selectedTimeEndMillis: Long = System.currentTimeMillis()
+    private var selectedSubmissionType: SubmissionType = SubmissionType.OTHER
+    private var selectedDueDateMillis: Long = System.currentTimeMillis()
     private var selectedRemindBeforeMinutes: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,18 +43,19 @@ class DialogFragmentTaskExam: DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = DialogFragmentTaskExamBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = DialogFragmentTaskHomeworkBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let{
+        arguments?.let {
             course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)
-            task = BundleCompat.getParcelable(it, ARG_TASK, Task.Exam::class.java)
+            task = BundleCompat.getParcelable(it, ARG_TASK, Task.Homework::class.java)
         }
+
         dateTimePicker = Picker(requireContext(), childFragmentManager)
         setupAdapters()
         setupFragmentResultListeners()
@@ -67,13 +66,10 @@ class DialogFragmentTaskExam: DialogFragment() {
             binding.toolbar.subtitle = course!!.title
             binding.etTitle.setText(task!!.title)
             binding.etDescription.setText(task!!.description)
-            binding.actvExamType.setText(task!!.examType.toString())
-            binding.etTargetScore.setText(task!!.targetScore.toString())
-            binding.etDate.setText(task!!.date.toFormattedString("dd MMMM yyyy EEEE"))
-            binding.etTimeStart.setText(task!!.timeStart.toFormattedString("HH:mm"))
-            binding.etTimeEnd.setText(task!!.timeEnd.toFormattedString("HH:mm"))
+            binding.etLink.setText(task!!.link)
+            binding.actvSubmissionType.setText(task!!.submissionType.toString())
+            binding.etDueDate.setText(task!!.dueDate.toFormattedString("dd MMMM yyyy EEEE"))
             binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)))
-            binding.etPlace.setText(task!!.place)
         }else{
 
         }
@@ -96,32 +92,25 @@ class DialogFragmentTaskExam: DialogFragment() {
                 val updatedTask = task!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    examType = selectedExamType,
-                    targetScore = binding.etTargetScore.text.toString().toInt(),
-                    date = selectedDateMillis,
-                    timeStart = selectedTimeStartMillis,
-                    timeEnd = selectedTimeEndMillis,
-                    remindBefore = selectedRemindBeforeMinutes,
-                    place = binding.etPlace.text.toString()
+                    link = binding.etLink.text.toString(),
+                    submissionType = selectedSubmissionType,
+                    dueDate = selectedDueDateMillis,
+                    remindBefore = selectedRemindBeforeMinutes
                 )
                 setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(RESULT_KEY_TASK to updatedTask))
                 dismiss()
             }else{
-                val newTask = Task.Exam(
+                val newTask = Task.Homework(
                     id = IdGenerator.generateTaskId(binding.etTitle.text.toString()),
                     courseId = course!!.id,
                     programTableId = course!!.programTableId,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    type = TaskType.EXAM,
-                    date = selectedDateMillis,
-                    timeStart = selectedTimeStartMillis,
-                    timeEnd = selectedTimeEndMillis,
-                    remindBefore = selectedRemindBeforeMinutes,
-                    examType = selectedExamType,
-                    place = binding.etPlace.text.toString(),
-                    targetScore = binding.etTargetScore.text.toString().toIntOrNull() ?: 0,
-                    achievedScore = 0
+                    type = TaskType.HOMEWORK,
+                    dueDate = selectedDueDateMillis,
+                    link = binding.etLink.text.toString(),
+                    submissionType = selectedSubmissionType,
+                    remindBefore = selectedRemindBeforeMinutes
                 )
                 setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))
                 dismiss()
@@ -130,32 +119,23 @@ class DialogFragmentTaskExam: DialogFragment() {
         binding.btnCancel.setOnClickListener {
             dismiss()
         }
-        binding.actvExamType.setOnItemClickListener { parentFragment, view, position, id ->
-            selectedExamType = when(position){
-                1 -> {ExamType.MIDTERM}
-                2 -> {ExamType.FINAL}
-                3 -> {ExamType.QUIZ}
-                else -> ExamType.OTHER
+        binding.etDueDate.setOnClickListener {
+            dateTimePicker.pickDateMillis("Due Date"){result ->
+                selectedDueDateMillis = result
+                binding.etDueDate.setText(selectedDueDateMillis.toFormattedString("dd MMMM yyyy EEEE"))
             }
         }
-        binding.etDate.setOnClickListener {
-            dateTimePicker.pickDateMillis("Date"){ result ->
-                selectedDateMillis = result
-                binding.etDate.setText(selectedDateMillis.toFormattedString("dd MMMM yyyy EEEE"))
+        binding.actvReminder.setOnItemClickListener{ parent, view, position, id ->
+            selectedRemindBeforeMinutes = when(position){
+                1 -> 0
+                2 -> 10
+                3 -> 30
+                4 -> 60
+                5 -> 1440
+                else -> -1
             }
         }
-        binding.etTimeStart.setOnClickListener {
-            dateTimePicker.pickTimeMillis("Start Time") { result ->
-                selectedTimeStartMillis = result
-                binding.etTimeStart.setText(selectedTimeStartMillis.toFormattedString("HH:mm"))
-            }
-        }
-        binding.etTimeEnd.setOnClickListener {
-            dateTimePicker.pickTimeMillis("End Time"){ result ->
-                selectedTimeEndMillis = result
-                binding.etTimeEnd.setText(selectedTimeEndMillis.toFormattedString("HH:mm"))
-            }
-        }
+
     }
 
     override fun onDestroyView() {
@@ -164,24 +144,27 @@ class DialogFragmentTaskExam: DialogFragment() {
     }
 
     private fun setupAdapters(){
-        binding.actvExamType.setAdapter(
-            ArrayAdapter(requireContext(),
+        binding.actvSubmissionType.setAdapter(
+            ArrayAdapter(
+                requireContext(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                resources.getStringArray(R.array.task_exam_types))
+                resources.getStringArray(R.array.task_lesson_submission_types)
+            )
         )
         binding.actvReminder.setAdapter(
-            ArrayAdapter(requireContext(),
+            ArrayAdapter(
+                requireContext(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                resources.getStringArray(R.array.reminder_options))
+                resources.getStringArray(R.array.reminder_options)
+            )
         )
     }
+
     private fun setupFragmentResultListeners(){
         childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, viewLifecycleOwner){ requestKey, result ->
             val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
             if (isYes){
-                setFragmentResult(
-                    REQUEST_KEY_DELETE, bundleOf(
-                        ARG_TASK to task))
+                setFragmentResult(REQUEST_KEY_DELETE, bundleOf(ARG_TASK to task))
                 dismiss()
             }
         }
@@ -199,23 +182,24 @@ class DialogFragmentTaskExam: DialogFragment() {
     }
 
     companion object{
-        const val ARG_COURSE = "dialog_task_exam_arg_course"
-        const val ARG_TASK = "dialog_task_exam_arg_task"
-        const val REQUEST_KEY_CREATE = "dialog_task_exam_request_key_create"
-        const val REQUEST_KEY_UPDATE = "dialog_task_exam_request_key_update"
-        const val REQUEST_KEY_DELETE = "dialog_task_exam_request_key_delete"
-        const val RESULT_KEY_TASK = "dialog_task_exam_result_key_task"
+        const val ARG_COURSE = "dialog_task_homework_arg_course"
+        const val ARG_TASK = "dialog_task_homework_arg_task"
+        const val REQUEST_KEY_CREATE = "dialog_task_homework_request_key_create"
+        const val REQUEST_KEY_UPDATE = "dialog_task_homework_request_key_update"
+        const val REQUEST_KEY_DELETE = "dialog_task_homework_request_key_delete"
+        const val RESULT_KEY_TASK = "dialog_task_homework_result_key_task"
 
-        fun newInstanceForCreate(course: Course): DialogFragmentTaskExam{
-            return DialogFragmentTaskExam().apply {
+        fun newInstanceForCreate(course: Course): DialogFragmentTaskHomework{
+            return DialogFragmentTaskHomework().apply {
                 arguments = bundleOf(ARG_COURSE to course)
             }
         }
 
-        fun newInstanceForEdit(course: Course, task: Task.Exam): DialogFragmentTaskExam{
-            return DialogFragmentTaskExam().apply {
+        fun newInstanceForEdit(course: Course, task: Task.Homework): DialogFragmentTaskHomework{
+            return DialogFragmentTaskHomework().apply {
                 arguments = bundleOf(ARG_COURSE to course, ARG_TASK to task)
             }
         }
     }
+
 }

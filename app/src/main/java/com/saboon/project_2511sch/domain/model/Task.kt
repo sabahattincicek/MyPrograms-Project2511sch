@@ -20,8 +20,6 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val type: TaskType,
 
         val date: Long,
-        val dateRangeStart: Long,
-        val dateRangeEnd: Long,
         val recurrenceRule: String,
         val timeStart: Long,
         val timeEnd: Long,
@@ -46,7 +44,7 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         val timeStart: Long,
         val timeEnd: Long,
         val examType: ExamType,
-        val remindBefore: Int = 0,
+        val remindBefore: Int,
         val place: String?,
         val targetScore: Int,
         val achievedScore: Int
@@ -66,7 +64,7 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val type: TaskType,
 
         val dueDate: Long,
-        val remindBefore: Int = 0,
+        val remindBefore: Int,
         val link: String?,
         val submissionType: SubmissionType,
     ): Parcelable, Task()
