@@ -4,8 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.saboon.project_2511sch.domain.model.ExamType
-import com.saboon.project_2511sch.domain.model.TaskType
 
 @Entity(
     tableName = "task_exams",

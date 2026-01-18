@@ -12,9 +12,7 @@ import androidx.fragment.app.setFragmentResult
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentTaskExamBinding
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ExamType
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.model.TaskType
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
@@ -30,7 +28,6 @@ class DialogFragmentTaskExam: DialogFragment() {
     private var course: Course?= null
     private var task: Task.Exam? = null
 
-    private var selectedExamType: ExamType = ExamType.OTHER
     private var selectedDateMillis: Long = System.currentTimeMillis()
     private var selectedTimeStartMillis: Long = System.currentTimeMillis()
     private var selectedTimeEndMillis: Long = System.currentTimeMillis()
@@ -96,7 +93,7 @@ class DialogFragmentTaskExam: DialogFragment() {
                 val updatedTask = task!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    examType = selectedExamType,
+                    examType = binding.actvExamType.text.toString(),
                     targetScore = binding.etTargetScore.text.toString().toInt(),
                     date = selectedDateMillis,
                     timeStart = selectedTimeStartMillis,
@@ -113,12 +110,11 @@ class DialogFragmentTaskExam: DialogFragment() {
                     programTableId = course!!.programTableId,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    type = TaskType.EXAM,
                     date = selectedDateMillis,
                     timeStart = selectedTimeStartMillis,
                     timeEnd = selectedTimeEndMillis,
                     remindBefore = selectedRemindBeforeMinutes,
-                    examType = selectedExamType,
+                    examType = binding.actvExamType.text.toString(),
                     place = binding.etPlace.text.toString(),
                     targetScore = binding.etTargetScore.text.toString().toIntOrNull() ?: 0,
                     achievedScore = 0
@@ -129,14 +125,6 @@ class DialogFragmentTaskExam: DialogFragment() {
         }
         binding.btnCancel.setOnClickListener {
             dismiss()
-        }
-        binding.actvExamType.setOnItemClickListener { parentFragment, view, position, id ->
-            selectedExamType = when(position){
-                1 -> {ExamType.MIDTERM}
-                2 -> {ExamType.FINAL}
-                3 -> {ExamType.QUIZ}
-                else -> ExamType.OTHER
-            }
         }
         binding.etDate.setOnClickListener {
             dateTimePicker.pickDateMillis("Date"){ result ->
@@ -164,11 +152,6 @@ class DialogFragmentTaskExam: DialogFragment() {
     }
 
     private fun setupAdapters(){
-        binding.actvExamType.setAdapter(
-            ArrayAdapter(requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                resources.getStringArray(R.array.task_exam_types))
-        )
         binding.actvReminder.setAdapter(
             ArrayAdapter(requireContext(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,

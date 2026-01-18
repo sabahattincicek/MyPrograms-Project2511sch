@@ -65,12 +65,3 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         val remindBefore: Int,
     ): Parcelable, Task()
 }
-
-enum class ExamType {
-    //dont forget edit the string array
-    OTHER, MIDTERM, FINAL, QUIZ
-}
-enum class SubmissionType {
-    //dont forget edit the string array
-    OTHER, ONLINE, PHYSICAL
-}
