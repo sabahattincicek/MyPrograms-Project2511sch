@@ -2,6 +2,7 @@ package com.saboon.project_2511sch.util
 
 import android.content.Context
 import android.text.format.DateFormat
+import android.util.Log
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -9,14 +10,17 @@ import com.google.android.material.timepicker.TimeFormat
 import java.util.Calendar
 
 class Picker(context: Context, private val fragmentManager: FragmentManager) {
+    
+    private val TAG = "Picker"
     private val clockFormat = if (DateFormat.is24HourFormat(context)) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
     private val calendar = Calendar.getInstance()
     private var _lastPickedTimeMillis: Long = System.currentTimeMillis()
-    val lastPickedTimeMillis = _lastPickedTimeMillis
+    val lastPickedTimeMillis get() = _lastPickedTimeMillis
     private var _lastPickedDateMillis: Long = System.currentTimeMillis()
-    val lastPickedDateMillis = _lastPickedDateMillis
+    val lastPickedDateMillis get() = _lastPickedDateMillis
 
     fun pickTimeMillis(title: String, callback:(Long) -> Unit){
+        Log.d(TAG, "pickTimeMillis: Showing time picker with title: $title")
         calendar.timeInMillis = _lastPickedTimeMillis
         val picker = MaterialTimePicker.Builder()
             .setTitleText(title)
@@ -31,28 +35,35 @@ class Picker(context: Context, private val fragmentManager: FragmentManager) {
                 set(Calendar.MINUTE, picker.minute)
             }.timeInMillis
             _lastPickedTimeMillis = pickedTimeMillis
+            Log.i(TAG, "pickTimeMillis: Time picked: $pickedTimeMillis")
             callback(pickedTimeMillis)
         }
         picker.show(fragmentManager, "Picker_pickTimeMillis")
     }
 
     fun setPickedTimeMillis(timeMillis: Long){
+        Log.d(TAG, "setPickedTimeMillis: Manually setting last picked time to: $timeMillis")
         _lastPickedTimeMillis = timeMillis
     }
 
     fun pickDateMillis(title: String, callback: (Long) -> Unit){
+        Log.d(TAG, "pickDateMillis: Showing date picker with title: $title")
         val picker = MaterialDatePicker.Builder.datePicker()
             .setTitleText(title)
             .setSelection(_lastPickedDateMillis)
             .build()
         picker.addOnPositiveButtonClickListener { selection ->
-            _lastPickedDateMillis = selection
-            callback(selection)
+            selection?.let {
+                _lastPickedDateMillis = it
+                Log.i(TAG, "pickDateMillis: Date picked: $it")
+                callback(it)
+            } ?: Log.w(TAG, "pickDateMillis: Selection was null")
         }
         picker.show(fragmentManager, "Picker_pickDateMillis")
     }
 
     fun setPickedDateMillis(dateMillis: Long){
+        Log.d(TAG, "setPickedDateMillis: Manually setting last picked date to: $dateMillis")
         _lastPickedDateMillis = dateMillis
     }
 }
