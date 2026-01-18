@@ -24,11 +24,12 @@ class RecyclerAdapterTask: ListAdapter<TaskDisplayItem, RecyclerView.ViewHolder>
 
     class HeaderViewHolder(private val binding: RecyclerListRowTaskHeaderBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: TaskDisplayItem.HeaderItem){
-            when(item.type){
-                TaskType.LESSON -> {binding.tvExamType.text = item.type.toString()}
-                TaskType.EXAM -> {binding.tvExamType.text = item.type.toString()}
-                TaskType.HOMEWORK -> {binding.tvExamType.text = item.type.toString()}
-            }
+            binding.tvTaskType.text = item.title
+//            when(item.title){
+//                TaskType.LESSON::class.simpleName -> {binding.tvTaskType.text = item.title}
+//                TaskType.EXAM::class.simpleName -> {binding.tvTaskType.text = item.title}
+//                TaskType.HOMEWORK::class.simpleName -> {binding.tvTaskType.text = item.title}
+//            }
         }
     }
 
@@ -58,8 +59,6 @@ class RecyclerAdapterTask: ListAdapter<TaskDisplayItem, RecyclerView.ViewHolder>
                     binding.tvDate2.text = task.dueDate.toFormattedString("yyyy")
                     binding.tvContent1.text = task.title
                     binding.tvContent1Sub.text = task.description
-                    binding.tvContent2.text = task.submissionType.toString()
-                    binding.tvContent2Sub.text = task.link
                 }
             }
         }

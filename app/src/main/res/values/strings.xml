@@ -180,6 +180,8 @@
     <string name="submission_type">Submission Type</string>
     <string name="lesson">Lesson</string>
     <string name="edit_task">Edit Task</string>
+    <string name="due_time">Due Time</string>
+    <string name="achieved_score">Achieved Score</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
@@ -202,18 +204,5 @@
         <item>Lesson</item>
         <item>Exam</item>
         <item>Homework</item>
-    </string-array>
-
-    <string-array name="task_exam_types">
-        <item>Other</item>
-        <item>Midterm</item>
-        <item>Final</item>
-        <item>Quiz</item>
-    </string-array>
-
-    <string-array name="task_lesson_submission_types">
-        <item>Other</item>
-        <item>Online</item>
-        <item>Physical</item>
     </string-array>
 </resources>

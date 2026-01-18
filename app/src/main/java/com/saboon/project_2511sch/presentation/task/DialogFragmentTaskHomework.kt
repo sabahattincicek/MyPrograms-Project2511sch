@@ -66,7 +66,8 @@ class DialogFragmentTaskHomework: DialogFragment() {
             binding.etTitle.setText(task!!.title)
             binding.etDescription.setText(task!!.description)
             binding.etDueDate.setText(task!!.dueDate.toFormattedString("dd MMMM yyyy EEEE"))
-            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)))
+            binding.etDueTime.setText(task!!.dueTime.toFormattedString("HH:mm"))
+            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
         }else{
 
         }
@@ -117,6 +118,12 @@ class DialogFragmentTaskHomework: DialogFragment() {
             dateTimePicker.pickDateMillis("Due Date"){result ->
                 selectedDueDateMillis = result
                 binding.etDueDate.setText(selectedDueDateMillis.toFormattedString("dd MMMM yyyy EEEE"))
+            }
+        }
+        binding.etDueTime.setOnClickListener {
+            dateTimePicker.pickTimeMillis("Due Time"){ result ->
+                selectedDueTimeMillis = result
+                binding.etDueTime.setText(selectedDueTimeMillis.toFormattedString("HH:mm"))
             }
         }
         binding.actvReminder.setOnItemClickListener{ parent, view, position, id ->

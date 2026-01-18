@@ -63,8 +63,6 @@ class RecyclerAdapterHome :
                     binding.tvDate2.text = task.dueDate.toFormattedString("yyyy")
                     binding.tvContent1.text = "${course.title}, ${task.title}"
                     binding.tvContent1Sub.text = task.description
-                    binding.tvContent2.text = task.submissionType.toString()
-                    binding.tvContent2Sub.text = task.link
                 }
             }
 

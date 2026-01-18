@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "437b40dca4d5c9e8b43098bffeec14ce",
+    "identityHash": "082c8791689ab4c5ae9779311c99ff3f",
     "entities": [
       {
         "tableName": "program_tables",
@@ -261,7 +261,7 @@
       },
       {
         "tableName": "task_lessons",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `type` TEXT NOT NULL, `date` INTEGER NOT NULL, `recurrence_rule` TEXT NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `date` INTEGER NOT NULL, `recurrence_rule` TEXT NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -308,12 +308,6 @@
             "fieldPath": "description",
             "columnName": "description",
             "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "TEXT",
-            "notNull": true
           },
           {
             "fieldPath": "date",
@@ -384,7 +378,7 @@
       },
       {
         "tableName": "task_exams",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `type` TEXT NOT NULL, `date` INTEGER NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `exam_type` TEXT NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT, `target_score` INTEGER NOT NULL, `achieved_score` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `date` INTEGER NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `exam_type` TEXT, `place` TEXT, `target_score` INTEGER, `achieved_score` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -433,12 +427,6 @@
             "affinity": "TEXT"
           },
           {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
             "fieldPath": "date",
             "columnName": "date",
             "affinity": "INTEGER",
@@ -457,16 +445,15 @@
             "notNull": true
           },
           {
-            "fieldPath": "examType",
-            "columnName": "exam_type",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
             "fieldPath": "remindBefore",
             "columnName": "remind_before",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "examType",
+            "columnName": "exam_type",
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "place",
@@ -476,14 +463,12 @@
           {
             "fieldPath": "targetScore",
             "columnName": "target_score",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "achievedScore",
             "columnName": "achieved_score",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -519,7 +504,7 @@
       },
       {
         "tableName": "task_homeworks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `type` TEXT NOT NULL, `due_date` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `link` TEXT, `submission_type` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `due_date` INTEGER NOT NULL, `due_time` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -568,14 +553,14 @@
             "affinity": "TEXT"
           },
           {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "TEXT",
+            "fieldPath": "dueDate",
+            "columnName": "due_date",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "dueDate",
-            "columnName": "due_date",
+            "fieldPath": "dueTime",
+            "columnName": "due_time",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -583,17 +568,6 @@
             "fieldPath": "remindBefore",
             "columnName": "remind_before",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "link",
-            "columnName": "link",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "submissionType",
-            "columnName": "submission_type",
-            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -631,7 +605,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '437b40dca4d5c9e8b43098bffeec14ce')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '082c8791689ab4c5ae9779311c99ff3f')"
     ]
   }
 }

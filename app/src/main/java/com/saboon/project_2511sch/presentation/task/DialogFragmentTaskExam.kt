@@ -64,12 +64,12 @@ class DialogFragmentTaskExam: DialogFragment() {
             binding.toolbar.subtitle = course!!.title
             binding.etTitle.setText(task!!.title)
             binding.etDescription.setText(task!!.description)
-            binding.actvExamType.setText(task!!.examType.toString())
             binding.etTargetScore.setText(task!!.targetScore.toString())
+            binding.etAchievedScore.setText(task!!.achievedScore.toString())
             binding.etDate.setText(task!!.date.toFormattedString("dd MMMM yyyy EEEE"))
             binding.etTimeStart.setText(task!!.timeStart.toFormattedString("HH:mm"))
             binding.etTimeEnd.setText(task!!.timeEnd.toFormattedString("HH:mm"))
-            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)))
+            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
             binding.etPlace.setText(task!!.place)
         }else{
 
@@ -93,7 +93,6 @@ class DialogFragmentTaskExam: DialogFragment() {
                 val updatedTask = task!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    examType = binding.actvExamType.text.toString(),
                     targetScore = binding.etTargetScore.text.toString().toInt(),
                     date = selectedDateMillis,
                     timeStart = selectedTimeStartMillis,
@@ -114,10 +113,9 @@ class DialogFragmentTaskExam: DialogFragment() {
                     timeStart = selectedTimeStartMillis,
                     timeEnd = selectedTimeEndMillis,
                     remindBefore = selectedRemindBeforeMinutes,
-                    examType = binding.actvExamType.text.toString(),
                     place = binding.etPlace.text.toString(),
-                    targetScore = binding.etTargetScore.text.toString().toIntOrNull() ?: 0,
-                    achievedScore = 0
+                    targetScore = binding.etTargetScore.text.toString().toIntOrNull(),
+                    achievedScore = binding.etAchievedScore.text.toString().toIntOrNull()
                 )
                 setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))
                 dismiss()

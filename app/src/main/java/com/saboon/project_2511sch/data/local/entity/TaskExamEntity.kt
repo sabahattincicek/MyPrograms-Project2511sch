@@ -37,7 +37,6 @@ data class TaskExamEntity(
     @ColumnInfo(name = "time_start") val timeStart: Long,
     @ColumnInfo(name = "time_end") val timeEnd: Long,
     @ColumnInfo(name = "remind_before") val remindBefore: Int,
-    @ColumnInfo(name = "exam_type") val examType: String?,
     @ColumnInfo(name = "place") val place: String?,
     @ColumnInfo(name = "target_score") val targetScore: Int?,
     @ColumnInfo(name = "achieved_score") val achievedScore: Int?

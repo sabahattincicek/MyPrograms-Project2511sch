@@ -42,7 +42,6 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         val timeStart: Long,
         val timeEnd: Long,
         val remindBefore: Int,
-        val examType: String?,
         val place: String?,
         val targetScore: Int?,
         val achievedScore: Int?

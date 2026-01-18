@@ -68,12 +68,12 @@ class DialogFragmentTaskLesson: DialogFragment() {
             binding.etTitle.setText(task!!.title)
             binding.etDescription.setText(task!!.description)
             binding.etDate.setText(task!!.date.toFormattedString("dd MMMM yyyy EEEE"))
-            binding.actvRepeat.setText(mapRuleToDisplayString(RecurrenceRule.fromRuleString(task!!.recurrenceRule), resources.getStringArray(R.array.recurrence_options)))
+            binding.actvRepeat.setText(mapRuleToDisplayString(RecurrenceRule.fromRuleString(task!!.recurrenceRule), resources.getStringArray(R.array.recurrence_options)), false)
             binding.etDateRangeStart.setText(RecurrenceRule.fromRuleString(task!!.recurrenceRule).dtStart.toFormattedString("dd.MM.yyyy"))
             binding.etDateRangeEnd.setText(RecurrenceRule.fromRuleString(task!!.recurrenceRule).until.toFormattedString("dd.MM.yyyy"))
             binding.etTimeStart.setText(task!!.timeStart.toFormattedString("HH:mm"))
             binding.etTimeEnd.setText(task!!.timeEnd.toFormattedString("HH:mm"))
-            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)))
+            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
             binding.etPlace.setText(task!!.place)
         }else{
 
@@ -113,7 +113,6 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     programTableId = course!!.programTableId,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    type = TaskType.LESSON,
                     date = selectedDateMillis,
                     recurrenceRule = selectedRecurrenceRule.toRuleString(),
                     timeStart = selectedTimeStartMillis,

@@ -20,9 +20,10 @@ class GetTaskDisplayItemsUseCase @Inject constructor(
                 is Resource.Success -> {
                     val tasks = resource.data ?: emptyList()
                     val displayItems = mutableListOf<TaskDisplayItem>()
-                    val groupedTasks = tasks.groupBy { it.type }
-                    groupedTasks.forEach { (type, tasksInGroup) ->
-                        displayItems.add(TaskDisplayItem.HeaderItem(type))
+                    val groupedTasks = tasks.groupBy { it::class }
+                    groupedTasks.forEach { (taskClass, tasksInGroup) ->
+                        val headerTitle = taskClass.simpleName ?: "Other"
+                        displayItems.add(TaskDisplayItem.HeaderItem(headerTitle))
                         tasksInGroup.forEach { task ->
                             displayItems.add(
                                 TaskDisplayItem.ContentItem(
