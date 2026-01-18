@@ -27,8 +27,6 @@ class DialogFragmentTaskHomework: DialogFragment() {
 
     private var course: Course?= null
     private var task: Task.Homework? = null
-    private var selectedDueDateMillis: Long = System.currentTimeMillis()
-    private var selectedDueTimeMillis: Long = System.currentTimeMillis()
 
     // TODO: bunlar yerine picker sinifindaki lastpickedtimemillisleri kullanmayi dnee
     private var selectedRemindBeforeMinutes: Int = 0
@@ -68,6 +66,9 @@ class DialogFragmentTaskHomework: DialogFragment() {
             binding.etDueDate.setText(task!!.dueDate.toFormattedString("dd MMMM yyyy EEEE"))
             binding.etDueTime.setText(task!!.dueTime.toFormattedString("HH:mm"))
             binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
+
+            dateTimePicker.setPickedDateMillis(task!!.dueDate)
+            dateTimePicker.setPickedTimeMillis(task!!.dueTime)
         }else{
 
         }
@@ -90,8 +91,8 @@ class DialogFragmentTaskHomework: DialogFragment() {
                 val updatedTask = task!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    dueDate = selectedDueDateMillis,
-                    dueTime = selectedDueTimeMillis,
+                    dueDate = dateTimePicker.lastPickedDateMillis,
+                    dueTime = dateTimePicker.lastPickedTimeMillis,
                     remindBefore = selectedRemindBeforeMinutes
                 )
                 setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(RESULT_KEY_TASK to updatedTask))
@@ -103,8 +104,8 @@ class DialogFragmentTaskHomework: DialogFragment() {
                     programTableId = course!!.programTableId,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    dueDate = selectedDueDateMillis,
-                    dueTime = selectedDueTimeMillis,
+                    dueDate = dateTimePicker.lastPickedDateMillis,
+                    dueTime = dateTimePicker.lastPickedTimeMillis,
                     remindBefore = selectedRemindBeforeMinutes
                 )
                 setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))
@@ -115,15 +116,15 @@ class DialogFragmentTaskHomework: DialogFragment() {
             dismiss()
         }
         binding.etDueDate.setOnClickListener {
-            dateTimePicker.pickDateMillis("Due Date"){result ->
-                selectedDueDateMillis = result
-                binding.etDueDate.setText(selectedDueDateMillis.toFormattedString("dd MMMM yyyy EEEE"))
+            dateTimePicker.pickDateMillis("Due Date"){ result ->
+                dateTimePicker.setPickedDateMillis(result)
+                binding.etDueDate.setText(dateTimePicker.lastPickedDateMillis.toFormattedString("dd MMMM yyyy EEEE"))
             }
         }
         binding.etDueTime.setOnClickListener {
             dateTimePicker.pickTimeMillis("Due Time"){ result ->
-                selectedDueTimeMillis = result
-                binding.etDueTime.setText(selectedDueTimeMillis.toFormattedString("HH:mm"))
+                dateTimePicker.setPickedTimeMillis(result)
+                binding.etDueTime.setText(dateTimePicker.lastPickedTimeMillis.toFormattedString("HH:mm"))
             }
         }
         binding.actvReminder.setOnItemClickListener{ parent, view, position, id ->

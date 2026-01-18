@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "082c8791689ab4c5ae9779311c99ff3f",
+    "identityHash": "ec0bcbea7e304da91bb80e766b9ff10f",
     "entities": [
       {
         "tableName": "program_tables",
@@ -378,7 +378,7 @@
       },
       {
         "tableName": "task_exams",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `date` INTEGER NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `exam_type` TEXT, `place` TEXT, `target_score` INTEGER, `achieved_score` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `date` INTEGER NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT, `target_score` INTEGER, `achieved_score` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -449,11 +449,6 @@
             "columnName": "remind_before",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "examType",
-            "columnName": "exam_type",
-            "affinity": "TEXT"
           },
           {
             "fieldPath": "place",
@@ -605,7 +600,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '082c8791689ab4c5ae9779311c99ff3f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ec0bcbea7e304da91bb80e766b9ff10f')"
     ]
   }
 }
