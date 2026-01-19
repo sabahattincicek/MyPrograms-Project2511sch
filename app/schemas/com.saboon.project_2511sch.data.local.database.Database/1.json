@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ec0bcbea7e304da91bb80e766b9ff10f",
+    "identityHash": "053d41e815a61f8572b98cc28ff5a025",
     "entities": [
       {
         "tableName": "program_tables",
@@ -85,7 +85,7 @@
       },
       {
         "tableName": "courses",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `created_by_user_id` TEXT, `updated_by_user_id` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `row_version` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `people` TEXT, `color` TEXT, `absence` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `created_by_user_id` TEXT, `updated_by_user_id` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `row_version` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `people` TEXT, `color` TEXT, `absence` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -165,11 +165,24 @@
           "columnNames": [
             "id"
           ]
-        }
+        },
+        "foreignKeys": [
+          {
+            "table": "program_tables",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "program_table_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "files",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `course_id` TEXT NOT NULL, `create_by_user_id` TEXT, `updated_by_user_id` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `row_version` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `file_type` TEXT NOT NULL, `file_path` TEXT NOT NULL, `size_in_bytes` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `course_id` TEXT NOT NULL, `create_by_user_id` TEXT, `updated_by_user_id` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `row_version` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `file_type` TEXT NOT NULL, `file_path` TEXT NOT NULL, `size_in_bytes` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -257,7 +270,31 @@
           "columnNames": [
             "id"
           ]
-        }
+        },
+        "foreignKeys": [
+          {
+            "table": "program_tables",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "program_table_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "courses",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "course_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "task_lessons",
@@ -378,7 +415,7 @@
       },
       {
         "tableName": "task_exams",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `date` INTEGER NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT, `target_score` INTEGER, `achieved_score` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `date` INTEGER NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT, `target_score` INTEGER, `achieved_score` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -474,22 +511,22 @@
         },
         "foreignKeys": [
           {
-            "table": "courses",
+            "table": "program_tables",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "course_id"
+              "program_table_id"
             ],
             "referencedColumns": [
               "id"
             ]
           },
           {
-            "table": "program_tables",
+            "table": "courses",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "program_table_id"
+              "course_id"
             ],
             "referencedColumns": [
               "id"
@@ -600,7 +637,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ec0bcbea7e304da91bb80e766b9ff10f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '053d41e815a61f8572b98cc28ff5a025')"
     ]
   }
 }

@@ -39,4 +39,21 @@
     <attr name="colorOnCustomColor8" format="color" />
     <attr name="colorCustomColor8Container" format="color" />
     <attr name="colorOnCustomColor8Container" format="color" />
+
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    <attr name="colorCustomColorLesson" format="color" />
+    <attr name="colorOnCustomColorLesson" format="color" />
+    <attr name="colorCustomColorLessonContainer" format="color" />
+    <attr name="colorOnCustomColorLessonContainer" format="color" />
+
+    <attr name="colorCustomColorExam" format="color" />
+    <attr name="colorOnCustomColorExam" format="color" />
+    <attr name="colorCustomColorExamContainer" format="color" />
+    <attr name="colorOnCustomColorExamContainer" format="color" />
+
+    <attr name="colorCustomColorHomework" format="color" />
+    <attr name="colorOnCustomColorHomework" format="color" />
+    <attr name="colorCustomColorHomeworkContainer" format="color" />
+    <attr name="colorOnCustomColorHomeworkContainer" format="color" />
 </resources>

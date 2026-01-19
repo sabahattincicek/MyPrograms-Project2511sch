@@ -15,6 +15,8 @@ import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.ModelColors
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class RecyclerAdapterHome :
     ListAdapter<HomeDisplayItem, RecyclerView.ViewHolder>(HomeDiffCallback()) {
@@ -27,8 +29,22 @@ class RecyclerAdapterHome :
     class HeaderViewHolder(private val binding: RecyclerListRowHomeHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeDisplayItem.HeaderItem) {
-            binding.tvDay.text = item.date.toFormattedString("EEEE")
-            binding.tvDate.text = item.date.toFormattedString("dd.MM.yyyy")
+            binding.tvContent1.text = item.date.toFormattedString("EEEE - dd MMMM yyyy")
+            val today = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }.timeInMillis
+            val diffMillis = item.date - today
+            val diffDays = TimeUnit.MILLISECONDS.toDays(diffMillis)
+            binding.tvContent2.text = when {
+                diffDays == 0L -> getString(binding.root.context, R.string.today)
+                diffDays == 1L -> getString(binding.root.context, R.string.tomorrow)
+                diffDays == -1L -> getString(binding.root.context, R.string.yesterday)
+                diffDays > 0 -> "In $diffDays days"
+                else -> "${kotlin.math.abs(diffDays)} days ago"
+            }
         }
     }
 
@@ -47,6 +63,16 @@ class RecyclerAdapterHome :
                     binding.tvContent1Sub.text = task.description
                     binding.tvContent2.text = task.date.toFormattedString("EEEE")
                     binding.tvContent2Sub.text = task.place
+
+                    val customColorAttrContainer = ModelColors.getThemeAttrForCustomContainerColor(course.color)
+                    val customColorAttrTask = ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_LESSON)
+                    val themeAwareCustomColorContainer = MaterialColors.getColor(binding.root, customColorAttrContainer, Color.BLACK)
+                    val themeAwareCustomColorTask = MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
+                    binding.llContainer.background = GradientDrawable(
+                        GradientDrawable.Orientation.LEFT_RIGHT,
+                        intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
+                    )
+                    binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
                 }
 
                 is Task.Exam -> {
@@ -56,25 +82,37 @@ class RecyclerAdapterHome :
                     binding.tvContent1Sub.text = "${getString(binding.root.context,R.string.target_score)}: ${task.targetScore}"
                     binding.tvContent2.text = task.date.toFormattedString("dd.MM.yyyy")
                     binding.tvContent2Sub.text = task.place
+
+                    val customColorAttrContainer = ModelColors.getThemeAttrForCustomContainerColor(course.color)
+                    val customColorAttrTask = ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_EXAM)
+                    val themeAwareCustomColorContainer = MaterialColors.getColor(binding.root, customColorAttrContainer, Color.BLACK)
+                    val themeAwareCustomColorTask = MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
+                    binding.llContainer.background = GradientDrawable(
+                        GradientDrawable.Orientation.LEFT_RIGHT,
+                        intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
+                    )
+                    binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
                 }
 
                 is Task.Homework -> {
-                    binding.tvDate1.text = task.dueDate.toFormattedString("dd/MM")
-                    binding.tvDate2.text = task.dueDate.toFormattedString("yyyy")
+                    binding.tvDate1.text = task.dueTime.toFormattedString("HH:mm")
+                    binding.tvDate2.text = ""
                     binding.tvContent1.text = "${course.title}, ${task.title}"
                     binding.tvContent1Sub.text = task.description
+                    binding.tvContent2.text = ""
+                    binding.tvContent2Sub.text = ""
+
+                    val customColorAttrContainer = ModelColors.getThemeAttrForCustomContainerColor(course.color)
+                    val customColorAttrTask = ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_HOMEWORK)
+                    val themeAwareCustomColorContainer = MaterialColors.getColor(binding.root, customColorAttrContainer, Color.BLACK)
+                    val themeAwareCustomColorTask = MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
+                    binding.llContainer.background = GradientDrawable(
+                        GradientDrawable.Orientation.LEFT_RIGHT,
+                        intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
+                    )
+                    binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
                 }
             }
-
-            val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor(course.color)
-            val themeAwareCustomContainerColor = MaterialColors.getColor(binding.root, customContainerColorAttr, Color.BLACK)
-            binding.llContainer.background = GradientDrawable(
-                GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.TRANSPARENT, themeAwareCustomContainerColor)
-            )
-            val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(course.color)
-            val themeAwareOnCustomContainerColor = MaterialColors.getColor(binding.root, onCustomContainerColorAttr, Color.BLACK)
-            binding.viewDivider.setBackgroundColor(themeAwareOnCustomContainerColor)
         }
     }
 

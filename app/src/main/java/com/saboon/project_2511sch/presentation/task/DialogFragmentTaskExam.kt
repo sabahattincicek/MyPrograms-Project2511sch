@@ -120,7 +120,7 @@ class DialogFragmentTaskExam: DialogFragment() {
                     timeEnd = selectedTimeEndMillis,
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString(),
-                    targetScore = binding.etTargetScore.text.toString().toIntOrNull(),
+                    targetScore = binding.etTargetScore.text.toString().toInt(),
                     achievedScore = binding.etAchievedScore.text.toString().toIntOrNull()
                 )
                 setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))

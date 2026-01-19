@@ -182,6 +182,10 @@
     <string name="edit_task">Edit Task</string>
     <string name="due_time">Due Time</string>
     <string name="achieved_score">Achieved Score</string>
+    <string name="due">Due</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="yesterday">Yesterday</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>

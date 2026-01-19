@@ -2,10 +2,21 @@ package com.saboon.project_2511sch.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.saboon.project_2511sch.domain.model.Course
 
-@Entity(tableName = "courses")
+@Entity(
+    tableName = "courses",
+    foreignKeys = [
+        ForeignKey(
+            entity = ProgramTableEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["program_table_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class CourseEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "program_table_id") val programTableId: String,

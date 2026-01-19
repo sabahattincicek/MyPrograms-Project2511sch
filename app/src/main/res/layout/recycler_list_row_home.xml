@@ -45,12 +45,18 @@
                 android:textAlignment="center"/>
         </LinearLayout>
 
-        <View
-            android:id="@+id/view_divider"
-            android:layout_width="2dp"
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="5dp"
             android:layout_height="match_parent"
-            android:background="?attr/colorOnSurface"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp"
+            app:cardCornerRadius="1000dp">
+
+            <View
+                android:id="@+id/view_divider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -74,7 +80,6 @@
                     android:ellipsize="end"
                     android:text="Lesson, Title"
                     android:textSize="18sp"/>
-
                 <TextView
                     android:id="@+id/tv_content_1_sub"
                     android:layout_width="wrap_content"
