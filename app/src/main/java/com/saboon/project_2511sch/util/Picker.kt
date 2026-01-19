@@ -41,11 +41,6 @@ class Picker(context: Context, private val fragmentManager: FragmentManager) {
         picker.show(fragmentManager, "Picker_pickTimeMillis")
     }
 
-    fun setPickedTimeMillis(timeMillis: Long){
-        Log.d(TAG, "setPickedTimeMillis: Manually setting last picked time to: $timeMillis")
-        _lastPickedTimeMillis = timeMillis
-    }
-
     fun pickDateMillis(title: String, callback: (Long) -> Unit){
         Log.d(TAG, "pickDateMillis: Showing date picker with title: $title")
         val picker = MaterialDatePicker.Builder.datePicker()
@@ -60,10 +55,5 @@ class Picker(context: Context, private val fragmentManager: FragmentManager) {
             } ?: Log.w(TAG, "pickDateMillis: Selection was null")
         }
         picker.show(fragmentManager, "Picker_pickDateMillis")
-    }
-
-    fun setPickedDateMillis(dateMillis: Long){
-        Log.d(TAG, "setPickedDateMillis: Manually setting last picked date to: $dateMillis")
-        _lastPickedDateMillis = dateMillis
     }
 }
