@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
 import com.saboon.project_2511sch.domain.model.ProgramTable
@@ -178,6 +179,10 @@ class HomeFragment : Fragment() {
         binding.programRecyclerView.apply {
             adapter = recyclerAdapterHome
             layoutManager = LinearLayoutManager(context)
+        }
+        recyclerAdapterHome.onItemClickListener = { course ->
+            val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(programTable, course)
+            findNavController().navigate(action)
         }
     }
 }

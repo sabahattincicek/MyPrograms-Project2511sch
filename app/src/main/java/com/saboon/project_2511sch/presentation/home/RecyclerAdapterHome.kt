@@ -13,6 +13,7 @@ import com.saboon.project_2511sch.databinding.RecyclerListRowHomeHeaderBinding
 import com.saboon.project_2511sch.util.toFormattedString
 import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
+import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.ModelColors
 import java.util.Calendar
@@ -20,6 +21,8 @@ import java.util.concurrent.TimeUnit
 
 class RecyclerAdapterHome :
     ListAdapter<HomeDisplayItem, RecyclerView.ViewHolder>(HomeDiffCallback()) {
+
+    var onItemClickListener:((Course) -> Unit)? = null
 
     companion object {
         private const val VIEW_TYPE_HEADER = 0
@@ -151,6 +154,14 @@ class RecyclerAdapterHome :
         when (holder) {
             is HeaderViewHolder -> holder.bind(item as HomeDisplayItem.HeaderItem)
             is ContentViewHolder -> holder.bind(item as HomeDisplayItem.ContentItem)
+        }
+        holder.itemView.setOnClickListener {
+            when(item) {
+                is HomeDisplayItem.ContentItem -> {
+                    onItemClickListener?.invoke(item.course)
+                }
+                is HomeDisplayItem.HeaderItem -> {}
+            }
         }
     }
 
