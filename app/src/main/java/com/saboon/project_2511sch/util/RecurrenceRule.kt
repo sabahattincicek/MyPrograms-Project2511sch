@@ -4,7 +4,7 @@ import android.icu.util.Calendar
 
 data class RecurrenceRule(
     var freq: Frequency = Frequency.ONCE,
-    var dtStart: Long = 0L,
+    var dtStart: Long = System.currentTimeMillis(),
     var until: Long = Long.MAX_VALUE,
 ){
     enum class Frequency {

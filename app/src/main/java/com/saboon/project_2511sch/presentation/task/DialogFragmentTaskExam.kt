@@ -1,5 +1,6 @@
 package com.saboon.project_2511sch.presentation.task
 
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -139,7 +140,11 @@ class DialogFragmentTaskExam: DialogFragment() {
             dateTimePicker.pickTimeMillis("Start Time", selectedTimeStartMillis) { result ->
                 selectedTimeStartMillis = result
                 binding.etTimeStart.setText(selectedTimeStartMillis.toFormattedString("HH:mm"))
-                selectedTimeEndMillis = selectedTimeStartMillis + (1000 * 60 * 60) //add 1 hour
+                val cal = Calendar.getInstance().apply {
+                    timeInMillis = selectedTimeStartMillis
+                    add(Calendar.HOUR_OF_DAY, 1)
+                }
+                selectedTimeEndMillis = cal.timeInMillis //add 1 hour
                 binding.etTimeEnd.setText(selectedTimeEndMillis.toFormattedString("HH:mm"))
             }
         }
