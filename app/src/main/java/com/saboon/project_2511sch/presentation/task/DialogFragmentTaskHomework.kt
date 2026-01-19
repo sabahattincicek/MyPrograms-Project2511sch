@@ -27,8 +27,8 @@ class DialogFragmentTaskHomework: DialogFragment() {
 
     private var course: Course?= null
     private var task: Task.Homework? = null
-    private var selectedDueDateMillis: Long = 0L
-    private var selectedDueTimeMillis: Long = 0L
+    private var selectedDueDateMillis: Long = System.currentTimeMillis()
+    private var selectedDueTimeMillis: Long = System.currentTimeMillis()
     private var selectedRemindBeforeMinutes: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,13 +117,13 @@ class DialogFragmentTaskHomework: DialogFragment() {
             dismiss()
         }
         binding.etDueDate.setOnClickListener {
-            dateTimePicker.pickDateMillis("Due Date"){ result ->
+            dateTimePicker.pickDateMillis("Due Date", selectedDueDateMillis){ result ->
                 selectedDueDateMillis = result
                 binding.etDueDate.setText(selectedDueDateMillis.toFormattedString("dd MMMM yyyy EEEE"))
             }
         }
         binding.etDueTime.setOnClickListener {
-            dateTimePicker.pickTimeMillis("Due Time"){ result ->
+            dateTimePicker.pickTimeMillis("Due Time", selectedDueTimeMillis){ result ->
                 selectedDueTimeMillis = result
                 binding.etDueTime.setText(selectedDueTimeMillis.toFormattedString("HH:mm"))
             }

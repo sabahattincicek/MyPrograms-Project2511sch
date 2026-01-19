@@ -19,9 +19,9 @@ class Picker(context: Context, private val fragmentManager: FragmentManager) {
     private var _lastPickedDateMillis: Long = System.currentTimeMillis()
     val lastPickedDateMillis get() = _lastPickedDateMillis
 
-    fun pickTimeMillis(title: String, callback:(Long) -> Unit){
+    fun pickTimeMillis(title: String, setTimeMillis: Long = System.currentTimeMillis(), callback:(Long) -> Unit){
         Log.d(TAG, "pickTimeMillis: Showing time picker with title: $title")
-        calendar.timeInMillis = _lastPickedTimeMillis
+        calendar.timeInMillis = setTimeMillis
         val picker = MaterialTimePicker.Builder()
             .setTitleText(title)
             .setTimeFormat(clockFormat)
@@ -41,11 +41,11 @@ class Picker(context: Context, private val fragmentManager: FragmentManager) {
         picker.show(fragmentManager, "Picker_pickTimeMillis")
     }
 
-    fun pickDateMillis(title: String, callback: (Long) -> Unit){
+    fun pickDateMillis(title: String, setDateMillis: Long = System.currentTimeMillis(), callback: (Long) -> Unit){
         Log.d(TAG, "pickDateMillis: Showing date picker with title: $title")
         val picker = MaterialDatePicker.Builder.datePicker()
             .setTitleText(title)
-            .setSelection(_lastPickedDateMillis)
+            .setSelection(setDateMillis)
             .build()
         picker.addOnPositiveButtonClickListener { selection ->
             selection?.let {

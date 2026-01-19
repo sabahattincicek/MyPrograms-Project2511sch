@@ -71,6 +71,11 @@ class DialogFragmentTaskExam: DialogFragment() {
             binding.etTimeEnd.setText(task!!.timeEnd.toFormattedString("HH:mm"))
             binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
             binding.etPlace.setText(task!!.place)
+
+            selectedDateMillis = task!!.date
+            selectedTimeStartMillis = task!!.timeStart
+            selectedTimeEndMillis = task!!.timeEnd
+            selectedRemindBeforeMinutes = task!!.remindBefore
         }else{
 
         }
@@ -131,13 +136,15 @@ class DialogFragmentTaskExam: DialogFragment() {
             }
         }
         binding.etTimeStart.setOnClickListener {
-            dateTimePicker.pickTimeMillis("Start Time") { result ->
+            dateTimePicker.pickTimeMillis("Start Time", selectedTimeStartMillis) { result ->
                 selectedTimeStartMillis = result
                 binding.etTimeStart.setText(selectedTimeStartMillis.toFormattedString("HH:mm"))
+                selectedTimeEndMillis = selectedTimeStartMillis + (1000 * 60 * 60) //add 1 hour
+                binding.etTimeEnd.setText(selectedTimeEndMillis.toFormattedString("HH:mm"))
             }
         }
         binding.etTimeEnd.setOnClickListener {
-            dateTimePicker.pickTimeMillis("End Time"){ result ->
+            dateTimePicker.pickTimeMillis("End Time", selectedTimeEndMillis){ result ->
                 selectedTimeEndMillis = result
                 binding.etTimeEnd.setText(selectedTimeEndMillis.toFormattedString("HH:mm"))
             }
