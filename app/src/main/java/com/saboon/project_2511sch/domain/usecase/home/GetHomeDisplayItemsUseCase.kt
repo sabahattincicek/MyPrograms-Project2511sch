@@ -58,24 +58,44 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
             if (course != null) {
                 when(task) {
                     is Task.Lesson -> {
-                        val untilDate = RecurrenceRule.fromRuleString(task.recurrenceRule).until
-                        val seriesStartDate = RecurrenceRule.fromRuleString(task.recurrenceRule).dtStart
-                        var occurrenceDate = seriesStartDate
-                        while (occurrenceDate <= endDate && occurrenceDate <= untilDate) {
-                            if (occurrenceDate >= startDate && occurrenceDate >= task.date) {
-                                val occurrenceId = "${task.id}_${occurrenceDate}"
-                                val occurrenceSchedule = task.copy(date = occurrenceDate)
+                        val rRule = RecurrenceRule.fromRuleString(task.recurrenceRule)
+                        val untilDate = rRule.until
+                        
+                        // Corrected: task.date is the anchor (determines the day of week)
+                        // rRule.dtStart is the visibility start filter
+                        var occurrenceDate = task.date
+                        val visibilityStart = rRule.dtStart
 
+                        if (rRule.freq == RecurrenceRule.Frequency.ONCE){
+                            if (task.date in startDate..endDate && task.date >= visibilityStart){
                                 finalEvents.add(
                                     HomeDisplayItem.ContentItem(
-                                        occurrenceId = occurrenceId,
                                         programTable = programTable,
                                         course = course,
-                                        task = occurrenceSchedule
+                                        task = task,
+                                        occurrenceId = task.id
                                     )
                                 )
                             }
-                            occurrenceDate = RecurrenceRule.fromRuleString(task.recurrenceRule).getNextOccurrence(occurrenceDate) ?: Long.MAX_VALUE
+                        }else{
+                            while (occurrenceDate <= endDate && occurrenceDate <= untilDate){
+                                // Only add if within the 30-day window AND after the visibility start date
+                                if (occurrenceDate >= startDate && occurrenceDate >= visibilityStart){
+                                    val occurrenceId = "${task.id}_${occurrenceDate}"
+                                    val occurrenceSchedule = task.copy(
+                                        date = occurrenceDate
+                                    )
+                                    finalEvents.add(
+                                        HomeDisplayItem.ContentItem(
+                                            programTable = programTable,
+                                            course = course,
+                                            task = occurrenceSchedule,
+                                            occurrenceId = occurrenceId
+                                        )
+                                    )
+                                }
+                                occurrenceDate = rRule.getNextOccurrence(occurrenceDate) ?: (endDate + 1)
+                            }
                         }
                     }
                     is Task.Exam -> {
@@ -153,23 +173,3 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
