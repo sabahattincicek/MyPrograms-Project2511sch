@@ -62,7 +62,11 @@
         android:id="@+id/homeFragment"
         android:name="com.saboon.project_2511sch.presentation.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_courseDetailsFragment"
+            app:destination="@id/courseDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/fileFragment"
         android:name="com.saboon.project_2511sch.presentation.file.FileFragment"

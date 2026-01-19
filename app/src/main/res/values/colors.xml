@@ -237,4 +237,21 @@
     <color name="colorOnCustomColor8_highContrast">#FFFFFF</color>
     <color name="colorCustomColor8Container_highContrast">#753723</color>
     <color name="colorOnCustomColor8Container_highContrast">#FFFFFF</color>
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    <color name="colorCustomColorLesson">#4A6FA5</color>
+    <color name="colorOnCustomColorLesson">#FFFFFF</color>
+    <color name="colorCustomColorLessonContainer">#D6E3F8</color>
+    <color name="colorOnCustomColorLessonContainer">#243B5A</color>
+
+    <color name="colorCustomColorExam">#B5655D</color>
+    <color name="colorOnCustomColorExam">#FFFFFF</color>
+    <color name="colorCustomColorExamContainer">#FFDAD6</color>
+    <color name="colorOnCustomColorExamContainer">#6E2E28</color>
+
+    <color name="colorCustomColorHomework">#5E8B6F</color>
+    <color name="colorOnCustomColorHomework">#FFFFFF</color>
+    <color name="colorCustomColorHomeworkContainer">#D9EFE0</color>
+    <color name="colorOnCustomColorHomeworkContainer">#2F4F3A</color>
 </resources>

@@ -33,7 +33,6 @@ data class TaskLessonEntity(
     @ColumnInfo(name = "program_table_id") val programTableId: String,
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "description") val description: String?,
-    @ColumnInfo(name = "type") val type: TaskType,
 
     @ColumnInfo(name = "date") val date: Long,
     @ColumnInfo(name = "recurrence_rule") val recurrenceRule: String,

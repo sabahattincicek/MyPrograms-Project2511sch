@@ -16,11 +16,7 @@ data class RecurrenceRule(
      */
     fun toRuleString(): String {
         if (freq == Frequency.ONCE) return ""
-        val parts = mutableListOf<String>()
-        parts.add("DTSTART=$dtStart")
-        parts.add("FREQ=$freq")
-        until?.let { parts.add("UNTIL=$it") }
-        return parts.joinToString(";")
+        return "DTSTART=$dtStart;FREQ=$freq;UNTIL=$until"
     }
 
     /**
@@ -29,7 +25,7 @@ data class RecurrenceRule(
     fun getNextOccurrence(currentDate: Long): Long? {
         if (freq == Frequency.ONCE) return null
 
-        val calendar = java.util.Calendar.getInstance().apply { timeInMillis = currentDate }
+        val calendar = Calendar.getInstance().apply { timeInMillis = currentDate }
         return when (freq) {
             Frequency.DAILY -> calendar.apply { add(Calendar.DAY_OF_YEAR, 1) }.timeInMillis
             Frequency.WEEKLY -> calendar.apply { add(Calendar.WEEK_OF_YEAR, 1) }.timeInMillis

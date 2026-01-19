@@ -1,5 +1,6 @@
 package com.saboon.project_2511sch.presentation.task
 
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,7 @@ import androidx.fragment.app.setFragmentResult
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentTaskExamBinding
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ExamType
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.model.TaskType
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
@@ -30,7 +29,6 @@ class DialogFragmentTaskExam: DialogFragment() {
     private var course: Course?= null
     private var task: Task.Exam? = null
 
-    private var selectedExamType: ExamType = ExamType.OTHER
     private var selectedDateMillis: Long = System.currentTimeMillis()
     private var selectedTimeStartMillis: Long = System.currentTimeMillis()
     private var selectedTimeEndMillis: Long = System.currentTimeMillis()
@@ -67,13 +65,18 @@ class DialogFragmentTaskExam: DialogFragment() {
             binding.toolbar.subtitle = course!!.title
             binding.etTitle.setText(task!!.title)
             binding.etDescription.setText(task!!.description)
-            binding.actvExamType.setText(task!!.examType.toString())
             binding.etTargetScore.setText(task!!.targetScore.toString())
+            binding.etAchievedScore.setText(task!!.achievedScore.toString())
             binding.etDate.setText(task!!.date.toFormattedString("dd MMMM yyyy EEEE"))
             binding.etTimeStart.setText(task!!.timeStart.toFormattedString("HH:mm"))
             binding.etTimeEnd.setText(task!!.timeEnd.toFormattedString("HH:mm"))
-            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)))
+            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
             binding.etPlace.setText(task!!.place)
+
+            selectedDateMillis = task!!.date
+            selectedTimeStartMillis = task!!.timeStart
+            selectedTimeEndMillis = task!!.timeEnd
+            selectedRemindBeforeMinutes = task!!.remindBefore
         }else{
 
         }
@@ -96,7 +99,6 @@ class DialogFragmentTaskExam: DialogFragment() {
                 val updatedTask = task!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    examType = selectedExamType,
                     targetScore = binding.etTargetScore.text.toString().toInt(),
                     date = selectedDateMillis,
                     timeStart = selectedTimeStartMillis,
@@ -113,15 +115,13 @@ class DialogFragmentTaskExam: DialogFragment() {
                     programTableId = course!!.programTableId,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    type = TaskType.EXAM,
                     date = selectedDateMillis,
                     timeStart = selectedTimeStartMillis,
                     timeEnd = selectedTimeEndMillis,
                     remindBefore = selectedRemindBeforeMinutes,
-                    examType = selectedExamType,
                     place = binding.etPlace.text.toString(),
-                    targetScore = binding.etTargetScore.text.toString().toIntOrNull() ?: 0,
-                    achievedScore = 0
+                    targetScore = binding.etTargetScore.text.toString().toInt(),
+                    achievedScore = binding.etAchievedScore.text.toString().toIntOrNull()
                 )
                 setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))
                 dismiss()
@@ -130,14 +130,6 @@ class DialogFragmentTaskExam: DialogFragment() {
         binding.btnCancel.setOnClickListener {
             dismiss()
         }
-        binding.actvExamType.setOnItemClickListener { parentFragment, view, position, id ->
-            selectedExamType = when(position){
-                1 -> {ExamType.MIDTERM}
-                2 -> {ExamType.FINAL}
-                3 -> {ExamType.QUIZ}
-                else -> ExamType.OTHER
-            }
-        }
         binding.etDate.setOnClickListener {
             dateTimePicker.pickDateMillis("Date"){ result ->
                 selectedDateMillis = result
@@ -145,13 +137,19 @@ class DialogFragmentTaskExam: DialogFragment() {
             }
         }
         binding.etTimeStart.setOnClickListener {
-            dateTimePicker.pickTimeMillis("Start Time") { result ->
+            dateTimePicker.pickTimeMillis("Start Time", selectedTimeStartMillis) { result ->
                 selectedTimeStartMillis = result
                 binding.etTimeStart.setText(selectedTimeStartMillis.toFormattedString("HH:mm"))
+                val cal = Calendar.getInstance().apply {
+                    timeInMillis = selectedTimeStartMillis
+                    add(Calendar.HOUR_OF_DAY, 1)
+                }
+                selectedTimeEndMillis = cal.timeInMillis //add 1 hour
+                binding.etTimeEnd.setText(selectedTimeEndMillis.toFormattedString("HH:mm"))
             }
         }
         binding.etTimeEnd.setOnClickListener {
-            dateTimePicker.pickTimeMillis("End Time"){ result ->
+            dateTimePicker.pickTimeMillis("End Time", selectedTimeEndMillis){ result ->
                 selectedTimeEndMillis = result
                 binding.etTimeEnd.setText(selectedTimeEndMillis.toFormattedString("HH:mm"))
             }
@@ -164,11 +162,6 @@ class DialogFragmentTaskExam: DialogFragment() {
     }
 
     private fun setupAdapters(){
-        binding.actvExamType.setAdapter(
-            ArrayAdapter(requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                resources.getStringArray(R.array.task_exam_types))
-        )
         binding.actvReminder.setAdapter(
             ArrayAdapter(requireContext(),
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,

@@ -8,9 +8,9 @@ import com.saboon.project_2511sch.domain.model.TaskType
 sealed class TaskDisplayItem {
     abstract val id: String
 
-    data class HeaderItem(val type: TaskType): TaskDisplayItem(){
+    data class HeaderItem(val title: String): TaskDisplayItem(){
         override val id: String
-            get() =  type::class.simpleName.toString()
+            get() =  title
     }
 
     data class ContentItem(

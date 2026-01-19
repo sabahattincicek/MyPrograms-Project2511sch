@@ -5,7 +5,23 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "files")
+@Entity(
+    tableName = "files",
+    foreignKeys = [
+        ForeignKey(
+            entity = ProgramTableEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["program_table_id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = CourseEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["course_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class FileEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "program_table_id") val programTableId: String,

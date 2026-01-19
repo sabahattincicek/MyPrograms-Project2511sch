@@ -78,5 +78,22 @@
         <item name="colorOnCustomColor8">@color/colorOnCustomColor8</item>
         <item name="colorCustomColor8Container">@color/colorCustomColor8Container</item>
         <item name="colorOnCustomColor8Container">@color/colorOnCustomColor8Container</item>
+
+        /////////////////////////////////////////////////////////////////////////////////////////
+
+        <item name="colorCustomColorLesson">@color/colorCustomColorLesson</item>
+        <item name="colorOnCustomColorLesson">@color/colorOnCustomColorLesson</item>
+        <item name="colorCustomColorLessonContainer">@color/colorCustomColorLessonContainer</item>
+        <item name="colorOnCustomColorLessonContainer">@color/colorOnCustomColorLessonContainer</item>
+
+        <item name="colorCustomColorExam">@color/colorCustomColorExam</item>
+        <item name="colorOnCustomColorExam">@color/colorOnCustomColorExam</item>
+        <item name="colorCustomColorExamContainer">@color/colorCustomColorExamContainer</item>
+        <item name="colorOnCustomColorExamContainer">@color/colorOnCustomColorExamContainer</item>
+
+        <item name="colorCustomColorHomework">@color/colorCustomColorHomework</item>
+        <item name="colorOnCustomColorHomework">@color/colorOnCustomColorHomework</item>
+        <item name="colorCustomColorHomeworkContainer">@color/colorCustomColorHomeworkContainer</item>
+        <item name="colorOnCustomColorHomeworkContainer">@color/colorOnCustomColorHomeworkContainer</item>
     </style>
 </resources>

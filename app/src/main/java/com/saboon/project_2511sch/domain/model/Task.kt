@@ -17,7 +17,6 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val programTableId: String,
         override val title: String?,
         override val description: String?,
-        override val type: TaskType,
 
         val date: Long,
         val recurrenceRule: String,
@@ -38,16 +37,14 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val programTableId: String,
         override val title: String?,
         override val description: String?,
-        override val type: TaskType,
 
         val date: Long,
         val timeStart: Long,
         val timeEnd: Long,
-        val examType: ExamType,
         val remindBefore: Int,
         val place: String?,
-        val targetScore: Int,
-        val achievedScore: Int
+        val targetScore: Int?,
+        val achievedScore: Int?
     ): Parcelable, Task()
 
     @Parcelize
@@ -61,20 +58,9 @@ sealed class Task: BaseModel, BaseTask, Parcelable {
         override val programTableId: String,
         override val title: String?,
         override val description: String?,
-        override val type: TaskType,
 
         val dueDate: Long,
+        val dueTime: Long,
         val remindBefore: Int,
-        val link: String?,
-        val submissionType: SubmissionType,
     ): Parcelable, Task()
-}
-
-enum class ExamType {
-    //dont forget edit the string array
-    OTHER, MIDTERM, FINAL, QUIZ
-}
-enum class SubmissionType {
-    //dont forget edit the string array
-    OTHER, ONLINE, PHYSICAL
 }

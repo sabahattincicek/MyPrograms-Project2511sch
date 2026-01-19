@@ -1,5 +1,6 @@
 package com.saboon.project_2511sch.presentation.task
 
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -68,13 +69,19 @@ class DialogFragmentTaskLesson: DialogFragment() {
             binding.etTitle.setText(task!!.title)
             binding.etDescription.setText(task!!.description)
             binding.etDate.setText(task!!.date.toFormattedString("dd MMMM yyyy EEEE"))
-            binding.actvRepeat.setText(mapRuleToDisplayString(RecurrenceRule.fromRuleString(task!!.recurrenceRule), resources.getStringArray(R.array.recurrence_options)))
+            binding.actvRepeat.setText(mapRuleToDisplayString(RecurrenceRule.fromRuleString(task!!.recurrenceRule), resources.getStringArray(R.array.recurrence_options)), false)
             binding.etDateRangeStart.setText(RecurrenceRule.fromRuleString(task!!.recurrenceRule).dtStart.toFormattedString("dd.MM.yyyy"))
             binding.etDateRangeEnd.setText(RecurrenceRule.fromRuleString(task!!.recurrenceRule).until.toFormattedString("dd.MM.yyyy"))
             binding.etTimeStart.setText(task!!.timeStart.toFormattedString("HH:mm"))
             binding.etTimeEnd.setText(task!!.timeEnd.toFormattedString("HH:mm"))
-            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)))
+            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
             binding.etPlace.setText(task!!.place)
+
+            selectedDateMillis = task!!.date
+            selectedRecurrenceRule = RecurrenceRule.fromRuleString(task!!.recurrenceRule)
+            selectedTimeStartMillis = task!!.timeStart
+            selectedTimeEndMillis = task!!.timeEnd
+            selectedRemindBeforeMinutes = task!!.remindBefore
         }else{
 
         }
@@ -113,7 +120,6 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     programTableId = course!!.programTableId,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    type = TaskType.LESSON,
                     date = selectedDateMillis,
                     recurrenceRule = selectedRecurrenceRule.toRuleString(),
                     timeStart = selectedTimeStartMillis,
@@ -130,7 +136,8 @@ class DialogFragmentTaskLesson: DialogFragment() {
         }
         binding.actvRepeat.setOnItemClickListener { parentFragment, view, position, id ->
             selectedRecurrenceRule.freq = when(position){
-                1 -> RecurrenceRule.Frequency.ONCE
+                0 -> RecurrenceRule.Frequency.ONCE
+                1 -> RecurrenceRule.Frequency.DAILY
                 2 -> RecurrenceRule.Frequency.WEEKLY
                 3 -> RecurrenceRule.Frequency.MONTHLY
                 4 -> RecurrenceRule.Frequency.YEARLY
@@ -148,31 +155,43 @@ class DialogFragmentTaskLesson: DialogFragment() {
             }
         }
         binding.etDate.setOnClickListener {
-            dateTimePicker.pickDateMillis("Date"){ result ->
+            dateTimePicker.pickDateMillis("Date", selectedDateMillis){ result ->
                 selectedDateMillis = result
                 binding.etDate.setText(selectedDateMillis.toFormattedString("dd MMMM yyyy EEEE"))
             }
         }
         binding.etDateRangeStart.setOnClickListener {
-            dateTimePicker.pickDateMillis("Start Date"){result ->
+            dateTimePicker.pickDateMillis("Start Date", selectedRecurrenceRule.dtStart){result ->
                 selectedRecurrenceRule.dtStart = result
                 binding.etDateRangeStart.setText(selectedRecurrenceRule.dtStart.toFormattedString("dd.MM.yyyy"))
+                val cal = Calendar.getInstance().apply {
+                    timeInMillis = selectedRecurrenceRule.dtStart
+                    add(Calendar.MONTH, 9)
+                }
+                selectedRecurrenceRule.until = cal.timeInMillis // add 9 month
+                binding.etDateRangeEnd.setText(selectedRecurrenceRule.until.toFormattedString("dd.MM.yyyy"))
             }
         }
         binding.etDateRangeEnd.setOnClickListener {
-            dateTimePicker.pickDateMillis("End Date"){result ->
+            dateTimePicker.pickDateMillis("End Date", selectedRecurrenceRule.until){result ->
                 selectedRecurrenceRule.until = result
                 binding.etDateRangeEnd.setText(selectedRecurrenceRule.until.toFormattedString("dd.MM.yyyy"))
             }
         }
         binding.etTimeStart.setOnClickListener {
-            dateTimePicker.pickTimeMillis("Start Time"){ result ->
+            dateTimePicker.pickTimeMillis("Start Time", selectedTimeStartMillis){ result ->
                 selectedTimeStartMillis = result
                 binding.etTimeStart.setText(selectedTimeStartMillis.toFormattedString("HH:mm"))
+                val cal = Calendar.getInstance().apply {
+                    timeInMillis = selectedTimeStartMillis
+                    add(Calendar.HOUR_OF_DAY, 1)
+                }
+                selectedTimeEndMillis = cal.timeInMillis //add 1 hour
+                binding.etTimeEnd.setText(selectedTimeEndMillis.toFormattedString("HH:mm"))
             }
         }
         binding.etTimeEnd.setOnClickListener {
-            dateTimePicker.pickTimeMillis("End Time"){ result ->
+            dateTimePicker.pickTimeMillis("End Time", selectedTimeEndMillis){ result ->
                 selectedTimeEndMillis = result
                 binding.etTimeEnd.setText(selectedTimeEndMillis.toFormattedString("HH:mm"))
             }
@@ -208,11 +227,12 @@ class DialogFragmentTaskLesson: DialogFragment() {
     }
     private fun mapRuleToDisplayString(rule: RecurrenceRule, options: Array<String>): String{
         return when(rule.freq){
-            RecurrenceRule.Frequency.ONCE -> options[1]
-            RecurrenceRule.Frequency.DAILY -> options[2]
+            RecurrenceRule.Frequency.ONCE -> options[0]
+            RecurrenceRule.Frequency.DAILY -> options[1]
+            RecurrenceRule.Frequency.WEEKLY -> options[2]
             RecurrenceRule.Frequency.MONTHLY -> options[3]
             RecurrenceRule.Frequency.YEARLY -> options[4]
-            else -> options[0] // "Does not repeat"
+            else -> options[0] // "Does not repeat/ONCE"
         }
     }
     private fun mapMinutesToDisplayString(minutes: Int, options: Array<String>): String{
