@@ -186,6 +186,7 @@
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="yesterday">Yesterday</string>
+    <string name="all_course">All Courses</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>

@@ -21,29 +21,59 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:elevation="3dp"
-        android:orientation="horizontal">
+        android:scrollbars="none"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/tv_program_table"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="ProgramTable"
-            android:layout_margin="16dp"/>
-
-        <ImageView
-            android:id="@+id/im_dropdown_program_table_list"
+        <com.google.android.material.chip.ChipGroup
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/baseline_arrow_drop_down_24"
-            app:tint="?attr/colorOnSurface" />
-    </LinearLayout>
+            android:layout_marginStart="8dp"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cp_program_table"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:text="@string/program_table"
+                android:checked="true"
+                app:chipIcon="@drawable/baseline_arrow_drop_down_24"
+                app:chipIconTint="?attr/colorOnSurface"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cp_course"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:text="@string/course"
+                android:checked="true"
+                app:chipIcon="@drawable/baseline_arrow_drop_down_24"
+                app:chipIconTint="?attr/colorOnSurface"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cp_lesson"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:text="@string/lesson"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cp_exam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:text="@string/exam"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cp_homework"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:text="@string/homework"/>
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/programRecyclerView"
