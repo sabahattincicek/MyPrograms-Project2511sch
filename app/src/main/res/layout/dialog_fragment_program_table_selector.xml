@@ -24,6 +24,12 @@
             app:title="@string/select_program_table" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/check_all"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/programRecyclerView"
         android:layout_width="match_parent"
