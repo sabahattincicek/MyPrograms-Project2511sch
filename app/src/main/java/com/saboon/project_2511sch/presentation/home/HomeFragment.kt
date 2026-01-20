@@ -13,8 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
 import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -26,12 +28,14 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModelHome: ViewModelHome by viewModels()
+    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
 
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
 
     private val tag = "HomeFragment"
 
     private lateinit var programTable: ProgramTable
+    private lateinit var activeProgramTablesList: List<ProgramTable>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,28 +58,38 @@ class HomeFragment : Fragment() {
         setupRecyclerAdapter()
         observeActiveProgramTableState()
         observeHomeDisplayItemsState()
-        observeAllProgramTablesState()
 
         Log.i(tag, "onViewCreated: Triggering initial data load by getting active program table.")
-        viewModelHome.getActiveProgramTable()
+        viewModelProgramTable.getActiveProgramTableList()
 
-        binding.imDropdownProgramTableList.setOnClickListener {
-            Log.d(tag, "Dropdown icon clicked. Requesting all program tables to show dialog.")
-            viewModelHome.getAllProgramTables()
+        binding.cpProgramTable.setOnClickListener {
+            if (activeProgramTablesList.isNotEmpty()) {
+                binding.cpProgramTable.isChecked = true
+            }
+            val dialog = DialogFragmentProgramTableSelector.newInstance()
+            dialog.show(childFragmentManager, "")
+        }
+        binding.cpCourse.setOnClickListener {
+            if (activeProgramTablesList.isNotEmpty()) {
+                binding.cpCourse.isChecked = true
+            }
+        }
+        binding.cpLesson.setOnCheckedChangeListener { chip, isChecked ->
+
+        }
+        binding.cpExam.setOnCheckedChangeListener { chip, isChecked ->
+
+        }
+        binding.cpHomework.setOnCheckedChangeListener { chip, isChecked ->
+
         }
 
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SELECT_ACTIVE, viewLifecycleOwner) { requestKey, result ->
+        childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SELECTED_PROGRAM_TABLE_BOOLEAN, viewLifecycleOwner) { requestKey, result ->
             Log.d(tag, "Result received from ProgramTableSelectorDialog with key: $requestKey")
-            val selectedProgramTable = BundleCompat.getParcelable(result,
-                DialogFragmentProgramTableSelector.RESULT_KEY_PROGRAM_TABLE, ProgramTable::class.java)
 
-            if (selectedProgramTable != null) {
-                Log.i(tag, "Program table selected: '${selectedProgramTable.title}'. Setting it as active and refreshing.")
-                viewModelHome.setProgramTableActive(selectedProgramTable)
-            } else {
-                Log.w(tag, "Received a null program table from the dialog.")
-                // TODO: get default or recent active programTable from database
+            val isTrue = result.getBoolean(DialogFragmentProgramTableSelector.RESULT_KEY_PROGRAM_TABLE_BOOLEAN)
+            if (isTrue){
+                viewModelProgramTable.getActiveProgramTableList()
             }
         }
     }
@@ -90,55 +104,30 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 Log.d(tag, "Subscribing to activeProgramTable state flow.")
-                viewModelHome.activeProgramTable.collect { result ->
+                viewModelProgramTable.programTablesState.collect { result ->
                     when (result) {
                         is Resource.Error<*> -> {
-                            Log.e(tag, "ActiveProgramTable State: Error - ${result.message}")
                         }
                         is Resource.Idle<*> -> {
-                            Log.d(tag, "ActiveProgramTable State: Idle.")
                         }
                         is Resource.Loading<*> -> {
-                            Log.d(tag, "ActiveProgramTable State: Loading.")
                         }
                         is Resource.Success<*> -> {
-                            if (result.data != null) {
-                                Log.i(tag, "ActiveProgramTable State: Success - Found active table: '${result.data.title}'.")
-                                programTable = result.data
-                                binding.tvProgramTable.text = programTable.title
-                                viewModelHome.getDisplayItems(programTable)
-                            } else {
-                                Log.w(tag, "ActiveProgramTable State: Success, but data is null.")
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeAllProgramTablesState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d(tag, "Subscribing to allProgramTables state flow.")
-                viewModelHome.programTableState.collect { resource ->
-                    when (resource) {
-                        is Resource.Error<*> -> {
-                            Log.e(tag, "AllProgramTables State: Error - ${resource.message}")
-                        }
-                        is Resource.Idle<*> -> {
-                            Log.d(tag, "AllProgramTables State: Idle.")
-                        }
-                        is Resource.Loading<*> -> {
-                            Log.d(tag, "AllProgramTables State: Loading.")
-                        }
-                        is Resource.Success<*> -> {
-                            if (resource.data != null) {
-                                Log.i(tag, "AllProgramTables State: Success - Received ${resource.data.size} tables. Showing dialog.")
-                                val dialog = DialogFragmentProgramTableSelector.newInstance(resource.data)
-                                dialog.show(childFragmentManager, "ProgramSelectorDialogFragment")
-                            } else {
-                                Log.w(tag, "AllProgramTables State: Success, but data is null.")
+                            result.data?.let {
+                                activeProgramTablesList = it
+                                if (activeProgramTablesList.isNotEmpty()){
+                                    binding.cpProgramTable.isChecked = true
+                                    if (activeProgramTablesList.size == 1){
+                                        binding.cpProgramTable.text = activeProgramTablesList.first().title
+                                    }else if (activeProgramTablesList.size > 1){
+                                        binding.cpProgramTable.text = "${activeProgramTablesList.first().title} and more"
+                                    }
+                                    viewModelHome.getDisplayItems(activeProgramTablesList)
+                                }else{
+                                    binding.cpProgramTable.isChecked = false
+                                    binding.cpProgramTable.text = getString(R.string.program_table)
+                                    //get entire task for display
+                                }
                             }
                         }
                     }

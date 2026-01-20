@@ -26,6 +26,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <CheckBox
+        android:id="@+id/cb_check_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

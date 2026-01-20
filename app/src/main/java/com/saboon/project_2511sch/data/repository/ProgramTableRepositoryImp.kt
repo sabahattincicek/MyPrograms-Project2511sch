@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.collections.map
 
 class ProgramTableRepositoryImp @Inject constructor(
     private val programTableDao: ProgramTableDao
@@ -19,6 +20,15 @@ class ProgramTableRepositoryImp @Inject constructor(
         try{
             programTableDao.insert(programTable.toEntity())
             return Resource.Success(programTable)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
+    override suspend fun updateProgramTable(programTable: ProgramTable): Resource<Unit> {
+        try {
+            programTableDao.update(programTable.toEntity())
+            return Resource.Success(Unit)
         }catch (e: Exception){
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
@@ -33,7 +43,7 @@ class ProgramTableRepositoryImp @Inject constructor(
         }
     }
 
-    override fun getAllProgramTables(): Flow<Resource<List<ProgramTable>>> {
+    override fun getAllProgramTableList(): Flow<Resource<List<ProgramTable>>> {
         return programTableDao.getAllProgramTables()
             .map<List<ProgramTableEntity>, Resource<List<ProgramTable>>>{ programTableEntities ->
                 Resource.Success(programTableEntities.map{it.toDomain()})
@@ -43,44 +53,33 @@ class ProgramTableRepositoryImp @Inject constructor(
             }
     }
 
-    override suspend fun insertProgramTableAndSetAsActive(programTable: ProgramTable): Resource<ProgramTable> {
-        return try {
-            programTableDao.insertAndSetAsActive(programTable.toEntity())
-            Resource.Success(programTable)
-        }catch (e: Exception){
-            Resource.Error(e.localizedMessage?:"An unexpected error occurred")
-        }
+    override fun getActiveProgramTableList(): Flow<Resource<List<ProgramTable>>>{
+        return programTableDao.getActiveProgramTableList()
+            .map<List<ProgramTableEntity>, Resource<List<ProgramTable>>>{ entityList ->
+                Resource.Success(entityList.map{it.toDomain()})
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+            }
     }
 
     override suspend fun setProgramTableActive(programTable: ProgramTable): Resource<Unit> {
         return try {
-            programTableDao.setProgramTableActive(programTable.toEntity())
+            programTableDao.setActiveById(programTable.id)
             Resource.Success(Unit)
         }catch (e: Exception){
             Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
         }
     }
 
-    override suspend fun updateProgramTable(programTable: ProgramTable): Resource<Unit> {
-        try {
-            programTableDao.update(programTable.toEntity())
-            return Resource.Success(Unit)
+    override suspend fun setProgramTableInActive(programTable: ProgramTable): Resource<Unit> {
+        return try {
+            programTableDao.setInActiveById(programTable.id)
+            Resource.Success(Unit)
         }catch (e: Exception){
-            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+            Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
         }
     }
 
-    override fun getActiveProgramTable(): Flow<Resource<ProgramTable>>{
-        return programTableDao.getActiveProgramTable()
-            .map<ProgramTableEntity?, Resource<ProgramTable>>{ entity ->
-                return@map if (entity != null){
-                    Resource.Success(entity.toDomain())
-                } else {
-                    Resource.Error("No active program table found.")
-                }
-            }
-            .catch { e ->
-                emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-            }
-    }
+
 }

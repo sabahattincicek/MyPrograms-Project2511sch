@@ -10,6 +10,6 @@ class GetAllProgramTablesUseCase @Inject constructor(
     private val programTableRepository: IProgramTableRepository
 ) {
     operator fun invoke(): Flow<Resource<List<ProgramTable>>> {
-        return programTableRepository.getAllProgramTables()
+        return programTableRepository.getAllProgramTableList()
     }
 }

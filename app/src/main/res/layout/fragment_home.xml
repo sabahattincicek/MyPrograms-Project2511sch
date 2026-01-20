@@ -28,8 +28,10 @@
         android:fillViewport="true">
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cpg_chip_group"
             android:layout_width="wrap_content"
             android:layout_marginStart="8dp"
+            app:singleLine="true"
             android:layout_height="wrap_content">
 
             <com.google.android.material.chip.Chip
@@ -38,9 +40,9 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.Chip.Filter"
                 android:text="@string/program_table"
-                android:checked="true"
-                app:chipIcon="@drawable/baseline_arrow_drop_down_24"
-                app:chipIconTint="?attr/colorOnSurface"/>
+                app:closeIcon="@drawable/baseline_arrow_drop_down_24"
+                app:closeIconEnabled="false"
+                app:closeIconVisible="true"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/cp_course"
@@ -48,9 +50,9 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.Chip.Filter"
                 android:text="@string/course"
-                android:checked="true"
-                app:chipIcon="@drawable/baseline_arrow_drop_down_24"
-                app:chipIconTint="?attr/colorOnSurface"/>
+                app:closeIcon="@drawable/baseline_arrow_drop_down_24"
+                app:closeIconEnabled="false"
+                app:closeIconVisible="true"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/cp_lesson"

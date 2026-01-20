@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Update
 import com.saboon.project_2511sch.data.local.entity.ProgramTableEntity
 import kotlinx.coroutines.flow.Flow
@@ -28,22 +27,16 @@ interface ProgramTableDao {
     @Query("SELECT * FROM program_tables")
     fun getAllProgramTables(): Flow<List<ProgramTableEntity>>
 
+    @Query("SELECT * FROM program_tables WHERE is_active = 1")
+    fun getActiveProgramTableList(): Flow<List<ProgramTableEntity>>
+
     @Query("UPDATE program_tables SET is_active = 0")
     suspend fun setAllToInactive()
 
     @Query("UPDATE program_tables SET is_active = 1 WHERE id = :id")
     suspend fun setActiveById(id: String)
 
+    @Query("UPDATE program_tables SET is_active = 0 WHERE id = :id")
+    suspend fun setInActiveById(id: String)
 
-    @Transaction
-    suspend fun insertAndSetAsActive(programTableEntity: ProgramTableEntity){
-        setAllToInactive()
-        insert(programTableEntity)
-    }
-
-    @Transaction
-    suspend fun setProgramTableActive(programTableEntity: ProgramTableEntity) {
-        setAllToInactive()
-        setActiveById(programTableEntity.id)
-    }
 }

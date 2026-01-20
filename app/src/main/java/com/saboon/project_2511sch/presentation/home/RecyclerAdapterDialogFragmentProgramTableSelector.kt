@@ -13,16 +13,15 @@ class RecyclerAdapterDialogFragmentProgramTableSelector : ListAdapter<ProgramTab
 ) {
 
     var onItemClickListener: ((ProgramTable) -> Unit)? = null
-    var onItemCheckedChangeListener: ((ProgramTable) -> Unit)? = null
+    var onItemCheckedChangeListener: ((Boolean, ProgramTable) -> Unit)? = null
 
     inner class DialogFragmentHomeViewHolder(private val binding: RecyclerListRowProgramTableSelectorBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ProgramTable){
             binding.tvProgramTableTitle.text = item.title
             binding.tvProgramTableDescription.text = item.description
+            binding.ckbProgramTable.isChecked = item.isActive
             binding.ckbProgramTable.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked){
-                    onItemCheckedChangeListener?.invoke(item)
-                }
+                onItemCheckedChangeListener?.invoke(isChecked, item)
             }
         }
     }

@@ -19,12 +19,16 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private val courseRepository: ICourseRepository,
     private val taskRepository: ITaskRepository
 ) {
-    operator fun invoke(programTable: ProgramTable): Flow<Resource<List<HomeDisplayItem>>> {
+    operator fun invoke(programTableList: List<ProgramTable>): Flow<Resource<List<HomeDisplayItem>>> {
 
         return combine(
-            courseRepository.getCoursesByProgramTableId(programTable.id),
-            taskRepository.getAllTaskByProgramTableId(programTable.id)
-        ) { coursesResult, tasksResult ->
+            programTableRepository.getActiveProgramTableList(),
+            courseRepository.getCoursesByProgramTableId(programTableList.first().id),
+            taskRepository.getAllTaskByProgramTableId(programTableList.first().id)
+        ) { programTablesResult, coursesResult, tasksResult ->
+            if (programTablesResult is Resource.Error) {
+                return@combine Resource.Error(programTablesResult.message ?: "Failed to load courses.")
+            }
             if (coursesResult is Resource.Error) {
                 return@combine Resource.Error(coursesResult.message ?: "Failed to load courses.")
             }
@@ -32,20 +36,23 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                 return@combine Resource.Error(tasksResult.message ?: "Failed to load tasks.")
             }
 
+            val programTables = (programTablesResult as? Resource.Success)?.data ?: emptyList()
             val courses = (coursesResult as? Resource.Success)?.data ?: emptyList()
             val tasks = (tasksResult as? Resource.Success)?.data ?: emptyList()
 
-            val displayItems = generateAndGroupDisplayList(programTable, courses, tasks)
+            val displayItems = generateAndGroupDisplayList(programTables, courses, tasks)
             Resource.Success(displayItems)
         }
     }
 
     private fun generateAndGroupDisplayList(
-        programTable: ProgramTable,
+        programTables: List<ProgramTable>,
         courses: List<Course>,
         tasks: List<Task>
     ): List<HomeDisplayItem> {
         val finalEvents = mutableListOf<HomeDisplayItem.ContentItem>()
+
+        val programTableMap = programTables.associateBy { it.id }
         val courseMap = courses.associateBy { it.id }
 
         val calendar = Calendar.getInstance()
@@ -63,8 +70,9 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         val weekEnd = calendar.timeInMillis
 
         tasks.forEach { task ->
+            val programTable = programTableMap[task.programTableId]
             val course = courseMap[task.courseId]
-            if (course != null) {
+            if (programTable != null && course != null) {
                 when(task) {
                     is Task.Lesson -> {
                         val rRule = RecurrenceRule.fromRuleString(task.recurrenceRule)
