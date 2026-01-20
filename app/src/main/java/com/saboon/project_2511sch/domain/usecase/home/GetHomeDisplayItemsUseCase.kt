@@ -49,9 +49,18 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         val courseMap = courses.associateBy { it.id }
 
         val calendar = Calendar.getInstance()
-        val startDate = getDayStartMillis(calendar.timeInMillis)
-        calendar.add(Calendar.DAY_OF_YEAR, 30)
-        val endDate = calendar.timeInMillis
+
+        //find monday of the current week
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) // sunday = 1, monday = 2 ...
+        //calculate how many days to go back to reach monday
+        val daysFromMonday = if (dayOfWeek == Calendar.SUNDAY) 6 else dayOfWeek - Calendar.MONDAY
+        calendar.add(Calendar.DAY_OF_YEAR, -daysFromMonday)
+
+        val weekStart = getDayStartMillis(calendar.timeInMillis) //monday 00:00:00
+
+        //find sunday of the current week
+        calendar.add(Calendar.DAY_OF_YEAR, 6) //sunday 23:59:59
+        val weekEnd = calendar.timeInMillis
 
         tasks.forEach { task ->
             val course = courseMap[task.courseId]
@@ -59,15 +68,12 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                 when(task) {
                     is Task.Lesson -> {
                         val rRule = RecurrenceRule.fromRuleString(task.recurrenceRule)
+                        val fromDate = rRule.dtStart
                         val untilDate = rRule.until
-                        
-                        // Corrected: task.date is the anchor (determines the day of week)
-                        // rRule.dtStart is the visibility start filter
                         var occurrenceDate = task.date
-                        val visibilityStart = rRule.dtStart
 
                         if (rRule.freq == RecurrenceRule.Frequency.ONCE){
-                            if (task.date in startDate..endDate && task.date >= visibilityStart){
+                            if (task.date in weekStart..weekEnd && task.date in fromDate..untilDate){
                                 finalEvents.add(
                                     HomeDisplayItem.ContentItem(
                                         programTable = programTable,
@@ -78,28 +84,21 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                                 )
                             }
                         }else{
-                            while (occurrenceDate <= endDate && occurrenceDate <= untilDate){
-                                // Only add if within the 30-day window AND after the visibility start date
-                                if (occurrenceDate >= startDate && occurrenceDate >= visibilityStart){
-                                    val occurrenceId = "${task.id}_${occurrenceDate}"
-                                    val occurrenceSchedule = task.copy(
-                                        date = occurrenceDate
+                            while (occurrenceDate in weekStart..weekEnd && occurrenceDate in fromDate..untilDate){
+                                finalEvents.add(
+                                    HomeDisplayItem.ContentItem(
+                                        programTable = programTable,
+                                        course = course,
+                                        task = task.copy(date = occurrenceDate),
+                                        occurrenceId = "${task.id}_${occurrenceDate}"
                                     )
-                                    finalEvents.add(
-                                        HomeDisplayItem.ContentItem(
-                                            programTable = programTable,
-                                            course = course,
-                                            task = occurrenceSchedule,
-                                            occurrenceId = occurrenceId
-                                        )
-                                    )
-                                }
-                                occurrenceDate = rRule.getNextOccurrence(occurrenceDate) ?: (endDate + 1)
+                                )
+                                occurrenceDate = rRule.getNextOccurrence(occurrenceDate) ?: (weekEnd + 1)
                             }
                         }
                     }
                     is Task.Exam -> {
-                        if (task.date in startDate..endDate) {
+                        if (task.date in weekStart..weekEnd) {
                             finalEvents.add(
                                 HomeDisplayItem.ContentItem(
                                     occurrenceId = "single_${task.id}",
@@ -111,7 +110,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                         }
                     }
                     is Task.Homework -> {
-                        if (task.dueDate in startDate..endDate) {
+                        if (task.dueDate in weekStart..weekEnd) {
                             finalEvents.add(
                                 HomeDisplayItem.ContentItem(
                                     occurrenceId = "single_${task.id}",
@@ -165,7 +164,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         val calendar = Calendar.getInstance().apply {
             timeInMillis = timestamp
             set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
+            set(Calendar.MINUTE,0)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }
