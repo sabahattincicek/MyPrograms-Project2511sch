@@ -80,4 +80,14 @@ class CourseRepositoryImp @Inject constructor(
                 emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
             }
     }
+
+    override fun getAllCoursesByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>> {
+        return courseDao.getAllCoursesByProgramTableIds(ids)
+            .map<List<CourseEntity>, Resource<List<Course>>> { courseEntities ->
+                Resource.Success(courseEntities.map { it.toDomain() })
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
+            }
+    }
 }

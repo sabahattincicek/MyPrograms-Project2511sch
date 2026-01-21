@@ -10,4 +10,5 @@ interface ITaskRepository {
     suspend fun deleteTask(task: Task): Resource<Task>
     fun getAllTasksByCourseId(id: String): Flow<Resource<List<Task>>>
     fun getAllTaskByProgramTableId(id: String): Flow<Resource<List<Task>>>
+    fun getAllTasksByProgramTableIds(ids: List<String>): Flow<Resource<List<Task>>>
 }

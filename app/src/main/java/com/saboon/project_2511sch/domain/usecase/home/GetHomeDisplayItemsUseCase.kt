@@ -19,16 +19,13 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private val courseRepository: ICourseRepository,
     private val taskRepository: ITaskRepository
 ) {
-    operator fun invoke(programTableList: List<ProgramTable>): Flow<Resource<List<HomeDisplayItem>>> {
+    operator fun invoke(activeProgramTableList: List<ProgramTable>): Flow<Resource<List<HomeDisplayItem>>> {
 
+        val activeProgramTableIds = activeProgramTableList.map { it.id }
         return combine(
-            programTableRepository.getActiveProgramTableList(),
-            courseRepository.getCoursesByProgramTableId(programTableList.first().id),
-            taskRepository.getAllTaskByProgramTableId(programTableList.first().id)
-        ) { programTablesResult, coursesResult, tasksResult ->
-            if (programTablesResult is Resource.Error) {
-                return@combine Resource.Error(programTablesResult.message ?: "Failed to load courses.")
-            }
+            courseRepository.getAllCoursesByProgramTableIds(activeProgramTableIds),
+            taskRepository.getAllTasksByProgramTableIds(activeProgramTableIds)
+        ) { coursesResult, tasksResult ->
             if (coursesResult is Resource.Error) {
                 return@combine Resource.Error(coursesResult.message ?: "Failed to load courses.")
             }
@@ -36,11 +33,10 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                 return@combine Resource.Error(tasksResult.message ?: "Failed to load tasks.")
             }
 
-            val programTables = (programTablesResult as? Resource.Success)?.data ?: emptyList()
             val courses = (coursesResult as? Resource.Success)?.data ?: emptyList()
             val tasks = (tasksResult as? Resource.Success)?.data ?: emptyList()
 
-            val displayItems = generateAndGroupDisplayList(programTables, courses, tasks)
+            val displayItems = generateAndGroupDisplayList(activeProgramTableList, courses, tasks)
             Resource.Success(displayItems)
         }
     }

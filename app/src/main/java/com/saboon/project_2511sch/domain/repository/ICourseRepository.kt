@@ -19,6 +19,7 @@ interface ICourseRepository {
     fun getAllCourses(): Flow<Resource<List<Course>>>
 
     fun getCoursesByProgramTableId(id: String): Flow<Resource<List<Course>>>
+    fun getAllCoursesByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>>
 
 
 }

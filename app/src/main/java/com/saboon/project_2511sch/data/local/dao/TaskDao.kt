@@ -26,6 +26,8 @@ interface TaskDao {
     fun getAllLessonsByCourseId(id: String): Flow<List<TaskLessonEntity>>
     @Query("SELECT * FROM task_lessons WHERE program_table_id = :id")
     fun getAllLessonsByProgramTableId(id: String): Flow<List<TaskLessonEntity>>
+    @Query("SELECT * FROM task_lessons WHERE program_table_id IN (:ids)")
+    fun getAllLessonsByProgramTableIds(ids: List<String>): Flow<List<TaskLessonEntity>>
 
     //--------------Exam-------------
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -38,6 +40,8 @@ interface TaskDao {
     fun getAllExamsByCourseId(id: String): Flow<List<TaskExamEntity>>
     @Query("SELECT * FROM task_exams WHERE program_table_id = :id")
     fun getAllExamsByProgramTableId(id: String): Flow<List<TaskExamEntity>>
+    @Query("SELECT * FROM task_exams WHERE program_table_id IN (:ids)")
+    fun getAllExamsByProgramTableIds(ids: List<String>): Flow<List<TaskExamEntity>>
 
     //--------------Homework-------------
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -50,4 +54,6 @@ interface TaskDao {
     fun getAllHomeworksByCourseId(id: String): Flow<List<TaskHomeworkEntity>>
     @Query("SELECT * FROM task_homeworks WHERE program_table_id = :id")
     fun getAllHomeworksByProgramTableId(id: String): Flow<List<TaskHomeworkEntity>>
+    @Query("SELECT * FROM task_homeworks WHERE program_table_id IN (:ids)")
+    fun getAllHomeworksByProgramTableIds(ids: List<String>): Flow<List<TaskHomeworkEntity>>
 }
