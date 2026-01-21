@@ -116,8 +116,9 @@ class DialogFragmentTaskLesson: DialogFragment() {
             }else{
                 val newTask = Task.Lesson(
                     id = IdGenerator.generateTaskId(binding.etTitle.text.toString()),
-                    courseId = course!!.id,
+                    appVersionAtCreation = getString(R.string.app_version),
                     programTableId = course!!.programTableId,
+                    courseId = course!!.id,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     date = selectedDateMillis,
@@ -125,7 +126,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     timeStart = selectedTimeStartMillis,
                     timeEnd = selectedTimeEndMillis,
                     remindBefore = selectedRemindBeforeMinutes,
-                    place = binding.etPlace.text.toString()
+                    place = binding.etPlace.text.toString(),
                 )
                 setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))
                 dismiss()

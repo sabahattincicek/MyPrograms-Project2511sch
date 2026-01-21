@@ -10,7 +10,7 @@ class UpdateCourseUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(course: Course): Resource<Course>{
         val updatedCourse = course.copy(
-            rowVersion = course.rowVersion + 1,
+            version = course.version + 1,
             updatedAt = System.currentTimeMillis()
         )
         return courseRepository.updateCourse(updatedCourse)

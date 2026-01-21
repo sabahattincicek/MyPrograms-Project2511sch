@@ -10,8 +10,8 @@ class UpdateProgramTableUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(programTable: ProgramTable): Resource<Unit> {
         val updatedProgramTable = programTable.copy(
-            updatedAt = System.currentTimeMillis(),
-            rowVersion = programTable.rowVersion + 1
+            version = programTable.version + 1,
+            updatedAt = System.currentTimeMillis()
         )
         return programTableRepository.updateProgramTable(updatedProgramTable)
     }

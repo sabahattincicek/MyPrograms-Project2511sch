@@ -76,8 +76,10 @@ class DialogFragmentFile: DialogFragment() {
             }else{
                 val newFile = File(
                     id = IdGenerator.generateFileId(binding.etTitle.text.toString()),
+                    appVersionAtCreation = getString(R.string.app_version),
                     programTableId = course!!.programTableId,
                     courseId = course!!.id,
+                    taskId = "",
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     fileType = this.fileType,

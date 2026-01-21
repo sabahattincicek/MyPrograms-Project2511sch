@@ -101,8 +101,9 @@ class DialogFragmentTaskHomework: DialogFragment() {
             }else{
                 val newTask = Task.Homework(
                     id = IdGenerator.generateTaskId(binding.etTitle.text.toString()),
-                    courseId = course!!.id,
+                    appVersionAtCreation = getString(R.string.app_version),
                     programTableId = course!!.programTableId,
+                    courseId = course!!.id,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     dueDate = selectedDueDateMillis,

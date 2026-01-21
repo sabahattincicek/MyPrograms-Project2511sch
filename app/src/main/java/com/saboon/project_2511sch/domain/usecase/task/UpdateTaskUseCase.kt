@@ -11,16 +11,16 @@ class UpdateTaskUseCase @Inject constructor(
     suspend operator fun invoke(task: Task): Resource<Task>{
         val updatedTask = when(task) {
             is Task.Exam -> task.copy(
+                version = task.version + 1,
                 updatedAt = System.currentTimeMillis(),
-                version = task.version + 1
             )
             is Task.Homework -> task.copy(
+                version = task.version + 1,
                 updatedAt = System.currentTimeMillis(),
-                version = task.version + 1
             )
             is Task.Lesson -> task.copy(
+                version = task.version + 1,
                 updatedAt = System.currentTimeMillis(),
-                version = task.version + 1
             )
         }
         return taskRepository.updateTask(updatedTask)
