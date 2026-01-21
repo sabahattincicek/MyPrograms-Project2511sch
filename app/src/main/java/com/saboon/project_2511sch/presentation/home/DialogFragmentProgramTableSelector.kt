@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -57,13 +56,6 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
         binding.topAppBar.setNavigationOnClickListener {
             dismiss()
         }
-
-        binding.btnOk.setOnClickListener {
-            setFragmentResult(REQUEST_KEY_SELECTED_PROGRAM_TABLE_BOOLEAN, bundleOf(
-                RESULT_KEY_PROGRAM_TABLE_BOOLEAN to true
-            ))
-            dismiss()
-        }
     }
 
     override fun onDestroy() {
@@ -98,30 +90,13 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            recyclerAdapterDialogFragmentProgramTableSelector.submitList(resource.data)
                             resource.data?.let {
-                                var counter = 0
-                                it.forEach { programTable ->
-                                    if (programTable.isActive) counter++
-                                }
-                                if (it.size == counter) binding.cbCheckAll.isChecked = true
-                                else binding.cbCheckAll.isChecked = false
+                                recyclerAdapterDialogFragmentProgramTableSelector.submitList(resource.data)
                             }
                         }
                     }
                 }
             }
-        }
-    }
-
-    companion object{
-        const val ARG_PROGRAM_TABLE_LIST = "program_table_selector_dialog_fragment_arg_program_table_list"
-        const val REQUEST_KEY_SELECTED_PROGRAM_TABLE_BOOLEAN = "program_table_selector_dialog_fragment_request_key_selected_program_table_list"
-        const val RESULT_KEY_PROGRAM_TABLE_BOOLEAN = "program_table_selector_dialog_fragment_result_key_program_table_list"
-
-        fun newInstance(): DialogFragmentProgramTableSelector{
-            val fragment = DialogFragmentProgramTableSelector()
-            return fragment
         }
     }
 }

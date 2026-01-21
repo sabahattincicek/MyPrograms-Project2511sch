@@ -25,14 +25,6 @@
             app:subtitle="@string/select_program_tables_to_show_in_home"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <CheckBox
-        android:id="@+id/cb_check_all"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="16sp"
-        android:text="@string/check_all"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/programRecyclerView"
         android:layout_width="match_parent"
@@ -41,23 +33,5 @@
         tools:itemCount="4"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/recycler_list_row_program_table_selector"/>
-
-
-    <LinearLayout
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="16dp">
-
-        <Button
-            android:id="@+id/btn_ok"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:text="@string/ok" />
-
-    </LinearLayout>
 
 </LinearLayout>

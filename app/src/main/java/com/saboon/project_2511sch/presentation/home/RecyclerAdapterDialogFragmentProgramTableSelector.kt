@@ -19,6 +19,7 @@ class RecyclerAdapterDialogFragmentProgramTableSelector : ListAdapter<ProgramTab
         fun bind(item: ProgramTable){
             binding.tvProgramTableTitle.text = item.title
             binding.tvProgramTableDescription.text = item.description
+            binding.ckbProgramTable.setOnCheckedChangeListener(null)
             binding.ckbProgramTable.isChecked = item.isActive
             binding.ckbProgramTable.setOnCheckedChangeListener { buttonView, isChecked ->
                 onItemCheckedChangeListener?.invoke(isChecked, item)

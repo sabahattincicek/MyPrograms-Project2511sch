@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.BundleCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -64,7 +63,7 @@ class HomeFragment : Fragment() {
 
         binding.cpProgramTable.setOnClickListener {
             Log.d(tag, "cpProgramTable clicked. Current list size: ${activeProgramTablesList.size}")
-            val dialog = DialogFragmentProgramTableSelector.newInstance()
+            val dialog = DialogFragmentProgramTableSelector()
             dialog.show(childFragmentManager, "ProgramTableSelectorDialog")
         }
         binding.cpCourse.setOnClickListener {
@@ -78,17 +77,6 @@ class HomeFragment : Fragment() {
         }
         binding.cpHomework.setOnCheckedChangeListener { _, isChecked ->
             Log.d(tag, "cpHomework checked state changed: $isChecked")
-        }
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SELECTED_PROGRAM_TABLE_BOOLEAN, viewLifecycleOwner) { requestKey, result ->
-            Log.d(tag, "Result received from ProgramTableSelectorDialog with key: $requestKey")
-
-            val isTrue = result.getBoolean(DialogFragmentProgramTableSelector.RESULT_KEY_PROGRAM_TABLE_BOOLEAN)
-            Log.d(tag, "Result isTrue: $isTrue")
-            if (isTrue){
-                Log.i(tag, "Refreshing active program table list due to dialog result.")
-                viewModelProgramTable.getActiveProgramTableList()
-            }
         }
     }
 
@@ -119,7 +107,10 @@ class HomeFragment : Fragment() {
                                 activeProgramTablesList.clear()
                                 activeProgramTablesList.addAll(data)
                                 Log.d(tag, "activeProgramTablesList updated. Size: ${activeProgramTablesList.size}")
-                                
+
+                                Log.i(tag, "Requesting display items for active program tables.")
+                                viewModelHome.getDisplayItems(activeProgramTablesList)
+
                                 if (activeProgramTablesList.isNotEmpty()){
                                     binding.cpProgramTable.isChecked = true
                                     if (activeProgramTablesList.size == 1){
@@ -129,13 +120,10 @@ class HomeFragment : Fragment() {
                                         binding.cpProgramTable.text = "${activeProgramTablesList.first().title} and more"
                                         Log.d(tag, "Setting multi-table title: ${activeProgramTablesList.first().title} and more")
                                     }
-                                    Log.i(tag, "Requesting display items for active program tables.")
-                                    viewModelHome.getDisplayItems(activeProgramTablesList)
                                 }else{
                                     Log.w(tag, "activeProgramTablesList is empty.")
                                     binding.cpProgramTable.isChecked = false
                                     binding.cpProgramTable.text = getString(R.string.program_table)
-                                    // TODO: get entire task for display or clear adapter
                                 }
                             }
                         }
