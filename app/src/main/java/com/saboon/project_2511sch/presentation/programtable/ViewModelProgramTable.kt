@@ -4,21 +4,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.ProgramTable
-import com.saboon.project_2511sch.domain.usecase.programtable.DeleteProgramTableUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.GetActiveProgramTableListUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.GetAllProgramTablesUseCase
-import com.saboon.project_2511sch.domain.usecase.programtable.InsertNewProgramTableUseCase
+import com.saboon.project_2511sch.domain.usecase.programtable.ProgramTableWriteUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.SetProgramTableActiveUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.SetProgramTableInActiveUseCase
-import com.saboon.project_2511sch.domain.usecase.programtable.UpdateProgramTableUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -26,9 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewModelProgramTable @Inject constructor(
-    private val insertNewProgramTableUseCase: InsertNewProgramTableUseCase,
-    private val deleteProgramTableUseCase: DeleteProgramTableUseCase,
-    private val updateProgramTableUseCase: UpdateProgramTableUseCase,
+    private val programTableWriteUseCase: ProgramTableWriteUseCase,
     private val getAllProgramTablesUseCase: GetAllProgramTablesUseCase,
     private val getActiveProgramTableListUseCase: GetActiveProgramTableListUseCase,
     private val setProgramTableActiveUseCase: SetProgramTableActiveUseCase,
@@ -60,7 +52,7 @@ class ViewModelProgramTable @Inject constructor(
             try{
                 Log.d(TAG, "Starting to add a new program table.")
                 _insertNewProgramTableEvent.send(Resource.Loading())
-                val insertResult = insertNewProgramTableUseCase.invoke(programTable)
+                val insertResult = programTableWriteUseCase.insert(programTable)
                 Log.d(TAG, "Sending insert result to event channel: $insertResult")
                 _insertNewProgramTableEvent.send(insertResult)
             }catch (e: Exception){
@@ -75,7 +67,7 @@ class ViewModelProgramTable @Inject constructor(
             try{
                 Log.d(TAG, "Starting to update program table.")
                 _updateProgramTableEvent.send(Resource.Loading())
-                val updateResult = updateProgramTableUseCase.invoke(programTable)
+                val updateResult = programTableWriteUseCase.update(programTable)
                 Log.d(TAG, "Sending update result to event channel: $updateResult")
                 _updateProgramTableEvent.send(updateResult)
             }catch (e: Exception){
@@ -91,7 +83,7 @@ class ViewModelProgramTable @Inject constructor(
             try{
                 Log.d(TAG, "Starting to delete program table.")
                 _deleteProgramTableEvent.send(Resource.Loading())
-                val deleteResult = deleteProgramTableUseCase.invoke(programTable)
+                val deleteResult = programTableWriteUseCase.delete(programTable)
                 Log.d(TAG, "Sending delete result to event channel: $deleteResult")
                 _deleteProgramTableEvent.send(deleteResult)
             }catch (e: Exception){
