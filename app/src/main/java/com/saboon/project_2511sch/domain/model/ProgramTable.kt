@@ -1,23 +1,21 @@
 package com.saboon.project_2511sch.domain.model
 
 import android.os.Parcelable
+import androidx.core.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ProgramTable(
-    val id: String,
-    val createdByUserId: String? = null,
-    val updatedByUserId: String? = null,
+    override val id: String,
+    override val createdAt: Long = System.currentTimeMillis(),
+    override val updatedAt: Long = System.currentTimeMillis(),
+    override val version: Int = 0,
+    override val isActive: Boolean = true,
+    override val isDeleted: Boolean = false,
+    override val deletedAt: Long = 0L,
+    override val appVersionAtCreation: String,
 
-    val createdAt: Long = System.currentTimeMillis(),
-    val updatedAt: Long = System.currentTimeMillis(),
-    val isDeleted: Boolean = false,
-    val rowVersion: Int = 1,
-
-    val title: String?,
-    val description: String?,
-    val color: String?,
-
-    val isActive: Boolean = true,
-    val isShared: Boolean = false
-): Parcelable
+    val title: String,
+    val description: String,
+    val color: String,
+    ): Parcelable, BaseModel

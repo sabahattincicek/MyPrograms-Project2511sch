@@ -10,8 +10,12 @@ fun TaskExamEntity.toDomain(): Task.Exam{
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version,
-        courseId = courseId,
+        isActive = isActive,
+        isDeleted = isDeleted,
+        deletedAt = deletedAt,
+        appVersionAtCreation = appVersionAtCreation,
         programTableId = programTableId,
+        courseId = courseId,
         title = title,
         description = description,
         date = date,
@@ -20,7 +24,7 @@ fun TaskExamEntity.toDomain(): Task.Exam{
         remindBefore = remindBefore,
         place = place,
         targetScore = targetScore,
-        achievedScore = achievedScore,
+        achievedScore = achievedScore
     )
 }
 
@@ -30,8 +34,12 @@ fun Task.Exam.toEntity(): TaskExamEntity{
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version,
-        courseId = courseId,
+        isActive = isActive,
+        isDeleted = isDeleted,
+        deletedAt = deletedAt,
+        appVersionAtCreation = appVersionAtCreation,
         programTableId = programTableId,
+        courseId = courseId,
         title = title,
         description = description,
         date = date,
