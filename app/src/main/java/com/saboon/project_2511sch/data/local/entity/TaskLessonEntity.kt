@@ -9,15 +9,15 @@ import androidx.room.PrimaryKey
     tableName = "task_lessons",
     foreignKeys = [
         ForeignKey(
-            entity = CourseEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["course_id"],
-            onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
             entity = ProgramTableEntity::class,
             parentColumns = ["id"],
             childColumns = ["program_table_id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = CourseEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["course_id"],
             onDelete = ForeignKey.CASCADE
         )
     ]

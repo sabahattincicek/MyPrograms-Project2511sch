@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.saboon.project_2511sch.domain.model.Task
 
 @Entity(
     tableName = "files",
@@ -21,7 +22,19 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = CourseEntity::class,
+            entity = TaskLessonEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["task_id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = TaskExamEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["task_id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = TaskHomeworkEntity::class,
             parentColumns = ["id"],
             childColumns = ["task_id"],
             onDelete = ForeignKey.CASCADE

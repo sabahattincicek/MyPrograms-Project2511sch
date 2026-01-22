@@ -27,7 +27,7 @@ data class CourseEntity(
     @ColumnInfo(name = "deleted_at") val deletedAt: Long,
     @ColumnInfo(name = "app_version_at_creation") val appVersionAtCreation: String,
 
-    @ColumnInfo(name = "") val programTableId: String,
+    @ColumnInfo(name = "program_table_id") val programTableId: String,
 
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
