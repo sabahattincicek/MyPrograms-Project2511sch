@@ -3,13 +3,8 @@ package com.saboon.project_2511sch.presentation.course
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.usecase.course.DecrementAbsenceUseCase
-import com.saboon.project_2511sch.domain.usecase.course.DeleteCourseUseCase
-import com.saboon.project_2511sch.domain.usecase.course.GetAllCoursesUseCase
-import com.saboon.project_2511sch.domain.usecase.course.GetCoursesWithProgramTableIdUseCase
-import com.saboon.project_2511sch.domain.usecase.course.IncrementAbsenceUseCase
-import com.saboon.project_2511sch.domain.usecase.course.InsertNewCourseUseCase
-import com.saboon.project_2511sch.domain.usecase.course.UpdateCourseUseCase
+import com.saboon.project_2511sch.domain.usecase.course.CourseReadUseCase
+import com.saboon.project_2511sch.domain.usecase.course.CourseWriteUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -22,17 +17,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewModelCourse @Inject constructor(
-    private val insertNewCourseUseCase: InsertNewCourseUseCase,
-    private val updateCourseUseCase: UpdateCourseUseCase,
-    private val deleteCourseUseCase: DeleteCourseUseCase,
-    private val decrementAbsenceUseCase: DecrementAbsenceUseCase,
-    private val incrementAbsenceUseCase: IncrementAbsenceUseCase,
-    private val getAllCoursesUseCase: GetAllCoursesUseCase,
-    private val getCoursesWithProgramTableIdUseCase: GetCoursesWithProgramTableIdUseCase
+    private val courseWriteUseCase: CourseWriteUseCase,
+    private val courseReadUseCase: CourseReadUseCase,
 ): ViewModel() {
 
-    private val _insertNewCourseEvent = Channel<Resource<Course>>()
-    val insertNewCourseEvent = _insertNewCourseEvent.receiveAsFlow()
+    // TODO: change all channels to sharedflow
+    private val _insertCourseEvent = Channel<Resource<Course>>()
+    val insertCourseEvent = _insertCourseEvent.receiveAsFlow()
 
     private val _updateCourseEvent = Channel<Resource<Course>>()
     val updateCourseEvent = _updateCourseEvent.receiveAsFlow()
@@ -46,11 +37,11 @@ class ViewModelCourse @Inject constructor(
     fun insertNewCourse(course: Course){
         viewModelScope.launch {
             try {
-                _insertNewCourseEvent.send(Resource.Loading())
-                val insertResult = insertNewCourseUseCase.invoke(course)
-                _insertNewCourseEvent.send(insertResult)
+                _insertCourseEvent.send(Resource.Loading())
+                val insertResult = courseWriteUseCase.insert(course)
+                _insertCourseEvent.send(insertResult)
             }catch (e: Exception){
-                _insertNewCourseEvent.send(Resource.Error(e.localizedMessage?:"An unexpected error occurred in ViewModel."))
+                _insertCourseEvent.send(Resource.Error(e.localizedMessage?:"An unexpected error occurred in ViewModel."))
             }
         }
     }
@@ -59,7 +50,7 @@ class ViewModelCourse @Inject constructor(
         viewModelScope.launch {
             try {
                 _updateCourseEvent.send(Resource.Loading())
-                val updateResult = updateCourseUseCase.invoke(course)
+                val updateResult = courseWriteUseCase.update(course)
                 _updateCourseEvent.send(updateResult)
             }catch (e: Exception){
                 _updateCourseEvent.send(Resource.Error(e.localizedMessage?:"An unexpected error occurred in ViewModel."))
@@ -71,7 +62,7 @@ class ViewModelCourse @Inject constructor(
         viewModelScope.launch {
             try {
                 _deleteCourseEvent.send(Resource.Loading())
-                val deleteResult = deleteCourseUseCase.invoke(course)
+                val deleteResult = courseWriteUseCase.delete(course)
                 _deleteCourseEvent.send(deleteResult)
             }catch (e: Exception){
                 _deleteCourseEvent.send(Resource.Error(e.localizedMessage?:"An unexpected error occurred in ViewModel."))
@@ -79,43 +70,11 @@ class ViewModelCourse @Inject constructor(
         }
     }
 
-    fun decrementAbsence(course: Course){
-        viewModelScope.launch {
-            try {
-                val decrementResult = decrementAbsenceUseCase.invoke(course)
-            }catch (e: Exception){
-
-            }
-        }
-    }
-    fun incrementAbsence(course: Course){
-        viewModelScope.launch {
-            try {
-                val incrementResult = incrementAbsenceUseCase.invoke(course)
-            }catch (e: Exception){
-
-            }
-        }
-    }
-
-    fun getAllCourses(){
+    fun getAllCoursesByProgramTableId(id: String){
         viewModelScope.launch {
             try {
                 _coursesState.value = Resource.Loading()
-                getAllCoursesUseCase.invoke().collect { resource ->
-                    _coursesState.value = resource
-                }
-            }catch (e: Exception){
-                _coursesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-            }
-        }
-    }
-
-    fun getCoursesWithProgramTableId(id: String){
-        viewModelScope.launch {
-            try {
-                _coursesState.value = Resource.Loading()
-                getCoursesWithProgramTableIdUseCase.invoke(id).collect { resource ->
+                courseReadUseCase.getAllByProgramTableId(id).collect { resource ->
                     _coursesState.value = resource
                 }
             }catch (e: Exception){

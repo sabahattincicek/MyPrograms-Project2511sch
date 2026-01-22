@@ -86,8 +86,10 @@ class DialogFragmentNote: DialogFragment() {
                     } else { // Create Mode
                         val newNoteFile = File(
                             id = IdGenerator.generateFileId(title),
+                            appVersionAtCreation = getString(R.string.app_version),
                             programTableId = course!!.programTableId,
                             courseId = course!!.id,
+                            taskId = "",
                             title = title,
                             description = content,
                             fileType = "app/note",

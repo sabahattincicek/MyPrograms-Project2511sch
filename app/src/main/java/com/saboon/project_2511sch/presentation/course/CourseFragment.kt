@@ -66,7 +66,7 @@ class CourseFragment : Fragment() {
         observeCoursesState()
         observeInsertNewCourseEvent()
 
-        viewModelCourse.getCoursesWithProgramTableId(args.programTable.id)
+        viewModelCourse.getAllCoursesByProgramTableId(args.programTable.id)
         Log.d(TAG, "onViewCreated: Requesting courses for program table id: ${args.programTable.id}")
 
         childFragmentManager.setFragmentResultListener(DialogFragmentCourse.REQUEST_KEY_CREATE, this){ requestKey, result ->
@@ -114,7 +114,7 @@ class CourseFragment : Fragment() {
     private fun observeInsertNewCourseEvent(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourse.insertNewCourseEvent.collect { event ->
+                viewModelCourse.insertCourseEvent.collect { event ->
                     when(event) {
                         is Resource.Error<*> -> {
                             Log.e(TAG, "observeInsertNewCourseEvent: Error inserting new course: ${event.message}")

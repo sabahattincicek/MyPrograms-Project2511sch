@@ -2,27 +2,17 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "053d41e815a61f8572b98cc28ff5a025",
+    "identityHash": "a7e3df03a0dbc1d1b59e089aeac79cb4",
     "entities": [
       {
         "tableName": "program_tables",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_by_user_id` TEXT, `updated_by_user_id` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `row_version` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `color` TEXT, `is_active` INTEGER NOT NULL, `is_shared` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `is_active` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `deleted_at` INTEGER NOT NULL, `app_version_at_creation` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `color` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "createdByUserId",
-            "columnName": "created_by_user_id",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "updatedByUserId",
-            "columnName": "updated_by_user_id",
-            "affinity": "TEXT"
           },
           {
             "fieldPath": "createdAt",
@@ -37,31 +27,10 @@
             "notNull": true
           },
           {
-            "fieldPath": "isDeleted",
-            "columnName": "is_deleted",
+            "fieldPath": "version",
+            "columnName": "version",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "rowVersion",
-            "columnName": "row_version",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "title",
-            "columnName": "title",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "description",
-            "columnName": "description",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "color",
-            "columnName": "color",
-            "affinity": "TEXT"
           },
           {
             "fieldPath": "isActive",
@@ -70,9 +39,39 @@
             "notNull": true
           },
           {
-            "fieldPath": "isShared",
-            "columnName": "is_shared",
+            "fieldPath": "isDeleted",
+            "columnName": "is_deleted",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deleted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appVersionAtCreation",
+            "columnName": "app_version_at_creation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "color",
+            "columnName": "color",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -85,29 +84,13 @@
       },
       {
         "tableName": "courses",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `created_by_user_id` TEXT, `updated_by_user_id` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `row_version` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `people` TEXT, `color` TEXT, `absence` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `is_active` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `deleted_at` INTEGER NOT NULL, `app_version_at_creation` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `people` TEXT NOT NULL, `color` TEXT NOT NULL, `absence` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "programTableId",
-            "columnName": "program_table_id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "createdByUserId",
-            "columnName": "created_by_user_id",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "updatedByUserId",
-            "columnName": "updated_by_user_id",
-            "affinity": "TEXT"
           },
           {
             "fieldPath": "createdAt",
@@ -122,36 +105,64 @@
             "notNull": true
           },
           {
+            "fieldPath": "version",
+            "columnName": "version",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "is_active",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "isDeleted",
             "columnName": "is_deleted",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "rowVersion",
-            "columnName": "row_version",
+            "fieldPath": "deletedAt",
+            "columnName": "deleted_at",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appVersionAtCreation",
+            "columnName": "app_version_at_creation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "programTableId",
+            "columnName": "program_table_id",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "title",
             "columnName": "title",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "description",
             "columnName": "description",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "people",
             "columnName": "people",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "color",
             "columnName": "color",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "absence",
@@ -182,11 +193,53 @@
       },
       {
         "tableName": "files",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `course_id` TEXT NOT NULL, `create_by_user_id` TEXT, `updated_by_user_id` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `row_version` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `file_type` TEXT NOT NULL, `file_path` TEXT NOT NULL, `size_in_bytes` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `is_active` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `deleted_at` INTEGER NOT NULL, `app_version_at_creation` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `course_id` TEXT NOT NULL, `task_id` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `file_type` TEXT NOT NULL, `file_path` TEXT NOT NULL, `size_in_bytes` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`task_id`) REFERENCES `task_lessons`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`task_id`) REFERENCES `task_exams`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`task_id`) REFERENCES `task_homeworks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "version",
+            "columnName": "version",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "is_active",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDeleted",
+            "columnName": "is_deleted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deleted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appVersionAtCreation",
+            "columnName": "app_version_at_creation",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -203,48 +256,22 @@
             "notNull": true
           },
           {
-            "fieldPath": "createdByUserId",
-            "columnName": "create_by_user_id",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "updatedByUserId",
-            "columnName": "updated_by_user_id",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "createdAt",
-            "columnName": "created_at",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "updatedAt",
-            "columnName": "updated_at",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isDeleted",
-            "columnName": "is_deleted",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "rowVersion",
-            "columnName": "row_version",
-            "affinity": "INTEGER",
+            "fieldPath": "taskId",
+            "columnName": "task_id",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "title",
             "columnName": "title",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "description",
             "columnName": "description",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "fileType",
@@ -293,12 +320,45 @@
             "referencedColumns": [
               "id"
             ]
+          },
+          {
+            "table": "task_lessons",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "task_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "task_exams",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "task_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "task_homeworks",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "task_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
           }
         ]
       },
       {
         "tableName": "task_lessons",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `date` INTEGER NOT NULL, `recurrence_rule` TEXT NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `is_active` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `deleted_at` INTEGER NOT NULL, `app_version_at_creation` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `course_id` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `date` INTEGER NOT NULL, `recurrence_rule` TEXT NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -325,8 +385,26 @@
             "notNull": true
           },
           {
-            "fieldPath": "courseId",
-            "columnName": "course_id",
+            "fieldPath": "isActive",
+            "columnName": "is_active",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDeleted",
+            "columnName": "is_deleted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deleted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appVersionAtCreation",
+            "columnName": "app_version_at_creation",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -337,14 +415,22 @@
             "notNull": true
           },
           {
+            "fieldPath": "courseId",
+            "columnName": "course_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "title",
             "columnName": "title",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "description",
             "columnName": "description",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "date",
@@ -379,7 +465,8 @@
           {
             "fieldPath": "place",
             "columnName": "place",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -390,17 +477,6 @@
         },
         "foreignKeys": [
           {
-            "table": "courses",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "course_id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          },
-          {
             "table": "program_tables",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
@@ -410,12 +486,23 @@
             "referencedColumns": [
               "id"
             ]
+          },
+          {
+            "table": "courses",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "course_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
           }
         ]
       },
       {
         "tableName": "task_exams",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `date` INTEGER NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT, `target_score` INTEGER, `achieved_score` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `is_active` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `deleted_at` INTEGER NOT NULL, `app_version_at_creation` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `course_id` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `date` INTEGER NOT NULL, `time_start` INTEGER NOT NULL, `time_end` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, `place` TEXT NOT NULL, `target_score` INTEGER, `achieved_score` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -442,8 +529,26 @@
             "notNull": true
           },
           {
-            "fieldPath": "courseId",
-            "columnName": "course_id",
+            "fieldPath": "isActive",
+            "columnName": "is_active",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDeleted",
+            "columnName": "is_deleted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deleted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appVersionAtCreation",
+            "columnName": "app_version_at_creation",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -454,14 +559,22 @@
             "notNull": true
           },
           {
+            "fieldPath": "courseId",
+            "columnName": "course_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "title",
             "columnName": "title",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "description",
             "columnName": "description",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "date",
@@ -490,7 +603,8 @@
           {
             "fieldPath": "place",
             "columnName": "place",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "targetScore",
@@ -536,7 +650,7 @@
       },
       {
         "tableName": "task_homeworks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `course_id` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `due_date` INTEGER NOT NULL, `due_time` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `version` INTEGER NOT NULL, `is_active` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `deleted_at` INTEGER NOT NULL, `app_version_at_creation` TEXT NOT NULL, `program_table_id` TEXT NOT NULL, `course_id` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `due_date` INTEGER NOT NULL, `due_time` INTEGER NOT NULL, `remind_before` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`program_table_id`) REFERENCES `program_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`course_id`) REFERENCES `courses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -563,8 +677,26 @@
             "notNull": true
           },
           {
-            "fieldPath": "courseId",
-            "columnName": "course_id",
+            "fieldPath": "isActive",
+            "columnName": "is_active",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDeleted",
+            "columnName": "is_deleted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deleted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appVersionAtCreation",
+            "columnName": "app_version_at_creation",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -575,14 +707,22 @@
             "notNull": true
           },
           {
+            "fieldPath": "courseId",
+            "columnName": "course_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "title",
             "columnName": "title",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "description",
             "columnName": "description",
-            "affinity": "TEXT"
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "dueDate",
@@ -611,22 +751,22 @@
         },
         "foreignKeys": [
           {
-            "table": "courses",
+            "table": "program_tables",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "course_id"
+              "program_table_id"
             ],
             "referencedColumns": [
               "id"
             ]
           },
           {
-            "table": "program_tables",
+            "table": "courses",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "program_table_id"
+              "course_id"
             ],
             "referencedColumns": [
               "id"
@@ -637,7 +777,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '053d41e815a61f8572b98cc28ff5a025')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a7e3df03a0dbc1d1b59e089aeac79cb4')"
     ]
   }
 }
