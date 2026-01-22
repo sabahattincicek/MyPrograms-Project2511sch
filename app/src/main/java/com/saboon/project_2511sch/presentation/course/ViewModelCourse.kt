@@ -21,6 +21,7 @@ class ViewModelCourse @Inject constructor(
     private val courseReadUseCase: CourseReadUseCase,
 ): ViewModel() {
 
+    // TODO: change all channels to sharedflow
     private val _insertCourseEvent = Channel<Resource<Course>>()
     val insertCourseEvent = _insertCourseEvent.receiveAsFlow()
 

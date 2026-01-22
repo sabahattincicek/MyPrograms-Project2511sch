@@ -9,7 +9,9 @@ import com.saboon.project_2511sch.domain.usecase.programtable.ProgramTableWriteU
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -25,12 +27,12 @@ class ViewModelProgramTable @Inject constructor(
     companion object {
         private const val TAG = "ProgramTableViewModel"
     }
-    private val _insertNewProgramTableEvent = Channel<Resource<ProgramTable>>()
-    val insertNewProgramTableEvent = _insertNewProgramTableEvent.receiveAsFlow()
-    private val _updateProgramTableEvent = Channel<Resource<Unit>>()
-    val updateProgramTableEvent = _updateProgramTableEvent.receiveAsFlow()
-    private val _deleteProgramTableEvent = Channel<Resource<ProgramTable>>()
-    val deleteProgramTableEvent = _deleteProgramTableEvent.receiveAsFlow()
+    private val _insertNewProgramTableEvent = MutableSharedFlow<Resource<ProgramTable>>()
+    val insertNewProgramTableEvent = _insertNewProgramTableEvent.asSharedFlow()
+    private val _updateProgramTableEvent = MutableSharedFlow<Resource<Unit>>()
+    val updateProgramTableEvent = _updateProgramTableEvent.asSharedFlow()
+    private val _deleteProgramTableEvent = MutableSharedFlow<Resource<ProgramTable>>()
+    val deleteProgramTableEvent = _deleteProgramTableEvent.asSharedFlow()
     private val _programTablesState = MutableStateFlow<Resource<List<ProgramTable>>>(Resource.Idle())
     val programTablesState = _programTablesState.asStateFlow()
 
@@ -39,13 +41,13 @@ class ViewModelProgramTable @Inject constructor(
         viewModelScope.launch {
             try{
                 Log.d(TAG, "Starting to add a new program table.")
-                _insertNewProgramTableEvent.send(Resource.Loading())
+                _insertNewProgramTableEvent.emit(Resource.Loading())
                 val insertResult = programTableWriteUseCase.insert(programTable)
                 Log.d(TAG, "Sending insert result to event channel: $insertResult")
-                _insertNewProgramTableEvent.send(insertResult)
+                _insertNewProgramTableEvent.emit(insertResult)
             }catch (e: Exception){
                 Log.e(TAG, "An unexpected error occurred: ${e.localizedMessage}", e)
-                _insertNewProgramTableEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+                _insertNewProgramTableEvent.emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }
@@ -54,13 +56,13 @@ class ViewModelProgramTable @Inject constructor(
         viewModelScope.launch {
             try{
                 Log.d(TAG, "Starting to update program table.")
-                _updateProgramTableEvent.send(Resource.Loading())
+                _updateProgramTableEvent.emit(Resource.Loading())
                 val updateResult = programTableWriteUseCase.update(programTable)
                 Log.d(TAG, "Sending update result to event channel: $updateResult")
-                _updateProgramTableEvent.send(updateResult)
+                _updateProgramTableEvent.emit(updateResult)
             }catch (e: Exception){
                 Log.e(TAG, "An unexpected error occurred while updating program table: ${e.localizedMessage}", e)
-                _updateProgramTableEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+                _updateProgramTableEvent.emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }
@@ -70,13 +72,13 @@ class ViewModelProgramTable @Inject constructor(
         viewModelScope.launch {
             try{
                 Log.d(TAG, "Starting to delete program table.")
-                _deleteProgramTableEvent.send(Resource.Loading())
+                _deleteProgramTableEvent.emit(Resource.Loading())
                 val deleteResult = programTableWriteUseCase.delete(programTable)
                 Log.d(TAG, "Sending delete result to event channel: $deleteResult")
-                _deleteProgramTableEvent.send(deleteResult)
+                _deleteProgramTableEvent.emit(deleteResult)
             }catch (e: Exception){
                 Log.e(TAG, "An unexpected error occurred while deleting program table: ${e.localizedMessage}", e)
-                _deleteProgramTableEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+                _deleteProgramTableEvent.emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }

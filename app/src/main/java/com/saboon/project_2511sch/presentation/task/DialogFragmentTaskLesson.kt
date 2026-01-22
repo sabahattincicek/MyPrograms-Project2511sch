@@ -14,7 +14,6 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentTaskLessonBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.model.TaskType
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker

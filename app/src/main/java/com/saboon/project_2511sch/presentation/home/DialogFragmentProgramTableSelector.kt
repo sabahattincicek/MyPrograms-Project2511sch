@@ -75,10 +75,10 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
                 )
                 viewModelProgramTable.updateProgramTable(activatedProgramTable)
             }else{
-                val activatedProgramTable = programTable.copy(
+                val inActivatedProgramTable = programTable.copy(
                     isActive = false
                 )
-                viewModelProgramTable.updateProgramTable(activatedProgramTable)
+                viewModelProgramTable.updateProgramTable(inActivatedProgramTable)
             }
         }
         binding.programRecyclerView.apply {

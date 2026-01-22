@@ -2,7 +2,6 @@ package com.saboon.project_2511sch.data.local.mapper
 
 import com.saboon.project_2511sch.data.local.entity.TaskExamEntity
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.model.TaskType
 
 fun TaskExamEntity.toDomain(): Task.Exam{
     return Task.Exam(

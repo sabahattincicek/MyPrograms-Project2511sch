@@ -13,7 +13,6 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.RecyclerListRowTaskBinding
 import com.saboon.project_2511sch.databinding.RecyclerListRowTaskHeaderBinding
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.model.TaskType
 import com.saboon.project_2511sch.util.ModelColors
 import com.saboon.project_2511sch.util.toFormattedString
 

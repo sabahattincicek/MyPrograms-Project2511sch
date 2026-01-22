@@ -6,6 +6,12 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 sealed class Task: BaseModel, Parcelable {
 
+    abstract val programTableId: String
+    abstract val courseId: String
+    abstract val title: String
+    abstract val description: String
+    abstract val remindBefore: Int
+
     @Parcelize
     data class Lesson(
         override val id: String,
@@ -17,16 +23,16 @@ sealed class Task: BaseModel, Parcelable {
         override val deletedAt: Long = 0L,
         override val appVersionAtCreation: String,
 
-        val programTableId: String,
-        val courseId: String,
+        override val programTableId: String,
+        override val courseId: String,
+        override val title: String,
+        override val description: String,
+        override val remindBefore: Int,
 
-        val title: String,
-        val description: String,
         val date: Long,
         val recurrenceRule: String,
         val timeStart: Long,
         val timeEnd: Long,
-        val remindBefore: Int,
         val place: String,
 
     ): Parcelable, Task()
@@ -42,15 +48,15 @@ sealed class Task: BaseModel, Parcelable {
         override val deletedAt: Long = 0L,
         override val appVersionAtCreation: String,
 
-        val programTableId: String,
-        val courseId: String,
+        override val programTableId: String,
+        override val courseId: String,
+        override val title: String,
+        override val description: String,
+        override val remindBefore: Int,
 
-        val title: String,
-        val description: String,
         val date: Long,
         val timeStart: Long,
         val timeEnd: Long,
-        val remindBefore: Int,
         val place: String,
         val targetScore: Int?,
         val achievedScore: Int?,
@@ -68,13 +74,13 @@ sealed class Task: BaseModel, Parcelable {
         override val deletedAt: Long = 0L,
         override val appVersionAtCreation: String,
 
-        val programTableId: String,
-        val courseId: String,
+        override val programTableId: String,
+        override val courseId: String,
+        override val title: String,
+        override val description: String,
+        override val remindBefore: Int,
 
-        val title: String,
-        val description: String,
         val dueDate: Long,
         val dueTime: Long,
-        val remindBefore: Int,
     ): Parcelable, Task()
 }
