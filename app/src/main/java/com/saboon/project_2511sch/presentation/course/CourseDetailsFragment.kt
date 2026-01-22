@@ -145,10 +145,16 @@ class CourseDetailsFragment : Fragment() {
 
 
         binding.btnAbsenceDecrease.setOnClickListener {
-            viewModelCourse.decrementAbsence(course)
+            val decrementedCourse = course.copy(
+                absence = course.absence + 1
+            )
+            viewModelCourse.updateCourse(decrementedCourse)
         }
         binding.btnAbsenceIncrease.setOnClickListener {
-            viewModelCourse.incrementAbsence(course)
+            val incrementedCourse = course.copy(
+                    absence = course.absence - 1
+                    )
+            viewModelCourse.updateCourse(incrementedCourse)
         }
     }
 

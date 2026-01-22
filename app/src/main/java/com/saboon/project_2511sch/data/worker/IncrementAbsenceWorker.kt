@@ -5,8 +5,6 @@ import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.saboon.project_2511sch.domain.usecase.course.GetCourseByIdUseCase
-import com.saboon.project_2511sch.domain.usecase.course.IncrementAbsenceUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject

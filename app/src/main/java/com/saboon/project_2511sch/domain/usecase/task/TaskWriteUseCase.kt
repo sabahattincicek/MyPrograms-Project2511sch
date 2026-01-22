@@ -5,10 +5,13 @@ import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.util.Resource
 import javax.inject.Inject
 
-class UpdateTaskUseCase @Inject constructor(
+class TaskWriteUseCase @Inject constructor(
     private val taskRepository: ITaskRepository
 ) {
-    suspend operator fun invoke(task: Task): Resource<Task>{
+    suspend fun insert(task: Task): Resource<Task>{
+        return taskRepository.insertTask(task)
+    }
+    suspend fun update(task: Task): Resource<Task>{
         val updatedTask = when(task) {
             is Task.Exam -> task.copy(
                 version = task.version + 1,
@@ -24,5 +27,8 @@ class UpdateTaskUseCase @Inject constructor(
             )
         }
         return taskRepository.updateTask(updatedTask)
+    }
+    suspend fun delete(task: Task): Resource<Task>{
+        return taskRepository.deleteTask(task)
     }
 }

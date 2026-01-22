@@ -3,12 +3,13 @@ package com.saboon.project_2511sch.domain.usecase.task
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.util.Resource
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class DeleteTaskUseCase @Inject constructor(
+class TaskReadUseCase @Inject constructor(
     private val taskRepository: ITaskRepository
 ) {
-    suspend operator fun invoke(task: Task): Resource<Task>{
-        return taskRepository.deleteTask(task)
+    fun getAllByProgramTableIds(ids: List<String>): Flow<Resource<List<Task>>>{
+        return taskRepository.getAllTasksByProgramTableIds(ids)
     }
 }

@@ -4,11 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.ProgramTable
-import com.saboon.project_2511sch.domain.usecase.programtable.GetActiveProgramTableListUseCase
-import com.saboon.project_2511sch.domain.usecase.programtable.GetAllProgramTablesUseCase
+import com.saboon.project_2511sch.domain.usecase.programtable.ProgramTableReadUseCase
 import com.saboon.project_2511sch.domain.usecase.programtable.ProgramTableWriteUseCase
-import com.saboon.project_2511sch.domain.usecase.programtable.SetProgramTableActiveUseCase
-import com.saboon.project_2511sch.domain.usecase.programtable.SetProgramTableInActiveUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -21,10 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewModelProgramTable @Inject constructor(
     private val programTableWriteUseCase: ProgramTableWriteUseCase,
-    private val getAllProgramTablesUseCase: GetAllProgramTablesUseCase,
-    private val getActiveProgramTableListUseCase: GetActiveProgramTableListUseCase,
-    private val setProgramTableActiveUseCase: SetProgramTableActiveUseCase,
-    private val setProgramTableInActiveUseCase: SetProgramTableInActiveUseCase
+    private val programTableReadUseCase: ProgramTableReadUseCase,
 ): ViewModel() {
 
 
@@ -37,16 +31,10 @@ class ViewModelProgramTable @Inject constructor(
     val updateProgramTableEvent = _updateProgramTableEvent.receiveAsFlow()
     private val _deleteProgramTableEvent = Channel<Resource<ProgramTable>>()
     val deleteProgramTableEvent = _deleteProgramTableEvent.receiveAsFlow()
-
-    private var _setProgramTableActiveEvent = MutableStateFlow<Resource<Unit>>(Resource.Idle())
-    val setProgramTableActiveEvent = _setProgramTableActiveEvent.asStateFlow()
-
-    private var _setProgramTableInActiveEvent = MutableStateFlow<Resource<Unit>>(Resource.Idle())
-    val setProgramTableInActiveEvent = _setProgramTableInActiveEvent.asStateFlow()
-
-
     private val _programTablesState = MutableStateFlow<Resource<List<ProgramTable>>>(Resource.Idle())
     val programTablesState = _programTablesState.asStateFlow()
+
+
     fun insertNewProgramTable(programTable: ProgramTable){
         viewModelScope.launch {
             try{
@@ -100,7 +88,7 @@ class ViewModelProgramTable @Inject constructor(
             try {
                 _programTablesState.value = Resource.Loading()
                 Log.d(TAG, "Fetching all program tables.")
-                getAllProgramTablesUseCase.invoke().collect { resource ->
+                programTableReadUseCase.getAll().collect { resource ->
                     _programTablesState.value = resource
                     Log.d(TAG, "Received program tables resource: $resource")                }
             } catch (e: Exception) {
@@ -114,35 +102,11 @@ class ViewModelProgramTable @Inject constructor(
         viewModelScope.launch {
             try {
                 _programTablesState.value = Resource.Loading()
-                getActiveProgramTableListUseCase.invoke().collect { resource ->
+                programTableReadUseCase.getAllActive().collect { resource ->
                     _programTablesState.value = resource
                 }
             }catch (e: Exception){
                 _programTablesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-            }
-        }
-    }
-
-    fun setProgramTableActive(programTable: ProgramTable){
-        viewModelScope.launch {
-            try {
-                _setProgramTableActiveEvent.value = Resource.Loading()
-                val result = setProgramTableActiveUseCase.invoke(programTable)
-                _setProgramTableActiveEvent.value = result
-            }catch (e: Exception){
-                _setProgramTableActiveEvent.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-            }
-        }
-    }
-
-    fun setProgramTableInActive(programTable: ProgramTable){
-        viewModelScope.launch {
-            try {
-                _setProgramTableInActiveEvent.value = Resource.Loading()
-                val result = setProgramTableInActiveUseCase.invoke(programTable)
-                _setProgramTableInActiveEvent.value = result
-            }catch (e: Exception){
-                _setProgramTableInActiveEvent.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
             }
         }
     }

@@ -6,10 +6,16 @@ import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetAllFilesUseCase @Inject constructor(
+class FileReadUseCase @Inject constructor(
     private val fileRepository: IFileRepository
 ) {
-    operator fun invoke(): Flow<Resource<List<File>>>{
+    fun getAllByCourseId(id: String): Flow<Resource<List<File>>>{
+        return fileRepository.getFilesByCourseId(id)
+    }
+    fun getAllByProgramTableId(id: String): Flow<Resource<List<File>>>{
+        return fileRepository.getFilesByProgramTableId(id)
+    }
+    fun getAll(): Flow<Resource<List<File>>>{
         return fileRepository.getAllFiles()
     }
 }

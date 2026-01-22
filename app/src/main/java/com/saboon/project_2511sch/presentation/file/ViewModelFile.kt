@@ -5,14 +5,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.File
-import com.saboon.project_2511sch.domain.usecase.file.DeleteFileUseCase
-import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesByCourseIdUseCase
-import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesByProgramTableIdUseCase
-import com.saboon.project_2511sch.domain.usecase.file.GetAllFilesUseCase
-import com.saboon.project_2511sch.domain.usecase.file.InsertNewLinkFileUseCase
-import com.saboon.project_2511sch.domain.usecase.file.InsertNewFileUseCase
-import com.saboon.project_2511sch.domain.usecase.file.InsertNewNoteUseCase
-import com.saboon.project_2511sch.domain.usecase.file.UpdateFileUseCase
+import com.saboon.project_2511sch.domain.usecase.file.FileReadUseCase
+import com.saboon.project_2511sch.domain.usecase.file.FileWriteUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -24,14 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewModelFile @Inject constructor(
-    private val deleteFileUseCase: DeleteFileUseCase,
-    private val updateFileUseCase: UpdateFileUseCase,
-    private val insertNewFileUseCase: InsertNewFileUseCase,
-    private val insertNewNoteUseCase: InsertNewNoteUseCase,
-    private val insertNewLinkUseCase: InsertNewLinkFileUseCase,
-    private val getAllFilesByCourseIdUseCase: GetAllFilesByCourseIdUseCase,
-    private val getAllFilesByProgramTableIdUseCase: GetAllFilesByProgramTableIdUseCase,
-    private val getAllFilesUseCase: GetAllFilesUseCase,
+    private val fileWriteUseCase: FileWriteUseCase,
+    private val fileReadUseCase: FileReadUseCase
 ) : ViewModel() {
 
     private val TAG = "ViewModelFile"
@@ -60,7 +48,7 @@ class ViewModelFile @Inject constructor(
             try {
                 Log.d(TAG, "insertNewFile: Sending Loading state.")
                 _insertNewFileEvent.send(Resource.Loading())
-                val result = insertNewFileUseCase.invoke(file, uri)
+                val result = fileWriteUseCase.insertFile(file, uri)
                 Log.i(TAG, "insertNewFile: Received result from UseCase: $result")
                 _insertNewFileEvent.send(result)
             } catch (e: Exception) {
@@ -69,36 +57,11 @@ class ViewModelFile @Inject constructor(
             }
         }
     }
-
-    fun deleteFile(file: File) {
-        viewModelScope.launch {
-            try {
-                _deleteFileEvent.send(Resource.Loading())
-                val result = deleteFileUseCase.invoke(file)
-                _deleteFileEvent.send(result)
-            }catch (e: Exception){
-                _deleteFileEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
-            }
-        }
-    }
-
-    fun updateFile(file: File){
-        viewModelScope.launch {
-            try {
-                _updateFileEvent.send(Resource.Loading())
-                val result = updateFileUseCase.invoke(file)
-                _updateFileEvent.send(result)
-            }catch (e: Exception){
-                _updateFileEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
-            }
-        }
-    }
-
     fun insertNewNote(note: File){
         viewModelScope.launch {
             try {
                 _insertNewNoteEvent.send(Resource.Loading())
-                val result = insertNewNoteUseCase.invoke(note)
+                val result = fileWriteUseCase.insertNote(note)
                 _insertNewNoteEvent.send(result)
             }catch (e: Exception){
                 _insertNewNoteEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
@@ -110,7 +73,7 @@ class ViewModelFile @Inject constructor(
         viewModelScope.launch {
             try {
                 _insertNewLinkEvent.send(Resource.Loading())
-                val result = insertNewLinkUseCase.invoke(link)
+                val result = fileWriteUseCase.insertLink(link)
                 _insertNewLinkEvent.send(result)
             }catch (e: Exception){
                 _insertNewLinkEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
@@ -118,13 +81,39 @@ class ViewModelFile @Inject constructor(
         }
     }
 
+    fun deleteFile(file: File) {
+        viewModelScope.launch {
+            try {
+                _deleteFileEvent.send(Resource.Loading())
+                val result = fileWriteUseCase.delete(file)
+                _deleteFileEvent.send(result)
+            }catch (e: Exception){
+                _deleteFileEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+            }
+        }
+    }
+
+    fun updateFile(file: File){
+        viewModelScope.launch {
+            try {
+                _updateFileEvent.send(Resource.Loading())
+                val result = fileWriteUseCase.update(file)
+                _updateFileEvent.send(result)
+            }catch (e: Exception){
+                _updateFileEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+            }
+        }
+    }
+
+
+
     fun getAllFilesByCourseId(id: String) {
         Log.d(TAG, "getAllFilesByCourseId: called with course ID: $id")
         viewModelScope.launch {
             try {
                 Log.d(TAG, "getAllFilesByCourseId: Setting Loading state.")
                 _filesState.value = Resource.Loading()
-                getAllFilesByCourseIdUseCase.invoke(id).collect { resource ->
+                fileReadUseCase.getAllByCourseId(id).collect { resource ->
                     Log.d(TAG, "getAllFilesByCourseId: Collected new resource for filesState: $resource")
                     _filesState.value = resource
                 }
@@ -139,7 +128,7 @@ class ViewModelFile @Inject constructor(
         viewModelScope.launch {
             try {
                 _filesState.value = Resource.Loading()
-                val result = getAllFilesByProgramTableIdUseCase.invoke(id).collect { resource ->
+                val result = fileReadUseCase.getAllByProgramTableId(id).collect { resource ->
                     _filesState.value = resource
                 }
             }catch (e: Exception){
@@ -152,7 +141,7 @@ class ViewModelFile @Inject constructor(
         viewModelScope.launch {
             try {
                 _filesState.value = Resource.Loading()
-                val result = getAllFilesUseCase.invoke().collect { resource ->
+                val result = fileReadUseCase.getAll().collect { resource ->
                     _filesState.value = resource
                 }
             }catch (e: Exception){

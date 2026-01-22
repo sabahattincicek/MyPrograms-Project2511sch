@@ -5,14 +5,20 @@ import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.util.Resource
 import javax.inject.Inject
 
-class UpdateCourseUseCase @Inject constructor(
+class CourseWriteUseCase @Inject constructor(
     private val courseRepository: ICourseRepository
 ) {
-    suspend operator fun invoke(course: Course): Resource<Course>{
+    suspend fun insert(course: Course): Resource<Course>{
+        return courseRepository.insertCourse(course)
+    }
+    suspend fun update(course: Course): Resource<Course>{
         val updatedCourse = course.copy(
             version = course.version + 1,
             updatedAt = System.currentTimeMillis()
         )
         return courseRepository.updateCourse(updatedCourse)
+    }
+    suspend fun delete(course: Course): Resource<Course>{
+        return courseRepository.deleteCourse(course)
     }
 }
