@@ -32,8 +32,6 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
 
     private val tag = "HomeFragment"
-
-    private lateinit var programTable: ProgramTable
     private var activeProgramTablesList = mutableListOf<ProgramTable>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +60,8 @@ class HomeFragment : Fragment() {
         viewModelProgramTable.getActiveProgramTableList()
 
         binding.cpProgramTable.setOnClickListener {
-            Log.d(tag, "cpProgramTable clicked. Current list size: ${activeProgramTablesList.size}")
+            Log.d(tag, "cpProgramTable clicked.")
+            binding.cpProgramTable.isChecked = !binding.cpProgramTable.isChecked
             val dialog = DialogFragmentProgramTableSelector()
             dialog.show(childFragmentManager, "ProgramTableSelectorDialog")
         }
@@ -111,19 +110,28 @@ class HomeFragment : Fragment() {
                                 Log.i(tag, "Requesting display items for active program tables.")
                                 viewModelHome.getDisplayItems(activeProgramTablesList)
 
-                                if (activeProgramTablesList.isNotEmpty()){
-                                    binding.cpProgramTable.isChecked = true
-                                    if (activeProgramTablesList.size == 1){
-                                        binding.cpProgramTable.text = activeProgramTablesList.first().title
-                                        Log.d(tag, "Setting single table title: ${activeProgramTablesList.first().title}")
-                                    }else if (activeProgramTablesList.size > 1){
-                                        binding.cpProgramTable.text = "${activeProgramTablesList.first().title} and more"
-                                        Log.d(tag, "Setting multi-table title: ${activeProgramTablesList.first().title} and more")
+                                viewModelProgramTable.getAllProgramTablesCount { resource ->
+                                    when(resource) {
+                                        is Resource.Error<*> -> {}
+                                        is Resource.Idle<*> -> {}
+                                        is Resource.Loading<*> -> {}
+                                        is Resource.Success<*> -> {
+                                            val count = resource.data ?: 0
+                                            if (activeProgramTablesList.size == count){ //filter is not applied got all program tables
+                                                binding.cpProgramTable.isChecked = false
+                                                binding.cpProgramTable.text = getString(R.string.program_table)
+                                            }else{ //filter applied got just require program tables
+                                                binding.cpProgramTable.isChecked = true
+                                                if (activeProgramTablesList.size == 1){
+                                                    binding.cpProgramTable.text = activeProgramTablesList.first().title
+                                                    Log.d(tag, "Setting single table title: ${activeProgramTablesList.first().title}")
+                                                }else if (activeProgramTablesList.size > 1){
+                                                    binding.cpProgramTable.text = "${activeProgramTablesList.first().title} ${getString(R.string.and_more)}"
+                                                    Log.d(tag, "Setting multi-table title: ${activeProgramTablesList.first().title} and more")
+                                                }
+                                            }
+                                        }
                                     }
-                                }else{
-                                    Log.w(tag, "activeProgramTablesList is empty.")
-                                    binding.cpProgramTable.isChecked = false
-                                    binding.cpProgramTable.text = getString(R.string.program_table)
                                 }
                             }
                         }

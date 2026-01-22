@@ -191,6 +191,7 @@
     <string name="ok">OK</string>
     <string name="select_program_tables">Select Program Tables</string>
     <string name="select_program_tables_to_show_in_home">Select program tables to show in home</string>
+    <string name="and_more">and more</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
