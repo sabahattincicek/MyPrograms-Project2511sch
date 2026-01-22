@@ -16,7 +16,7 @@ import kotlin.collections.map
 class ProgramTableRepositoryImp @Inject constructor(
     private val programTableDao: ProgramTableDao
 ): IProgramTableRepository {
-    override suspend fun insertProgramTable(programTable: ProgramTable): Resource<ProgramTable> {
+    override suspend fun insert(programTable: ProgramTable): Resource<ProgramTable> {
         try{
             programTableDao.insert(programTable.toEntity())
             return Resource.Success(programTable)
@@ -25,7 +25,7 @@ class ProgramTableRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun updateProgramTable(programTable: ProgramTable): Resource<Unit> {
+    override suspend fun update(programTable: ProgramTable): Resource<Unit> {
         try {
             programTableDao.update(programTable.toEntity())
             return Resource.Success(Unit)
@@ -34,7 +34,7 @@ class ProgramTableRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun deleteProgramTable(programTable: ProgramTable): Resource<ProgramTable> {
+    override suspend fun delete(programTable: ProgramTable): Resource<ProgramTable> {
         try {
             programTableDao.delete(programTable.toEntity())
             return Resource.Success(programTable)
@@ -43,8 +43,8 @@ class ProgramTableRepositoryImp @Inject constructor(
         }
     }
 
-    override fun getAllProgramTableList(): Flow<Resource<List<ProgramTable>>> {
-        return programTableDao.getAllProgramTables()
+    override fun getAll(): Flow<Resource<List<ProgramTable>>> {
+        return programTableDao.getAll()
             .map<List<ProgramTableEntity>, Resource<List<ProgramTable>>>{ programTableEntities ->
                 Resource.Success(programTableEntities.map{it.toDomain()})
             }
@@ -53,8 +53,8 @@ class ProgramTableRepositoryImp @Inject constructor(
             }
     }
 
-    override fun getActiveProgramTableList(): Flow<Resource<List<ProgramTable>>>{
-        return programTableDao.getActiveProgramTableList()
+    override fun getAllActive(): Flow<Resource<List<ProgramTable>>>{
+        return programTableDao.getAllActive()
             .map<List<ProgramTableEntity>, Resource<List<ProgramTable>>>{ entityList ->
                 Resource.Success(entityList.map{it.toDomain()})
             }
@@ -63,23 +63,21 @@ class ProgramTableRepositoryImp @Inject constructor(
             }
     }
 
-    override suspend fun setProgramTableActive(programTable: ProgramTable): Resource<Unit> {
-        return try {
-            programTableDao.setActiveById(programTable.id)
-            Resource.Success(Unit)
+    override suspend fun getAllCount(): Resource<Int> {
+        try {
+            val count = programTableDao.getAllCount()
+            return Resource.Success(count)
         }catch (e: Exception){
-            Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
+            return Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
         }
     }
 
-    override suspend fun setProgramTableInActive(programTable: ProgramTable): Resource<Unit> {
-        return try {
-            programTableDao.setInActiveById(programTable.id)
-            Resource.Success(Unit)
+    override suspend fun getAllActiveCount(): Resource<Int> {
+        try {
+            val count = programTableDao.getAllActiveCount()
+            return Resource.Success(count)
         }catch (e: Exception){
-            Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
+            return Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
         }
     }
-
-
 }

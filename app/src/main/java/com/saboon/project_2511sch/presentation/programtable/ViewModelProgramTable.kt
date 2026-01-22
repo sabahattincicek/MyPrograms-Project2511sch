@@ -113,4 +113,25 @@ class ViewModelProgramTable @Inject constructor(
         }
     }
 
+    fun getAllProgramTablesCount(onResult: (Resource<Int>) -> Unit){
+        viewModelScope.launch {
+            try {
+                val result = programTableReadUseCase.getAllCount()
+                onResult(result)
+            }catch (e: Exception){
+                onResult(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+            }
+        }
+    }
+
+    fun getAllActiveProgramTablesCount(onResult: (Resource<Int>) -> Unit){
+        viewModelScope.launch {
+            try {
+                val result = programTableReadUseCase.getAllActiveCount()
+                onResult(result)
+            }catch (e: Exception){
+                onResult(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+            }
+        }
+    }
 }

@@ -21,22 +21,15 @@ interface ProgramTableDao {
     @Delete
     suspend fun delete(programTableEntity: ProgramTableEntity)
 
-    @Query("SELECT * FROM program_tables WHERE is_active = 1")
-    fun getActiveProgramTable(): Flow<ProgramTableEntity?>
-
     @Query("SELECT * FROM program_tables")
-    fun getAllProgramTables(): Flow<List<ProgramTableEntity>>
+    fun getAll(): Flow<List<ProgramTableEntity>>
 
     @Query("SELECT * FROM program_tables WHERE is_active = 1")
-    fun getActiveProgramTableList(): Flow<List<ProgramTableEntity>>
+    fun getAllActive(): Flow<List<ProgramTableEntity>>
 
-    @Query("UPDATE program_tables SET is_active = 0")
-    suspend fun setAllToInactive()
+    @Query("SELECT COUNT(*) FROM program_tables")
+    suspend fun getAllCount(): Int
 
-    @Query("UPDATE program_tables SET is_active = 1 WHERE id = :id")
-    suspend fun setActiveById(id: String)
-
-    @Query("UPDATE program_tables SET is_active = 0 WHERE id = :id")
-    suspend fun setInActiveById(id: String)
-
+    @Query("SELECT COUNT(*) FROM program_tables WHERE is_active = 1")
+    suspend fun getAllActiveCount(): Int
 }

@@ -10,9 +10,15 @@ class ProgramTableReadUseCase @Inject constructor(
     private val programTableRepository: IProgramTableRepository
 ) {
     fun getAll(): Flow<Resource<List<ProgramTable>>> {
-        return programTableRepository.getAllProgramTableList()
+        return programTableRepository.getAll()
     }
     fun getAllActive(): Flow<Resource<List<ProgramTable>>> {
-        return programTableRepository.getActiveProgramTableList()
+        return programTableRepository.getAllActive()
+    }
+    suspend fun getAllCount(): Resource<Int>{
+        return programTableRepository.getAllCount()
+    }
+    suspend fun getAllActiveCount(): Resource<Int>{
+        return programTableRepository.getAllActiveCount()
     }
 }

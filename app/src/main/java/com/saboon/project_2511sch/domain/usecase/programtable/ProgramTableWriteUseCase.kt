@@ -9,7 +9,7 @@ class ProgramTableWriteUseCase @Inject constructor(
     private val programTableRepository: IProgramTableRepository
 ) {
     suspend fun insert(programTable: ProgramTable): Resource<ProgramTable>{
-        return programTableRepository.insertProgramTable(programTable)
+        return programTableRepository.insert(programTable)
     }
 
     suspend fun update(programTable: ProgramTable): Resource<Unit> {
@@ -17,10 +17,10 @@ class ProgramTableWriteUseCase @Inject constructor(
             version = programTable.version + 1,
             updatedAt = System.currentTimeMillis()
         )
-        return programTableRepository.updateProgramTable(updatedProgramTable)
+        return programTableRepository.update(updatedProgramTable)
     }
 
     suspend fun delete(programTable: ProgramTable): Resource<ProgramTable>{
-        return programTableRepository.deleteProgramTable(programTable)
+        return programTableRepository.delete(programTable)
     }
 }
