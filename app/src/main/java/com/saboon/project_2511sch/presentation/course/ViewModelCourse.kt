@@ -82,4 +82,15 @@ class ViewModelCourse @Inject constructor(
             }
         }
     }
+
+    fun getAllCoursesCount(onResult: (Resource<Int>) -> Unit){
+        viewModelScope.launch {
+            try {
+                val result = courseReadUseCase.getAllCount()
+                onResult(result)
+            }catch (e: Exception){
+                onResult(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+            }
+        }
+    }
 }

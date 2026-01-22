@@ -12,12 +12,12 @@ class CourseAbsenceUseCase @Inject constructor(
         val incrementedCourse = course.copy(
             absence = course.absence + 1
         )
-        return courseRepository.updateCourse(incrementedCourse)
+        return courseRepository.update(incrementedCourse)
     }
     suspend fun decrement(course: Course): Resource<Course>{
         val decrementedCourse = course.copy(
             absence = course.absence - 1
         )
-        return courseRepository.updateCourse(decrementedCourse)
+        return courseRepository.update(decrementedCourse)
     }
 }

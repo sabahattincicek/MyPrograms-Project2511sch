@@ -23,7 +23,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
 
         val activeProgramTableIds = activeProgramTableList.map { it.id }
         return combine(
-            courseRepository.getAllCoursesByProgramTableIds(activeProgramTableIds),
+            courseRepository.getAllByProgramTableIds(activeProgramTableIds),
             taskRepository.getAllTasksByProgramTableIds(activeProgramTableIds)
         ) { coursesResult, tasksResult ->
             if (coursesResult is Resource.Error) {

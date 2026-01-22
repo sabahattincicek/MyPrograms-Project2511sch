@@ -9,16 +9,16 @@ class CourseWriteUseCase @Inject constructor(
     private val courseRepository: ICourseRepository
 ) {
     suspend fun insert(course: Course): Resource<Course>{
-        return courseRepository.insertCourse(course)
+        return courseRepository.insert(course)
     }
     suspend fun update(course: Course): Resource<Course>{
         val updatedCourse = course.copy(
             version = course.version + 1,
             updatedAt = System.currentTimeMillis()
         )
-        return courseRepository.updateCourse(updatedCourse)
+        return courseRepository.update(updatedCourse)
     }
     suspend fun delete(course: Course): Resource<Course>{
-        return courseRepository.deleteCourse(course)
+        return courseRepository.delete(course)
     }
 }
