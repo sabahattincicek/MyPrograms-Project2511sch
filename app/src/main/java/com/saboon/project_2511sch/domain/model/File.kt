@@ -13,13 +13,13 @@ data class File(
     override val isDeleted: Boolean = false,
     override val deletedAt: Long = 0L,
     override val appVersionAtCreation: String,
+    override val title: String,
+    override val description: String,
 
     val programTableId: String,
     val courseId: String,
     val taskId: String,
 
-    val title: String,
-    val description: String,
     val fileType: String,
     val filePath: String,
     val sizeInBytes: Long,

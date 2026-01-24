@@ -9,4 +9,6 @@ interface BaseModel {
     val isDeleted: Boolean
     val deletedAt: Long
     val appVersionAtCreation: String
+    val title: String
+    val description: String
 }

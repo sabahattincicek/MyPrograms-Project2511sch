@@ -21,7 +21,7 @@
             app:navigationIcon="@drawable/baseline_arrow_back_24"
             app:navigationIconTint="?attr/colorOnSurface"
             android:minHeight="?attr/actionBarSize"
-            app:title="@string/select_program_tables"
+            app:title="@string/select"
             app:subtitle="@string/select_program_tables_to_show_in_home"/>
     </com.google.android.material.appbar.AppBarLayout>
 

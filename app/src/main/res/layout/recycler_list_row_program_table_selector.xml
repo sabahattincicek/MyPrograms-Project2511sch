@@ -11,7 +11,7 @@
     android:layout_height="wrap_content">
 
     <CheckBox
-        android:id="@+id/ckb_program_table"
+        android:id="@+id/ckb_filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -23,17 +23,17 @@
 
 
         <TextView
-            android:id="@+id/tvProgramTableTitle"
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Program Title"
+            android:text="Title"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tvProgramTableDescription"
+            android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Program Description"
+            android:text="Description"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

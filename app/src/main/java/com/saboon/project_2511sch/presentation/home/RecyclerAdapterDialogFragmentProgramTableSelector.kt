@@ -6,22 +6,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.databinding.RecyclerListRowProgramTableSelectorBinding
+import com.saboon.project_2511sch.domain.model.BaseModel
 import com.saboon.project_2511sch.domain.model.ProgramTable
 
-class RecyclerAdapterDialogFragmentProgramTableSelector : ListAdapter<ProgramTable, RecyclerAdapterDialogFragmentProgramTableSelector.DialogFragmentHomeViewHolder>(
+class RecyclerAdapterDialogFragmentProgramTableSelector : ListAdapter<BaseModel, RecyclerAdapterDialogFragmentProgramTableSelector.DialogFragmentHomeViewHolder>(
     DialogFragmentHomeDiffCallback()
 ) {
-
-    var onItemClickListener: ((ProgramTable) -> Unit)? = null
-    var onItemCheckedChangeListener: ((Boolean, ProgramTable) -> Unit)? = null
+    var onItemCheckedChangeListener: ((Boolean, BaseModel) -> Unit)? = null
 
     inner class DialogFragmentHomeViewHolder(private val binding: RecyclerListRowProgramTableSelectorBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ProgramTable){
-            binding.tvProgramTableTitle.text = item.title
-            binding.tvProgramTableDescription.text = item.description
-            binding.ckbProgramTable.setOnCheckedChangeListener(null)
-            binding.ckbProgramTable.isChecked = item.isActive
-            binding.ckbProgramTable.setOnCheckedChangeListener { buttonView, isChecked ->
+        fun bind(item: BaseModel){
+            binding.tvTitle.text = item.title
+            binding.tvDescription.text = item.description
+            binding.ckbFilter.setOnCheckedChangeListener(null)
+            binding.ckbFilter.isChecked = item.isActive
+            binding.ckbFilter.setOnCheckedChangeListener { buttonView, isChecked ->
                 onItemCheckedChangeListener?.invoke(isChecked, item)
             }
         }
@@ -40,17 +39,17 @@ class RecyclerAdapterDialogFragmentProgramTableSelector : ListAdapter<ProgramTab
         holder.bind(item)
     }
 
-    open class DialogFragmentHomeDiffCallback: DiffUtil.ItemCallback<ProgramTable>() {
+    open class DialogFragmentHomeDiffCallback: DiffUtil.ItemCallback<BaseModel>() {
         override fun areItemsTheSame(
-            oldItem: ProgramTable,
-            newItem: ProgramTable
+            oldItem: BaseModel,
+            newItem: BaseModel
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: ProgramTable,
-            newItem: ProgramTable
+            oldItem: BaseModel,
+            newItem: BaseModel
         ): Boolean {
             return oldItem == newItem
         }

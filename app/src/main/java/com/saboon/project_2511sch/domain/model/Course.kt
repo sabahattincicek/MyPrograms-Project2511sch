@@ -13,11 +13,11 @@ data class Course(
     override val isDeleted: Boolean = false,
     override val deletedAt: Long = 0L,
     override val appVersionAtCreation: String,
+    override val title: String,
+    override val description: String,
 
     val programTableId: String,
 
-    val title: String,
-    val description: String,
     val people: String,
     val color: String,
     val absence: Int = 0,

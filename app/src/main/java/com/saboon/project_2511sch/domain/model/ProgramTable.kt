@@ -14,8 +14,8 @@ data class ProgramTable(
     override val isDeleted: Boolean = false,
     override val deletedAt: Long = 0L,
     override val appVersionAtCreation: String,
+    override val title: String,
+    override val description: String,
 
-    val title: String,
-    val description: String,
     val color: String,
     ): Parcelable, BaseModel

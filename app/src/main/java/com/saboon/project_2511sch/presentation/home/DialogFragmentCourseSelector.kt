@@ -12,22 +12,23 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentHomeFilterSelectorBinding
-import com.saboon.project_2511sch.domain.model.ProgramTable
-import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
+import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 @AndroidEntryPoint
-class DialogFragmentProgramTableSelector: DialogFragment() {
-    private val tag = "DialogFragmentProgramTableSelector"
+class DialogFragmentCourseSelector: DialogFragment() {
+    private val tag = "DialogFragmentCourseSelector"
 
-    private var _binding: DialogFragmentHomeFilterSelectorBinding? = null
+    private var _binding: DialogFragmentHomeFilterSelectorBinding ?= null
     private val binding get() = _binding!!
 
     private lateinit var recyclerAdapterDialogFragmentProgramTableSelector: RecyclerAdapterDialogFragmentProgramTableSelector
 
-    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
+    private val viewModelCourse: ViewModelCourse by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,21 +52,24 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
         binding.topAppBar.setNavigationOnClickListener {
             dismiss()
         }
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
-
     private fun setupRecyclerAdapter(){
         recyclerAdapterDialogFragmentProgramTableSelector = RecyclerAdapterDialogFragmentProgramTableSelector()
+        recyclerAdapterDialogFragmentProgramTableSelector.onItemClickListener = { programTable ->
+
+        }
         recyclerAdapterDialogFragmentProgramTableSelector.onItemCheckedChangeListener = { isChecked, baseModel ->
-            if (baseModel is ProgramTable){
-                val updatedProgramTable = baseModel.copy(
+            if (baseModel is Course){
+                val updatedCourse = baseModel.copy(
                     isActive = isChecked
                 )
-                viewModelProgramTable.updateProgramTable(updatedProgramTable)
+                viewModelCourse.updateCourse(updatedCourse)
             }
         }
         binding.programRecyclerView.apply {
@@ -77,7 +81,7 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
     private fun observeProgramTablesState(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.programTablesState.collect { resource ->
+                viewModelCourse.coursesState.collect { resource ->
                     when (resource) {
                         is Resource.Error<*> -> {}
                         is Resource.Idle<*> -> {}
@@ -92,4 +96,5 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
             }
         }
     }
+
 }

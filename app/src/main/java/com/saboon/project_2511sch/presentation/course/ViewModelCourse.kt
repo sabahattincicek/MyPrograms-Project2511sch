@@ -70,6 +70,19 @@ class ViewModelCourse @Inject constructor(
         }
     }
 
+    fun getAllCourse(){
+        viewModelScope.launch {
+            try {
+                _coursesState.value = Resource.Loading()
+                courseReadUseCase.getAll().collect { resource ->
+                    _coursesState.value = resource
+                }
+            }catch (e: Exception){
+                _coursesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+            }
+        }
+    }
+
     fun getAllCoursesByProgramTableId(id: String){
         viewModelScope.launch {
             try {

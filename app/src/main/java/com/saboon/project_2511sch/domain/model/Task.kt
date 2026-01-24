@@ -8,8 +8,6 @@ sealed class Task: BaseModel, Parcelable {
 
     abstract val programTableId: String
     abstract val courseId: String
-    abstract val title: String
-    abstract val description: String
     abstract val remindBefore: Int
 
     @Parcelize
@@ -22,11 +20,11 @@ sealed class Task: BaseModel, Parcelable {
         override val isDeleted: Boolean = false,
         override val deletedAt: Long = 0L,
         override val appVersionAtCreation: String,
+        override val title: String,
+        override val description: String,
 
         override val programTableId: String,
         override val courseId: String,
-        override val title: String,
-        override val description: String,
         override val remindBefore: Int,
 
         val date: Long,
@@ -47,11 +45,11 @@ sealed class Task: BaseModel, Parcelable {
         override val isDeleted: Boolean = false,
         override val deletedAt: Long = 0L,
         override val appVersionAtCreation: String,
+        override val title: String,
+        override val description: String,
 
         override val programTableId: String,
         override val courseId: String,
-        override val title: String,
-        override val description: String,
         override val remindBefore: Int,
 
         val date: Long,
@@ -73,11 +71,11 @@ sealed class Task: BaseModel, Parcelable {
         override val isDeleted: Boolean = false,
         override val deletedAt: Long = 0L,
         override val appVersionAtCreation: String,
+        override val title: String,
+        override val description: String,
 
         override val programTableId: String,
         override val courseId: String,
-        override val title: String,
-        override val description: String,
         override val remindBefore: Int,
 
         val dueDate: Long,

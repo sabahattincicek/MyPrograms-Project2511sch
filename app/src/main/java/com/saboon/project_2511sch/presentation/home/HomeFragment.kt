@@ -67,6 +67,9 @@ class HomeFragment : Fragment() {
         }
         binding.cpCourse.setOnClickListener {
             Log.d(tag, "cpCourse clicked.")
+            binding.cpCourse.isChecked = !binding.cpCourse.isChecked
+            val dialog = DialogFragmentCourseSelector()
+            dialog.show(childFragmentManager, "CourseSelectorDialog")
         }
         binding.cpLesson.setOnCheckedChangeListener { _, isChecked ->
             Log.d(tag, "cpLesson checked state changed: $isChecked")
@@ -139,6 +142,10 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun observeActiveCoursesState(){
+
     }
 
     private fun observeHomeDisplayItemsState() {
