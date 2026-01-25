@@ -4,6 +4,8 @@ import java.util.UUID
 
 object IdGenerator {
 
+    // TODO: kelimeler arasinda bosluk oldugunda - ile degistir
+
     fun generateUserId(userName: String = "userName"): String{
         val dateMillis = System.currentTimeMillis().toString()
         val date = System.currentTimeMillis().toFormattedString("yyyyMMdd_HHmmss")

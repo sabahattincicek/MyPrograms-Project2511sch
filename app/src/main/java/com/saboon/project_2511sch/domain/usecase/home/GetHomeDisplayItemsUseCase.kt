@@ -1,6 +1,7 @@
 package com.saboon.project_2511sch.domain.usecase.home
 
 import android.icu.util.Calendar
+import android.util.Log
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.Task
@@ -20,16 +21,20 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private val taskRepository: ITaskRepository
 ) {
     operator fun invoke(activeProgramTableList: List<ProgramTable>): Flow<Resource<List<HomeDisplayItem>>> {
-
+        Log.d("GetHomeDisplayItemsUC", "invoke: Called with ${activeProgramTableList.size} active tables")
         val activeProgramTableIds = activeProgramTableList.map { it.id }
         return combine(
             courseRepository.getAllByProgramTableIds(activeProgramTableIds),
             taskRepository.getAllTasksByProgramTableIds(activeProgramTableIds)
         ) { coursesResult, tasksResult ->
+            Log.d("GetHomeDisplayItemsUC", "combine: Results received. Courses: ${coursesResult::class.java.simpleName}, Tasks: ${tasksResult::class.java.simpleName}")
+            
             if (coursesResult is Resource.Error) {
+                Log.e("GetHomeDisplayItemsUC", "combine: Course error: ${coursesResult.message}")
                 return@combine Resource.Error(coursesResult.message ?: "Failed to load courses.")
             }
             if (tasksResult is Resource.Error) {
+                Log.e("GetHomeDisplayItemsUC", "combine: Task error: ${tasksResult.message}")
                 return@combine Resource.Error(tasksResult.message ?: "Failed to load tasks.")
             }
 
@@ -37,6 +42,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
             val tasks = (tasksResult as? Resource.Success)?.data ?: emptyList()
 
             val displayItems = generateAndGroupDisplayList(activeProgramTableList, courses, tasks)
+            Log.d("GetHomeDisplayItemsUC", "combine: Success. Generated ${displayItems.size} items")
             Resource.Success(displayItems)
         }
     }
@@ -46,6 +52,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         courses: List<Course>,
         tasks: List<Task>
     ): List<HomeDisplayItem> {
+        Log.d("GetHomeDisplayItemsUC", "generate: Processing ${tasks.size} tasks for ${programTables.size} tables")
         val finalEvents = mutableListOf<HomeDisplayItem.ContentItem>()
 
         val programTableMap = programTables.associateBy { it.id }
@@ -53,25 +60,32 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
 
         val calendar = Calendar.getInstance()
 
-        //find monday of the current week
+        //find which day of the current week
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) // sunday = 1, monday = 2 ...
         //calculate how many days to go back to reach monday
         val daysFromMonday = if (dayOfWeek == Calendar.SUNDAY) 6 else dayOfWeek - Calendar.MONDAY
+
+        //set calendar to monday
         calendar.add(Calendar.DAY_OF_YEAR, -daysFromMonday)
-
         val weekStart = getDayStartMillis(calendar.timeInMillis) //monday 00:00:00
-
         //find sunday of the current week
-        calendar.add(Calendar.DAY_OF_YEAR, 6) //sunday 23:59:59
-        val weekEnd = calendar.timeInMillis
+        calendar.add(Calendar.DAY_OF_YEAR, 6)
+        val weekEnd = getDayEndMillis(calendar.timeInMillis) //sunday 23:59:59.999
 
         tasks.forEach { task ->
             val programTable = programTableMap[task.programTableId]
             val course = courseMap[task.courseId]
+
+            Log.d("GetHomeDisplayItemsUC", "Checking task: ${task.id}, Table: ${task.programTableId}, Course: ${task.courseId}")
+            if (programTable == null) Log.w("GetHomeDisplayItemsUC", "Table not found for task ${task.id}")
+            if (course == null) Log.w("GetHomeDisplayItemsUC", "Course not found for task ${task.id}")
+
             if (programTable != null && course != null) {
                 when(task) {
                     is Task.Lesson -> {
                         val rRule = RecurrenceRule.fromRuleString(task.recurrenceRule)
+                        Log.d("GetHomeDisplayItemsUC", "Lesson Rule: ${task.recurrenceRule}, Task Date: ${task.date}, Week: $weekStart - $weekEnd")
+
                         val fromDate = rRule.dtStart
                         val untilDate = rRule.until
                         var occurrenceDate = task.date
@@ -88,6 +102,11 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                                 )
                             }
                         }else{
+                            //if lesson started in the past, get date to begin of current week
+                            while (occurrenceDate < weekStart && occurrenceDate < untilDate) {
+                                val next = rRule.getNextOccurrence(occurrenceDate) ?: break
+                                occurrenceDate = next
+                            }
                             while (occurrenceDate in weekStart..weekEnd && occurrenceDate in fromDate..untilDate){
                                 finalEvents.add(
                                     HomeDisplayItem.ContentItem(
@@ -102,6 +121,8 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                         }
                     }
                     is Task.Exam -> {
+                        Log.d("GetHomeDisplayItemsUC", "Exam Date: ${task.date}, In Week: ${task.date in weekStart..weekEnd}")
+
                         if (task.date in weekStart..weekEnd) {
                             finalEvents.add(
                                 HomeDisplayItem.ContentItem(
@@ -114,6 +135,8 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                         }
                     }
                     is Task.Homework -> {
+                        Log.d("GetHomeDisplayItemsUC", "Homework Due: ${task.dueDate}, In Week: ${task.dueDate in weekStart..weekEnd}")
+
                         if (task.dueDate in weekStart..weekEnd) {
                             finalEvents.add(
                                 HomeDisplayItem.ContentItem(
@@ -161,6 +184,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
             }
             displayItemsWithHeaders.add(event)
         }
+        Log.d("GetHomeDisplayItemsUC", "generate: Final list size with headers: ${displayItemsWithHeaders.size}")
         return displayItemsWithHeaders
     }
 
@@ -175,4 +199,14 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         return calendar.timeInMillis
     }
 
+    private fun getDayEndMillis(timestamp: Long): Long {
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = timestamp
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+            set(Calendar.MILLISECOND, 999)
+        }
+        return calendar.timeInMillis
+    }
 }
