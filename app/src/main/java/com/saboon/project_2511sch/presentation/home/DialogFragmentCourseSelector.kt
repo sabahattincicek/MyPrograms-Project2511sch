@@ -49,6 +49,7 @@ class DialogFragmentCourseSelector: DialogFragment() {
 
         setupRecyclerAdapter()
         observeProgramTablesState()
+        viewModelCourse.getAllCourse()
         binding.topAppBar.setNavigationOnClickListener {
             dismiss()
         }
@@ -61,9 +62,6 @@ class DialogFragmentCourseSelector: DialogFragment() {
     }
     private fun setupRecyclerAdapter(){
         recyclerAdapterDialogFragmentProgramTableSelector = RecyclerAdapterDialogFragmentProgramTableSelector()
-        recyclerAdapterDialogFragmentProgramTableSelector.onItemClickListener = { programTable ->
-
-        }
         recyclerAdapterDialogFragmentProgramTableSelector.onItemCheckedChangeListener = { isChecked, baseModel ->
             if (baseModel is Course){
                 val updatedCourse = baseModel.copy(
