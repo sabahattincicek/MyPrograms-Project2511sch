@@ -91,6 +91,16 @@ class CourseRepositoryImp @Inject constructor(
             }
     }
 
+    override fun getAllActivesByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>> {
+        return courseDao.getAllActivesByProgramTableIds(ids)
+            .map<List<CourseEntity>, Resource<List<Course>>> { courseEntities ->
+                Resource.Success(courseEntities.map { it.toDomain() })
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
+            }
+    }
+
     override suspend fun getAllCount(): Resource<Int> {
         try {
             val count = courseDao.getAllCount()

@@ -20,7 +20,7 @@ interface ICourseRepository {
 
     fun getAllByProgramTableId(id: String): Flow<Resource<List<Course>>>
     fun getAllByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>>
-
+    fun getAllActivesByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>>
     suspend fun getAllCount(): Resource<Int>
     suspend fun getAllActiveCount(): Resource<Int>
 
