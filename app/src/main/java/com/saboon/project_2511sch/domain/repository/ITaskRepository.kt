@@ -9,6 +9,7 @@ interface ITaskRepository {
     suspend fun updateTask(task: Task): Resource<Task>
     suspend fun deleteTask(task: Task): Resource<Task>
     fun getAllTasksByCourseId(id: String): Flow<Resource<List<Task>>>
+    fun getAllTasksByCourseIds(ids: List<String>): Flow<Resource<List<Task>>>
     fun getAllTaskByProgramTableId(id: String): Flow<Resource<List<Task>>>
     fun getAllTasksByProgramTableIds(ids: List<String>): Flow<Resource<List<Task>>>
 }

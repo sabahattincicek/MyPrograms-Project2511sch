@@ -28,7 +28,7 @@ class ViewModelHome @Inject constructor(
                 _displayItemsState.value = Resource.Loading()
                 Log.d(tag, "getDisplayItems: State set to Loading")
                 
-                getHomeDisplayItemsUseCase.invoke(activeProgramTableList).collect { resource ->
+                getHomeDisplayItemsUseCase.invoke().collect { resource ->
                     Log.d(tag, "getDisplayItems: Resource received: ${resource::class.java.simpleName}")
                     _displayItemsState.value = resource
                 }

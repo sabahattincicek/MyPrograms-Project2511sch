@@ -11,8 +11,11 @@ import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.presentation.home.HomeDisplayItem
 import com.saboon.project_2511sch.util.RecurrenceRule
 import com.saboon.project_2511sch.util.Resource
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetHomeDisplayItemsUseCase @Inject constructor(
@@ -20,31 +23,76 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private val courseRepository: ICourseRepository,
     private val taskRepository: ITaskRepository
 ) {
-    operator fun invoke(activeProgramTableList: List<ProgramTable>): Flow<Resource<List<HomeDisplayItem>>> {
-        Log.d("GetHomeDisplayItemsUC", "invoke: Called with ${activeProgramTableList.size} active tables")
-        val activeProgramTableIds = activeProgramTableList.map { it.id }
-        return combine(
-            courseRepository.getAllByProgramTableIds(activeProgramTableIds),
-            taskRepository.getAllTasksByProgramTableIds(activeProgramTableIds)
-        ) { coursesResult, tasksResult ->
-            Log.d("GetHomeDisplayItemsUC", "combine: Results received. Courses: ${coursesResult::class.java.simpleName}, Tasks: ${tasksResult::class.java.simpleName}")
-            
-            if (coursesResult is Resource.Error) {
-                Log.e("GetHomeDisplayItemsUC", "combine: Course error: ${coursesResult.message}")
-                return@combine Resource.Error(coursesResult.message ?: "Failed to load courses.")
-            }
-            if (tasksResult is Resource.Error) {
-                Log.e("GetHomeDisplayItemsUC", "combine: Task error: ${tasksResult.message}")
-                return@combine Resource.Error(tasksResult.message ?: "Failed to load tasks.")
-            }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    operator fun invoke(): Flow<Resource<List<HomeDisplayItem>>> {
+        return programTableRepository.getAllActive().flatMapLatest { ptResource ->
+            when(ptResource) {
+                is Resource.Error -> flowOf(Resource.Error(ptResource.message ?: "ProgramTables can not loaded"))
+                is Resource.Idle -> flowOf(Resource.Idle())
+                is Resource.Loading -> flowOf(Resource.Loading())
+                is Resource.Success -> {
+                    val activeTables = ptResource.data ?: emptyList()
+                    val tableIds = activeTables.map { it.id }
 
-            val courses = (coursesResult as? Resource.Success)?.data ?: emptyList()
-            val tasks = (tasksResult as? Resource.Success)?.data ?: emptyList()
+                    courseRepository.getAllActivesByProgramTableIds(tableIds).flatMapLatest { courseResource ->
+                        when(courseResource) {
+                            is Resource.Error -> flowOf(Resource.Error(courseResource.message ?: "Courses can not loaded"))
+                            is Resource.Idle -> flowOf(Resource.Idle())
+                            is Resource.Loading -> flowOf(Resource.Loading())
+                            is Resource.Success -> {
+                                val activeCourses = courseResource.data ?: emptyList()
+                                val courseIds = activeCourses.map { it.id }
 
-            val displayItems = generateAndGroupDisplayList(activeProgramTableList, courses, tasks)
-            Log.d("GetHomeDisplayItemsUC", "combine: Success. Generated ${displayItems.size} items")
-            Resource.Success(displayItems)
+                                taskRepository.getAllTasksByCourseIds(courseIds).map { taskResource ->
+                                    when(taskResource) {
+                                        is Resource.Error -> Resource.Error(taskResource.message ?: "Courses can not loaded")
+                                        is Resource.Idle -> Resource.Idle()
+                                        is Resource.Loading -> Resource.Loading()
+                                        is Resource.Success -> {
+                                            val tasks = taskResource.data ?: emptyList()
+                                            val filteredTasks = tasks.filter { task ->
+                                                when(task) {
+                                                    is Task.Lesson -> true
+                                                    is Task.Exam -> true
+                                                    is Task.Homework -> true
+                                                }
+                                            }
+                                            val displayItems = generateAndGroupDisplayList(activeTables, activeCourses, filteredTasks)
+                                            Resource.Success(displayItems)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+//        Log.d("GetHomeDisplayItemsUC", "invoke: Called with ${activeProgramTableList.size} active tables")
+//        val activeProgramTableIds = activeProgramTableList.map { it.id }
+//        return combine(
+//            courseRepository.getAllByProgramTableIds(activeProgramTableIds),
+//            taskRepository.getAllTasksByProgramTableIds(activeProgramTableIds)
+//        ) { coursesResult, tasksResult ->
+//            Log.d("GetHomeDisplayItemsUC", "combine: Results received. Courses: ${coursesResult::class.java.simpleName}, Tasks: ${tasksResult::class.java.simpleName}")
+//
+//            if (coursesResult is Resource.Error) {
+//                Log.e("GetHomeDisplayItemsUC", "combine: Course error: ${coursesResult.message}")
+//                return@combine Resource.Error(coursesResult.message ?: "Failed to load courses.")
+//            }
+//            if (tasksResult is Resource.Error) {
+//                Log.e("GetHomeDisplayItemsUC", "combine: Task error: ${tasksResult.message}")
+//                return@combine Resource.Error(tasksResult.message ?: "Failed to load tasks.")
+//            }
+//
+//            val courses = (coursesResult as? Resource.Success)?.data ?: emptyList()
+//            val tasks = (tasksResult as? Resource.Success)?.data ?: emptyList()
+//
+//            val displayItems = generateAndGroupDisplayList(activeProgramTableList, courses, tasks)
+//            Log.d("GetHomeDisplayItemsUC", "combine: Success. Generated ${displayItems.size} items")
+//            Resource.Success(displayItems)
+//        }
     }
 
     private fun generateAndGroupDisplayList(
