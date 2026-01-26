@@ -7,9 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.databinding.RecyclerListRowProgramTableSelectorBinding
 import com.saboon.project_2511sch.domain.model.BaseModel
-import com.saboon.project_2511sch.domain.model.ProgramTable
 
-class RecyclerAdapterDialogFragmentProgramTableSelector : ListAdapter<BaseModel, RecyclerAdapterDialogFragmentProgramTableSelector.DialogFragmentHomeViewHolder>(
+class RecyclerAdapterDialogFragmentSelector : ListAdapter<BaseModel, RecyclerAdapterDialogFragmentSelector.DialogFragmentHomeViewHolder>(
     DialogFragmentHomeDiffCallback()
 ) {
     var onItemCheckedChangeListener: ((Boolean, BaseModel) -> Unit)? = null

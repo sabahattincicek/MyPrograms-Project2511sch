@@ -26,7 +26,7 @@ class DialogFragmentCourseSelector: DialogFragment() {
     private var _binding: DialogFragmentHomeFilterSelectorBinding ?= null
     private val binding get() = _binding!!
 
-    private lateinit var recyclerAdapterDialogFragmentProgramTableSelector: RecyclerAdapterDialogFragmentProgramTableSelector
+    private lateinit var recyclerAdapterDialogFragmentSelector: RecyclerAdapterDialogFragmentSelector
 
     private val viewModelCourse: ViewModelCourse by viewModels()
 
@@ -61,14 +61,14 @@ class DialogFragmentCourseSelector: DialogFragment() {
         _binding = null
     }
     private fun setupRecyclerAdapter(){
-        recyclerAdapterDialogFragmentProgramTableSelector = RecyclerAdapterDialogFragmentProgramTableSelector()
-        recyclerAdapterDialogFragmentProgramTableSelector.onItemCheckedChangeListener = { isChecked, baseModel ->
+        recyclerAdapterDialogFragmentSelector = RecyclerAdapterDialogFragmentSelector()
+        recyclerAdapterDialogFragmentSelector.onItemCheckedChangeListener = { isChecked, baseModel ->
             if (baseModel is Course){
                 viewModelCourse.activationById(baseModel.id, isChecked)
             }
         }
         binding.programRecyclerView.apply {
-            adapter = recyclerAdapterDialogFragmentProgramTableSelector
+            adapter = recyclerAdapterDialogFragmentSelector
             layoutManager = LinearLayoutManager(context)
         }
     }
@@ -83,7 +83,7 @@ class DialogFragmentCourseSelector: DialogFragment() {
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
                             resource.data?.let {
-                                recyclerAdapterDialogFragmentProgramTableSelector.submitList(resource.data)
+                                recyclerAdapterDialogFragmentSelector.submitList(resource.data)
                             }
                         }
                     }

@@ -26,7 +26,7 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
     private var _binding: DialogFragmentHomeFilterSelectorBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var recyclerAdapterDialogFragmentProgramTableSelector: RecyclerAdapterDialogFragmentProgramTableSelector
+    private lateinit var recyclerAdapterDialogFragmentSelector: RecyclerAdapterDialogFragmentSelector
 
     private val viewModelProgramTable: ViewModelProgramTable by viewModels()
 
@@ -63,15 +63,15 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
     }
 
     private fun setupRecyclerAdapter(){
-        recyclerAdapterDialogFragmentProgramTableSelector = RecyclerAdapterDialogFragmentProgramTableSelector()
-        recyclerAdapterDialogFragmentProgramTableSelector.onItemCheckedChangeListener = { isChecked, baseModel ->
+        recyclerAdapterDialogFragmentSelector = RecyclerAdapterDialogFragmentSelector()
+        recyclerAdapterDialogFragmentSelector.onItemCheckedChangeListener = { isChecked, baseModel ->
             Log.d(tag, "onItemCheckedChangeListener: isChecked=$isChecked, item=$baseModel")
             if (baseModel is ProgramTable){
                 viewModelProgramTable.activationById(baseModel.id, isChecked)
             }
         }
         binding.programRecyclerView.apply {
-            adapter = recyclerAdapterDialogFragmentProgramTableSelector
+            adapter = recyclerAdapterDialogFragmentSelector
             layoutManager = LinearLayoutManager(context)
         }
     }
@@ -93,7 +93,7 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
                         is Resource.Success<*> -> {
                             Log.d(tag, "observeProgramTablesState: Success - Received ${resource.data?.size ?: 0} items")
                             resource.data?.let {
-                                recyclerAdapterDialogFragmentProgramTableSelector.submitList(resource.data)
+                                recyclerAdapterDialogFragmentSelector.submitList(resource.data)
                             }
                         }
                     }
