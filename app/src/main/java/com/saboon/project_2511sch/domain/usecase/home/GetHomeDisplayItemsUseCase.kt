@@ -8,6 +8,7 @@ import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
+import com.saboon.project_2511sch.presentation.home.FilterTask
 import com.saboon.project_2511sch.presentation.home.HomeDisplayItem
 import com.saboon.project_2511sch.util.RecurrenceRule
 import com.saboon.project_2511sch.util.Resource
@@ -24,7 +25,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private val taskRepository: ITaskRepository
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(): Flow<Resource<List<HomeDisplayItem>>> {
+    operator fun invoke(filterTask: FilterTask): Flow<Resource<List<HomeDisplayItem>>> {
         return programTableRepository.getAllActive().flatMapLatest { ptResource ->
             when(ptResource) {
                 is Resource.Error -> flowOf(Resource.Error(ptResource.message ?: "ProgramTables can not loaded"))
@@ -52,9 +53,9 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                                             val tasks = taskResource.data ?: emptyList()
                                             val filteredTasks = tasks.filter { task ->
                                                 when(task) {
-                                                    is Task.Lesson -> true
-                                                    is Task.Exam -> true
-                                                    is Task.Homework -> true
+                                                    is Task.Lesson -> filterTask.lesson
+                                                    is Task.Exam -> filterTask.exam
+                                                    is Task.Homework -> filterTask.homework
                                                 }
                                             }
                                             val displayItems = generateAndGroupDisplayList(activeTables, activeCourses, filteredTasks)

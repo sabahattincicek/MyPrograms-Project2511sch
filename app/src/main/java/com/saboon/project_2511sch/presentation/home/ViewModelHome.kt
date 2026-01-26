@@ -21,13 +21,13 @@ class ViewModelHome @Inject constructor(
     private val _displayItemsState = MutableStateFlow<Resource<List<HomeDisplayItem>>>(Resource.Idle())
     val displayItemsState = _displayItemsState.asStateFlow()
 
-    fun getDisplayItems(){
+    fun getDisplayItems(filterTask: FilterTask){
         viewModelScope.launch {
             try {
                 _displayItemsState.value = Resource.Loading()
                 Log.d(tag, "getDisplayItems: State set to Loading")
                 
-                getHomeDisplayItemsUseCase.invoke().collect { resource ->
+                getHomeDisplayItemsUseCase.invoke(filterTask).collect { resource ->
                     Log.d(tag, "getDisplayItems: Resource received: ${resource::class.java.simpleName}")
                     _displayItemsState.value = resource
                 }

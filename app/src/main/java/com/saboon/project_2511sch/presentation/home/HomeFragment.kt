@@ -29,6 +29,7 @@ class HomeFragment : Fragment() {
     private val viewModelHome: ViewModelHome by viewModels()
     private val viewModelProgramTable: ViewModelProgramTable by viewModels()
     private val viewModelCourse: ViewModelCourse by viewModels()
+    private val filterTask = FilterTask()
 
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
 
@@ -55,7 +56,7 @@ class HomeFragment : Fragment() {
         setupRecyclerAdapter()
         observeHomeDisplayItemsState()
 
-        viewModelHome.getDisplayItems()
+        viewModelHome.getDisplayItems(filterTask)
 
         binding.cpProgramTable.setOnClickListener {
             Log.d(tag, "cpProgramTable clicked.")
@@ -71,12 +72,42 @@ class HomeFragment : Fragment() {
         }
         binding.cpLesson.setOnCheckedChangeListener { _, isChecked ->
             Log.d(tag, "cpLesson checked state changed: $isChecked")
+            if (!binding.cpLesson.isChecked && !binding.cpExam.isChecked && !binding.cpHomework.isChecked){
+                filterTask.lesson = true
+                filterTask.exam = true
+                filterTask.homework = true
+            }else{
+                filterTask.lesson = isChecked
+                filterTask.exam = binding.cpExam.isChecked
+                filterTask.homework = binding.cpHomework.isChecked
+            }
+            viewModelHome.getDisplayItems(filterTask)
         }
         binding.cpExam.setOnCheckedChangeListener { _, isChecked ->
             Log.d(tag, "cpExam checked state changed: $isChecked")
+            if (!binding.cpLesson.isChecked && !binding.cpExam.isChecked && !binding.cpHomework.isChecked){
+                filterTask.lesson = true
+                filterTask.exam = true
+                filterTask.homework = true
+            }else{
+                filterTask.lesson = binding.cpLesson.isChecked
+                filterTask.exam = isChecked
+                filterTask.homework = binding.cpHomework.isChecked
+            }
+            viewModelHome.getDisplayItems(filterTask)
         }
         binding.cpHomework.setOnCheckedChangeListener { _, isChecked ->
             Log.d(tag, "cpHomework checked state changed: $isChecked")
+            if (!binding.cpLesson.isChecked && !binding.cpExam.isChecked && !binding.cpHomework.isChecked){
+                filterTask.lesson = true
+                filterTask.exam = true
+                filterTask.homework = true
+            }else{
+                filterTask.lesson = binding.cpLesson.isChecked
+                filterTask.exam = binding.cpExam.isChecked
+                filterTask.homework = isChecked
+            }
+            viewModelHome.getDisplayItems(filterTask)
         }
     }
 
