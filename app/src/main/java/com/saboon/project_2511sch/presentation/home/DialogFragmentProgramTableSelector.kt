@@ -67,10 +67,7 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
         recyclerAdapterDialogFragmentProgramTableSelector.onItemCheckedChangeListener = { isChecked, baseModel ->
             Log.d(tag, "onItemCheckedChangeListener: isChecked=$isChecked, item=$baseModel")
             if (baseModel is ProgramTable){
-                val updatedProgramTable = baseModel.copy(
-                    isActive = isChecked
-                )
-                viewModelProgramTable.updateProgramTable(updatedProgramTable)
+                viewModelProgramTable.activationById(baseModel.id, isChecked)
             }
         }
         binding.programRecyclerView.apply {

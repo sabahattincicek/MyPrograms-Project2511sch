@@ -83,6 +83,15 @@ class ViewModelProgramTable @Inject constructor(
         }
     }
 
+    fun activationById(id: String, isActive: Boolean){
+        viewModelScope.launch {
+            try {
+                programTableWriteUseCase.activationById(id, isActive)
+            }catch (e: Exception){
+
+            }
+        }
+    }
 
     fun getAllProgramTables(){
         Log.d(TAG, "getAllProgramTables called.")

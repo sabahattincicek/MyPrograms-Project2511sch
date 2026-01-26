@@ -34,6 +34,15 @@ class ProgramTableRepositoryImp @Inject constructor(
         }
     }
 
+    override suspend fun activationById(id: String, isActive: Boolean): Resource<Unit> {
+        try {
+            programTableDao.activationById(id, isActive)
+            return Resource.Success(Unit)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
     override suspend fun delete(programTable: ProgramTable): Resource<ProgramTable> {
         try {
             programTableDao.delete(programTable.toEntity())

@@ -23,4 +23,8 @@ class ProgramTableWriteUseCase @Inject constructor(
     suspend fun delete(programTable: ProgramTable): Resource<ProgramTable>{
         return programTableRepository.delete(programTable)
     }
+
+    suspend fun activationById(id: String, isActive: Boolean): Resource<Unit>{
+        return programTableRepository.activationById(id, isActive)
+    }
 }
