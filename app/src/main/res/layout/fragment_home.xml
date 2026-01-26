@@ -78,10 +78,33 @@
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/programRecyclerView"
+    <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:itemCount="4"
-        tools:listitem="@layout/recycler_list_row_home" />
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/btn_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="Önceki Veriler"
+            android:alpha="0" />
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:text="Sonraki Veriler"
+            android:alpha="0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/programRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:itemCount="4"
+            tools:listitem="@layout/recycler_list_row_home"/>
+    </com.saboon.project_2511sch.presentation.home.OverscrollActionLayout>
+
 </LinearLayout>
