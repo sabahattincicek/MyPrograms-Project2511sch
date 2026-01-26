@@ -9,6 +9,9 @@ import javax.inject.Inject
 class ProgramTableReadUseCase @Inject constructor(
     private val programTableRepository: IProgramTableRepository
 ) {
+    fun getById(id: String): Flow<Resource<ProgramTable>>{
+        return programTableRepository.getById(id)
+    }
     fun getAll(): Flow<Resource<List<ProgramTable>>> {
         return programTableRepository.getAll()
     }

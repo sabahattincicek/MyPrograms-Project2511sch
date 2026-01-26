@@ -33,7 +33,6 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
 
     private val tag = "HomeFragment"
-    private var activeProgramTablesList = mutableListOf<ProgramTable>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,9 +101,10 @@ class HomeFragment : Fragment() {
                             Log.d(tag, "displayItemsState: Loading.")
                         }
                         is Resource.Success<*> -> {
-                            val itemCount = result.data?.size ?: 0
+                            val homeDisplayItemList = result.data
+                            val itemCount = homeDisplayItemList?.size ?: 0
                             Log.i(tag, "displayItemsState: Success - Submitting $itemCount items to adapter.")
-                            recyclerAdapterHome.submitList(result.data)
+                            recyclerAdapterHome.submitList(homeDisplayItemList)
                             viewModelProgramTable.getAllProgramTablesCount { resource ->
                                 if (resource is Resource.Success){
                                     val allCount = resource.data ?: 0
@@ -143,9 +143,7 @@ class HomeFragment : Fragment() {
         }
         recyclerAdapterHome.onItemClickListener = { course ->
             Log.d(tag, "Recycler item clicked. Course: ${course.title}")
-            val tableToPass = activeProgramTablesList.first()
-            Log.i(tag, "Navigating to CourseDetailsFragment with table: ${tableToPass.title} and course: ${course.title}")
-            val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(tableToPass, course)
+            val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(course)
             findNavController().navigate(action)
         }
     }

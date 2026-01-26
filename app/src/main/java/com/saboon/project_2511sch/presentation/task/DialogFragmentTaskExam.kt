@@ -99,7 +99,8 @@ class DialogFragmentTaskExam: DialogFragment() {
                 val updatedTask = task!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    targetScore = binding.etTargetScore.text.toString().toInt(),
+                    targetScore = binding.etTargetScore.text.toString().toIntOrNull(),
+                    achievedScore = binding.etAchievedScore.text.toString().toIntOrNull(),
                     date = selectedDateMillis,
                     timeStart = selectedTimeStartMillis,
                     timeEnd = selectedTimeEndMillis,
@@ -121,7 +122,7 @@ class DialogFragmentTaskExam: DialogFragment() {
                     timeEnd = selectedTimeEndMillis,
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString(),
-                    targetScore = binding.etTargetScore.text.toString().toInt(),
+                    targetScore = binding.etTargetScore.text.toString().toIntOrNull(),
                     achievedScore = binding.etAchievedScore.text.toString().toIntOrNull()
                 )
                 setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))

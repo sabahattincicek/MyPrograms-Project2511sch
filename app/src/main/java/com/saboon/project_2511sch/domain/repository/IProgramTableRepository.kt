@@ -9,6 +9,7 @@ interface IProgramTableRepository {
     suspend fun delete(programTable: ProgramTable) : Resource<ProgramTable>
     suspend fun update(programTable: ProgramTable) : Resource<Unit>
     suspend fun activationById(id: String, isActive: Boolean): Resource<Unit>
+    fun getById(id: String): Flow<Resource<ProgramTable>>
     fun getAll(): Flow<Resource<List<ProgramTable>>>
     fun getAllActive(): Flow<Resource<List<ProgramTable>>>
     suspend fun getAllCount(): Resource<Int>

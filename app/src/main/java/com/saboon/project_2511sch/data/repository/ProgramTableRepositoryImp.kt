@@ -43,6 +43,16 @@ class ProgramTableRepositoryImp @Inject constructor(
         }
     }
 
+    override fun getById(id: String): Flow<Resource<ProgramTable>> {
+        return programTableDao.getById(id)
+            .map<ProgramTableEntity, Resource<ProgramTable>> { entity ->
+                Resource.Success(entity.toDomain())
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+            }
+    }
+
     override suspend fun delete(programTable: ProgramTable): Resource<ProgramTable> {
         try {
             programTableDao.delete(programTable.toEntity())

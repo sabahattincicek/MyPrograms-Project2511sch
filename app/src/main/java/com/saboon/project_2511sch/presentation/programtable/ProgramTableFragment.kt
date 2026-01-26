@@ -117,7 +117,7 @@ class ProgramTableFragment : Fragment() {
         Log.d(TAG, "observeProgramTablesState: Starting to observe programTablesState.")
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.programTablesState.collect { resource ->
+                viewModelProgramTable.programTableListState.collect { resource ->
                     Log.v(TAG, "observeProgramTablesState: New state received: ${resource::class.java.simpleName}")
                     when(resource) {
                         is Resource.Error<*> -> {

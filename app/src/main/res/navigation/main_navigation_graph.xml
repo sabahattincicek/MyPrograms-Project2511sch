@@ -49,9 +49,6 @@
             android:id="@+id/action_courseDetailsFragment_to_courseFragment"
             app:destination="@id/courseFragment" />
         <argument
-            android:name="programTable"
-            app:argType="com.saboon.project_2511sch.domain.model.ProgramTable" />
-        <argument
             android:name="course"
             app:argType="com.saboon.project_2511sch.domain.model.Course" />
         <action

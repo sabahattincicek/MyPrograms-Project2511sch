@@ -20,6 +20,8 @@ interface ProgramTableDao {
 
     @Delete
     suspend fun delete(programTableEntity: ProgramTableEntity)
+    @Query("SELECT * FROM program_tables WHERE id = :id")
+    fun getById(id: String): Flow<ProgramTableEntity>
     @Query("UPDATE program_tables SET is_active = :isActive WHERE id = :id")
     suspend fun activationById(id: String, isActive: Boolean)
 

@@ -8,12 +8,10 @@ import com.saboon.project_2511sch.domain.usecase.programtable.ProgramTableReadUs
 import com.saboon.project_2511sch.domain.usecase.programtable.ProgramTableWriteUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,8 +31,10 @@ class ViewModelProgramTable @Inject constructor(
     val updateProgramTableEvent = _updateProgramTableEvent.asSharedFlow()
     private val _deleteProgramTableEvent = MutableSharedFlow<Resource<ProgramTable>>()
     val deleteProgramTableEvent = _deleteProgramTableEvent.asSharedFlow()
-    private val _programTablesState = MutableStateFlow<Resource<List<ProgramTable>>>(Resource.Idle())
-    val programTablesState = _programTablesState.asStateFlow()
+    private val _programTableState = MutableStateFlow<Resource<ProgramTable>>(Resource.Idle())
+    val programTableState = _programTableState.asStateFlow()
+    private val _programTableListState = MutableStateFlow<Resource<List<ProgramTable>>>(Resource.Idle())
+    val programTableListState = _programTableListState.asStateFlow()
 
 
     fun insertNewProgramTable(programTable: ProgramTable){
@@ -83,6 +83,19 @@ class ViewModelProgramTable @Inject constructor(
         }
     }
 
+    fun  getById(id: String){
+        viewModelScope.launch {
+            try {
+                _programTableState.value = Resource.Loading()
+                programTableReadUseCase.getById(id).collect { resource ->
+                    _programTableState.value = resource
+                }
+            }catch (e: Exception){
+                _programTableState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+            }
+        }
+    }
+
     fun activationById(id: String, isActive: Boolean){
         viewModelScope.launch {
             try {
@@ -97,14 +110,14 @@ class ViewModelProgramTable @Inject constructor(
         Log.d(TAG, "getAllProgramTables called.")
         viewModelScope.launch {
             try {
-                _programTablesState.value = Resource.Loading()
+                _programTableListState.value = Resource.Loading()
                 Log.d(TAG, "Fetching all program tables.")
                 programTableReadUseCase.getAll().collect { resource ->
-                    _programTablesState.value = resource
+                    _programTableListState.value = resource
                     Log.d(TAG, "Received program tables resource: $resource")                }
             } catch (e: Exception) {
                 Log.e(TAG, "An unexpected error occurred while getting all program tables: ${e.localizedMessage}", e)
-                _programTablesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+                _programTableListState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
             }
         }
     }
@@ -112,12 +125,12 @@ class ViewModelProgramTable @Inject constructor(
     fun getActiveProgramTableList(){
         viewModelScope.launch {
             try {
-                _programTablesState.value = Resource.Loading()
+                _programTableListState.value = Resource.Loading()
                 programTableReadUseCase.getAllActive().collect { resource ->
-                    _programTablesState.value = resource
+                    _programTableListState.value = resource
                 }
             }catch (e: Exception){
-                _programTablesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+                _programTableListState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
             }
         }
     }

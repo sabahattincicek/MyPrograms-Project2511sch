@@ -79,7 +79,7 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
     private fun observeProgramTablesState(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.programTablesState.collect { resource ->
+                viewModelProgramTable.programTableListState.collect { resource ->
                     when (resource) {
                         is Resource.Error<*> -> {
                             Log.e(tag, "observeProgramTablesState: Error - ${resource.message}")
