@@ -12,9 +12,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
 import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +28,7 @@ class HomeFragment : Fragment() {
 
     private val viewModelHome: ViewModelHome by viewModels()
     private val viewModelProgramTable: ViewModelProgramTable by viewModels()
+    private val viewModelCourse: ViewModelCourse by viewModels()
 
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
 
@@ -53,11 +54,9 @@ class HomeFragment : Fragment() {
         Log.d(tag, "onViewCreated: View has been created. Setting up UI and observers.")
 
         setupRecyclerAdapter()
-        observeActiveProgramTableState()
         observeHomeDisplayItemsState()
 
-        Log.i(tag, "onViewCreated: Triggering initial data load by getting active program table.")
-        viewModelProgramTable.getActiveProgramTableList()
+        viewModelHome.getDisplayItems()
 
         binding.cpProgramTable.setOnClickListener {
             Log.d(tag, "cpProgramTable clicked.")
@@ -87,67 +86,6 @@ class HomeFragment : Fragment() {
         Log.d(tag, "onDestroyView: View is being destroyed, nullifying binding to prevent memory leaks.")
         _binding = null
     }
-
-    private fun observeActiveProgramTableState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d(tag, "Subscribing to programTablesState flow.")
-                viewModelProgramTable.programTablesState.collect { result ->
-                    when (result) {
-                        is Resource.Error<*> -> {
-                            Log.e(tag, "programTablesState: Error - ${result.message}")
-                        }
-                        is Resource.Idle<*> -> {
-                            Log.d(tag, "programTablesState: Idle.")
-                        }
-                        is Resource.Loading<*> -> {
-                            Log.d(tag, "programTablesState: Loading.")
-                        }
-                        is Resource.Success<*> -> {
-                            Log.i(tag, "programTablesState: Success received.")
-                            result.data?.let { data ->
-                                activeProgramTablesList.clear()
-                                activeProgramTablesList.addAll(data)
-                                Log.d(tag, "activeProgramTablesList updated. Size: ${activeProgramTablesList.size}")
-
-                                Log.i(tag, "Requesting display items for active program tables.")
-                                viewModelHome.getDisplayItems(activeProgramTablesList)
-
-                                viewModelProgramTable.getAllProgramTablesCount { resource ->
-                                    when(resource) {
-                                        is Resource.Error<*> -> {}
-                                        is Resource.Idle<*> -> {}
-                                        is Resource.Loading<*> -> {}
-                                        is Resource.Success<*> -> {
-                                            val count = resource.data ?: 0
-                                            if (activeProgramTablesList.size == count){ //filter is not applied got all program tables
-                                                binding.cpProgramTable.isChecked = false
-                                                binding.cpProgramTable.text = getString(R.string.program_table)
-                                            }else{ //filter applied got just require program tables
-                                                binding.cpProgramTable.isChecked = true
-                                                if (activeProgramTablesList.size == 1){
-                                                    binding.cpProgramTable.text = activeProgramTablesList.first().title
-                                                    Log.d(tag, "Setting single table title: ${activeProgramTablesList.first().title}")
-                                                }else if (activeProgramTablesList.size > 1){
-                                                    binding.cpProgramTable.text = "${activeProgramTablesList.first().title} ${getString(R.string.and_more)}"
-                                                    Log.d(tag, "Setting multi-table title: ${activeProgramTablesList.first().title} and more")
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeActiveCoursesState(){
-
-    }
-
     private fun observeHomeDisplayItemsState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -167,6 +105,28 @@ class HomeFragment : Fragment() {
                             val itemCount = result.data?.size ?: 0
                             Log.i(tag, "displayItemsState: Success - Submitting $itemCount items to adapter.")
                             recyclerAdapterHome.submitList(result.data)
+                            viewModelProgramTable.getAllProgramTablesCount { resource ->
+                                if (resource is Resource.Success){
+                                    val allCount = resource.data ?: 0
+                                    viewModelProgramTable.getAllActiveProgramTablesCount { resource ->
+                                        if (resource is Resource.Success){
+                                            val allActivesCount = resource.data ?: 0
+                                            binding.cpProgramTable.isChecked = allCount != allActivesCount //filter is not applied got all program tables
+                                        }
+                                    }
+                                }
+                            }
+                            viewModelCourse.getAllCount { resource ->
+                                if (resource is Resource.Success){
+                                    val allCount = resource.data ?: 0
+                                    viewModelCourse.getAllActivesCount { resource ->
+                                        if (resource is Resource.Success){
+                                            val allActivesCount = resource.data ?: 0
+                                            binding.cpCourse.isChecked = allCount != allActivesCount //filter is not applied got all courses
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

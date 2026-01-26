@@ -146,12 +146,25 @@ class ViewModelCourse @Inject constructor(
         }
     }
 
-    fun getAllCoursesCount(onResult: (Resource<Int>) -> Unit) {
+    fun getAllCount(onResult: (Resource<Int>) -> Unit) {
         Log.d(TAG, "getAllCoursesCount called")
         viewModelScope.launch {
             try {
                 val result = courseReadUseCase.getAllCount()
                 Log.d(TAG, "getAllCoursesCount -> Result: $result")
+                onResult(result)
+            } catch (e: Exception) {
+                Log.e(TAG, "getAllCoursesCount -> Error", e)
+                onResult(
+                    Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+                )
+            }
+        }
+    }
+    fun getAllActivesCount(onResult: (Resource<Int>) -> Unit){
+        viewModelScope.launch {
+            try {
+                val result = courseReadUseCase.getAllActiveCount()
                 onResult(result)
             } catch (e: Exception) {
                 Log.e(TAG, "getAllCoursesCount -> Error", e)

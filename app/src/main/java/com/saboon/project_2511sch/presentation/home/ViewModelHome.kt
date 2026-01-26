@@ -21,8 +21,7 @@ class ViewModelHome @Inject constructor(
     private val _displayItemsState = MutableStateFlow<Resource<List<HomeDisplayItem>>>(Resource.Idle())
     val displayItemsState = _displayItemsState.asStateFlow()
 
-    fun getDisplayItems(activeProgramTableList: List<ProgramTable>){
-        Log.d(tag, "getDisplayItems: Called with list size: ${activeProgramTableList.size}")
+    fun getDisplayItems(){
         viewModelScope.launch {
             try {
                 _displayItemsState.value = Resource.Loading()
