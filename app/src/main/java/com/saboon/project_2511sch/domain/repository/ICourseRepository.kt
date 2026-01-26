@@ -11,6 +11,7 @@ interface ICourseRepository {
     suspend fun delete(course: Course): Resource<Course>
 
     suspend fun update(course: Course): Resource<Course>
+    suspend fun activationById(id: String, isActive: Boolean): Resource<Unit>
 
     fun getById(id: String): Flow<Resource<Course>>
 

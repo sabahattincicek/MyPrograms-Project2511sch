@@ -64,10 +64,7 @@ class DialogFragmentCourseSelector: DialogFragment() {
         recyclerAdapterDialogFragmentProgramTableSelector = RecyclerAdapterDialogFragmentProgramTableSelector()
         recyclerAdapterDialogFragmentProgramTableSelector.onItemCheckedChangeListener = { isChecked, baseModel ->
             if (baseModel is Course){
-                val updatedCourse = baseModel.copy(
-                    isActive = isChecked
-                )
-                viewModelCourse.updateCourse(updatedCourse)
+                viewModelCourse.activationById(baseModel.id, isChecked)
             }
         }
         binding.programRecyclerView.apply {

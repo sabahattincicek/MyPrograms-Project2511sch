@@ -99,6 +99,15 @@ class ViewModelCourse @Inject constructor(
         }
     }
 
+    fun activationById(id: String, isActive: Boolean){
+        viewModelScope.launch {
+            try {
+                courseWriteUseCase.activationById(id, isActive)
+            }catch (e: Exception){
+
+            }
+        }
+    }
     fun getAllCourse() {
         Log.d(TAG, "getAllCourse called")
         viewModelScope.launch {

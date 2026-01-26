@@ -42,6 +42,18 @@ class CourseRepositoryImp @Inject constructor(
         }
     }
 
+    override suspend fun activationById(
+        id: String,
+        isActive: Boolean
+    ): Resource<Unit> {
+        try {
+            courseDao.activationById(id, isActive)
+            return Resource.Success(Unit)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
     override fun getById(id: String): Flow<Resource<Course>> {
         return courseDao.getById(id)
             .map<CourseEntity, Resource<Course>> { courseEntity ->
