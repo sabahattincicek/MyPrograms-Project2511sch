@@ -25,7 +25,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private val taskRepository: ITaskRepository
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(filterTask: FilterTask): Flow<Resource<List<HomeDisplayItem>>> {
+    operator fun invoke(filterTask: FilterTask, startDate: Long, endDate: Long): Flow<Resource<List<HomeDisplayItem>>> {
         return programTableRepository.getAllActive().flatMapLatest { ptResource ->
             when(ptResource) {
                 is Resource.Error -> flowOf(Resource.Error(ptResource.message ?: "ProgramTables can not loaded"))
@@ -58,7 +58,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                                                     is Task.Homework -> filterTask.homework
                                                 }
                                             }
-                                            val displayItems = generateAndGroupDisplayList(activeTables, activeCourses, filteredTasks)
+                                            val displayItems = generateAndGroupDisplayList(activeTables, activeCourses, filteredTasks, startDate, endDate)
                                             Resource.Success(displayItems)
                                         }
                                     }
@@ -74,7 +74,9 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private fun generateAndGroupDisplayList(
         programTables: List<ProgramTable>,
         courses: List<Course>,
-        tasks: List<Task>
+        tasks: List<Task>,
+        startDate: Long,
+        endDate: Long
     ): List<HomeDisplayItem> {
         Log.d("GetHomeDisplayItemsUC", "generate: Processing ${tasks.size} tasks for ${programTables.size} tables")
         val finalEvents = mutableListOf<HomeDisplayItem.ContentItem>()
@@ -82,19 +84,19 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         val programTableMap = programTables.associateBy { it.id }
         val courseMap = courses.associateBy { it.id }
 
-        val calendar = Calendar.getInstance()
-
-        //find which day of the current week
-        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) // sunday = 1, monday = 2 ...
-        //calculate how many days to go back to reach monday
-        val daysFromMonday = if (dayOfWeek == Calendar.SUNDAY) 6 else dayOfWeek - Calendar.MONDAY
-
-        //set calendar to monday
-        calendar.add(Calendar.DAY_OF_YEAR, -daysFromMonday)
-        val weekStart = getDayStartMillis(calendar.timeInMillis) //monday 00:00:00
-        //find sunday of the current week
-        calendar.add(Calendar.DAY_OF_YEAR, 6)
-        val weekEnd = getDayEndMillis(calendar.timeInMillis) //sunday 23:59:59.999
+//        val calendar = Calendar.getInstance()
+//
+//        //find which day of the current week
+//        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) // sunday = 1, monday = 2 ...
+//        //calculate how many days to go back to reach monday
+//        val daysFromMonday = if (dayOfWeek == Calendar.SUNDAY) 6 else dayOfWeek - Calendar.MONDAY
+//
+//        //set calendar to monday
+//        calendar.add(Calendar.DAY_OF_YEAR, -daysFromMonday)
+//        val weekStart = getDayStartMillis(calendar.timeInMillis) //monday 00:00:00
+//        //find sunday of the current week
+//        calendar.add(Calendar.DAY_OF_YEAR, 6)
+//        val weekEnd = getDayEndMillis(calendar.timeInMillis) //sunday 23:59:59.999
 
         tasks.forEach { task ->
             val programTable = programTableMap[task.programTableId]
@@ -108,14 +110,14 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                 when(task) {
                     is Task.Lesson -> {
                         val rRule = RecurrenceRule.fromRuleString(task.recurrenceRule)
-                        Log.d("GetHomeDisplayItemsUC", "Lesson Rule: ${task.recurrenceRule}, Task Date: ${task.date}, Week: $weekStart - $weekEnd")
+                        Log.d("GetHomeDisplayItemsUC", "Lesson Rule: ${task.recurrenceRule}, Task Date: ${task.date}, Week: $startDate - $endDate")
 
                         val fromDate = rRule.dtStart
                         val untilDate = rRule.until
                         var occurrenceDate = task.date
 
                         if (rRule.freq == RecurrenceRule.Frequency.ONCE){
-                            if (task.date in weekStart..weekEnd && task.date in fromDate..untilDate){
+                            if (task.date in startDate..endDate && task.date in fromDate..untilDate){
                                 finalEvents.add(
                                     HomeDisplayItem.ContentItem(
                                         programTable = programTable,
@@ -127,11 +129,11 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                             }
                         }else{
                             //if lesson started in the past, get date to begin of current week
-                            while (occurrenceDate < weekStart && occurrenceDate < untilDate) {
+                            while (occurrenceDate < startDate && occurrenceDate < untilDate) {
                                 val next = rRule.getNextOccurrence(occurrenceDate) ?: break
                                 occurrenceDate = next
                             }
-                            while (occurrenceDate in weekStart..weekEnd && occurrenceDate in fromDate..untilDate){
+                            while (occurrenceDate in startDate..endDate && occurrenceDate in fromDate..untilDate){
                                 finalEvents.add(
                                     HomeDisplayItem.ContentItem(
                                         programTable = programTable,
@@ -140,14 +142,14 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                                         occurrenceId = "${task.id}_${occurrenceDate}"
                                     )
                                 )
-                                occurrenceDate = rRule.getNextOccurrence(occurrenceDate) ?: (weekEnd + 1)
+                                occurrenceDate = rRule.getNextOccurrence(occurrenceDate) ?: (endDate + 1)
                             }
                         }
                     }
                     is Task.Exam -> {
-                        Log.d("GetHomeDisplayItemsUC", "Exam Date: ${task.date}, In Week: ${task.date in weekStart..weekEnd}")
+                        Log.d("GetHomeDisplayItemsUC", "Exam Date: ${task.date}, In Week: ${task.date in startDate..endDate}")
 
-                        if (task.date in weekStart..weekEnd) {
+                        if (task.date in startDate..endDate) {
                             finalEvents.add(
                                 HomeDisplayItem.ContentItem(
                                     occurrenceId = "single_${task.id}",
@@ -159,9 +161,9 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                         }
                     }
                     is Task.Homework -> {
-                        Log.d("GetHomeDisplayItemsUC", "Homework Due: ${task.dueDate}, In Week: ${task.dueDate in weekStart..weekEnd}")
+                        Log.d("GetHomeDisplayItemsUC", "Homework Due: ${task.dueDate}, In Week: ${task.dueDate in startDate..endDate}")
 
-                        if (task.dueDate in weekStart..weekEnd) {
+                        if (task.dueDate in startDate..endDate) {
                             finalEvents.add(
                                 HomeDisplayItem.ContentItem(
                                     occurrenceId = "single_${task.id}",

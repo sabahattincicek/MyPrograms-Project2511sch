@@ -1,7 +1,7 @@
 package com.saboon.project_2511sch.presentation.home
 
 data class FilterTask(
-    var lesson: Boolean = true,
-    var exam: Boolean = true,
-    var homework: Boolean = true
+    val lesson: Boolean = true,
+    val exam: Boolean = true,
+    val homework: Boolean = true
 )
