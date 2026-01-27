@@ -21,115 +21,147 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:fillViewport="true">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cpg_chip_group"
-            android:layout_width="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:singleLine="true"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/cp_program_table"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:text="@string/program_table"
-                app:closeIcon="@drawable/baseline_arrow_drop_down_24"
-                app:closeIconEnabled="false"
-                app:closeIconVisible="true"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/cp_course"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:text="@string/course"
-                app:closeIcon="@drawable/baseline_arrow_drop_down_24"
-                app:closeIconEnabled="false"
-                app:closeIconVisible="true"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/cp_lesson"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:text="@string/lesson"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/cp_exam"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:text="@string/exam"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/cp_homework"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:text="@string/homework"/>
-        </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
-
-    <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout
-        android:id="@+id/osa_over_scroll"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="top|center_horizontal"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:alpha="0">
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/cpb_getPrev"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Swipe to get previous 30 item"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="bottom|center_horizontal"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:alpha="0">
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/cpb_getNext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Swipe to get next 30 item"/>
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_home"
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:itemCount="4"
-            android:background="?attr/colorSurface"
-            tools:listitem="@layout/recycler_list_row_home"/>
-    </com.saboon.project_2511sch.presentation.home.OverscrollActionLayout>
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cpg_chip_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    app:singleLine="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_program_table"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/program_table"
+                        app:closeIcon="@drawable/baseline_arrow_drop_down_24"
+                        app:closeIconEnabled="false"
+                        app:closeIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_course"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/course"
+                        app:closeIcon="@drawable/baseline_arrow_drop_down_24"
+                        app:closeIconEnabled="false"
+                        app:closeIconVisible="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_lesson"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lesson" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_exam"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/exam" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cp_homework"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/homework" />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
+
+            <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout
+                android:id="@+id/osa_over_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:alpha="0"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/cpb_getPrev"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Swipe to get previous 30 item" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="0"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/cpb_getNext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Swipe to get next 30 item" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorSurface"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/recycler_list_row_home_content" />
+            </com.saboon.project_2511sch.presentation.home.OverscrollActionLayout>
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_scroll_today"
+            style="?attr/floatingActionButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/scroll_to_today"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/baseline_arrow_upward_24" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
