@@ -6,19 +6,23 @@ import kotlinx.coroutines.flow.Flow
 
 interface ICourseRepository {
 
-    suspend fun insertCourse(course: Course): Resource<Course>
+    suspend fun insert(course: Course): Resource<Course>
 
-    suspend fun deleteCourse(course: Course): Resource<Course>
+    suspend fun delete(course: Course): Resource<Course>
 
-    suspend fun updateCourse(course: Course): Resource<Course>
+    suspend fun update(course: Course): Resource<Course>
+    suspend fun activationById(id: String, isActive: Boolean): Resource<Unit>
 
-    fun getCourseById(id: String): Flow<Resource<Course>>
+    fun getById(id: String): Flow<Resource<Course>>
 
-    suspend fun deleteCoursesByProgramTableId(id: String): Resource<Unit>
+    suspend fun deleteByProgramTableId(id: String): Resource<Unit>
 
-    fun getAllCourses(): Flow<Resource<List<Course>>>
+    fun getAll(): Flow<Resource<List<Course>>>
 
-    fun getCoursesByProgramTableId(id: String): Flow<Resource<List<Course>>>
-
+    fun getAllByProgramTableId(id: String): Flow<Resource<List<Course>>>
+    fun getAllByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>>
+    fun getAllActivesByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>>
+    suspend fun getAllCount(): Resource<Int>
+    suspend fun getAllActiveCount(): Resource<Int>
 
 }

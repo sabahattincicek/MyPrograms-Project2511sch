@@ -5,4 +5,10 @@ interface BaseModel {
     val createdAt: Long
     val updatedAt: Long
     val version: Int
+    val isActive: Boolean
+    val isDeleted: Boolean
+    val deletedAt: Long
+    val appVersionAtCreation: String
+    val title: String
+    val description: String
 }

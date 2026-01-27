@@ -6,35 +6,37 @@ import com.saboon.project_2511sch.domain.model.Course
 fun CourseEntity.toDomain(): Course {
     return Course(
         id = id,
-        programTableId = programTableId,
-        createdByUserId = createdByUserId,
-        updatedByUserId = updatedByUserId,
         createdAt = createdAt,
         updatedAt = updatedAt,
+        version = version,
+        isActive = isActive,
         isDeleted = isDeleted,
-        rowVersion = rowVersion,
+        deletedAt = deletedAt,
+        appVersionAtCreation = appVersionAtCreation,
+        programTableId = programTableId,
         title = title,
         description = description,
         people = people,
         color = color,
-        absence = absence,
+        absence = absence
     )
 }
 
 fun Course.toEntity(): CourseEntity {
     return CourseEntity(
         id = id,
-        programTableId = programTableId,
-        createdByUserId = createdByUserId,
-        updatedByUserId = updatedByUserId,
         createdAt = createdAt,
         updatedAt = updatedAt,
+        version = version,
+        isActive = isActive,
         isDeleted = isDeleted,
-        rowVersion = rowVersion,
+        deletedAt = deletedAt,
+        appVersionAtCreation = appVersionAtCreation,
+        programTableId = programTableId,
         title = title,
         description = description,
         people = people,
         color = color,
-        absence = absence,
+        absence = absence
     )
 }

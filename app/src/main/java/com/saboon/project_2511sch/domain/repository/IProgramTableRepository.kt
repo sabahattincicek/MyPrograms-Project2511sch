@@ -5,13 +5,13 @@ import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface IProgramTableRepository {
-    suspend fun insertProgramTable(programTable: ProgramTable) : Resource<ProgramTable>
-    suspend fun deleteProgramTable(programTable: ProgramTable) : Resource<ProgramTable>
-    suspend fun updateProgramTable(programTable: ProgramTable) : Resource<Unit>
-    fun getActiveProgramTable(): Flow<Resource<ProgramTable>>
-    fun getAllProgramTables(): Flow<Resource<List<ProgramTable>>>
-
-    suspend fun insertProgramTableAndSetAsActive(programTable: ProgramTable): Resource<ProgramTable>
-    suspend fun setProgramTableActive(programTable: ProgramTable): Resource<Unit>
-
+    suspend fun insert(programTable: ProgramTable) : Resource<ProgramTable>
+    suspend fun delete(programTable: ProgramTable) : Resource<ProgramTable>
+    suspend fun update(programTable: ProgramTable) : Resource<Unit>
+    suspend fun activationById(id: String, isActive: Boolean): Resource<Unit>
+    fun getById(id: String): Flow<Resource<ProgramTable>>
+    fun getAll(): Flow<Resource<List<ProgramTable>>>
+    fun getAllActive(): Flow<Resource<List<ProgramTable>>>
+    suspend fun getAllCount(): Resource<Int>
+    suspend fun getAllActiveCount(): Resource<Int>
 }

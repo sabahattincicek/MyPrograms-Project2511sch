@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.BundleCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
 import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.presentation.course.ViewModelCourse
+import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -26,12 +28,12 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModelHome: ViewModelHome by viewModels()
+    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
+    private val viewModelCourse: ViewModelCourse by viewModels()
 
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
 
     private val tag = "HomeFragment"
-
-    private lateinit var programTable: ProgramTable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,30 +54,68 @@ class HomeFragment : Fragment() {
         Log.d(tag, "onViewCreated: View has been created. Setting up UI and observers.")
 
         setupRecyclerAdapter()
-        observeActiveProgramTableState()
         observeHomeDisplayItemsState()
-        observeAllProgramTablesState()
 
-        Log.i(tag, "onViewCreated: Triggering initial data load by getting active program table.")
-        viewModelHome.getActiveProgramTable()
+        viewModelHome.loadCurrentWeek()
 
-        binding.imDropdownProgramTableList.setOnClickListener {
-            Log.d(tag, "Dropdown icon clicked. Requesting all program tables to show dialog.")
-            viewModelHome.getAllProgramTables()
+        binding.cpProgramTable.setOnClickListener {
+            Log.d(tag, "cpProgramTable clicked.")
+            binding.cpProgramTable.isChecked = !binding.cpProgramTable.isChecked
+            val dialog = DialogFragmentProgramTableSelector()
+            dialog.show(childFragmentManager, "ProgramTableSelectorDialog")
         }
-
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentProgramTableSelector.REQUEST_KEY_SELECT_ACTIVE, viewLifecycleOwner) { requestKey, result ->
-            Log.d(tag, "Result received from ProgramTableSelectorDialog with key: $requestKey")
-            val selectedProgramTable = BundleCompat.getParcelable(result,
-                DialogFragmentProgramTableSelector.RESULT_KEY_PROGRAM_TABLE, ProgramTable::class.java)
-
-            if (selectedProgramTable != null) {
-                Log.i(tag, "Program table selected: '${selectedProgramTable.title}'. Setting it as active and refreshing.")
-                viewModelHome.setProgramTableActive(selectedProgramTable)
+        binding.cpCourse.setOnClickListener {
+            Log.d(tag, "cpCourse clicked.")
+            binding.cpCourse.isChecked = !binding.cpCourse.isChecked
+            val dialog = DialogFragmentCourseSelector()
+            dialog.show(childFragmentManager, "CourseSelectorDialog")
+        }
+        binding.cpLesson.setOnCheckedChangeListener { _, isChecked ->
+            Log.d(tag, "cpLesson checked state changed: $isChecked")
+            if (!binding.cpLesson.isChecked && !binding.cpExam.isChecked && !binding.cpHomework.isChecked){
+                viewModelHome.updateFilter(FilterTask())
+            }else{
+                val newFilter = viewModelHome.filterState.value.copy(
+                    lesson = isChecked,
+                    exam = binding.cpExam.isChecked,
+                    homework = binding.cpHomework.isChecked
+                )
+                viewModelHome.updateFilter(newFilter)
+            }
+        }
+        binding.cpExam.setOnCheckedChangeListener { _, isChecked ->
+            Log.d(tag, "cpExam checked state changed: $isChecked")
+            if (!binding.cpLesson.isChecked && !binding.cpExam.isChecked && !binding.cpHomework.isChecked){
+                viewModelHome.updateFilter(FilterTask())
+            }else{
+                val newFilter = viewModelHome.filterState.value.copy(
+                    lesson = binding.cpLesson.isChecked,
+                    exam = isChecked,
+                    homework = binding.cpHomework.isChecked
+                )
+                viewModelHome.updateFilter(newFilter)
+            }
+        }
+        binding.cpHomework.setOnCheckedChangeListener { _, isChecked ->
+            Log.d(tag, "cpHomework checked state changed: $isChecked")
+            if (!binding.cpLesson.isChecked && !binding.cpExam.isChecked && !binding.cpHomework.isChecked){
+                viewModelHome.updateFilter(FilterTask())
+            }else{
+                val newFilter = viewModelHome.filterState.value.copy(
+                    lesson = binding.cpLesson.isChecked,
+                    exam = binding.cpExam.isChecked,
+                    homework = isChecked
+                )
+                viewModelHome.updateFilter(newFilter)
+            }
+        }
+        binding.osaOverScroll.onActionTriggered = {isTop ->
+            if (isTop) {
+                Log.d(tag, "overscroll triggered: Top")
+                viewModelHome.loadPrevious()
             } else {
-                Log.w(tag, "Received a null program table from the dialog.")
-                // TODO: get default or recent active programTable from database
+                Log.d(tag, "overscroll triggered: Bottom")
+                viewModelHome.loadNext()
             }
         }
     }
@@ -85,87 +125,48 @@ class HomeFragment : Fragment() {
         Log.d(tag, "onDestroyView: View is being destroyed, nullifying binding to prevent memory leaks.")
         _binding = null
     }
-
-    private fun observeActiveProgramTableState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d(tag, "Subscribing to activeProgramTable state flow.")
-                viewModelHome.activeProgramTable.collect { result ->
-                    when (result) {
-                        is Resource.Error<*> -> {
-                            Log.e(tag, "ActiveProgramTable State: Error - ${result.message}")
-                        }
-                        is Resource.Idle<*> -> {
-                            Log.d(tag, "ActiveProgramTable State: Idle.")
-                        }
-                        is Resource.Loading<*> -> {
-                            Log.d(tag, "ActiveProgramTable State: Loading.")
-                        }
-                        is Resource.Success<*> -> {
-                            if (result.data != null) {
-                                Log.i(tag, "ActiveProgramTable State: Success - Found active table: '${result.data.title}'.")
-                                programTable = result.data
-                                binding.tvProgramTable.text = programTable.title
-                                viewModelHome.getDisplayItems(programTable)
-                            } else {
-                                Log.w(tag, "ActiveProgramTable State: Success, but data is null.")
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeAllProgramTablesState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d(tag, "Subscribing to allProgramTables state flow.")
-                viewModelHome.programTableState.collect { resource ->
-                    when (resource) {
-                        is Resource.Error<*> -> {
-                            Log.e(tag, "AllProgramTables State: Error - ${resource.message}")
-                        }
-                        is Resource.Idle<*> -> {
-                            Log.d(tag, "AllProgramTables State: Idle.")
-                        }
-                        is Resource.Loading<*> -> {
-                            Log.d(tag, "AllProgramTables State: Loading.")
-                        }
-                        is Resource.Success<*> -> {
-                            if (resource.data != null) {
-                                Log.i(tag, "AllProgramTables State: Success - Received ${resource.data.size} tables. Showing dialog.")
-                                val dialog = DialogFragmentProgramTableSelector.newInstance(resource.data)
-                                dialog.show(childFragmentManager, "ProgramSelectorDialogFragment")
-                            } else {
-                                Log.w(tag, "AllProgramTables State: Success, but data is null.")
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private fun observeHomeDisplayItemsState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d(tag, "Subscribing to displayItems state flow.")
+                Log.d(tag, "Subscribing to displayItemsState flow.")
                 viewModelHome.displayItemsState.collect { result ->
                     when (result) {
                         is Resource.Error<*> -> {
-                            Log.e(tag, "DisplayItems State: Error - ${result.message}")
+                            Log.e(tag, "displayItemsState: Error - ${result.message}")
                         }
                         is Resource.Idle<*> -> {
-                            Log.d(tag, "DisplayItems State: Idle.")
+                            Log.d(tag, "displayItemsState: Idle.")
                         }
                         is Resource.Loading<*> -> {
-                            Log.d(tag, "DisplayItems State: Loading.")
+                            Log.d(tag, "displayItemsState: Loading.")
                         }
                         is Resource.Success<*> -> {
-                            val itemCount = result.data?.size ?: 0
-                            Log.i(tag, "DisplayItems State: Success - Submitting $itemCount items to adapter.")
-                            recyclerAdapterHome.submitList(result.data)
+                            val homeDisplayItemList = result.data
+                            val itemCount = homeDisplayItemList?.size ?: 0
+                            Log.i(tag, "displayItemsState: Success - Submitting $itemCount items to adapter.")
+                            recyclerAdapterHome.submitList(homeDisplayItemList)
+                            viewModelProgramTable.getAllProgramTablesCount { resource ->
+                                if (resource is Resource.Success){
+                                    val allCount = resource.data ?: 0
+                                    viewModelProgramTable.getAllActiveProgramTablesCount { resource ->
+                                        if (resource is Resource.Success){
+                                            val allActivesCount = resource.data ?: 0
+                                            binding.cpProgramTable.isChecked = allCount != allActivesCount //filter is not applied got all program tables
+                                        }
+                                    }
+                                }
+                            }
+                            viewModelCourse.getAllCount { resource ->
+                                if (resource is Resource.Success){
+                                    val allCount = resource.data ?: 0
+                                    viewModelCourse.getAllActivesCount { resource ->
+                                        if (resource is Resource.Success){
+                                            val allActivesCount = resource.data ?: 0
+                                            binding.cpCourse.isChecked = allCount != allActivesCount //filter is not applied got all courses
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -174,14 +175,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerAdapter() {
-        Log.d(tag, "setupRecyclerAdapter: Initializing and setting up RecyclerAdapterHome.")
+        Log.d(tag, "setupRecyclerAdapter: Initializing RecyclerAdapterHome.")
         recyclerAdapterHome = RecyclerAdapterHome()
-        binding.programRecyclerView.apply {
+        binding.rvHome.apply {
             adapter = recyclerAdapterHome
             layoutManager = LinearLayoutManager(context)
         }
         recyclerAdapterHome.onItemClickListener = { course ->
-            val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(programTable, course)
+            Log.d(tag, "Recycler item clicked. Course: ${course.title}")
+            val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(course)
             findNavController().navigate(action)
         }
     }

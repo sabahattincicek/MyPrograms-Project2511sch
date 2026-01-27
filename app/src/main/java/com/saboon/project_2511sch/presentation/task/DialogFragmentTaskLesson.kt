@@ -14,7 +14,6 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentTaskLessonBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.model.TaskType
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
@@ -116,8 +115,9 @@ class DialogFragmentTaskLesson: DialogFragment() {
             }else{
                 val newTask = Task.Lesson(
                     id = IdGenerator.generateTaskId(binding.etTitle.text.toString()),
-                    courseId = course!!.id,
+                    appVersionAtCreation = getString(R.string.app_version),
                     programTableId = course!!.programTableId,
+                    courseId = course!!.id,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     date = selectedDateMillis,
@@ -125,7 +125,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     timeStart = selectedTimeStartMillis,
                     timeEnd = selectedTimeEndMillis,
                     remindBefore = selectedRemindBeforeMinutes,
-                    place = binding.etPlace.text.toString()
+                    place = binding.etPlace.text.toString(),
                 )
                 setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))
                 dismiss()

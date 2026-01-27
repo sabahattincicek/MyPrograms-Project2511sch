@@ -78,11 +78,52 @@ class TaskRepositoryImp @Inject constructor(
         }
     }
 
+    override fun getAllTasksByCourseIds(ids: List<String>): Flow<Resource<List<Task>>> {
+        return combine<List<TaskLessonEntity>, List<TaskExamEntity>, List<TaskHomeworkEntity>, Resource<List<Task>>>(
+            taskDao.getAllLessonsByCourseIds(ids),
+            taskDao.getAllExamsByCourseIds(ids),
+            taskDao.getAllHomeworksByCourseIds(ids)
+        ) { lessons, exams, homeworks ->
+            // Convert entities to domain models and combine into one list
+            val allTasks = mutableListOf<Task>()
+            allTasks.addAll(lessons.map { it.toDomain() })
+            allTasks.addAll(exams.map { it.toDomain() })
+            allTasks.addAll(homeworks.map { it.toDomain() })
+
+            // Optionally sort by date/time if needed
+            // allTasks.sortBy { it.date }
+
+            Resource.Success(allTasks.toList())
+        }.catch { e ->
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+        }
+    }
+
     override fun getAllTaskByProgramTableId(id: String): Flow<Resource<List<Task>>> {
         return combine<List<TaskLessonEntity>, List<TaskExamEntity>, List<TaskHomeworkEntity>, Resource<List<Task>>>(
             taskDao.getAllLessonsByProgramTableId(id),
             taskDao.getAllExamsByProgramTableId(id),
             taskDao.getAllHomeworksByProgramTableId(id)
+        ) { lessonEntities, examEntities, homeworkEntities ->
+            val allTasks = mutableListOf<Task>()
+            allTasks.addAll(lessonEntities.map { it.toDomain() })
+            allTasks.addAll(examEntities.map { it.toDomain() })
+            allTasks.addAll(homeworkEntities.map { it.toDomain() })
+
+            // Optionally sort by date/time if needed
+            // allTasks.sortBy { it.date }
+
+            Resource.Success(allTasks.toList())
+        }.catch { e ->
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+        }
+    }
+
+    override fun getAllTasksByProgramTableIds(ids: List<String>): Flow<Resource<List<Task>>> {
+        return combine<List<TaskLessonEntity>, List<TaskExamEntity>, List<TaskHomeworkEntity>, Resource<List<Task>>>(
+            taskDao.getAllLessonsByProgramTableIds(ids),
+            taskDao.getAllExamsByProgramTableIds(ids),
+            taskDao.getAllHomeworksByProgramTableIds(ids)
         ) { lessonEntities, examEntities, homeworkEntities ->
             val allTasks = mutableListOf<Task>()
             allTasks.addAll(lessonEntities.map { it.toDomain() })

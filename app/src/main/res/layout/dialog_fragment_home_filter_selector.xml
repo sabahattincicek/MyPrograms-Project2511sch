@@ -21,16 +21,17 @@
             app:navigationIcon="@drawable/baseline_arrow_back_24"
             app:navigationIconTint="?attr/colorOnSurface"
             android:minHeight="?attr/actionBarSize"
-            app:title="@string/select_program_table" />
+            app:title="@string/select"
+            app:subtitle="@string/select_program_tables_to_show_in_home"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/programRecyclerView"
+        android:id="@+id/rv_selector"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         tools:itemCount="4"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/recycler_list_row_program_tables"/>
+        tools:listitem="@layout/recycler_list_row_program_table_selector"/>
 
 </LinearLayout>

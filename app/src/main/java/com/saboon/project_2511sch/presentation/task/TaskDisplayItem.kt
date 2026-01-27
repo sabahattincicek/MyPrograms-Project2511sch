@@ -1,9 +1,6 @@
 package com.saboon.project_2511sch.presentation.task
 
-import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.model.TaskType
 
 sealed class TaskDisplayItem {
     abstract val id: String

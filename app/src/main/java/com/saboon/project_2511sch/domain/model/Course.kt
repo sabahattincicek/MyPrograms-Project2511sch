@@ -5,19 +5,20 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Course(
-    val id: String,
+    override val id: String,
+    override val createdAt: Long = System.currentTimeMillis(),
+    override val updatedAt: Long = System.currentTimeMillis(),
+    override val version: Int = 0,
+    override val isActive: Boolean = true,
+    override val isDeleted: Boolean = false,
+    override val deletedAt: Long = 0L,
+    override val appVersionAtCreation: String,
+    override val title: String,
+    override val description: String,
+
     val programTableId: String,
-    val createdByUserId: String? = null,
-    val updatedByUserId: String? = null,
 
-    val createdAt: Long = System.currentTimeMillis(),
-    val updatedAt: Long = System.currentTimeMillis(),
-    val isDeleted: Boolean = false,
-    val rowVersion: Int = 1,
-
-    val title: String?,
-    val description: String?,
-    val people: String?,
-    val color: String?,
+    val people: String,
+    val color: String,
     val absence: Int = 0,
-) : Parcelable
+) : Parcelable, BaseModel

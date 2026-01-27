@@ -18,16 +18,22 @@ interface CourseDao {
     suspend fun delete(course: CourseEntity)
     @Update
     suspend fun update(course: CourseEntity)
-
+    @Query("UPDATE courses SET is_active = :isActive WHERE id = :id")
+    suspend fun activationById(id: String, isActive: Boolean)
     @Query("SELECT * FROM courses WHERE id = :id")
-    fun getCourseById(id: String): Flow<CourseEntity>
-
+    fun getById(id: String): Flow<CourseEntity>
     @Query("DELETE FROM courses WHERE program_table_id = :id")
-    suspend fun deleteCoursesByProgramTableId(id: String)
-
+    suspend fun deleteByProgramTableId(id: String)
     @Query("SELECT * FROM courses")
-    fun getAllCourses(): Flow<List<CourseEntity>>
-
+    fun getAll(): Flow<List<CourseEntity>>
     @Query("SELECT * FROM courses WHERE program_table_id = :id")
-    fun getCoursesByProgramTableId(id: String): Flow<List<CourseEntity>>
+    fun getAllByProgramTableId(id: String): Flow<List<CourseEntity>>
+    @Query("SELECT * FROM courses WHERE program_table_id IN (:ids)")
+    fun getAllByProgramTableIds(ids: List<String>): Flow<List<CourseEntity>>
+    @Query("SELECT * FROM courses WHERE is_active = 1 AND program_table_id IN (:ids)")
+    fun getAllActivesByProgramTableIds(ids: List<String>): Flow<List<CourseEntity>>
+    @Query("SELECT COUNT(*) FROM courses")
+    suspend fun getAllCount(): Int
+    @Query("SELECT COUNT(*) FROM courses WHERE is_active = 1")
+    suspend fun getAllActiveCount(): Int
 }

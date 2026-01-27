@@ -22,8 +22,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
+import com.saboon.project_2511sch.data.local.entity.ProgramTableEntity
 import com.saboon.project_2511sch.databinding.FragmentCourseBinding
 import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -37,6 +39,7 @@ class CourseFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val args : CourseFragmentArgs by navArgs()
+    private lateinit var programTable: ProgramTable
 
     private val viewModelCourse: ViewModelCourse by viewModels()
     private lateinit var recyclerAdapterCourse: RecyclerAdapterCourse
@@ -61,13 +64,14 @@ class CourseFragment : Fragment() {
         Log.d(TAG, "onViewCreated: View is created and UI is being set up.")
 
         (activity as AppCompatActivity).setSupportActionBar(binding.topAppBar)
+        programTable = args.programTable
 
         setupRecyclerAdapter()
         observeCoursesState()
         observeInsertNewCourseEvent()
 
-        viewModelCourse.getCoursesWithProgramTableId(args.programTable.id)
-        Log.d(TAG, "onViewCreated: Requesting courses for program table id: ${args.programTable.id}")
+        viewModelCourse.getAllCoursesByProgramTableId(programTable.id)
+        Log.d(TAG, "onViewCreated: Requesting courses for program table id: ${programTable.id}")
 
         childFragmentManager.setFragmentResultListener(DialogFragmentCourse.REQUEST_KEY_CREATE, this){ requestKey, result ->
             val newCourse = BundleCompat.getParcelable(result,DialogFragmentCourse.RESULT_KEY_COURSE, Course::class.java)
@@ -94,7 +98,7 @@ class CourseFragment : Fragment() {
                 return when(menuItem.itemId){
                     R.id.action_add -> {
                         Log.d(TAG, "onMenuItemSelected: Add action clicked.")
-                        val dialog = DialogFragmentCourse.newInstance(args.programTable, null)
+                        val dialog = DialogFragmentCourse.newInstance(programTable, null)
                         dialog.show(childFragmentManager, "CreateCourseFragmentDialog")
                         true
                     }
@@ -108,13 +112,13 @@ class CourseFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        binding.topAppBar.subtitle = args.programTable.title
+        binding.topAppBar.subtitle = programTable.title
     }
 
     private fun observeInsertNewCourseEvent(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourse.insertNewCourseEvent.collect { event ->
+                viewModelCourse.insertCourseEvent.collect { event ->
                     when(event) {
                         is Resource.Error<*> -> {
                             Log.e(TAG, "observeInsertNewCourseEvent: Error inserting new course: ${event.message}")
@@ -124,8 +128,8 @@ class CourseFragment : Fragment() {
                         is Resource.Loading<*> -> {Log.d(TAG, "observeInsertNewCourseEvent: Loading...")}
                         is Resource.Success -> {
                             Log.d(TAG, "observeInsertNewCourseEvent: Course added successfully.")
-                            Toast.makeText(context, getString(R.string.course_added_successfully), Toast.LENGTH_SHORT).show()
-                            val action = CourseFragmentDirections.actionCourseFragmentToCourseDetailsFragment(args.programTable, event.data!!)
+                            val course = event.data!!
+                            val action = CourseFragmentDirections.actionCourseFragmentToCourseDetailsFragment(course)
                             findNavController().navigate(action)
                         }
                     }
@@ -160,10 +164,10 @@ class CourseFragment : Fragment() {
         recyclerAdapterCourse = RecyclerAdapterCourse()
         recyclerAdapterCourse.onItemClickListener = { course ->
             Log.d(TAG, "setupRecyclerAdapter: Course item clicked: ${course.title}")
-            val action = CourseFragmentDirections.actionCourseFragmentToCourseDetailsFragment(args.programTable, course)
+            val action = CourseFragmentDirections.actionCourseFragmentToCourseDetailsFragment(course)
             findNavController().navigate(action)
         }
-        binding.programRecyclerView.apply {
+        binding.rvCourse.apply {
             adapter = recyclerAdapterCourse
             layoutManager = LinearLayoutManager(context)
         }

@@ -7,18 +7,15 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "program_tables")
 data class ProgramTableEntity(
     @PrimaryKey val id: String,
-    @ColumnInfo(name ="created_by_user_id")val createdByUserId: String?,
-    @ColumnInfo(name ="updated_by_user_id")val updatedByUserId: String?,
+    @ColumnInfo(name = "created_at") val createdAt: Long,
+    @ColumnInfo(name = "updated_at") val updatedAt: Long,
+    @ColumnInfo(name = "version") val version: Int,
+    @ColumnInfo(name = "is_active") val isActive: Boolean,
+    @ColumnInfo(name = "is_deleted") val isDeleted: Boolean,
+    @ColumnInfo(name = "deleted_at") val deletedAt: Long,
+    @ColumnInfo(name = "app_version_at_creation") val appVersionAtCreation: String,
 
-    @ColumnInfo(name ="created_at")val createdAt: Long,
-    @ColumnInfo(name ="updated_at")val updatedAt: Long,
-    @ColumnInfo(name ="is_deleted")val isDeleted: Boolean,
-    @ColumnInfo(name ="row_version")val rowVersion: Int,
-
-    @ColumnInfo(name ="title")val title: String?,
-    @ColumnInfo(name ="description")val description: String?,
-    @ColumnInfo(name ="color")val color: String?,
-
-    @ColumnInfo(name ="is_active")val isActive: Boolean,
-    @ColumnInfo(name ="is_shared")val isShared: Boolean
+    @ColumnInfo(name = "title") val title: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "color") val color: String,
 )

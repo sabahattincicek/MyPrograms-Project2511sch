@@ -91,9 +91,10 @@ class DialogFragmentProgramTable: DialogFragment() {
             }else{
                 val newProgramTable = ProgramTable(
                     id = IdGenerator.generateProgramTableId(binding.etTitle.text.toString()),
+                    appVersionAtCreation = getString(R.string.app_version),
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    color = color
+                    color = color,
                 )
 
                 setFragmentResult(REQUEST_KEY_CREATE, bundleOf(

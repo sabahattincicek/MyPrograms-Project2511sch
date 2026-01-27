@@ -15,7 +15,7 @@ import javax.inject.Inject
 class CourseRepositoryImp @Inject constructor(
     private val courseDao: CourseDao
 ) : ICourseRepository {
-    override suspend fun insertCourse(course: Course): Resource<Course> {
+    override suspend fun insert(course: Course): Resource<Course> {
         try{
             courseDao.insert(course.toEntity())
             return Resource.Success(course)
@@ -24,7 +24,7 @@ class CourseRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun deleteCourse(course: Course): Resource<Course> {
+    override suspend fun delete(course: Course): Resource<Course> {
         try{
             courseDao.delete(course.toEntity())
             return Resource.Success(course)
@@ -33,7 +33,7 @@ class CourseRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun updateCourse(course: Course): Resource<Course> {
+    override suspend fun update(course: Course): Resource<Course> {
         try{
             courseDao.update(course.toEntity())
             return Resource.Success(course)
@@ -42,8 +42,20 @@ class CourseRepositoryImp @Inject constructor(
         }
     }
 
-    override fun getCourseById(id: String): Flow<Resource<Course>> {
-        return courseDao.getCourseById(id)
+    override suspend fun activationById(
+        id: String,
+        isActive: Boolean
+    ): Resource<Unit> {
+        try {
+            courseDao.activationById(id, isActive)
+            return Resource.Success(Unit)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
+    override fun getById(id: String): Flow<Resource<Course>> {
+        return courseDao.getById(id)
             .map<CourseEntity, Resource<Course>> { courseEntity ->
                 Resource.Success(courseEntity.toDomain())
             }
@@ -52,17 +64,17 @@ class CourseRepositoryImp @Inject constructor(
             }
     }
 
-    override suspend fun deleteCoursesByProgramTableId(id: String): Resource<Unit> {
+    override suspend fun deleteByProgramTableId(id: String): Resource<Unit> {
         try {
-            courseDao.deleteCoursesByProgramTableId(id)
+            courseDao.deleteByProgramTableId(id)
             return Resource.Success(Unit)
         }catch (e: Exception){
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
     }
 
-    override fun getAllCourses(): Flow<Resource<List<Course>>> {
-        return courseDao.getAllCourses()
+    override fun getAll(): Flow<Resource<List<Course>>> {
+        return courseDao.getAll()
             .map<List<CourseEntity>, Resource<List<Course>>> { courseEntity ->
                 Resource.Success(courseEntity.map { it.toDomain() })
             }
@@ -71,13 +83,51 @@ class CourseRepositoryImp @Inject constructor(
             }
     }
 
-    override fun getCoursesByProgramTableId(id: String): Flow<Resource<List<Course>>> {
-        return courseDao.getCoursesByProgramTableId(id)
+    override fun getAllByProgramTableId(id: String): Flow<Resource<List<Course>>> {
+        return courseDao.getAllByProgramTableId(id)
             .map<List<CourseEntity>, Resource<List<Course>>> { courseEntities ->
                 Resource.Success(courseEntities.map { it.toDomain() })
             }
             .catch { e ->
                 emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
             }
+    }
+
+    override fun getAllByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>> {
+        return courseDao.getAllByProgramTableIds(ids)
+            .map<List<CourseEntity>, Resource<List<Course>>> { courseEntities ->
+                Resource.Success(courseEntities.map { it.toDomain() })
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
+            }
+    }
+
+    override fun getAllActivesByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>> {
+        return courseDao.getAllActivesByProgramTableIds(ids)
+            .map<List<CourseEntity>, Resource<List<Course>>> { courseEntities ->
+                Resource.Success(courseEntities.map { it.toDomain() })
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
+            }
+    }
+
+    override suspend fun getAllCount(): Resource<Int> {
+        try {
+            val count = courseDao.getAllCount()
+            return Resource.Success(count)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
+        }
+    }
+
+    override suspend fun getAllActiveCount(): Resource<Int> {
+        try {
+            val count = courseDao.getAllActiveCount()
+            return Resource.Success(count)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
+        }
     }
 }

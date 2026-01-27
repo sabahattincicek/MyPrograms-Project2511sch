@@ -5,13 +5,19 @@ import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.util.Resource
 import javax.inject.Inject
 
-class DecrementAbsenceUseCase @Inject constructor(
+class CourseAbsenceUseCase @Inject constructor(
     private val courseRepository: ICourseRepository
 ) {
-    suspend operator fun invoke(course: Course): Resource<Course>{
+    suspend fun increment(course: Course): Resource<Course>{
+        val incrementedCourse = course.copy(
+            absence = course.absence + 1
+        )
+        return courseRepository.update(incrementedCourse)
+    }
+    suspend fun decrement(course: Course): Resource<Course>{
         val decrementedCourse = course.copy(
             absence = course.absence - 1
         )
-        return courseRepository.updateCourse(decrementedCourse)
+        return courseRepository.update(decrementedCourse)
     }
 }

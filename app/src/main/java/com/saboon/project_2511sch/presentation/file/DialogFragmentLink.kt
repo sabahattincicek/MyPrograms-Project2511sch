@@ -77,8 +77,10 @@ class DialogFragmentLink: DialogFragment() {
                     }else{ //Create Mode
                         val newLinkFile = File(
                             id = IdGenerator.generateFileId(title),
+                            appVersionAtCreation = getString(R.string.app_version),
                             programTableId = course!!.programTableId,
                             courseId = course!!.id,
+                            taskId = "",
                             title = title,
                             description = url,
                             fileType = "app/link",

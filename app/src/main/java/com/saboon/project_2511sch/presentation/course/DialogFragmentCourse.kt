@@ -84,11 +84,12 @@ class DialogFragmentCourse: DialogFragment() {
                 Log.d(TAG, "onCreateView: Creating new course.")
                 val newCourse = Course(
                     id = IdGenerator.generateCourseId(binding.etTitle.text.toString()),
+                    appVersionAtCreation = getString(R.string.app_version),
                     programTableId = programTable!!.id,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     people = binding.etPeople.text.toString(),
-                    color = color
+                    color = color,
                 )
 
                 Log.d(TAG, "onCreateView: New course created: $newCourse")

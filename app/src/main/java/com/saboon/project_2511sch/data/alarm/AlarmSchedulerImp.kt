@@ -75,20 +75,20 @@ class AlarmSchedulerImp(
     }
 
     override fun cancel(task: Task) {
-        Log.d(tag, "Attempting to cancel all alarms for task: '${task.title}' (ID: ${task.id})")
-        // Cancel reminder alarm
-        val reminderIntent = createIntent(null, null, null).apply {
-            action = ACTION_REMINDER
-            data = "task://${task.id}#reminder".toUri()
-        }
-        alarmManager.cancel(createPendingIntent(task.id.hashCode(), reminderIntent))
-
-        // Cancel absence check alarm
-        val absenceIntent = createIntent(null, null, null).apply {
-            action = ACTION_ABSENCE_CHECK
-            data = "task://${task.id}#absence".toUri()
-        }
-        alarmManager.cancel(createPendingIntent(task.id.hashCode() + 1, absenceIntent))
+//        Log.d(tag, "Attempting to cancel all alarms for task: '${task.title}' (ID: ${task.id})")
+//        // Cancel reminder alarm
+//        val reminderIntent = createIntent(null, null, null).apply {
+//            action = ACTION_REMINDER
+//            data = "task://${task.id}#reminder".toUri()
+//        }
+//        alarmManager.cancel(createPendingIntent(task.id.hashCode(), reminderIntent))
+//
+//        // Cancel absence check alarm
+//        val absenceIntent = createIntent(null, null, null).apply {
+//            action = ACTION_ABSENCE_CHECK
+//            data = "task://${task.id}#absence".toUri()
+//        }
+//        alarmManager.cancel(createPendingIntent(task.id.hashCode() + 1, absenceIntent))
     }
 
     private fun createIntent(programTable: ProgramTable?, course: Course?, task: Task?): Intent {

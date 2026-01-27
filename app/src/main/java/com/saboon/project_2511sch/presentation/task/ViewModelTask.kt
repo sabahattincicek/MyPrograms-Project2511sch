@@ -6,10 +6,9 @@ import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.usecase.task.DeleteTaskUseCase
 import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemsUseCase
-import com.saboon.project_2511sch.domain.usecase.task.InsertNewTaskUseCase
-import com.saboon.project_2511sch.domain.usecase.task.UpdateTaskUseCase
+import com.saboon.project_2511sch.domain.usecase.task.TaskReadUseCase
+import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -21,9 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewModelTask @Inject constructor(
-    private val insertNewTaskUseCase: InsertNewTaskUseCase,
-    private val updateTaskUseCase: UpdateTaskUseCase,
-    private val deleteTaskUseCase: DeleteTaskUseCase,
+    private val taskWriteUseCase: TaskWriteUseCase,
+    private val taskReadUseCase: TaskReadUseCase,
     private val getTaskDisplayItemsUseCase: GetTaskDisplayItemsUseCase,
     private val alarmScheduler: IAlarmScheduler
 ): ViewModel() {
@@ -45,7 +43,7 @@ class ViewModelTask @Inject constructor(
         viewModelScope.launch {
             try {
                 _insertNewTaskEvent.send(Resource.Loading())
-                val insertResult = insertNewTaskUseCase.invoke(task)
+                val insertResult = taskWriteUseCase.insert(task)
                 _insertNewTaskEvent.send(insertResult)
             }catch (e: Exception){
                 _insertNewTaskEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
@@ -57,7 +55,7 @@ class ViewModelTask @Inject constructor(
         viewModelScope.launch {
             try {
                 _updateTaskEvent.send(Resource.Loading())
-                val updateResult = updateTaskUseCase.invoke(task)
+                val updateResult = taskWriteUseCase.update(task)
                 _updateTaskEvent.send(updateResult)
             }catch (e: Exception){
                 _updateTaskEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
@@ -69,7 +67,7 @@ class ViewModelTask @Inject constructor(
         viewModelScope.launch {
             try {
                 _deleteTaskEvent.send(Resource.Loading())
-                val deleteResult = deleteTaskUseCase.invoke(task)
+                val deleteResult = taskWriteUseCase.delete(task)
                 _deleteTaskEvent.send(deleteResult)
                 alarmScheduler.cancel(task)
             }catch (e: Exception){
