@@ -79,30 +79,54 @@
     </HorizontalScrollView>
 
     <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout
+        android:id="@+id/osa_over_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/cpb_getPrev"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_gravity="top|center_horizontal"
+            android:gravity="center_horizontal"
             android:layout_marginBottom="16dp"
-            android:alpha="0"/>
+            android:alpha="0">
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/cpb_getPrev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Swipe to get previous 30 item"/>
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/cpb_getNext"
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_gravity="bottom|center_horizontal"
+            android:gravity="center_horizontal"
             android:layout_marginBottom="16dp"
-            android:alpha="0"/>
+            android:alpha="0">
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/cpb_getNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Swipe to get next 30 item"/>
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:itemCount="4"
+            android:background="?attr/colorSurface"
             tools:listitem="@layout/recycler_list_row_home"/>
     </com.saboon.project_2511sch.presentation.home.OverscrollActionLayout>
 

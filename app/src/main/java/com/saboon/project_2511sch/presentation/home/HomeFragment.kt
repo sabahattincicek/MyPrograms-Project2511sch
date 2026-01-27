@@ -110,6 +110,15 @@ class HomeFragment : Fragment() {
             }
             viewModelHome.getDisplayItems(filterTask)
         }
+        binding.osaOverScroll.onActionTriggered = {isTop ->
+            if (isTop) {
+                // Liste en üstteyken 2 saniye boyunca çekildi (Önceki verileri getir)
+//                viewModel.fetchPreviousPage()
+            } else {
+                // Liste en alttayken 2 saniye boyunca çekildi (Sonraki verileri getir)
+//                viewModel.fetchNextPage()
+            }
+        }
     }
 
     override fun onDestroyView() {

@@ -7,10 +7,11 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
-import android.widget.ProgressBar
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import androidx.core.view.NestedScrollingParent3
 import androidx.core.view.ViewCompat
 
@@ -106,11 +107,7 @@ class OverscrollActionLayout(
                 (isPullingUp && canTriggerBottomOverscroll)
 
         if (shouldExecute && dyConsumed == 0) {
-            // Internal state accumulates drag, but we will clamp it for translation
             totalDragY -= dyUnconsumed * friction
-
-            // To prevent totalDragY from growing infinitely while translation is clamped,
-            // we clamp the internal state as well.
             totalDragY = totalDragY.coerceIn(-threshold, threshold)
 
             applyTranslation(target)
@@ -124,19 +121,18 @@ class OverscrollActionLayout(
     }
 
     private fun applyTranslation(target: View) {
-        // Strict clamping: View movement is physically capped at (threshold - stickySlop)
         if (Math.abs(totalDragY) < stickySlop && !isActionProcessing) {
             target.translationY = 0f
         } else {
             val sign = if (totalDragY > 0) 1 else -1
-            // Use totalDragY which is already clamped in onNestedScroll
             target.translationY = totalDragY - (sign * stickySlop)
         }
     }
 
     private fun updateIndicators(target: View) {
-        val topProgress = getChildAt(0) as? ProgressBar ?: return
-        val bottomProgress = getChildAt(1) as? ProgressBar ?: return
+        // Now referencing the LinearLayout containers
+        val topContainer = getChildAt(0) ?: return
+        val bottomContainer = getChildAt(1) ?: return
 
         val currentTranslation = target.translationY
         val maxVisibleTranslation = threshold - stickySlop
@@ -145,18 +141,25 @@ class OverscrollActionLayout(
         } else 0f
 
         if (totalDragY > 0) {
-            topProgress.alpha = if (isActionProcessing) 1f else progress
-            bottomProgress.alpha = 0f
+            topContainer.alpha = if (isActionProcessing) 1f else progress
+            bottomContainer.alpha = 0f
         } else if (totalDragY < 0) {
-            bottomProgress.alpha = if (isActionProcessing) 1f else progress
-            topProgress.alpha = 0f
+            bottomContainer.alpha = if (isActionProcessing) 1f else progress
+            topContainer.alpha = 0f
+        } else {
+            topContainer.alpha = 0f
+            bottomContainer.alpha = 0f
         }
     }
 
     private fun startActionProcess(isTop: Boolean, target: View) {
         isActionProcessing = true
-        val progressBar = (if (isTop) getChildAt(0) else getChildAt(1)) as? ProgressBar ?: return
-        progressBar.alpha = 1f
+        val container = (if (isTop) getChildAt(0) else getChildAt(1)) as? ViewGroup ?: return
+
+        // Find the CircularProgressIndicator within the LinearLayout
+        val progressBar = findCircularProgress(container) ?: return
+
+        container.alpha = 1f
         progressBar.progress = 0
 
         currentActionAnimator = ValueAnimator.ofInt(0, 100).apply {
@@ -169,7 +172,7 @@ class OverscrollActionLayout(
                 override fun onAnimationEnd(animation: Animator) {
                     if (isActionProcessing && progressBar.progress == 100) {
                         onActionTriggered?.invoke(isTop)
-                        resetProcess(progressBar)
+                        resetProcess(container, progressBar)
                         animateToZero(target)
                     }
                 }
@@ -178,22 +181,34 @@ class OverscrollActionLayout(
         }
     }
 
+    private fun findCircularProgress(viewGroup: ViewGroup): CircularProgressIndicator? {
+        for (i in 0 until viewGroup.childCount) {
+            val child = viewGroup.getChildAt(i)
+            if (child is CircularProgressIndicator) return child
+        }
+        return null
+    }
+
     private fun cancelActionProcess() {
         currentActionAnimator?.cancel()
         currentActionAnimator = null
         isActionProcessing = false
 
-        val topProgress = getChildAt(0) as? ProgressBar
-        val bottomProgress = getChildAt(1) as? ProgressBar
+        val topContainer = getChildAt(0) as? ViewGroup
+        val bottomContainer = getChildAt(1) as? ViewGroup
 
-        topProgress?.progress = 0
-        bottomProgress?.progress = 0
-        topProgress?.alpha = 0f
-        bottomProgress?.alpha = 0f
+        topContainer?.let {
+            it.alpha = 0f
+            findCircularProgress(it)?.progress = 0
+        }
+        bottomContainer?.let {
+            it.alpha = 0f
+            findCircularProgress(it)?.progress = 0
+        }
     }
 
-    private fun resetProcess(progressBar: ProgressBar) {
-        progressBar.animate()
+    private fun resetProcess(container: ViewGroup, progressBar: CircularProgressIndicator) {
+        container.animate()
             .alpha(0f)
             .setDuration(300)
             .withEndAction {
