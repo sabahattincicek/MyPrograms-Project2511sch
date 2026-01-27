@@ -49,8 +49,6 @@ class OverscrollActionLayout(
 
     override fun onStopNestedScroll(target: View, type: Int) {
         if (type == ViewCompat.TYPE_TOUCH) {
-            // Case 1 & 2: Finger lifted before the 2-second timer completed.
-            // We cancel the progress and reset everything.
             if (isActionProcessing) {
                 cancelActionProcess()
             }
@@ -64,8 +62,6 @@ class OverscrollActionLayout(
     }
 
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
-        // If action is already processing, we allow the user to keep dragging or move back,
-        // but we prioritize visual feedback.
         if (totalDragY == 0f) return
 
         if (totalDragY > 0 && dy > 0) {
@@ -76,7 +72,6 @@ class OverscrollActionLayout(
             consumed[1] = consume
             updateIndicators(target)
 
-            // If user moves back above threshold while holding, we should cancel the process
             if (isActionProcessing && Math.abs(totalDragY) < threshold) {
                 cancelActionProcess()
             }
@@ -111,14 +106,17 @@ class OverscrollActionLayout(
                 (isPullingUp && canTriggerBottomOverscroll)
 
         if (shouldExecute && dyConsumed == 0) {
+            // Internal state accumulates drag, but we will clamp it for translation
             totalDragY -= dyUnconsumed * friction
-            totalDragY = totalDragY.coerceIn(-threshold * 1.5f, threshold * 1.5f) // Allow slightly more drag than threshold
+
+            // To prevent totalDragY from growing infinitely while translation is clamped,
+            // we clamp the internal state as well.
+            totalDragY = totalDragY.coerceIn(-threshold, threshold)
 
             applyTranslation(target)
             updateIndicators(target)
             consumed[1] = dyUnconsumed
 
-            // Durum 3 Trigger: Start process when threshold hit, but DON'T return to zero yet.
             if (Math.abs(totalDragY) >= threshold && !isActionProcessing) {
                 startActionProcess(totalDragY > 0, target)
             }
@@ -126,10 +124,12 @@ class OverscrollActionLayout(
     }
 
     private fun applyTranslation(target: View) {
+        // Strict clamping: View movement is physically capped at (threshold - stickySlop)
         if (Math.abs(totalDragY) < stickySlop && !isActionProcessing) {
             target.translationY = 0f
         } else {
             val sign = if (totalDragY > 0) 1 else -1
+            // Use totalDragY which is already clamped in onNestedScroll
             target.translationY = totalDragY - (sign * stickySlop)
         }
     }
@@ -167,11 +167,10 @@ class OverscrollActionLayout(
             }
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    // Only trigger if animator wasn't canceled (Meaning finger was held for 2s)
                     if (isActionProcessing && progressBar.progress == 100) {
                         onActionTriggered?.invoke(isTop)
                         resetProcess(progressBar)
-                        animateToZero(target) // Return after success
+                        animateToZero(target)
                     }
                 }
             })
