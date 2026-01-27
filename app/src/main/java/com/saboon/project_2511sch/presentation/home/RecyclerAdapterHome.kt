@@ -13,6 +13,7 @@ import com.saboon.project_2511sch.databinding.RecyclerListRowHomeHeaderBinding
 import com.saboon.project_2511sch.util.toFormattedString
 import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
+import com.saboon.project_2511sch.databinding.RecyclerListRowHomeFooterBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.ModelColors
@@ -27,6 +28,7 @@ class RecyclerAdapterHome :
     companion object {
         private const val VIEW_TYPE_HEADER = 0
         private const val VIEW_TYPE_CONTENT = 1
+        private const val VIEW_TYPE_FOOTER = 2
     }
 
     class HeaderViewHolder(private val binding: RecyclerListRowHomeHeaderBinding) :
@@ -118,6 +120,16 @@ class RecyclerAdapterHome :
             }
         }
     }
+    class FooterViewHolder(private val binding: RecyclerListRowHomeFooterBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(item: HomeDisplayItem.FooterItem){
+            val startDay = item.startDate
+            val endDay = item.endDate
+            val itemCount = item.itemCount
+
+            binding.tvDateRange.text = "Showing date range: ${startDay.toFormattedString("dd.MM.yyyy")} - ${endDay.toFormattedString("dd.MM.yyyy")}"
+            binding.tvItemCount.text = "Showing items: ${itemCount}"
+        }
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -142,6 +154,11 @@ class RecyclerAdapterHome :
                 ContentViewHolder(binding)
             }
 
+            VIEW_TYPE_FOOTER -> {
+                val binding = RecyclerListRowHomeFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FooterViewHolder(binding)
+            }
+
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
@@ -154,13 +171,15 @@ class RecyclerAdapterHome :
         when (holder) {
             is HeaderViewHolder -> holder.bind(item as HomeDisplayItem.HeaderItem)
             is ContentViewHolder -> holder.bind(item as HomeDisplayItem.ContentItem)
+            is FooterViewHolder -> holder.bind(item as HomeDisplayItem.FooterItem)
         }
         holder.itemView.setOnClickListener {
             when(item) {
+                is HomeDisplayItem.HeaderItem -> {}
                 is HomeDisplayItem.ContentItem -> {
                     onItemClickListener?.invoke(item.course)
                 }
-                is HomeDisplayItem.HeaderItem -> {}
+                is HomeDisplayItem.FooterItem -> {}
             }
         }
     }
@@ -169,6 +188,7 @@ class RecyclerAdapterHome :
         return when (getItem(position)) {
             is HomeDisplayItem.HeaderItem -> VIEW_TYPE_HEADER
             is HomeDisplayItem.ContentItem -> VIEW_TYPE_CONTENT
+            is HomeDisplayItem.FooterItem -> VIEW_TYPE_FOOTER
         }
     }
 

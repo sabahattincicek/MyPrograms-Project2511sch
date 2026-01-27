@@ -84,20 +84,6 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         val programTableMap = programTables.associateBy { it.id }
         val courseMap = courses.associateBy { it.id }
 
-//        val calendar = Calendar.getInstance()
-//
-//        //find which day of the current week
-//        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) // sunday = 1, monday = 2 ...
-//        //calculate how many days to go back to reach monday
-//        val daysFromMonday = if (dayOfWeek == Calendar.SUNDAY) 6 else dayOfWeek - Calendar.MONDAY
-//
-//        //set calendar to monday
-//        calendar.add(Calendar.DAY_OF_YEAR, -daysFromMonday)
-//        val weekStart = getDayStartMillis(calendar.timeInMillis) //monday 00:00:00
-//        //find sunday of the current week
-//        calendar.add(Calendar.DAY_OF_YEAR, 6)
-//        val weekEnd = getDayEndMillis(calendar.timeInMillis) //sunday 23:59:59.999
-
         tasks.forEach { task ->
             val programTable = programTableMap[task.programTableId]
             val course = courseMap[task.courseId]
@@ -210,6 +196,8 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
             }
             displayItemsWithHeaders.add(event)
         }
+        val footerItem = HomeDisplayItem.FooterItem(startDate, endDate, finalEvents.size)
+        displayItemsWithHeaders.add(footerItem)
         Log.d("GetHomeDisplayItemsUC", "generate: Final list size with headers: ${displayItemsWithHeaders.size}")
         return displayItemsWithHeaders
     }
@@ -221,17 +209,6 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
             set(Calendar.MINUTE,0)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
-        }
-        return calendar.timeInMillis
-    }
-
-    private fun getDayEndMillis(timestamp: Long): Long {
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = timestamp
-            set(Calendar.HOUR_OF_DAY, 23)
-            set(Calendar.MINUTE, 59)
-            set(Calendar.SECOND, 59)
-            set(Calendar.MILLISECOND, 999)
         }
         return calendar.timeInMillis
     }
