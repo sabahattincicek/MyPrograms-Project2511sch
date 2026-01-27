@@ -21,4 +21,12 @@ sealed class HomeDisplayItem {
         override val id: String
             get() = occurrenceId
     }
+
+    data class FooterItem(
+        val startDate: Long,
+        val endDate: Long,
+        val itemCount: Int
+    ): HomeDisplayItem(){
+        override val id: String get() = "footer_id"
+    }
 }

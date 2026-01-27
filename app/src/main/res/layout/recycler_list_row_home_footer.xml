@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:paddingBottom="24dp"
+    android:layout_gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/tv_date_range"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Date range to show: 20.12.2025 - 18.01.2026"/>
+
+    <TextView
+        android:id="@+id/tv_item_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Items to show: 24"/>
+</LinearLayout>
