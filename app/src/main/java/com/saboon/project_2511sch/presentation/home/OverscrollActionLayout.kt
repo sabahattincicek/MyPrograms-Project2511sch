@@ -23,8 +23,9 @@ class OverscrollActionLayout(
     private var totalDragY = 0f
     private val friction = 0.5f
     private val threshold = 400f
+    private val scaleThreshold = 200f // Scaling reaches 100% at this offset
     private val stickySlop = 80f
-    private val actionDuration = 2000L
+    private val actionDuration = 1000L
 
     private var isAnimating = false
     private var isActionProcessing = false
@@ -130,24 +131,40 @@ class OverscrollActionLayout(
     }
 
     private fun updateIndicators(target: View) {
-        // Now referencing the LinearLayout containers
         val topContainer = getChildAt(0) ?: return
         val bottomContainer = getChildAt(1) ?: return
 
-        val currentTranslation = target.translationY
-        val maxVisibleTranslation = threshold - stickySlop
-        val progress = if (maxVisibleTranslation > 0) {
-            (Math.abs(currentTranslation) / maxVisibleTranslation).coerceIn(0f, 1f)
+        val currentTranslationAbs = Math.abs(target.translationY)
+        // Calculate progress based on scaleThreshold instead of full threshold
+        val maxScaleTranslation = scaleThreshold - stickySlop
+        val scaleProgress = if (maxScaleTranslation > 0) {
+            (currentTranslationAbs / maxScaleTranslation).coerceIn(0f, 1f)
         } else 0f
 
         if (totalDragY > 0) {
-            topContainer.alpha = if (isActionProcessing) 1f else progress
+            val scale = if (isActionProcessing) 1f else scaleProgress
+            topContainer.scaleX = scale
+            topContainer.scaleY = scale
+            topContainer.alpha = scale
+
+            bottomContainer.scaleX = 0f
+            bottomContainer.scaleY = 0f
             bottomContainer.alpha = 0f
         } else if (totalDragY < 0) {
-            bottomContainer.alpha = if (isActionProcessing) 1f else progress
+            val scale = if (isActionProcessing) 1f else scaleProgress
+            bottomContainer.scaleX = scale
+            bottomContainer.scaleY = scale
+            bottomContainer.alpha = scale
+
+            topContainer.scaleX = 0f
+            topContainer.scaleY = 0f
             topContainer.alpha = 0f
         } else {
+            topContainer.scaleX = 0f
+            topContainer.scaleY = 0f
             topContainer.alpha = 0f
+            bottomContainer.scaleX = 0f
+            bottomContainer.scaleY = 0f
             bottomContainer.alpha = 0f
         }
     }
@@ -155,10 +172,10 @@ class OverscrollActionLayout(
     private fun startActionProcess(isTop: Boolean, target: View) {
         isActionProcessing = true
         val container = (if (isTop) getChildAt(0) else getChildAt(1)) as? ViewGroup ?: return
-
-        // Find the CircularProgressIndicator within the LinearLayout
         val progressBar = findCircularProgress(container) ?: return
 
+        container.scaleX = 1f
+        container.scaleY = 1f
         container.alpha = 1f
         progressBar.progress = 0
 
@@ -197,18 +214,18 @@ class OverscrollActionLayout(
         val topContainer = getChildAt(0) as? ViewGroup
         val bottomContainer = getChildAt(1) as? ViewGroup
 
-        topContainer?.let {
-            it.alpha = 0f
-            findCircularProgress(it)?.progress = 0
-        }
-        bottomContainer?.let {
-            it.alpha = 0f
-            findCircularProgress(it)?.progress = 0
+        listOfNotNull(topContainer, bottomContainer).forEach { container ->
+            container.scaleX = 0f
+            container.scaleY = 0f
+            container.alpha = 0f
+            findCircularProgress(container)?.progress = 0
         }
     }
 
     private fun resetProcess(container: ViewGroup, progressBar: CircularProgressIndicator) {
         container.animate()
+            .scaleX(0f)
+            .scaleY(0f)
             .alpha(0f)
             .setDuration(300)
             .withEndAction {
