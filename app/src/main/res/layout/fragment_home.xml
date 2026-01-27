@@ -82,23 +82,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_prev"
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cpb_getPrev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="Önceki Veriler"
-            android:alpha="0" />
+            android:layout_marginBottom="16dp"
+            android:alpha="0"/>
 
-        <Button
-            android:id="@+id/btn_next"
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cpb_getNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="16dp"
-            android:text="Sonraki Veriler"
-            android:alpha="0" />
+            android:alpha="0"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_home"
