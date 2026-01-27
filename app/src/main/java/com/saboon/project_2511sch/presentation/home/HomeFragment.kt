@@ -114,9 +114,11 @@ class HomeFragment : Fragment() {
             if (isTop) {
                 // Liste en üstteyken 2 saniye boyunca çekildi (Önceki verileri getir)
 //                viewModel.fetchPreviousPage()
+                Log.d(tag, "overscroll triggered: Top")
             } else {
                 // Liste en alttayken 2 saniye boyunca çekildi (Sonraki verileri getir)
 //                viewModel.fetchNextPage()
+                Log.d(tag, "overscroll triggered: Bottom")
             }
         }
     }
