@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.presentation.course.ViewModelCourse
@@ -116,6 +117,29 @@ class HomeFragment : Fragment() {
             } else {
                 Log.d(tag, "overscroll triggered: Bottom")
                 viewModelHome.loadNext()
+            }
+        }
+        binding.rvHome.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val firstVisible = layoutManager.findFirstVisibleItemPosition()
+                val lastVisible = layoutManager.findLastVisibleItemPosition()
+
+                val todayPosition = recyclerAdapterHome.getTodayPosition()
+
+                if (todayPosition != -1 && (todayPosition !in firstVisible..lastVisible)){
+                    binding.btnScrollToday.visibility = View.VISIBLE
+                }else{
+                    binding.btnScrollToday.visibility = View.GONE
+                }
+            }
+        })
+        binding.btnScrollToday.setOnClickListener {
+            val todayPosition = recyclerAdapterHome.getTodayPosition()
+            if (todayPosition != -1){
+                val layoutManager = binding.rvHome.layoutManager as LinearLayoutManager
+                val offset = binding.rvHome.height / 3
+                layoutManager.scrollToPositionWithOffset(todayPosition, offset)
             }
         }
     }

@@ -211,6 +211,17 @@ class RecyclerAdapterHome :
         }
     }
 
+    fun getTodayPosition(): Int{
+        val today = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
+        return currentList.indexOfFirst {
+            it is HomeDisplayItem.HeaderItem && it.date == today
+        }
+    }
     class HomeDiffCallback : DiffUtil.ItemCallback<HomeDisplayItem>() {
         override fun areItemsTheSame(
             oldItem: HomeDisplayItem,
