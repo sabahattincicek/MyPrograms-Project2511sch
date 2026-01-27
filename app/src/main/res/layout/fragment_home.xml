@@ -81,6 +81,7 @@
     <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <Button
             android:id="@+id/btn_prev"
             android:layout_width="wrap_content"
@@ -100,7 +101,7 @@
             android:alpha="0" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/programRecyclerView"
+            android:id="@+id/rv_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:itemCount="4"

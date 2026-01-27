@@ -70,7 +70,7 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
                 viewModelProgramTable.activationById(baseModel.id, isChecked)
             }
         }
-        binding.programRecyclerView.apply {
+        binding.rvSelector.apply {
             adapter = recyclerAdapterDialogFragmentSelector
             layoutManager = LinearLayoutManager(context)
         }

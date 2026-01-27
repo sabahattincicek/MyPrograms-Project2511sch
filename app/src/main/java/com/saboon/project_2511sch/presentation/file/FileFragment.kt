@@ -163,7 +163,7 @@ class FileFragment : Fragment() {
             }
         }
 
-        binding.programRecyclerView.apply {
+        binding.rvFile.apply {
             adapter = recyclerAdapter
             layoutManager = LinearLayoutManager(context)
         }

@@ -67,7 +67,7 @@ class DialogFragmentCourseSelector: DialogFragment() {
                 viewModelCourse.activationById(baseModel.id, isChecked)
             }
         }
-        binding.programRecyclerView.apply {
+        binding.rvSelector.apply {
             adapter = recyclerAdapterDialogFragmentSelector
             layoutManager = LinearLayoutManager(context)
         }

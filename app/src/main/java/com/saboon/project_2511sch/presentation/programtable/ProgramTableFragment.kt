@@ -233,7 +233,7 @@ class ProgramTableFragment : Fragment() {
                 }
             }
         }
-        binding.programRecyclerView.apply {
+        binding.rvProgramTable.apply {
             adapter = programTablesRecyclerAdapter
             layoutManager = LinearLayoutManager(context)
         }

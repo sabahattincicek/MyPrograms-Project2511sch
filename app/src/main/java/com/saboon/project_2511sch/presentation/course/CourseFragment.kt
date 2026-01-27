@@ -167,7 +167,7 @@ class CourseFragment : Fragment() {
             val action = CourseFragmentDirections.actionCourseFragmentToCourseDetailsFragment(course)
             findNavController().navigate(action)
         }
-        binding.programRecyclerView.apply {
+        binding.rvCourse.apply {
             adapter = recyclerAdapterCourse
             layoutManager = LinearLayoutManager(context)
         }
