@@ -129,7 +129,7 @@
             android:layout_height="match_parent"
             tools:itemCount="4"
             android:background="?attr/colorSurface"
-            tools:listitem="@layout/recycler_list_row_home"/>
+            tools:listitem="@layout/recycler_list_row_home_content"/>
     </com.saboon.project_2511sch.presentation.home.OverscrollActionLayout>
 
 </LinearLayout>
