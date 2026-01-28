@@ -85,11 +85,6 @@ class FileFragment : Fragment() {
         setupFragmentResultListeners()
         setupObservers()
 
-        binding.toolbar.setNavigationOnClickListener {
-            Log.d(tag, "Toolbar back pressed.")
-            findNavController().popBackStack()
-        }
-
 //        binding.etSearch.doAfterTextChanged {
 //            val query = it.toString().trim()
 //            Log.d(tag, "Search query changed: $query")
@@ -170,14 +165,17 @@ class FileFragment : Fragment() {
         Log.d(tag, "applyDataToView: Updating UI chips based on initial state.")
         if (programTable != null){
             binding.cpProgramTable.isChecked = true
+            binding.cpProgramTable.isCloseIconVisible = true
             binding.cpProgramTable.text = programTable!!.title
         }
         if (course != null){
             binding.cpCourse.isChecked = true
+            binding.cpCourse.isCloseIconVisible = true
             binding.cpCourse.text = course!!.title
         }
         if (task != null){
             binding.cpTask.isChecked = true
+            binding.cpTask.isCloseIconVisible = true
             binding.cpTask.text = task!!.title
         }
     }
@@ -196,7 +194,7 @@ class FileFragment : Fragment() {
                 }
                 "app/link" -> {
                     Log.d(tag, "Opening DialogFragmentLink for edit.")
-                    val dialog = DialogFragmentLink.newInstanceForEdit(clickedFile)
+                    val dialog = DialogFragmentLink.newInstanceEdit(clickedFile)
                     dialog.show(childFragmentManager, "LinkDialogFragment_editMode")
                 }
                 else -> {
@@ -261,8 +259,10 @@ class FileFragment : Fragment() {
                         true
                     }
                     R.id.action_add_link -> {
-//                        val dialog = DialogFragmentLink.newInstanceForCreate(currentCourse)
-//                        dialog.show(childFragmentManager, "LinkDialogFragment_createLink")
+                        if (task != null) DialogFragmentLink.newInstanceCreateForTask(task!!).show(childFragmentManager, "DialogFragmentNote")
+                        else if (course != null) DialogFragmentLink.newInstanceCreateForCourse(course!!).show(childFragmentManager, "DialogFragmentNote")
+                        else if (programTable != null) DialogFragmentLink.newInstanceCreateForProgramTable(programTable!!).show(childFragmentManager, "DialogFragmentNote")
+                        else DialogFragmentLink.newInstanceCreate().show(childFragmentManager, "DialogFragmentNote")
                         true
                     }
                     else -> false
@@ -274,18 +274,6 @@ class FileFragment : Fragment() {
 
     private fun setupFragmentResultListeners() {
         Log.d(tag, "setupFragmentResultListeners: Initializing listeners.")
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentLink.REQUEST_KEY_CREATE, viewLifecycleOwner) { _, result ->
-            val newLink = BundleCompat.getParcelable(result, DialogFragmentLink.RESULT_KEY_LINK, File::class.java)
-            Log.d(tag, "Result: Create Link - Link: ${newLink?.title}")
-            newLink?.let { viewModelFile.insertLink(it) }
-        }
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentLink.REQUEST_KEY_UPDATE, viewLifecycleOwner) { _, result ->
-            val updatedLink = BundleCompat.getParcelable(result, DialogFragmentLink.RESULT_KEY_LINK, File::class.java)
-            Log.d(tag, "Result: Update Link - Link: ${updatedLink?.title}")
-            updatedLink?.let { viewModelFile.updateFile(it) }
-        }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentFileFilter.REQUEST_KEY_BASE_MODEL, viewLifecycleOwner){ _, result ->
             val baseModel = BundleCompat.getParcelable(result, DialogFragmentFileFilter.RESULT_KEY_BASE_MODEL,BaseModel::class.java)
@@ -349,25 +337,6 @@ class FileFragment : Fragment() {
                 }
             }
         }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelFile.insertNoteEvent.collect { resource ->
-                    Log.d(tag, "Observer: insertNewNoteEvent - ${resource::class.java.simpleName}")
-                    when(resource) {
-                        is Resource.Error<*> -> {
-                            Log.e(tag, "InsertNote Error: ${resource.message}")
-                            Toast.makeText(context, resource.message, Toast.LENGTH_LONG).show()
-                        }
-                        is Resource.Loading<*> -> Toast.makeText(context, "Saving note...", Toast.LENGTH_SHORT).show()
-                        is Resource.Success<*> -> Toast.makeText(context, "Note saved successfully", Toast.LENGTH_SHORT).show()
-                        else -> {}
-                    }
-                }
-            }
-        }
-
-
     }
 
     private fun openFile(file: File){

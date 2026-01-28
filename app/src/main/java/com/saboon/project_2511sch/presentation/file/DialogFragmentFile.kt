@@ -117,7 +117,7 @@ class DialogFragmentFile: DialogFragment() {
 
         binding.ivFilePreview.setOnClickListener {
             Log.d(TAG, "ivFilePreview: clicked, file: $file, uri: $uri")
-            if (file == null && uri == null) {
+            if (file == null) {
                 Log.i(TAG, "ivFilePreview: Launching file picker")
                 selectFileLauncher.launch(arrayOf("*/*"))
             }
@@ -141,6 +141,7 @@ class DialogFragmentFile: DialogFragment() {
                     val courseId = task?.courseId ?: course?.id
                     val taskId = task?.id
 
+                    Log.d(TAG, "Constraint Check - TaskID: ${task?.id}, CourseID: ${task?.courseId}, PTID: ${task?.programTableId}")
                     val newFile = File(
                         id = IdGenerator.generateFileId(binding.etTitle.text.toString()),
                         appVersionAtCreation = getString(R.string.app_version),

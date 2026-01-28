@@ -17,8 +17,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/baseline_arrow_back_24"
-            app:navigationIconTint="?attr/colorOnSurface"
             app:subtitle="@string/course"
             app:title="@string/files"/>
 
