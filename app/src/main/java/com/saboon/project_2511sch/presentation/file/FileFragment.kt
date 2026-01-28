@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.FileProvider
 import androidx.core.os.BundleCompat
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -192,7 +191,7 @@ class FileFragment : Fragment() {
             when (clickedFile.fileType){
                 "app/note" -> {
                     Log.d(tag, "Opening DialogFragmentNote for edit.")
-                    val dialog = DialogFragmentNote.newInstanceForEdit(clickedFile)
+                    val dialog = DialogFragmentNote.newInstanceEdit(clickedFile)
                     dialog.show(childFragmentManager, "NoteDialogFragment_editMode")
                 }
                 "app/link" -> {
@@ -255,8 +254,10 @@ class FileFragment : Fragment() {
                         true
                     }
                     R.id.action_add_note -> {
-//                        val dialog = DialogFragmentNote.newInstanceForCreate(currentCourse)
-//                        dialog.show(childFragmentManager, "NoteDialogFragment")
+                        if (task != null) DialogFragmentNote.newInstanceCreateForTask(task!!).show(childFragmentManager, "DialogFragmentNote")
+                        else if (course != null) DialogFragmentNote.newInstanceCreateForCourse(course!!).show(childFragmentManager, "DialogFragmentNote")
+                        else if (programTable != null) DialogFragmentNote.newInstanceCreateForProgramTable(programTable!!).show(childFragmentManager, "DialogFragmentNote")
+                        else DialogFragmentNote.newInstanceCreate().show(childFragmentManager, "DialogFragmentNote")
                         true
                     }
                     R.id.action_add_link -> {
@@ -273,19 +274,6 @@ class FileFragment : Fragment() {
 
     private fun setupFragmentResultListeners() {
         Log.d(tag, "setupFragmentResultListeners: Initializing listeners.")
-
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentNote.REQUEST_KEY_CREATE, viewLifecycleOwner) { _, result ->
-            val newNote = BundleCompat.getParcelable(result, DialogFragmentNote.RESULT_KEY_NOTE, File::class.java)
-            Log.d(tag, "Result: Create Note - Note: ${newNote?.title}")
-            newNote?.let { viewModelFile.insertNote(it) }
-        }
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentNote.REQUEST_KEY_UPDATE, viewLifecycleOwner) { _, result ->
-            val updatedNote = BundleCompat.getParcelable(result, DialogFragmentNote.RESULT_KEY_NOTE, File::class.java)
-            Log.d(tag, "Result: Update Note - Note: ${updatedNote?.title}")
-            updatedNote?.let { viewModelFile.updateFile(it) }
-        }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentLink.REQUEST_KEY_CREATE, viewLifecycleOwner) { _, result ->
             val newLink = BundleCompat.getParcelable(result, DialogFragmentLink.RESULT_KEY_LINK, File::class.java)
@@ -364,7 +352,7 @@ class FileFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelFile.insertNewNoteEvent.collect { resource ->
+                viewModelFile.insertNoteEvent.collect { resource ->
                     Log.d(tag, "Observer: insertNewNoteEvent - ${resource::class.java.simpleName}")
                     when(resource) {
                         is Resource.Error<*> -> {

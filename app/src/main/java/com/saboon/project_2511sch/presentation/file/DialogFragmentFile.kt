@@ -38,8 +38,8 @@ class DialogFragmentFile: DialogFragment() {
     private var programTable: ProgramTable ?= null
     private var course: Course ?= null
     private var task: Task?=null
-    private var uri: Uri? = null
     private var file: File? = null
+    private var uri: Uri? = null
 
     private val viewModelFile: ViewModelFile by viewModels()
 
@@ -80,7 +80,6 @@ class DialogFragmentFile: DialogFragment() {
             course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)
             task = BundleCompat.getParcelable(it, ARG_TASK, Task::class.java)
             file = BundleCompat.getParcelable(it, ARG_FILE, File::class.java)
-            Log.d(TAG, "onViewCreated: args parsed, file: ${file?.title}, course: ${course?.title}")
         }
 
         setupObservers()
@@ -229,7 +228,7 @@ class DialogFragmentFile: DialogFragment() {
         //insert
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelFile.insertNewFileEvent.collect { resource ->
+                viewModelFile.insertFileEvent.collect { resource ->
                     Log.d(TAG, "insertNewFileEvent: collected resource: $resource")
                     when(resource) {
                         is Resource.Error -> {
@@ -286,12 +285,10 @@ class DialogFragmentFile: DialogFragment() {
     }
 
     companion object{
-        const val ARG_PROGRAM_TABLE = "file_dialog_fragment_arg_program_table"
-        const val ARG_COURSE = "file_dialog_fragment_arg_course"
-        const val ARG_TASK = "file_dialog_fragment_arg_task"
-        const val ARG_FILE = "file_dialog_fragment_arg_file"
-        const val REQUEST_KEY_CREATE = "file_dialog_fragment_request_key_create"
-        const val RESULT_KEY_FILE = "file_dialog_fragment_result_key_file"
+        const val ARG_PROGRAM_TABLE = "dialog_fragment_file_arg_program_table"
+        const val ARG_COURSE = "dialog_fragment_file_arg_course"
+        const val ARG_TASK = "dialog_fragment_file_arg_task"
+        const val ARG_FILE = "dialog_fragment_file_arg_file"
 
         fun newInstanceCreate(): DialogFragmentFile{
             return DialogFragmentFile().apply {

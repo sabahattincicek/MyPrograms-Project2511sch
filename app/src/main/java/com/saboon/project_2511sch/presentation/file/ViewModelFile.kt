@@ -14,10 +14,8 @@ import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -33,20 +31,16 @@ class ViewModelFile @Inject constructor(
 
     private val TAG = "ViewModelFile"
 
-    private val _insertNewFileEvent = Channel<Resource<File>>(Channel.BUFFERED)
-    val insertNewFileEvent = _insertNewFileEvent.receiveAsFlow()
-
+    private val _insertFileEvent = Channel<Resource<File>>(Channel.BUFFERED)
+    val insertFileEvent = _insertFileEvent.receiveAsFlow()
+    private val _insertNoteEvent = Channel<Resource<File>>(Channel.BUFFERED)
+    val insertNoteEvent = _insertNoteEvent.receiveAsFlow()
+    private val _insertLinkEvent = Channel<Resource<File>>(Channel.BUFFERED)
+    val insertLinkEvent = _insertLinkEvent.receiveAsFlow()
     private val _deleteFileEvent = Channel<Resource<File>>(Channel.BUFFERED)
     val deleteFileEvent = _deleteFileEvent.receiveAsFlow()
-
     private val _updateFileEvent = Channel<Resource<File>>(Channel.BUFFERED)
     val updateFileEvent = _updateFileEvent.receiveAsFlow()
-
-    private val _insertNewNoteEvent = Channel<Resource<File>>(Channel.BUFFERED)
-    val insertNewNoteEvent = _insertNewNoteEvent.receiveAsFlow()
-
-    private val _insertNewLinkEvent = Channel<Resource<File>>(Channel.BUFFERED)
-    val insertNewLinkEvent = _insertNewLinkEvent.receiveAsFlow()
     private val _filterState = MutableStateFlow(FilterFile())
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -68,35 +62,35 @@ class ViewModelFile @Inject constructor(
         viewModelScope.launch {
             try {
                 Log.d(TAG, "insertNewFile: Sending Loading state.")
-                _insertNewFileEvent.send(Resource.Loading())
+                _insertFileEvent.send(Resource.Loading())
                 val result = fileWriteUseCase.insertFile(file, uri)
                 Log.i(TAG, "insertNewFile: Received result from UseCase: $result")
-                _insertNewFileEvent.send(result)
+                _insertFileEvent.send(result)
             } catch (e: Exception) {
                 Log.e(TAG, "insertNewFile: Exception caught while inserting file.", e)
-                _insertNewFileEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+                _insertFileEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }
     fun insertNote(note: File){
         viewModelScope.launch {
             try {
-                _insertNewNoteEvent.send(Resource.Loading())
+                _insertNoteEvent.send(Resource.Loading())
                 val result = fileWriteUseCase.insertNote(note)
-                _insertNewNoteEvent.send(result)
+                _insertNoteEvent.send(result)
             }catch (e: Exception){
-                _insertNewNoteEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+                _insertNoteEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }
     fun insertLink(link: File){
         viewModelScope.launch {
             try {
-                _insertNewLinkEvent.send(Resource.Loading())
+                _insertLinkEvent.send(Resource.Loading())
                 val result = fileWriteUseCase.insertLink(link)
-                _insertNewLinkEvent.send(result)
+                _insertLinkEvent.send(result)
             }catch (e: Exception){
-                _insertNewLinkEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+                _insertLinkEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }
