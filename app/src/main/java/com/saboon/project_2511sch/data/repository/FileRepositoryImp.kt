@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.FileOutputStream
-import java.io.IOException
 import javax.inject.Inject
 import java.io.File as JavaFile
 
@@ -23,7 +22,7 @@ class FileRepositoryImp @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fileDao: FileDao,
 ): IFileRepository {
-    override suspend fun insertFileFromUri(file: File, uri: Uri): Resource<File> {
+    override suspend fun insertFile(file: File, uri: Uri): Resource<File> {
         val contentResolver = context.contentResolver
 
         // Güvenlik ve tutarlılık için, dosya adını tekrar Uri'den okuyalım.
@@ -62,29 +61,7 @@ class FileRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun deleteFile(file: File): Resource<File> {
-        try {
-            val fileToDelete = JavaFile(file.filePath)
-            if (fileToDelete.exists() && !fileToDelete.delete()){
-                return Resource.Error("Failed to delete physical file at ${file.filePath}")
-            }
-            fileDao.delete(file.toEntity())
-            return Resource.Success(file)
-        }catch (e: Exception){
-            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
-        }
-    }
-
-    override suspend fun updateFile(file: File): Resource<File> {
-        try {
-            fileDao.update(file.toEntity())
-            return Resource.Success(file)
-        }catch (e: Exception){
-            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
-        }
-    }
-
-    override suspend fun insertNoteFile(note: File): Resource<File> {
+    override suspend fun insertNote(note: File): Resource<File> {
         val content = note.description ?: ""
 
         try {
@@ -111,7 +88,7 @@ class FileRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun insertLinkFile(link: File): Resource<File> {
+    override suspend fun insertLink(link: File): Resource<File> {
         try {
             fileDao.insert(link.toEntity())
             return Resource.Success(link)
@@ -119,9 +96,41 @@ class FileRepositoryImp @Inject constructor(
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
     }
+    override suspend fun delete(file: File): Resource<File> {
+        try {
+            val fileToDelete = JavaFile(file.filePath)
+            if (fileToDelete.exists() && !fileToDelete.delete()){
+                return Resource.Error("Failed to delete physical file at ${file.filePath}")
+            }
+            fileDao.delete(file.toEntity())
+            return Resource.Success(file)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
+    override suspend fun update(file: File): Resource<File> {
+        try {
+            fileDao.update(file.toEntity())
+            return Resource.Success(file)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
+    override fun getAllByTaskId(id: String): Flow<Resource<List<File>>> {
+        return fileDao.getAllByTaskId(id)
+            .map<List<FileEntity>, Resource<List<File>>>  { entities ->
+                Resource.Success(entities.map { it.toDomain() })
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
+            }
+    }
+
 
     override fun getFilesByCourseId(id: String): Flow<Resource<List<File>>> {
-        return fileDao.getFilesByCourseId(id)
+        return fileDao.getAllByCourseId(id)
             .map<List<FileEntity>, Resource<List<File>>> { entities ->
                 Resource.Success( entities.map { it.toDomain() } )
             }
@@ -131,7 +140,7 @@ class FileRepositoryImp @Inject constructor(
     }
 
     override fun getFilesByProgramTableId(id: String): Flow<Resource<List<File>>> {
-        return fileDao.getFilesByProgramTableId(id)
+        return fileDao.getAllByProgramTableId(id)
             .map<List<FileEntity>, Resource<List<File>>> { entities ->
                 Resource.Success(entities.map { it.toDomain() })
             }
@@ -141,7 +150,7 @@ class FileRepositoryImp @Inject constructor(
     }
 
     override fun getAllFiles(): Flow<Resource<List<File>>> {
-        return fileDao.getAllFiles()
+        return fileDao.getAll()
             .map<List<FileEntity>, Resource<List<File>>> { entities ->
                 Resource.Success(entities.map { it.toDomain() })
             }

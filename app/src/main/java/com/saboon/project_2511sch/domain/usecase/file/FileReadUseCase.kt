@@ -9,6 +9,9 @@ import javax.inject.Inject
 class FileReadUseCase @Inject constructor(
     private val fileRepository: IFileRepository
 ) {
+    fun getAllByTaskId(id: String): Flow<Resource<List<File>>>{
+        return fileRepository.getAllByTaskId(id)
+    }
     fun getAllByCourseId(id: String): Flow<Resource<List<File>>>{
         return fileRepository.getFilesByCourseId(id)
     }

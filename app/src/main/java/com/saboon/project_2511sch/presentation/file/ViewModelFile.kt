@@ -106,7 +106,18 @@ class ViewModelFile @Inject constructor(
     }
 
 
-
+    fun getAllFilesByTaskId(id: String){
+        viewModelScope.launch {
+            try {
+                _filesState.value = Resource.Loading()
+                fileReadUseCase.getAllByTaskId(id).collect { resource ->
+                    _filesState.value = resource
+                }
+            }catch (e: Exception){
+                _filesState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+            }
+        }
+    }
     fun getAllFilesByCourseId(id: String) {
         Log.d(TAG, "getAllFilesByCourseId: called with course ID: $id")
         viewModelScope.launch {

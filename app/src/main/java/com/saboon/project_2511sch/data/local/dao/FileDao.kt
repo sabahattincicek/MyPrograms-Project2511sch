@@ -20,12 +20,14 @@ interface FileDao {
     @Update
     suspend fun update(file: FileEntity)
 
+    @Query("SELECT * FROM files WHERE task_id = :id")
+    fun getAllByTaskId(id: String): Flow<List<FileEntity>>
     @Query("SELECT * FROM files WHERE course_id = :id")
-    fun getFilesByCourseId(id: String): Flow<List<FileEntity>>
+    fun getAllByCourseId(id: String): Flow<List<FileEntity>>
 
     @Query("SELECT * FROM files WHERE program_table_id = :id")
-    fun getFilesByProgramTableId(id: String): Flow<List<FileEntity>>
+    fun getAllByProgramTableId(id: String): Flow<List<FileEntity>>
 
     @Query("SELECT * FROM files")
-    fun getAllFiles(): Flow<List<FileEntity>>
+    fun getAll(): Flow<List<FileEntity>>
 }

@@ -7,19 +7,20 @@ import kotlinx.coroutines.flow.Flow
 
 interface IFileRepository {
 
-    suspend fun insertFileFromUri(file: File, uri: Uri): Resource<File>
+    suspend fun insertFile(file: File, uri: Uri): Resource<File>
+    suspend fun insertNote(note: File): Resource<File>
+    suspend fun insertLink(link: File): Resource<File>
+    suspend fun delete(file: File): Resource<File>
+    suspend fun update(file: File): Resource<File>
 
-    suspend fun deleteFile(file: File): Resource<File>
-
-    suspend fun updateFile(file: File): Resource<File>
-
-    suspend fun insertNoteFile(note: File): Resource<File>
-
-    suspend fun insertLinkFile(link: File): Resource<File>
-
+    fun getAllByTaskId(id: String): Flow<Resource<List<File>>>
     fun getFilesByCourseId(id: String): Flow<Resource<List<File>>>
-
     fun getFilesByProgramTableId(id: String): Flow<Resource<List<File>>>
-
     fun getAllFiles(): Flow<Resource<List<File>>>
 }
+
+
+
+
+
+
