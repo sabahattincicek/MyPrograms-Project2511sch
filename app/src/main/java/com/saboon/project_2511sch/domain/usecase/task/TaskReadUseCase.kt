@@ -12,4 +12,7 @@ class TaskReadUseCase @Inject constructor(
     fun getAllByProgramTableIds(ids: List<String>): Flow<Resource<List<Task>>>{
         return taskRepository.getAllTasksByProgramTableIds(ids)
     }
+    fun getAllByCourseId(id: String): Flow<Resource<List<Task>>>{
+        return taskRepository.getAllTasksByCourseId(id)
+    }
 }

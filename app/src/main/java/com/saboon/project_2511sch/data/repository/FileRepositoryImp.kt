@@ -55,7 +55,7 @@ class FileRepositoryImp @Inject constructor(
            // 3. Nihai nesneyi veritabanına kaydet
            fileDao.insert(finalFileToSave.toEntity())
 
-           return Resource.Success(file)
+           return Resource.Success(finalFileToSave)
         }catch (e: Exception){
            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }

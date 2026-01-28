@@ -1,7 +1,6 @@
-package com.saboon.project_2511sch.presentation.home
+package com.saboon.project_2511sch.presentation.common
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,22 +12,23 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentHomeFilterSelectorBinding
-import com.saboon.project_2511sch.domain.model.ProgramTable
-import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
+import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 @AndroidEntryPoint
-class DialogFragmentProgramTableSelector: DialogFragment() {
-    private val tag = "DialogFragmentProgramTableSelector"
+class DialogFragmentCourseSelector: DialogFragment() {
+    private val tag = "DialogFragmentCourseSelector"
 
-    private var _binding: DialogFragmentHomeFilterSelectorBinding? = null
+    private var _binding: DialogFragmentHomeFilterSelectorBinding ?= null
     private val binding get() = _binding!!
 
     private lateinit var recyclerAdapterDialogFragmentSelector: RecyclerAdapterDialogFragmentSelector
 
-    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
+    private val viewModelCourse: ViewModelCourse by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,28 +46,25 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(tag, "onViewCreated: Dialog initialized")
 
         setupRecyclerAdapter()
         observeProgramTablesState()
-        viewModelProgramTable.getAllProgramTables()
+        viewModelCourse.getAllCourse()
         binding.topAppBar.setNavigationOnClickListener {
-            Log.d(tag, "topAppBar clicked: Dismissing dialog")
             dismiss()
         }
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
-
     private fun setupRecyclerAdapter(){
         recyclerAdapterDialogFragmentSelector = RecyclerAdapterDialogFragmentSelector()
         recyclerAdapterDialogFragmentSelector.onItemCheckedChangeListener = { isChecked, baseModel ->
-            Log.d(tag, "onItemCheckedChangeListener: isChecked=$isChecked, item=$baseModel")
-            if (baseModel is ProgramTable){
-                viewModelProgramTable.activationById(baseModel.id, isChecked)
+            if (baseModel is Course){
+                viewModelCourse.activationById(baseModel.id, isChecked)
             }
         }
         binding.rvSelector.apply {
@@ -79,19 +76,12 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
     private fun observeProgramTablesState(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.programTableListState.collect { resource ->
+                viewModelCourse.coursesState.collect { resource ->
                     when (resource) {
-                        is Resource.Error<*> -> {
-                            Log.e(tag, "observeProgramTablesState: Error - ${resource.message}")
-                        }
-                        is Resource.Idle<*> -> {
-                            Log.d(tag, "observeProgramTablesState: Idle")
-                        }
-                        is Resource.Loading<*> -> {
-                            Log.d(tag, "observeProgramTablesState: Loading...")
-                        }
+                        is Resource.Error<*> -> {}
+                        is Resource.Idle<*> -> {}
+                        is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            Log.d(tag, "observeProgramTablesState: Success - Received ${resource.data?.size ?: 0} items")
                             resource.data?.let {
                                 recyclerAdapterDialogFragmentSelector.submitList(resource.data)
                             }
@@ -101,4 +91,5 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
             }
         }
     }
+
 }

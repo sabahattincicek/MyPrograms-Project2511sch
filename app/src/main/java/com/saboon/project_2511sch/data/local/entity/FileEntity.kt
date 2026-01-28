@@ -51,9 +51,9 @@ data class FileEntity(
     @ColumnInfo(name = "deleted_at") val deletedAt: Long,
     @ColumnInfo(name = "app_version_at_creation") val appVersionAtCreation: String,
 
-    @ColumnInfo(name = "program_table_id") val programTableId: String,
-    @ColumnInfo(name = "course_id") val courseId: String,
-    @ColumnInfo(name = "task_id") val taskId: String,
+    @ColumnInfo(name = "program_table_id") val programTableId: String?,
+    @ColumnInfo(name = "course_id") val courseId: String?,
+    @ColumnInfo(name = "task_id") val taskId: String?,
 
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,

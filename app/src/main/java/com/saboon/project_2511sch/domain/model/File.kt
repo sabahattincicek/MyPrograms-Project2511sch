@@ -16,9 +16,9 @@ data class File(
     override val title: String,
     override val description: String,
 
-    val programTableId: String,
-    val courseId: String,
-    val taskId: String,
+    val programTableId: String?,
+    val courseId: String?,
+    val taskId: String?,
 
     val fileType: String,
     val filePath: String,

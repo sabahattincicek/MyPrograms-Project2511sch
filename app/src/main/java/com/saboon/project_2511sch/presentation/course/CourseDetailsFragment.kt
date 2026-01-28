@@ -88,7 +88,7 @@ class CourseDetailsFragment : Fragment() {
         }
 
         binding.btnFiles.setOnClickListener {
-            val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToFileFragment(course)
+            val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToFileFragment(programTable, course, null)
             findNavController().navigate(action)
         }
 

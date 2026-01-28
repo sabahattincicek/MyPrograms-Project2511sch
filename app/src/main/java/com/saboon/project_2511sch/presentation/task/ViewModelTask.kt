@@ -88,6 +88,18 @@ class ViewModelTask @Inject constructor(
             }
         }
     }
+    fun getAllByCourseId(id: String){
+        viewModelScope.launch {
+            try {
+                _taskState.value = Resource.Loading()
+                taskReadUseCase.getAllByCourseId(id).collect { resource ->
+                    _taskState.value = resource
+                }
+            }catch (e: Exception){
+                _taskState.value = Resource.Error(e.localizedMessage?:"An unexpected error occurred in ViewModel.")
+            }
+        }
+    }
 
     fun setupAlarmForSchedule(programTable: ProgramTable, course: Course, task: Task){
         alarmScheduler.scheduleReminder(programTable, course, task)

@@ -194,6 +194,10 @@
     <string name="and_more">and more</string>
     <string name="select">Select</string>
     <string name="scroll_to_today">Scroll To Today</string>
+    <string name="search_in_files">Search in files...</string>
+    <string name="clear_filters">Clear Filters</string>
+    <string name="chose_file">Chose File</string>
+    <string name="file_preview">File preview</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>

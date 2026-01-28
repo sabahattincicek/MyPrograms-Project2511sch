@@ -24,7 +24,10 @@ import com.saboon.project_2511sch.data.local.entity.TaskLessonEntity
         TaskExamEntity::class,
         TaskHomeworkEntity::class
     ],
-    version = 1,
+    version = 2,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ],
     exportSchema = true)
 abstract class Database(): RoomDatabase() {
     abstract fun programDao(): ProgramTableDao

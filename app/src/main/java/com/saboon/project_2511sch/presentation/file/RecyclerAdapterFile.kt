@@ -7,16 +7,20 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil3.load
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.RecyclerListRowFileBinding
 import com.saboon.project_2511sch.domain.model.File
 import com.saboon.project_2511sch.util.toFormattedString
+import java.io.File as JavaFile
 
-class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder>(FileDiffCallback()) {
+class RecyclerAdapterFile :
+    ListAdapter<File, RecyclerAdapterFile.FileViewHolder>(FileDiffCallback()) {
 
 
     var onItemClickListener: ((File) -> Unit)? = null
     var onMenuItemClickListener: ((File, Int) -> Unit)? = null
+    var onFilePreviewClickListener: ((File) -> Unit)? = null
 
     class FileViewHolder(val binding: RecyclerListRowFileBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: File){
@@ -27,12 +31,7 @@ class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder
                 item.fileType.startsWith("image/") -> {
                     binding.tvFileType.visibility = View.GONE
                     binding.ivFilePreview.visibility = View.VISIBLE
-                    // ÖNEMLİ: Dosya yolundan resim yüklemek için Coil veya Glide gibi
-                    // bir kütüphane kullanın. Bu, performansı ve bellek yönetimini
-                    // otomatik olarak halleder.
-
-                    // Örnek (Coil ile):
-                    // binding.ivFilePreview.load(JavaFile(file.filePath))
+                    binding.ivFilePreview.load(JavaFile(item.filePath))
                 }
 
                 item.fileType == "application/pdf" -> {
@@ -101,7 +100,9 @@ class RecyclerAdapterFile : ListAdapter<File, RecyclerAdapterFile.FileViewHolder
         holder.itemView.setOnClickListener {
             onItemClickListener?.invoke(item)
         }
-
+        holder.binding.ivFilePreview.setOnClickListener {
+            onFilePreviewClickListener?.invoke(item)
+        }
         holder.binding.ivFileMoreMenu.setOnClickListener { anchorView ->
             val popup = PopupMenu(anchorView.context, anchorView)
             popup.inflate(R.menu.menu_action_delete)

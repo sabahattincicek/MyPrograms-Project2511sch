@@ -73,8 +73,18 @@
             android:id="@+id/action_fileFragment_to_courseDetailsFragment"
             app:destination="@id/courseDetailsFragment" />
         <argument
+            android:name="program_table"
+            app:argType="com.saboon.project_2511sch.domain.model.ProgramTable"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
             android:name="course"
             app:argType="com.saboon.project_2511sch.domain.model.Course"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="task"
+            app:argType="com.saboon.project_2511sch.domain.model.Task"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
