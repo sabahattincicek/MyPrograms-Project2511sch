@@ -166,7 +166,7 @@ class DialogFragmentTaskExam: DialogFragment() {
     private fun setupAdapters(){
         binding.actvReminder.setAdapter(
             ArrayAdapter(requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.support_simple_spinner_dropdown_item,
                 resources.getStringArray(R.array.reminder_options))
         )
     }

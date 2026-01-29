@@ -207,12 +207,12 @@ class DialogFragmentTaskLesson: DialogFragment() {
     private fun setupAdapters(){
         binding.actvRepeat.setAdapter(
             ArrayAdapter(requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.support_simple_spinner_dropdown_item,
                 resources.getStringArray(R.array.recurrence_options))
         )
         binding.actvReminder.setAdapter(
             ArrayAdapter(requireContext(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                layout.support_simple_spinner_dropdown_item,
                 resources.getStringArray(R.array.reminder_options))
         )
     }
