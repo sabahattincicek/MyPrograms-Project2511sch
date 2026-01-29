@@ -33,6 +33,14 @@ class ProgramTableRepositoryImp @Inject constructor(
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
     }
+    override suspend fun delete(programTable: ProgramTable): Resource<ProgramTable> {
+        try {
+            programTableDao.delete(programTable.toEntity())
+            return Resource.Success(programTable)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
 
     override suspend fun activationById(id: String, isActive: Boolean): Resource<Unit> {
         try {
@@ -51,15 +59,6 @@ class ProgramTableRepositoryImp @Inject constructor(
             .catch { e ->
                 emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
             }
-    }
-
-    override suspend fun delete(programTable: ProgramTable): Resource<ProgramTable> {
-        try {
-            programTableDao.delete(programTable.toEntity())
-            return Resource.Success(programTable)
-        }catch (e: Exception){
-            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
-        }
     }
 
     override fun getAll(): Flow<Resource<List<ProgramTable>>> {

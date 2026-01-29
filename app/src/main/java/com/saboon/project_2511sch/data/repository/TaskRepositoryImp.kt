@@ -1,5 +1,6 @@
 package com.saboon.project_2511sch.data.repository
 
+import com.saboon.project_2511sch.data.local.dao.FileDao
 import com.saboon.project_2511sch.data.local.dao.TaskDao
 import com.saboon.project_2511sch.data.local.entity.TaskExamEntity
 import com.saboon.project_2511sch.data.local.entity.TaskHomeworkEntity
@@ -16,7 +17,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TaskRepositoryImp @Inject constructor(
-    private val taskDao: TaskDao
+    private val taskDao: TaskDao,
+    private val fileDao: FileDao
 ): ITaskRepository {
     override suspend fun insertTask(task: Task): Resource<Task> {
         try {
@@ -46,6 +48,7 @@ class TaskRepositoryImp @Inject constructor(
 
     override suspend fun deleteTask(task: Task): Resource<Task> {
         try{
+            fileDao.deleteAllByTaskId(task.id)
             when(task) {
                 is Task.Lesson -> taskDao.deleteLesson(task.toEntity())
                 is Task.Exam -> taskDao.deleteExam(task.toEntity())

@@ -20,24 +20,6 @@ import com.saboon.project_2511sch.domain.model.Task
             parentColumns = ["id"],
             childColumns = ["course_id"],
             onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity = TaskLessonEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["task_id"],
-            onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity = TaskExamEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["task_id"],
-            onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity = TaskHomeworkEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["task_id"],
-            onDelete = ForeignKey.CASCADE
         )
     ]
 )

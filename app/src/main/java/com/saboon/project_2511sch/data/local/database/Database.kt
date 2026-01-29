@@ -24,9 +24,10 @@ import com.saboon.project_2511sch.data.local.entity.TaskLessonEntity
         TaskExamEntity::class,
         TaskHomeworkEntity::class
     ],
-    version = 2,
+    version = 3,
     autoMigrations = [
-        AutoMigration(from = 1, to = 2)
+        AutoMigration(from = 1, to = 2), // make file fields (program_table_id, course_id, task_id) nullable
+        AutoMigration(from = 2, to = 3) // delete task foreign keys in file entity
     ],
     exportSchema = true)
 abstract class Database(): RoomDatabase() {

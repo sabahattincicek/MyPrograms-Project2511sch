@@ -12,7 +12,6 @@ interface IFileRepository {
     suspend fun insertLink(link: File): Resource<File>
     suspend fun delete(file: File): Resource<File>
     suspend fun update(file: File): Resource<File>
-
     fun getAllByTaskId(id: String): Flow<Resource<List<File>>>
     fun getFilesByCourseId(id: String): Flow<Resource<List<File>>>
     fun getFilesByProgramTableId(id: String): Flow<Resource<List<File>>>

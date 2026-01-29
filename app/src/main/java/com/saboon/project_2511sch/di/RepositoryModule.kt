@@ -51,8 +51,8 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideTaskRepositoryImp(taskDao: TaskDao): ITaskRepository {
-        return TaskRepositoryImp(taskDao)
+    fun provideTaskRepositoryImp(taskDao: TaskDao, fileDao: FileDao): ITaskRepository {
+        return TaskRepositoryImp(taskDao, fileDao)
     }
 
 }
