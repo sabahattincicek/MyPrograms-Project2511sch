@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.FileProvider
 import androidx.core.os.BundleCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -85,27 +86,28 @@ class FileFragment : Fragment() {
         setupFragmentResultListeners()
         setupObservers()
 
-//        binding.etSearch.doAfterTextChanged {
-//            val query = it.toString().trim()
-//            Log.d(tag, "Search query changed: $query")
-//            val originalList = (viewModelFile.filesState.value as? Resource.Success<List<File>>)?.data
-//            if(originalList != null){
-//                if (query.isNotEmpty()){
-//                    val filteredList = originalList.filter { file ->
-//                        val titleMatches = file.title.contains(query, true)
-//                        val descriptionMatches = file.title.contains(query, true)
-//                        val courseTitleMatches = file.courseId.contains(query, true)
-//                        val programTableTitleMatches = file.programTableId.contains(query, true)
-//                        titleMatches || descriptionMatches || courseTitleMatches || programTableTitleMatches
-//                    }
-//                    Log.d(tag, "Filtering list. Original size: ${originalList.size}, Filtered size: ${filteredList.size}")
-//                    recyclerAdapter.submitList(filteredList)
-//                }else{
-//                    Log.d(tag, "Query empty, submitting original list.")
-//                    recyclerAdapter.submitList(originalList)
-//                }
-//            }
-//        }
+        binding.etSearch.doAfterTextChanged {
+            val query = it.toString().trim()
+            Log.d(tag, "Search query changed: $query")
+            val originalList = (viewModelFile.filesState.value as? Resource.Success<List<File>>)?.data
+            if(originalList != null){
+                if (query.isNotEmpty()){
+                    val filteredList = originalList.filter { file ->
+                        val titleMatches = file.title.contains(query, true)
+                        val descriptionMatches = file.title.contains(query, true)
+                        val taskTitleMatches = (file.taskId ?: "").contains(query, true)
+                        val courseTitleMatches = (file.courseId ?: "").contains(query, true)
+                        val programTableTitleMatches = (file.programTableId ?: "").contains(query, true)
+                        titleMatches || descriptionMatches || taskTitleMatches || courseTitleMatches || programTableTitleMatches
+                    }
+                    Log.d(tag, "Filtering list. Original size: ${originalList.size}, Filtered size: ${filteredList.size}")
+                    recyclerAdapter.submitList(filteredList)
+                }else{
+                    Log.d(tag, "Query empty, submitting original list.")
+                    recyclerAdapter.submitList(originalList)
+                }
+            }
+        }
          binding.fabAddNewFile.setOnClickListener { anchorView ->
             showAddFileMenu(anchorView)
          }
