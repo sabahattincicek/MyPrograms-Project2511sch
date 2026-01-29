@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.common
+package com.saboon.project_2511sch.presentation.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

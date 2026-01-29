@@ -24,6 +24,7 @@ class RecyclerAdapterFile :
 
     class FileViewHolder(val binding: RecyclerListRowFileBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: File){
+//            binding.tvPath.text =
             binding.tvTitle.text = item.title
             binding.tvDate.text = item.createdAt.toFormattedString("dd.MM.yyyy")
 

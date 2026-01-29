@@ -151,7 +151,7 @@ class DialogFragmentTaskHomework: DialogFragment() {
         binding.actvReminder.setAdapter(
             ArrayAdapter(
                 requireContext(),
-                R.layout.support_simple_spinner_dropdown_item,
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 resources.getStringArray(R.array.reminder_options)
             )
         )

@@ -53,6 +53,13 @@
             android:layout_marginStart="16dp"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tv_path"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="File Title"/>
+
+            <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

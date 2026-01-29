@@ -98,6 +98,7 @@ class DialogFragmentLink: DialogFragment() {
         binding.btnSave.setOnClickListener {
             Log.d(TAG, "btnSave: clicked, isEditMode: $isEditMode")
             val title = binding.etTitle.text.toString()
+            val description = binding.etDescription.toString()
             val url = binding.etUrl.text.toString()
             if (isEditMode){
                 val updatedLink = file!!.copy(
@@ -118,9 +119,9 @@ class DialogFragmentLink: DialogFragment() {
                     courseId = courseId,
                     taskId = taskId,
                     title = title,
-                    description = url,
+                    description = description,
                     fileType = "app/link",
-                    filePath = "",
+                    filePath = url,
                     sizeInBytes = 0L
                 )
                 viewModelFile.insertLink(newLink)

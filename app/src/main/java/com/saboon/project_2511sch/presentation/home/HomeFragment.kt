@@ -14,8 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
-import com.saboon.project_2511sch.presentation.common.DialogFragmentCourseSelector
-import com.saboon.project_2511sch.presentation.common.DialogFragmentProgramTableSelector
 import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
 import com.saboon.project_2511sch.util.Resource

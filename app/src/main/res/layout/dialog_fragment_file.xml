@@ -97,14 +97,30 @@
                 app:strokeColor="?attr/colorOutline"
                 app:strokeWidth="1dp">
 
-                <ImageView
-                    android:id="@+id/iv_file_preview"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerInside"
-                    android:padding="8dp"
-                    android:src="@drawable/baseline_insert_drive_file_24"
-                    android:contentDescription="@string/file_preview" />
+                    android:layout_height="match_parent">
+
+                    <!-- Resim önizlemeleri için kullanılacak -->
+                    <ImageView
+                        android:id="@+id/iv_file_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/baseline_insert_drive_file_24"
+                        android:visibility="visible" /> <!-- Başlangıçta gizli -->
+
+                    <!-- PDF, DOCX gibi metinler için kullanılacak -->
+                    <TextView
+                        android:id="@+id/tv_preview_file_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="PDF"
+                        android:textStyle="bold"
+                        android:visibility="gone" /> <!-- Başlangıçta görünür -->
+
+                </FrameLayout>
 
             </com.google.android.material.card.MaterialCardView>
 

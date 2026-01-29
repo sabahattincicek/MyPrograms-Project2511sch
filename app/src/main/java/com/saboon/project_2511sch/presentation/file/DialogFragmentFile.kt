@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import coil3.load
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course

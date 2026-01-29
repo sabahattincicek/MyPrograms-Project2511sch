@@ -10,16 +10,27 @@ import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentTaskLessonBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
+import com.saboon.project_2511sch.presentation.file.ViewModelFile
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
 import com.saboon.project_2511sch.util.RecurrenceRule
+import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.toFormattedString
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class DialogFragmentTaskLesson: DialogFragment() {
     private var _binding: DialogFragmentTaskLessonBinding?= null
     private val binding get() = _binding!!
@@ -28,6 +39,10 @@ class DialogFragmentTaskLesson: DialogFragment() {
 
     private var course: Course?= null
     private var task: Task.Lesson? = null
+
+    private lateinit var recyclerAdapterMiniFile: RecyclerAdapterMiniFile
+
+    private val viewModelFile: ViewModelFile by viewModels()
 
     private var selectedDateMillis: Long = System.currentTimeMillis()
     private var selectedRecurrenceRule: RecurrenceRule = RecurrenceRule()
@@ -60,6 +75,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
         dateTimePicker = Picker(requireContext(), childFragmentManager)
         setupAdapters()
         setupFragmentResultListeners()
+        setupObservers()
 
         val isEditMode = task != null
         if (isEditMode){
@@ -75,6 +91,10 @@ class DialogFragmentTaskLesson: DialogFragment() {
             binding.etTimeEnd.setText(task!!.timeEnd.toFormattedString("HH:mm"))
             binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
             binding.etPlace.setText(task!!.place)
+
+            //apply files section
+            binding.llFilesSection.visibility = View.VISIBLE
+            viewModelFile.updateTaskFilter(task!!)
 
             selectedDateMillis = task!!.date
             selectedRecurrenceRule = RecurrenceRule.fromRuleString(task!!.recurrenceRule)
@@ -207,14 +227,22 @@ class DialogFragmentTaskLesson: DialogFragment() {
     private fun setupAdapters(){
         binding.actvRepeat.setAdapter(
             ArrayAdapter(requireContext(),
-                R.layout.support_simple_spinner_dropdown_item,
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 resources.getStringArray(R.array.recurrence_options))
         )
         binding.actvReminder.setAdapter(
             ArrayAdapter(requireContext(),
-                layout.support_simple_spinner_dropdown_item,
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 resources.getStringArray(R.array.reminder_options))
         )
+        recyclerAdapterMiniFile = RecyclerAdapterMiniFile()
+        recyclerAdapterMiniFile.onItemClickListener = {file ->
+
+        }
+        binding.rvMiniFilePreviews.apply {
+            adapter = recyclerAdapterMiniFile
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
     }
     private fun setupFragmentResultListeners(){
         childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, viewLifecycleOwner){ requestKey, result ->
@@ -222,6 +250,24 @@ class DialogFragmentTaskLesson: DialogFragment() {
             if (isYes){
                 setFragmentResult(REQUEST_KEY_DELETE, bundleOf(ARG_TASK to task))
                 dismiss()
+            }
+        }
+    }
+    private fun setupObservers(){
+        //file states
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelFile.filesState.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            val list = resource.data
+                            recyclerAdapterMiniFile.submitList(resource.data)
+                        }
+                    }
+                }
             }
         }
     }
