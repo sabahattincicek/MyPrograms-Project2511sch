@@ -3,7 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:menu="@menu/menu_action_delete"
+            app:navigationIcon="@drawable/baseline_close_24"
+            app:navigationIconTint="?attr/colorOnSurface"
+            app:subtitle="@string/course"
+            app:title="@string/task"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,31 +31,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:orientation="vertical">
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="?attr/actionBarSize"
-                    app:menu="@menu/menu_action_delete"
-                    app:navigationIcon="@drawable/baseline_close_24"
-                    app:navigationIconTint="?attr/colorOnSurface"
-                    app:subtitle="@string/course"
-                    app:title="@string/task"/>
-            </com.google.android.material.appbar.AppBarLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:gravity="bottom"
                 android:orientation="horizontal">
 
@@ -62,12 +62,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="16dp"
                 android:hint="@string/hint_title">
-
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_title"
                     android:layout_width="match_parent"
@@ -77,12 +73,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
                 app:counterEnabled="true"
                 app:counterMaxLength="100"
                 android:textAlignment="textStart"
-                android:layout_marginEnd="16dp"
                 android:hint="@string/hint_description">
 
 
@@ -98,8 +92,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:gravity="bottom"
                 android:orientation="horizontal">
 
@@ -123,9 +115,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="16dp"
                 android:hint="@string/due_date">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_due_date"
@@ -138,9 +128,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="16dp"
                 android:hint="@string/due_time">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_due_time"
@@ -153,10 +141,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
                 app:helperText="@string/reminderInfo"
-                android:layout_marginEnd="16dp"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:hint="@string/hint_reminder">
                 <AutoCompleteTextView
@@ -165,6 +151,40 @@
                     android:layout_height="wrap_content"
                     android:inputType="none"/>
             </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/files"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="5dp"
+                    android:background="?attr/colorOnSurface" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_mini_file_previews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="1"
+                tools:listitem="@layout/recycler_list_row_file_mini_content"/>
 
         </LinearLayout>
 

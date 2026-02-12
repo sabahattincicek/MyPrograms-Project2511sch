@@ -49,7 +49,7 @@ class DialogFragmentCourseSelector: DialogFragment() {
 
         setupRecyclerAdapter()
         observeProgramTablesState()
-        viewModelCourse.getAllCourse()
+        viewModelCourse.updateFilter(null)
         binding.topAppBar.setNavigationOnClickListener {
             dismiss()
         }
@@ -83,7 +83,7 @@ class DialogFragmentCourseSelector: DialogFragment() {
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
                             resource.data?.let {
-                                recyclerAdapterDialogFragmentSelector.submitList(resource.data)
+//                                recyclerAdapterDialogFragmentSelector.submitList(resource.data)
                             }
                         }
                     }

@@ -67,7 +67,7 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
         recyclerAdapterDialogFragmentSelector.onItemCheckedChangeListener = { isChecked, baseModel ->
             Log.d(tag, "onItemCheckedChangeListener: isChecked=$isChecked, item=$baseModel")
             if (baseModel is ProgramTable){
-                viewModelProgramTable.activationById(baseModel.id, isChecked)
+//                viewModelProgramTable.activationById(baseModel.id, isChecked)
             }
         }
         binding.rvSelector.apply {
@@ -77,28 +77,28 @@ class DialogFragmentProgramTableSelector: DialogFragment() {
     }
 
     private fun observeProgramTablesState(){
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.programTableListState.collect { resource ->
-                    when (resource) {
-                        is Resource.Error<*> -> {
-                            Log.e(tag, "observeProgramTablesState: Error - ${resource.message}")
-                        }
-                        is Resource.Idle<*> -> {
-                            Log.d(tag, "observeProgramTablesState: Idle")
-                        }
-                        is Resource.Loading<*> -> {
-                            Log.d(tag, "observeProgramTablesState: Loading...")
-                        }
-                        is Resource.Success<*> -> {
-                            Log.d(tag, "observeProgramTablesState: Success - Received ${resource.data?.size ?: 0} items")
-                            resource.data?.let {
-                                recyclerAdapterDialogFragmentSelector.submitList(resource.data)
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+//                viewModelProgramTable.programTableDisplayItemListState.collect { resource ->
+//                    when (resource) {
+//                        is Resource.Error<*> -> {
+//                            Log.e(tag, "observeProgramTablesState: Error - ${resource.message}")
+//                        }
+//                        is Resource.Idle<*> -> {
+//                            Log.d(tag, "observeProgramTablesState: Idle")
+//                        }
+//                        is Resource.Loading<*> -> {
+//                            Log.d(tag, "observeProgramTablesState: Loading...")
+//                        }
+//                        is Resource.Success<*> -> {
+//                            Log.d(tag, "observeProgramTablesState: Success - Received ${resource.data?.size ?: 0} items")
+//                            resource.data?.let {
+//                                recyclerAdapterDialogFragmentSelector.submitList(resource.data)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }

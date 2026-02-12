@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +10,10 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
@@ -20,219 +23,270 @@
             app:menu="@menu/menu_action_edit_delete"
             app:navigationIcon="@drawable/baseline_arrow_back_24"
             app:navigationIconTint="?attr/colorOnSurface"
-            app:subtitle="@string/course"
-            app:title="@string/appBarTitle_courseDetails" />
+            app:subtitle="@string/program_table"
+            app:title="@string/details" />
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            android:elevation="20dp"
-            app:cardCornerRadius="20dp">
-
-            <LinearLayout
-                android:id="@+id/ll_course_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorCustomColor1Container"
-                android:orientation="vertical"
-                android:padding="8dp">
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_title_course"
-                    android:textColor="?attr/colorOnCustomColor1Container"
-                    android:maxLines="1"
-                    android:layout_margin="8dp"
-                    android:text="Robot Kinematigi"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:id="@+id/tv_person_primary"
-                    android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    android:text="Zafer Bingul"
-                    android:textColor="?attr/colorOnCustomColor1Container"
-                    android:textSize="18sp"
-                    android:maxLines="1"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:id="@+id/tv_person_secondary"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Cenk karaman, Emre ulusan"
-                    android:textColor="?attr/colorOnCustomColor1Container"
-                    android:maxLines="1"
-                    android:visibility="visible"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="24dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_description"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:maxLines="2"
-                        android:text="description jflakjdfl kasfjdlaskf j;als kdfj sadf dsfafd"
-                        android:textColor="?attr/colorOnCustomColor1Container"
-                        android:layout_weight="1"/>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_absence_label"
-                            android:layout_width="80dp"
-                            android:textAlignment="center"
-                            android:layout_height="wrap_content"
-                            android:textColor="?attr/colorOnCustomColor1Container"
-                            android:text="Absence"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/btn_absence_decrease"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/baseline_horizontal_rule_24"
-                                app:tint="?attr/colorOnCustomColor1Container" />
-                            <TextView
-                                android:id="@+id/tv_absence_count"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:textAlignment="center"
-                                android:textColor="?attr/colorOnCustomColor1Container"
-                                android:layout_height="wrap_content"
-                                android:text="2"/>
-                            <ImageView
-                                android:id="@+id/btn_absence_increase"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/baseline_add_24"
-                                app:tint="?attr/colorOnCustomColor1Container" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="16dp"
-            android:background="?attr/colorPrimary"/>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:elevation="20dp"
-            app:cardCornerRadius="50dp">
-
-            <LinearLayout
-                android:id="@+id/ll_filesContainer"
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_height="match_parent"
-                android:paddingStart="3dp"
-                android:paddingEnd="3dp"
-                android:background="?attr/colorCustomColor1Container">
-
-                <TextView
-                    android:id="@+id/tv_file"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="13dp"
-                    android:layout_marginEnd="3dp"
-                    android:maxLines="1"
-                    android:text="Lorem Ipsum Dolor"
-                    android:textColor="?attr/colorOnCustomColor1Container"/>
-
-                <Button
-                    android:id="@+id/btn_files"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/files"/>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="16dp"
-            android:background="?attr/colorPrimary"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:orientation="horizontal">
+            android:paddingBottom="50dp"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tasks"
-                android:textSize="18sp"/>
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="16dp"
+                android:elevation="20dp"
+                app:cardCornerRadius="20dp">
 
-            <ImageView
-                android:id="@+id/btn_add_schedule"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/baseline_add_24"
-                app:tint="?attr/colorOnSurface" />
+                <LinearLayout
+                    android:id="@+id/ll_course_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorCustomColor1Container"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+
+                    <TextView
+                        android:id="@+id/tv_title_course"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:maxLines="1"
+                        android:text="Robot Kinematigi"
+                        android:textColor="?attr/colorOnCustomColor1Container"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/tv_person_primary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:maxLines="1"
+                        android:text="Zafer Bingul"
+                        android:textColor="?attr/colorOnCustomColor1Container"
+                        android:textSize="18sp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/tv_person_secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="8dp"
+                        android:maxLines="1"
+                        android:text="Cenk karaman, Emre ulusan"
+                        android:textColor="?attr/colorOnCustomColor1Container"
+                        android:visibility="visible" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_description"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="2"
+                            android:text="description jflakjdfl kasfjdlaskf j;als kdfj sadf dsfafd"
+                            android:textColor="?attr/colorOnCustomColor1Container" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_absence_label"
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:text="Absence"
+                                android:textAlignment="center"
+                                android:textColor="?attr/colorOnCustomColor1Container" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/btn_absence_decrease"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/baseline_horizontal_rule_24"
+                                    app:tint="?attr/colorOnCustomColor1Container" />
+
+                                <TextView
+                                    android:id="@+id/tv_absence_count"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="2"
+                                    android:textAlignment="center"
+                                    android:textColor="?attr/colorOnCustomColor1Container" />
+
+                                <ImageView
+                                    android:id="@+id/btn_absence_increase"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/baseline_add_24"
+                                    app:tint="?attr/colorOnCustomColor1Container" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/SECTION_FILES"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/files"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="?attr/colorOnSurface" />
+
+                    <ImageView
+                        android:id="@+id/iv_files"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/baseline_arrow_forward_ios_24"
+                        app:tint="?attr/colorOnSurface" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_mini_file_previews"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clipToPadding="false"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/row_file_mini" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/SECTION_TASKS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tasks"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="5dp"
+                        android:background="?attr/colorOnSurface" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_tasks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="vertical"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/row_main_content" />
+            </LinearLayout>
 
         </LinearLayout>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_schedules"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp"/>
+    </androidx.core.widget.NestedScrollView>
 
-    </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add"
+        style="?attr/extendedFloatingActionButtonSmallStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/baseline_add_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

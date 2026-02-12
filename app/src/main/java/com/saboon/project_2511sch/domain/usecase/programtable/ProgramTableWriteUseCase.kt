@@ -12,7 +12,7 @@ class ProgramTableWriteUseCase @Inject constructor(
         return programTableRepository.insert(programTable)
     }
 
-    suspend fun update(programTable: ProgramTable): Resource<Unit> {
+    suspend fun update(programTable: ProgramTable): Resource<ProgramTable> {
         val updatedProgramTable = programTable.copy(
             version = programTable.version + 1,
             updatedAt = System.currentTimeMillis()

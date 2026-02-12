@@ -5,10 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentCourseBinding
 import com.saboon.project_2511sch.domain.model.Course
@@ -16,11 +14,23 @@ import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.ModelColors
 import androidx.core.os.BundleCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.saboon.project_2511sch.util.Resource
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class DialogFragmentCourse: DialogFragment() {
 
     private var _binding: DialogFragmentCourseBinding ?= null
     private val binding get() = _binding!!
+    private val viewModelCourse: ViewModelCourse by viewModels()
+    private lateinit var programTable: ProgramTable
+    private var course: Course? = null
+    private var color: String = ModelColors.MODEL_COLOR_1
     private val TAG = "DialogFragmentCourse"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,21 +46,22 @@ class DialogFragmentCourse: DialogFragment() {
         _binding = DialogFragmentCourseBinding.inflate(inflater, container, false)
         Log.d(TAG, "onCreateView: View created.")
 
-        val programTable = arguments?.let{BundleCompat.getParcelable(it,ARG_PROGRAM_TABLE, ProgramTable::class.java)}
-        val course = arguments?.let{BundleCompat.getParcelable(it,ARG_COURSE, Course::class.java)}
-        var color: String = ModelColors.MODEL_COLOR_1
+        arguments?.let {
+            programTable = BundleCompat.getParcelable(it,ARG_PROGRAM_TABLE, ProgramTable::class.java)!!
+            course = BundleCompat.getParcelable(it,ARG_COURSE, Course::class.java)
+        }
 
-        Log.d(TAG, "onCreateView: ProgramTable: $programTable, Course: $course")
+        setupObservers()
 
         val isEditMode = course != null
         Log.d(TAG, "onCreateView: isEditMode: $isEditMode")
 
         if (isEditMode){
-            Log.d(TAG, "onCreateView: Edit mode. Populating fields for course: ${course.title}")
-            binding.etTitle.setText(course.title)
-            binding.etDescription.setText(course.description)
-            binding.etPeople.setText(course.people)
-            color = course.color ?: ModelColors.MODEL_COLOR_1
+            Log.d(TAG, "onCreateView: Edit mode. Populating fields for course: ${course!!.title}")
+            binding.etTitle.setText(course!!.title)
+            binding.etDescription.setText(course!!.description)
+            binding.etPeople.setText(course!!.people)
+            color = course!!.color
             when(color){
                 ModelColors.MODEL_COLOR_1 -> {binding.radioColor1.isChecked = true}
                 ModelColors.MODEL_COLOR_2 -> {binding.radioColor2.isChecked = true}
@@ -62,41 +73,31 @@ class DialogFragmentCourse: DialogFragment() {
                 ModelColors.MODEL_COLOR_8 -> {binding.radioColor8.isChecked = true}
             }
         }else{
-            Log.d(TAG, "onCreateView: Create mode.")
-            binding.toolbar.title = getString(R.string.create_new_course)
+
         }
 
         binding.btnSave.setOnClickListener {
             Log.d(TAG, "onCreateView: Save button clicked.")
             if (isEditMode){
-                val updatedCourse = course.copy(
+                val updatedCourse = course!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     people = binding.etPeople.text.toString(),
                     color = color
                 )
-                Log.d(TAG, "onCreateView: Updating course: $updatedCourse")
-                setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(
-                    RESULT_KEY_COURSE to updatedCourse
-                ))
-                dismiss()
+                viewModelCourse.update(updatedCourse)
             }else{
                 Log.d(TAG, "onCreateView: Creating new course.")
                 val newCourse = Course(
                     id = IdGenerator.generateCourseId(binding.etTitle.text.toString()),
                     appVersionAtCreation = getString(R.string.app_version),
-                    programTableId = programTable!!.id,
+                    programTableId = programTable.id,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     people = binding.etPeople.text.toString(),
                     color = color,
                 )
-
-                Log.d(TAG, "onCreateView: New course created: $newCourse")
-                setFragmentResult(REQUEST_KEY_CREATE, bundleOf(
-                    RESULT_KEY_COURSE to newCourse
-                ))
-                dismiss()
+                viewModelCourse.insert(newCourse)
             }
 
         }
@@ -134,17 +135,52 @@ class DialogFragmentCourse: DialogFragment() {
         _binding = null
     }
 
+    private fun setupObservers(){
+        //INSERT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelCourse.insertEvent.collect { event ->
+                    when(event){
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading ->{}
+                        is Resource.Success -> {
+                            dismiss()
+                        }
+                    }
+                }
+            }
+        }
+        //UPDATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelCourse.updateEvent.collect { resource ->
+                    when(resource){
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading ->{}
+                        is Resource.Success -> {
+                            dismiss()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     companion object{
         const val ARG_PROGRAM_TABLE = "course_dialog_fragment_arg_program_table"
         const val ARG_COURSE = "course_dialog_fragment_arg_course"
 
-        const val REQUEST_KEY_CREATE = "course_dialog_fragment_request_key_create"
-        const val REQUEST_KEY_UPDATE = "course_dialog_fragment_request_key_update"
-
-        const val RESULT_KEY_COURSE = "course_dialog_fragment_result_key_course"
-
-        fun newInstance(programTable: ProgramTable, course: Course?): DialogFragmentCourse{
+        fun newInstanceForCreate(programTable: ProgramTable):DialogFragmentCourse{
+            val fragment = DialogFragmentCourse()
+            fragment.arguments = bundleOf(
+                ARG_PROGRAM_TABLE to programTable
+            )
+            return fragment
+        }
+        fun newInstanceForUpdate(programTable: ProgramTable, course: Course): DialogFragmentCourse{
             val fragment = DialogFragmentCourse()
             fragment.arguments = bundleOf(
                 ARG_PROGRAM_TABLE to programTable,

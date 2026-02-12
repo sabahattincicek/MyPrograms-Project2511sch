@@ -6,15 +6,20 @@ import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemsUseCase
+import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TaskReadUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
+import com.saboon.project_2511sch.presentation.common.FilterGeneric
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,69 +27,69 @@ import javax.inject.Inject
 class ViewModelTask @Inject constructor(
     private val taskWriteUseCase: TaskWriteUseCase,
     private val taskReadUseCase: TaskReadUseCase,
-    private val getTaskDisplayItemsUseCase: GetTaskDisplayItemsUseCase,
+    private val getTaskDisplayItemUseCase: GetTaskDisplayItemUseCase,
     private val alarmScheduler: IAlarmScheduler
 ): ViewModel() {
-    private val _insertNewTaskEvent = Channel<Resource<Task>>()
-    val insertNewScheduleEvent = _insertNewTaskEvent.receiveAsFlow()
+    private val _insertEvent = Channel<Resource<Task>>()
+    val insertEvent = _insertEvent.receiveAsFlow()
+    private val _updateEvent = Channel<Resource<Task>>()
+    val updateEvent = _updateEvent.receiveAsFlow()
+    private val _deleteEvent = Channel<Resource<Task>>()
+    val deleteEvent = _deleteEvent.receiveAsFlow()
 
-    private val _updateTaskEvent = Channel<Resource<Task>>()
-    val updateScheduleEvent = _updateTaskEvent.receiveAsFlow()
 
-    private val _deleteTaskEvent = Channel<Resource<Task>>()
-    val deleteScheduleEvent = _deleteTaskEvent.receiveAsFlow()
+    private val _filterState = MutableStateFlow(FilterGeneric())
 
-    private val _taskState = MutableStateFlow<Resource<List<Task>>>(Resource.Idle())
-    val taskState = _taskState.asStateFlow()
+    //STATE
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val tasksState = _filterState.flatMapLatest { filter ->
+        getTaskDisplayItemUseCase.invoke(filter)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Companion.WhileSubscribed(5000),
+        initialValue = Resource.Idle()
+    )
 
-    private val _taskDisplayItemsState = MutableStateFlow<Resource<List<TaskDisplayItem>>>(Resource.Idle())
-    val taskDisplayItemsState = _taskDisplayItemsState.asStateFlow()
-    fun insertNewTask(task: Task){
+    //FILTER
+    fun updateFilter(programTable: ProgramTable?, course: Course?){
+        _filterState.update { current ->
+            if (programTable == null) FilterGeneric()
+            else current.copy(programTable = programTable, course = course, task = null)
+        }
+    }
+
+    //EVENT
+    fun insert(task: Task){
         viewModelScope.launch {
             try {
-                _insertNewTaskEvent.send(Resource.Loading())
+                _insertEvent.send(Resource.Loading())
                 val insertResult = taskWriteUseCase.insert(task)
-                _insertNewTaskEvent.send(insertResult)
+                _insertEvent.send(insertResult)
             }catch (e: Exception){
-                _insertNewTaskEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+                _insertEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }
-
-    fun updateTask(task: Task){
+    fun update(task: Task){
         viewModelScope.launch {
             try {
-                _updateTaskEvent.send(Resource.Loading())
+                _updateEvent.send(Resource.Loading())
                 val updateResult = taskWriteUseCase.update(task)
-                _updateTaskEvent.send(updateResult)
+                _updateEvent.send(updateResult)
             }catch (e: Exception){
-                _updateTaskEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+                _updateEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }
-
-    fun deleteTask(task: Task){
+    fun delete(task: Task){
         viewModelScope.launch {
             try {
-                _deleteTaskEvent.send(Resource.Loading())
+                _deleteEvent.send(Resource.Loading())
                 val deleteResult = taskWriteUseCase.delete(task)
-                _deleteTaskEvent.send(deleteResult)
+                _deleteEvent.send(deleteResult)
                 alarmScheduler.cancel(task)
             }catch (e: Exception){
-                _deleteTaskEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
-            }
-        }
-    }
-
-    fun getTaskDisplayItems(course: Course){
-        viewModelScope.launch {
-            try {
-                _taskDisplayItemsState.value = Resource.Loading()
-                getTaskDisplayItemsUseCase.invoke(course).collect { resource ->
-                    _taskDisplayItemsState.value = resource
-                }
-            }catch (e: Exception){
-                _taskDisplayItemsState.value = Resource.Error(e.localizedMessage?:"An unexpected error occurred in ViewModel.")
+                _deleteEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
             }
         }
     }

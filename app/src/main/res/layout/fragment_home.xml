@@ -40,55 +40,61 @@
                 android:fillViewport="true"
                 android:scrollbars="none">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/cpg_chip_group"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    app:singleLine="true">
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/cp_program_table"
-                        style="@style/Widget.Material3.Chip.Filter"
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cpg_chip_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/program_table"
-                        app:closeIcon="@drawable/baseline_arrow_drop_down_24"
-                        app:closeIconEnabled="false"
-                        app:closeIconVisible="true" />
+                        app:singleLine="true">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/cp_course"
-                        style="@style/Widget.Material3.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/course"
-                        app:closeIcon="@drawable/baseline_arrow_drop_down_24"
-                        app:closeIconEnabled="false"
-                        app:closeIconVisible="true" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/cp_program_table"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/program_table"
+                            app:closeIcon="@drawable/baseline_arrow_drop_down_24"
+                            app:closeIconEnabled="false"
+                            app:closeIconVisible="true" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/cp_lesson"
-                        style="@style/Widget.Material3.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lesson" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/cp_course"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/course"
+                            app:closeIcon="@drawable/baseline_arrow_drop_down_24"
+                            app:closeIconEnabled="false"
+                            app:closeIconVisible="true" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/cp_exam"
-                        style="@style/Widget.Material3.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/exam" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/cp_lesson"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lesson" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/cp_homework"
-                        style="@style/Widget.Material3.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/homework" />
-                </com.google.android.material.chip.ChipGroup>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/cp_exam"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/exam" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/cp_homework"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/homework" />
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
             </HorizontalScrollView>
 
             <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout

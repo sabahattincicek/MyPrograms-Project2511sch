@@ -1,16 +1,14 @@
 package com.saboon.project_2511sch.presentation.course
 
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -29,34 +27,50 @@ import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import androidx.core.os.BundleCompat
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
-import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
+import com.saboon.project_2511sch.presentation.programtable.DialogFragmentProgramTable
+import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
+import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskExam
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskHomework
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskLesson
+import com.saboon.project_2511sch.util.open
 
 @AndroidEntryPoint
 class CourseDetailsFragment : Fragment() {
 
     private var _binding: FragmentCourseDetailsBinding? =  null
     private val binding get() = _binding!!
-
     private val args : CourseDetailsFragmentArgs by navArgs()
-
-    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
     private val viewModelCourse : ViewModelCourse by viewModels()
     private val viewModelTask: ViewModelTask by viewModels()
-
+    private val viewModelSFile: ViewModelSFile by viewModels()
+    private lateinit var recyclerAdapterSFileMini: RecyclerAdapterSFileMini
+    private lateinit var recyclerAdapterTask: RecyclerAdapterTask
     private lateinit var programTable: ProgramTable
     private lateinit var course: Course
+    private var uri: Uri? = null
 
-    private lateinit var taskRecyclerAdapter: RecyclerAdapterTask
-
+    private val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if (uri != null) {
+            this.uri = uri
+            val sFile = SFile(
+                id = "generate in repository",
+                appVersionAtCreation = getString(R.string.app_version),
+                title = "generate in repository",
+                description = "",
+                programTableId = programTable.id,
+                courseId = course.id,
+                taskId = null,
+                filePath = "generate in repository"
+            )
+            viewModelSFile.insert(sFile, uri)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,86 +84,51 @@ class CourseDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as AppCompatActivity).setSupportActionBar(binding.topAppBar)
+        programTable = args.programTable
+        viewModelCourse.getById(args.course.id) //course initialized in setupObservers() function
 
-        course = args.course
-        viewModelProgramTable.getById(course.programTableId) //program table initialized in setupObservers() function
-
-        applyDataToView()
-        setupRecyclerAdapter()
+        setupAdapters()
         setupListeners()
         setupObservers()
-
-
-        viewModelTask.getTaskDisplayItems(course)
 
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-
-        binding.btnFiles.setOnClickListener {
-            val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToFileFragment(course)
-            findNavController().navigate(action)
-        }
-
-        binding.btnAddSchedule.setOnClickListener { anchorView ->
-            showAddTaskMenu(anchorView)
-        }
-
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider{
-            override fun onCreateMenu(
-                menu: Menu,
-                menuInflater: MenuInflater
-            ) {
-                menuInflater.inflate(R.menu.menu_action_edit_delete, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when(menuItem.itemId){
-                    R.id.action_edit -> {
-                        val dialog = DialogFragmentCourse.newInstance(programTable, course)
-                        dialog.show(childFragmentManager, "EditCourseDialog")
-                        true
-                    }
-                    R.id.action_delete -> {
-                        val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete Course", "Are you sure?")
-                        dialog.show(childFragmentManager, "DeleteCourseDialog")
-                        true
-                    }
-                    else -> false
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.action_delete -> {
+                    val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete", "Are you sure?")
+                    dialog.show(childFragmentManager, "Delete Course")
+                    true
+                }
+                R.id.action_edit -> {
+                    val dialog = DialogFragmentProgramTable.newInstanceForUpdate(programTable)
+                    dialog.show(childFragmentManager, "Edit Course")
+                    true
+                }
+                else -> {
+                    false
                 }
             }
-
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, this) { requestKey, result ->
-            val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
-            if (isYes) {
-                 viewModelCourse.deleteCourse(course)
-            }
         }
-
-        childFragmentManager.setFragmentResultListener(DialogFragmentCourse.REQUEST_KEY_UPDATE, this){requestKey, result ->
-            val updatedCourse = BundleCompat.getParcelable(result, DialogFragmentCourse.RESULT_KEY_COURSE,Course::class.java)
-            if (updatedCourse != null){
-                viewModelCourse.updateCourse(updatedCourse)
-            }
+        binding.fabAdd.setOnClickListener { view ->
+            showAddTaskMenu(view)
         }
-
-
-
+        binding.ivFiles.setOnClickListener {
+            val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToFileFragment(programTable, course)
+            findNavController().navigate(action)
+        }
         binding.btnAbsenceDecrease.setOnClickListener {
             val decrementedCourse = course.copy(
                 absence = course.absence + 1
             )
-            viewModelCourse.updateCourse(decrementedCourse)
+            viewModelCourse.update(decrementedCourse)
         }
         binding.btnAbsenceIncrease.setOnClickListener {
             val incrementedCourse = course.copy(
-                    absence = course.absence - 1
-                    )
-            viewModelCourse.updateCourse(incrementedCourse)
+                absence = course.absence - 1
+            )
+            viewModelCourse.update(incrementedCourse)
         }
     }
     private fun applyDataToView(){
@@ -169,7 +148,6 @@ class CourseDetailsFragment : Fragment() {
         val themeAwareOnCustomContainerColor = MaterialColors.getColor(requireContext(), onCustomContainerColorAttr, Color.BLACK)
 
         binding.llCourseInfo.setBackgroundColor(themeAwareCustomContainerColor)
-        binding.llFilesContainer.setBackgroundColor(themeAwareCustomContainerColor)
 
         binding.tvTitleCourse.setTextColor(themeAwareOnCustomContainerColor)
         binding.tvPersonPrimary.setTextColor(themeAwareOnCustomContainerColor)
@@ -179,14 +157,10 @@ class CourseDetailsFragment : Fragment() {
         binding.tvAbsenceCount.setTextColor(themeAwareOnCustomContainerColor)
         binding.btnAbsenceDecrease.setColorFilter(themeAwareOnCustomContainerColor)
         binding.btnAbsenceIncrease.setColorFilter(themeAwareOnCustomContainerColor)
-
-        binding.btnFiles.setBackgroundColor(themeAwareOnCustomContainerColor)
-        binding.btnFiles.setTextColor(themeAwareCustomContainerColor)
-        binding.tvFile.setTextColor(themeAwareCustomContainerColor)
     }
-    private fun setupRecyclerAdapter(){
-        taskRecyclerAdapter = RecyclerAdapterTask()
-        taskRecyclerAdapter.onItemClickListener = { task ->
+    private fun setupAdapters(){
+        recyclerAdapterTask = RecyclerAdapterTask()
+        recyclerAdapterTask.onItemClickListener = { task ->
             when(task) {
                 is Task.Lesson -> {
                     val dialog = DialogFragmentTaskLesson.newInstanceForEdit(course, task)
@@ -202,9 +176,20 @@ class CourseDetailsFragment : Fragment() {
                 }
             }
         }
-        binding.rvSchedules.apply{
-            adapter = taskRecyclerAdapter
+        binding.rvTasks.apply{
+            adapter = recyclerAdapterTask
             layoutManager = LinearLayoutManager(context)
+        }
+        recyclerAdapterSFileMini = RecyclerAdapterSFileMini()
+        recyclerAdapterSFileMini.onItemClickListener = { sFile ->
+            sFile.open(requireContext())
+        }
+        recyclerAdapterSFileMini.onAddItemClickListener = {
+            selectFileLauncher.launch(arrayOf("*/*"))
+        }
+        binding.rvMiniFilePreviews.apply {
+            adapter = recyclerAdapterSFileMini
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
     private fun showAddTaskMenu(anchorView: View){
@@ -235,49 +220,51 @@ class CourseDetailsFragment : Fragment() {
     }
 
     private fun setupObservers(){
-        //PROGRAM TABLE STATE
+        //COURSE STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.programTableState.collect { resource ->
+                viewModelCourse.courseState.collect { resource ->
                     when(resource) {
                         is Resource.Error -> {}
                         is Resource.Idle -> {}
                         is Resource.Loading -> {}
                         is Resource.Success -> {
-                            programTable = resource.data!!
+                            course = resource.data!!
+                            applyDataToView()
+                            viewModelTask.updateFilter(programTable, course)
+                            viewModelSFile.updateProgramTable(programTable)
+                            viewModelSFile.updateCourse(course, false)
                         }
                     }
                 }
             }
         }
-        //TASK DISPLAY ITEM STATE
+        //TASK STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelTask.taskDisplayItemsState.collect { resource ->
+                viewModelTask.tasksState.collect { resource ->
                     when(resource) {
                         is Resource.Error<*> -> {}
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            taskRecyclerAdapter.submitList(resource.data)
+                            recyclerAdapterTask.submitList(resource.data)
                         }
                     }
                 }
             }
         }
-        //UPDATE COURSE EVENT
+        //FILES STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourse.updateCourseEvent.collect { event ->
-                    when(event) {
-                        is Resource.Error<*> -> {
-                            Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
-                        }
-                        is Resource.Idle<*> -> {}
-                        is Resource.Loading<*> -> {}
-                        is Resource.Success<*> -> {
-                            course = event.data!!
-                            applyDataToView()
+                viewModelSFile.filesState.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            val sFileDisplayItemList = resource.data
+                            recyclerAdapterSFileMini.submitList(sFileDisplayItemList)
                         }
                     }
                 }
@@ -286,7 +273,7 @@ class CourseDetailsFragment : Fragment() {
         //DELETE COURSE EVENT
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourse.deleteCourseEvent.collect { event ->
+                viewModelCourse.deleteEvent.collect { event ->
                     when(event) {
                         is Resource.Error<*> -> {
                             Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
@@ -304,7 +291,7 @@ class CourseDetailsFragment : Fragment() {
         //INSERT TASK EVENT
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelTask.insertNewScheduleEvent.collect { event ->
+                viewModelTask.insertEvent.collect { event ->
                     when(event) {
                         is Resource.Error<*> -> {
                             Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
@@ -321,7 +308,7 @@ class CourseDetailsFragment : Fragment() {
         //UPDATE TASK EVENT
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelTask.updateScheduleEvent.collect { event ->
+                viewModelTask.updateEvent.collect { event ->
                     when(event) {
                         is Resource.Error<*> -> {
                             Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
@@ -338,7 +325,7 @@ class CourseDetailsFragment : Fragment() {
         //DELETE TASK EVENT
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelTask.deleteScheduleEvent.collect { event ->
+                viewModelTask.deleteEvent.collect { event ->
                     when(event) {
                         is Resource.Error<*> -> {}
                         is Resource.Idle<*> -> {}
@@ -350,28 +337,51 @@ class CourseDetailsFragment : Fragment() {
                 }
             }
         }
+        //FILE INSERT EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelSFile.insertEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading ->{}
+                        is Resource.Success -> {
+
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     private fun setupListeners(){
+        //DELETE
+        childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, this) { requestKey, result ->
+            val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
+            if (isYes) {
+                viewModelCourse.deleteCourse(course)
+            }
+        }
         //TASK LESSON LISTENERS
         childFragmentManager.setFragmentResultListener(DialogFragmentTaskLesson.REQUEST_KEY_CREATE, this){ requestKey, result ->
             val newTask = BundleCompat.getParcelable(result, DialogFragmentTaskLesson.RESULT_KEY_TASK, Task.Lesson::class.java)
             if (newTask != null){
-                viewModelTask.insertNewTask(newTask)
+                viewModelTask.insert(newTask)
             }
         }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentTaskLesson.REQUEST_KEY_UPDATE, this){ requestKey, result ->
             val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTaskLesson.RESULT_KEY_TASK,Task.Lesson::class.java)
             if(updatedTask != null){
-                viewModelTask.updateTask(updatedTask)
+                viewModelTask.update(updatedTask)
             }
         }
 
         childFragmentManager.setFragmentResultListener(DialogFragmentTaskLesson.REQUEST_KEY_DELETE, this){ requestKey, result ->
             val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTaskLesson.RESULT_KEY_TASK, Task.Lesson::class.java)
             if (deletedTask != null){
-                viewModelTask.deleteTask(deletedTask)
+                viewModelTask.delete(deletedTask)
             }
         }
 
@@ -379,19 +389,19 @@ class CourseDetailsFragment : Fragment() {
         childFragmentManager.setFragmentResultListener(DialogFragmentTaskExam.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
             val newTask = BundleCompat.getParcelable(result, DialogFragmentTaskExam.RESULT_KEY_TASK, Task.Exam::class.java)
             if (newTask != null){
-                viewModelTask.insertNewTask(newTask)
+                viewModelTask.insert(newTask)
             }
         }
         childFragmentManager.setFragmentResultListener(DialogFragmentTaskExam.REQUEST_KEY_UPDATE, this){ requestKey, result ->
             val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTaskExam.RESULT_KEY_TASK,Task.Exam::class.java)
             if(updatedTask != null){
-                viewModelTask.updateTask(updatedTask)
+                viewModelTask.update(updatedTask)
             }
         }
         childFragmentManager.setFragmentResultListener(DialogFragmentTaskExam.REQUEST_KEY_DELETE, this){ requestKey, result ->
             val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTaskExam.RESULT_KEY_TASK, Task.Exam::class.java)
             if (deletedTask != null){
-                viewModelTask.deleteTask(deletedTask)
+                viewModelTask.delete(deletedTask)
             }
         }
 
@@ -399,19 +409,19 @@ class CourseDetailsFragment : Fragment() {
         childFragmentManager.setFragmentResultListener(DialogFragmentTaskHomework.REQUEST_KEY_CREATE, viewLifecycleOwner){ requestKey, result ->
             val newTask = BundleCompat.getParcelable(result, DialogFragmentTaskHomework.RESULT_KEY_TASK, Task.Homework::class.java)
             if (newTask != null){
-                viewModelTask.insertNewTask(newTask)
+                viewModelTask.insert(newTask)
             }
         }
         childFragmentManager.setFragmentResultListener(DialogFragmentTaskHomework.REQUEST_KEY_UPDATE, this){ requestKey, result ->
             val updatedTask = BundleCompat.getParcelable(result, DialogFragmentTaskHomework.RESULT_KEY_TASK,Task.Homework::class.java)
             if(updatedTask != null){
-                viewModelTask.updateTask(updatedTask)
+                viewModelTask.update(updatedTask)
             }
         }
         childFragmentManager.setFragmentResultListener(DialogFragmentTaskHomework.REQUEST_KEY_DELETE, this){ requestKey, result ->
             val deletedTask = BundleCompat.getParcelable(result, DialogFragmentTaskHomework.RESULT_KEY_TASK, Task.Homework::class.java)
             if (deletedTask != null){
-                viewModelTask.deleteTask(deletedTask)
+                viewModelTask.delete(deletedTask)
             }
         }
     }

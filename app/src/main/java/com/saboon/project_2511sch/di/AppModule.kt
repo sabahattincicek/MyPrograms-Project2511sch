@@ -2,6 +2,8 @@ package com.saboon.project_2511sch.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.saboon.project_2511sch.data.alarm.AlarmSchedulerImp
 import com.saboon.project_2511sch.data.local.dao.CourseDao
 import com.saboon.project_2511sch.data.local.dao.ProgramTableDao
@@ -22,6 +24,17 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+//    val MIGRATION_3_4 = object: Migration(3,4) {
+//        override fun migrate(database: SupportSQLiteDatabase) {
+//            database.execSQL("DROP TABLE IF EXISTS files")
+//            database.execSQL("ALTER TABLE program_tables ADD COLUMN files")
+//            database.execSQL("ALTER TABLE courses ADD COLUMN files")
+//            database.execSQL("ALTER TABLE task_lessons ADD COLUMN files")
+//            database.execSQL("ALTER TABLE task_exams ADD COLUMN files")
+//            database.execSQL("ALTER TABLE task_homeworks ADD COLUMN files")
+//        }
+//    }
+
     @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext context: Context) = Room.databaseBuilder(
@@ -40,10 +53,10 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideFileDao(database: Database) = database.fileDao()
+    fun provideTaskDao(database: Database) = database.taskDao()
 
     @Singleton
     @Provides
-    fun provideTaskDao(database: Database) = database.taskDao()
+    fun provideSFileDao(database: Database) = database.sFileDao()
 
 }

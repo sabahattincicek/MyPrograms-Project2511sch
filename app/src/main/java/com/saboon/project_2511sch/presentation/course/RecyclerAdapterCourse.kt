@@ -1,60 +1,84 @@
 package com.saboon.project_2511sch.presentation.course
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.saboon.project_2511sch.R
+import com.saboon.project_2511sch.databinding.RowGeneralItemBinding
+import com.saboon.project_2511sch.databinding.RowSingleTextViewBinding
+import com.saboon.project_2511sch.databinding.RowSingleTextViewLeftBinding
 import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.util.BaseDiffCallback
+import com.saboon.project_2511sch.util.BaseDisplayListItem
+import com.saboon.project_2511sch.util.BaseViewHolder
+import com.saboon.project_2511sch.util.toFormattedString
 
-class RecyclerAdapterCourse: ListAdapter<Course, RecyclerAdapterCourse.CourseViewHolder>(CourseDiffCallback()) {
+class RecyclerAdapterCourse: ListAdapter<DisplayItemCourse, BaseViewHolder>(BaseDiffCallback<DisplayItemCourse>()) {
 
-    var onItemClickListener: ((Course) -> Unit) ?= null
-
-    class CourseViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        val courseTitle: TextView = view.findViewById(R.id.tvCourseTitle)
-        val courseDescription: TextView = view.findViewById(R.id.tvCourseDescription)
-    }
-
+    var onItemClickListener: ((Course) -> Unit)? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CourseViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_list_row_courses, parent, false)
-        return CourseViewHolder(view)
+    ): BaseViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when(viewType){
+            BaseDisplayListItem.VIEW_TYPE_HEADER -> {
+                val binding = RowSingleTextViewLeftBinding.inflate(inflater, parent, false)
+                HeaderCourseViewHolder(binding)
+            }
+            BaseDisplayListItem.VIEW_TYPE_CONTENT -> {
+                val binding = RowGeneralItemBinding.inflate(inflater, parent, false)
+                ContentCourseViewHolder(binding)
+            }
+
+            BaseDisplayListItem.VIEW_TYPE_FOOTER -> {
+                val binding = RowSingleTextViewBinding.inflate(inflater, parent, false)
+                FooterCourseViewHolder(binding)
+            }
+            else -> throw IllegalArgumentException("Unknown viewType")
+        }
     }
 
     override fun onBindViewHolder(
-        holder: CourseViewHolder,
+        holder: BaseViewHolder,
         position: Int
     ) {
-        val course = getItem(position)
-        holder.courseTitle.text = course.title
-        holder.courseDescription.text = course.description
-
-        holder.itemView.setOnClickListener {
-            onItemClickListener?.invoke(course)
+        val item = getItem(position)
+        holder.onItemClickListener = { baseItem ->
+            if (baseItem is DisplayItemCourse.ContentCourse){
+                onItemClickListener?.invoke(baseItem.course)
+            }
+        }
+        holder.bind(item)
+    }
+    override fun getItemViewType(position: Int): Int {
+        return getItem(position).viewType
+    }
+    inner class HeaderCourseViewHolder(private val binding: RowSingleTextViewLeftBinding): BaseViewHolder(binding.root){
+        override fun bind(item: BaseDisplayListItem) {
+            super.bind(item)
+            if (item is DisplayItemCourse.HeaderCourse){
+                binding.tvContent.text = item.title
+            }
+        }
+    }
+    inner class ContentCourseViewHolder(private val binding: RowGeneralItemBinding): BaseViewHolder(binding.root){
+        override fun bind(item: BaseDisplayListItem) {
+            super.bind(item) //for click logic
+            if (item is DisplayItemCourse.ContentCourse){
+                binding.tvMainContent.text = item.course.title
+                binding.tvSubContent.text = item.course.createdAt.toFormattedString("MMM yyyy")
+            }
         }
     }
 
-    open class CourseDiffCallback: DiffUtil.ItemCallback<Course>() {
-        override fun areItemsTheSame(
-            oldItem: Course,
-            newItem: Course
-        ): Boolean {
-            return oldItem.id == newItem.id
+    inner class FooterCourseViewHolder(private val binding: RowSingleTextViewBinding): BaseViewHolder(binding.root){
+        override fun bind(item: BaseDisplayListItem) {
+            super.bind(item)
+            if (item is DisplayItemCourse.FooterCourse){
+                binding.tvContent.text = "Count: ${item.count}"
+            }
         }
-
-        override fun areContentsTheSame(
-            oldItem: Course,
-            newItem: Course
-        ): Boolean {
-            return oldItem == newItem
-        }
-
     }
+
 }

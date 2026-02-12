@@ -15,6 +15,7 @@
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/baseline_close_24"
             app:navigationIconTint="?attr/colorOnSurface"
+            app:menu="@menu/menu_action_delete"
             app:title="@string/add_new_note"/>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -146,5 +147,30 @@
 
         </LinearLayout>
     </HorizontalScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="@android:string/cancel" />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="@string/save" />
+
+    </LinearLayout>
 
 </LinearLayout>
