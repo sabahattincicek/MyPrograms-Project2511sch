@@ -3,17 +3,17 @@ package com.saboon.project_2511sch.di
 import android.content.Context
 import com.saboon.project_2511sch.data.alarm.AlarmSchedulerImp
 import com.saboon.project_2511sch.data.local.dao.CourseDao
-import com.saboon.project_2511sch.data.local.dao.FileDao
 import com.saboon.project_2511sch.data.local.dao.ProgramTableDao
+import com.saboon.project_2511sch.data.local.dao.SFileDao
 import com.saboon.project_2511sch.data.local.dao.TaskDao
 import com.saboon.project_2511sch.data.repository.CourseRepositoryImp
-import com.saboon.project_2511sch.data.repository.FileRepositoryImp
 import com.saboon.project_2511sch.data.repository.ProgramTableRepositoryImp
+import com.saboon.project_2511sch.data.repository.SFileRepositoryImp
 import com.saboon.project_2511sch.data.repository.TaskRepositoryImp
 import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
-import com.saboon.project_2511sch.domain.repository.IFileRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
+import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import dagger.Provides
 import dagger.Module
@@ -45,14 +45,14 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideFileRepositoryImp(@ApplicationContext context: Context, fileDao: FileDao): IFileRepository {
-        return FileRepositoryImp(context, fileDao)
+    fun provideTaskRepositoryImp(taskDao: TaskDao): ITaskRepository {
+        return TaskRepositoryImp(taskDao)
     }
 
     @Singleton
     @Provides
-    fun provideTaskRepositoryImp(taskDao: TaskDao, fileDao: FileDao): ITaskRepository {
-        return TaskRepositoryImp(taskDao, fileDao)
+    fun provideSFileRepositoryImp(@ApplicationContext context: Context, sFileDao: SFileDao): ISFileRepository{
+        return SFileRepositoryImp(context, sFileDao)
     }
 
 }

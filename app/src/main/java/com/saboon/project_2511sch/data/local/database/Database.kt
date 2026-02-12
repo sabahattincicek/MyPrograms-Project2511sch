@@ -1,16 +1,14 @@
 package com.saboon.project_2511sch.data.local.database
 
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.migration.AutoMigrationSpec
 import com.saboon.project_2511sch.data.local.dao.CourseDao
-import com.saboon.project_2511sch.data.local.dao.FileDao
 import com.saboon.project_2511sch.data.local.dao.ProgramTableDao
+import com.saboon.project_2511sch.data.local.dao.SFileDao
 import com.saboon.project_2511sch.data.local.dao.TaskDao
 import com.saboon.project_2511sch.data.local.entity.CourseEntity
-import com.saboon.project_2511sch.data.local.entity.FileEntity
 import com.saboon.project_2511sch.data.local.entity.ProgramTableEntity
+import com.saboon.project_2511sch.data.local.entity.SFileEntity
 import com.saboon.project_2511sch.data.local.entity.TaskExamEntity
 import com.saboon.project_2511sch.data.local.entity.TaskHomeworkEntity
 import com.saboon.project_2511sch.data.local.entity.TaskLessonEntity
@@ -19,20 +17,17 @@ import com.saboon.project_2511sch.data.local.entity.TaskLessonEntity
     entities = [
         ProgramTableEntity::class,
         CourseEntity::class,
-        FileEntity::class,
         TaskLessonEntity::class,
         TaskExamEntity::class,
-        TaskHomeworkEntity::class
+        TaskHomeworkEntity::class,
+        SFileEntity::class
     ],
-    version = 3,
-    autoMigrations = [
-        AutoMigration(from = 1, to = 2), // make file fields (program_table_id, course_id, task_id) nullable
-        AutoMigration(from = 2, to = 3) // delete task foreign keys in file entity
-    ],
-    exportSchema = true)
+    version = 1,
+    exportSchema = true
+)
 abstract class Database(): RoomDatabase() {
     abstract fun programDao(): ProgramTableDao
     abstract fun courseDao(): CourseDao
-    abstract fun fileDao(): FileDao
     abstract fun taskDao(): TaskDao
+    abstract fun sFileDao(): SFileDao
 }

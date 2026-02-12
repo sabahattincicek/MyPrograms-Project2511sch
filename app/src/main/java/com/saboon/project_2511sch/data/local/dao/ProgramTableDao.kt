@@ -14,26 +14,20 @@ interface ProgramTableDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(programTableEntity: ProgramTableEntity)
-
     @Update
     suspend fun update(programTableEntity: ProgramTableEntity)
-
     @Delete
     suspend fun delete(programTableEntity: ProgramTableEntity)
     @Query("SELECT * FROM program_tables WHERE id = :id")
     fun getById(id: String): Flow<ProgramTableEntity>
     @Query("UPDATE program_tables SET is_active = :isActive WHERE id = :id")
     suspend fun activationById(id: String, isActive: Boolean)
-
     @Query("SELECT * FROM program_tables")
     fun getAll(): Flow<List<ProgramTableEntity>>
-
     @Query("SELECT * FROM program_tables WHERE is_active = 1")
     fun getAllActive(): Flow<List<ProgramTableEntity>>
-
     @Query("SELECT COUNT(*) FROM program_tables")
     suspend fun getAllCount(): Int
-
     @Query("SELECT COUNT(*) FROM program_tables WHERE is_active = 1")
     suspend fun getAllActiveCount(): Int
 }

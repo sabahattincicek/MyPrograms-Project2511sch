@@ -1,151 +1,136 @@
 package com.saboon.project_2511sch.presentation.task
 
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getString
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
-import com.saboon.project_2511sch.databinding.RecyclerListRowTaskBinding
-import com.saboon.project_2511sch.databinding.RecyclerListRowTaskHeaderBinding
+import com.saboon.project_2511sch.databinding.RowMainContentBinding
+import com.saboon.project_2511sch.databinding.RowSingleTextViewBinding
+import com.saboon.project_2511sch.databinding.RowSingleTextViewLeftBinding
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.util.BaseDiffCallback
+import com.saboon.project_2511sch.util.BaseDisplayListItem
+import com.saboon.project_2511sch.util.BaseViewHolder
 import com.saboon.project_2511sch.util.ModelColors
 import com.saboon.project_2511sch.util.toFormattedString
 
-class RecyclerAdapterTask: ListAdapter<TaskDisplayItem, RecyclerView.ViewHolder>(TaskDiffCallback()) {
+class RecyclerAdapterTask:
+    ListAdapter<DisplayItemTask, BaseViewHolder>(BaseDiffCallback<DisplayItemTask>()) {
 
     var onItemClickListener:((Task) -> Unit)? = null
-
-
-    companion object{
-        private const val VIEW_TYPE_HEADER = 0
-        private const val VIEW_TYPE_CONTENT = 1
-    }
-
-    class HeaderViewHolder(private val binding: RecyclerListRowTaskHeaderBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: TaskDisplayItem.HeaderItem){
-            binding.tvTaskType.text = item.title
-//            when(item.title){
-//                TaskType.LESSON::class.simpleName -> {binding.tvTaskType.text = item.title}
-//                TaskType.EXAM::class.simpleName -> {binding.tvTaskType.text = item.title}
-//                TaskType.HOMEWORK::class.simpleName -> {binding.tvTaskType.text = item.title}
-//            }
-        }
-    }
-
-    class ContentViewHolder(private val binding: RecyclerListRowTaskBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(item: TaskDisplayItem.ContentItem){
-            val task = item.task
-
-            when(task){
-                is Task.Lesson -> {
-                    binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
-                    binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
-                    binding.tvContent1.text = task.title
-                    binding.tvContent1Sub.text = task.description
-                    binding.tvContent2.text = task.date.toFormattedString("EEEE")
-                    binding.tvContent2Sub.text = task.place
-
-                    val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor( ModelColors.MODEL_COLOR_LESSON)
-                    val themeAwareCustomContainerColor = MaterialColors.getColor(binding.root, customContainerColorAttr, Color.BLACK)
-                    binding.llContainer.setBackgroundColor(themeAwareCustomContainerColor)
-                    val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(ModelColors.MODEL_COLOR_LESSON)
-                    val themeAwareOnCustomContainerColor = MaterialColors.getColor(binding.root, onCustomContainerColorAttr, Color.BLACK)
-                    binding.viewDivider.setBackgroundColor(themeAwareOnCustomContainerColor)
-                }
-                is Task.Exam -> {
-                    binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
-                    binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
-                    binding.tvContent1.text = task.title
-                    binding.tvContent1Sub.text = "${getString(binding.root.context,R.string.target_score)}: ${task.targetScore}"
-                    binding.tvContent2.text = task.date.toFormattedString("dd MMMM yyyy EEEE")
-                    binding.tvContent2Sub.text = task.place
-
-                    val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor( ModelColors.MODEL_COLOR_EXAM)
-                    val themeAwareCustomContainerColor = MaterialColors.getColor(binding.root, customContainerColorAttr, Color.BLACK)
-                    binding.llContainer.setBackgroundColor(themeAwareCustomContainerColor)
-                    val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(ModelColors.MODEL_COLOR_EXAM)
-                    val themeAwareOnCustomContainerColor = MaterialColors.getColor(binding.root, onCustomContainerColorAttr, Color.BLACK)
-                    binding.viewDivider.setBackgroundColor(themeAwareOnCustomContainerColor)
-                }
-                is Task.Homework -> {
-                    binding.tvDate1.text = task.dueTime.toFormattedString("HH:mm")
-                    binding.tvDate2.text = ""
-                    binding.tvContent1.text = task.title
-                    binding.tvContent1Sub.text = task.description
-                    binding.tvContent2.text = task.dueDate.toFormattedString("dd MMMM yyyy EEEE")
-                    binding.tvContent2Sub.text = ""
-
-                    val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor( ModelColors.MODEL_COLOR_HOMEWORK)
-                    val themeAwareCustomContainerColor = MaterialColors.getColor(binding.root, customContainerColorAttr, Color.BLACK)
-                    binding.llContainer.setBackgroundColor(themeAwareCustomContainerColor)
-                    val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(ModelColors.MODEL_COLOR_HOMEWORK)
-                    val themeAwareOnCustomContainerColor = MaterialColors.getColor(binding.root, onCustomContainerColorAttr, Color.BLACK)
-                    binding.viewDivider.setBackgroundColor(themeAwareOnCustomContainerColor)
-                }
-            }
-        }
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RecyclerView.ViewHolder {
+    ): BaseViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return when(viewType){
-            VIEW_TYPE_HEADER -> {
-                val binding = RecyclerListRowTaskHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                HeaderViewHolder(binding)
+            BaseDisplayListItem.VIEW_TYPE_HEADER -> {
+                val binding = RowSingleTextViewLeftBinding.inflate(inflater, parent, false)
+                HeaderTaskViewHolder(binding)
             }
-            VIEW_TYPE_CONTENT -> {
-                val binding = RecyclerListRowTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                ContentViewHolder(binding)
+            BaseDisplayListItem.VIEW_TYPE_CONTENT -> {
+                val binding = RowMainContentBinding.inflate(inflater, parent, false)
+                ContentTaskViewHolder(binding)
             }
-            else -> {throw IllegalArgumentException("Invalid view type")}
+            BaseDisplayListItem.VIEW_TYPE_FOOTER -> {
+                val binding = RowSingleTextViewBinding.inflate(inflater, parent, false)
+                FooterTaskViewHolder(binding)
+            }
+            else -> throw IllegalArgumentException("Unknown viewType")
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: BaseViewHolder,
+        position: Int
+    ) {
         val item = getItem(position)
-        when(holder){
-            is HeaderViewHolder -> {holder.bind(item as TaskDisplayItem.HeaderItem)}
-            is ContentViewHolder -> {holder.bind(item as TaskDisplayItem.ContentItem)}
-        }
-        holder.itemView.setOnClickListener {
-            when(item) {
-                is TaskDisplayItem.ContentItem -> {
-                    onItemClickListener?.invoke(item.task)
-                }
-                is TaskDisplayItem.HeaderItem -> {}
+        holder.onItemClickListener = { baseItem ->
+            if (baseItem is DisplayItemTask.ContentTask){
+                onItemClickListener?.invoke(baseItem.task)
             }
         }
+        holder.bind(item)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(getItem(position)){
-            is TaskDisplayItem.HeaderItem -> VIEW_TYPE_HEADER
-            is TaskDisplayItem.ContentItem -> VIEW_TYPE_CONTENT
+        return getItem(position).viewType
+    }
+
+    inner class HeaderTaskViewHolder(private val binding: RowSingleTextViewLeftBinding): BaseViewHolder(binding.root){
+        override fun bind(item: BaseDisplayListItem) {
+            super.bind(item) //for click logic
+            if (item is DisplayItemTask.HeaderTask){
+                binding.tvContent.text = item.taskType
+            }
+        }
+    }
+    inner class ContentTaskViewHolder(private val binding: RowMainContentBinding) : BaseViewHolder(binding.root){
+        override fun bind(item: BaseDisplayListItem) {
+            super.bind(item)
+            if (item is DisplayItemTask.ContentTask){
+                val task = item.task
+                when(task){
+                    is Task.Lesson -> {
+                        binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
+                        binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
+                        binding.tvContent1.text = task.title
+                        binding.tvContent1Sub.text = task.description
+                        binding.tvContent2.text = task.date.toFormattedString("EEEE")
+                        binding.tvContent2Sub.text = task.place
+
+                        val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor( ModelColors.MODEL_COLOR_LESSON)
+                        val themeAwareCustomContainerColor = MaterialColors.getColor(binding.root, customContainerColorAttr, Color.BLACK)
+                        binding.llContainer.setBackgroundColor(themeAwareCustomContainerColor)
+                        val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(ModelColors.MODEL_COLOR_LESSON)
+                        val themeAwareOnCustomContainerColor = MaterialColors.getColor(binding.root, onCustomContainerColorAttr, Color.BLACK)
+                        binding.viewDivider.setBackgroundColor(themeAwareOnCustomContainerColor)
+                    }
+                    is Task.Exam -> {
+                        binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
+                        binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
+                        binding.tvContent1.text = task.title
+                        binding.tvContent1Sub.text = "${getString(binding.root.context,R.string.target_score)}: ${task.targetScore}"
+                        binding.tvContent2.text = task.date.toFormattedString("dd MMMM yyyy EEEE")
+                        binding.tvContent2Sub.text = task.place
+
+                        val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor( ModelColors.MODEL_COLOR_EXAM)
+                        val themeAwareCustomContainerColor = MaterialColors.getColor(binding.root, customContainerColorAttr, Color.BLACK)
+                        binding.llContainer.setBackgroundColor(themeAwareCustomContainerColor)
+                        val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(ModelColors.MODEL_COLOR_EXAM)
+                        val themeAwareOnCustomContainerColor = MaterialColors.getColor(binding.root, onCustomContainerColorAttr, Color.BLACK)
+                        binding.viewDivider.setBackgroundColor(themeAwareOnCustomContainerColor)
+                    }
+                    is Task.Homework -> {
+                        binding.tvDate1.text = task.dueTime.toFormattedString("HH:mm")
+                        binding.tvDate2.text = ""
+                        binding.tvContent1.text = task.title
+                        binding.tvContent1Sub.text = task.description
+                        binding.tvContent2.text = task.dueDate.toFormattedString("dd MMMM yyyy EEEE")
+                        binding.tvContent2Sub.text = ""
+
+                        val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor( ModelColors.MODEL_COLOR_HOMEWORK)
+                        val themeAwareCustomContainerColor = MaterialColors.getColor(binding.root, customContainerColorAttr, Color.BLACK)
+                        binding.llContainer.setBackgroundColor(themeAwareCustomContainerColor)
+                        val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(ModelColors.MODEL_COLOR_HOMEWORK)
+                        val themeAwareOnCustomContainerColor = MaterialColors.getColor(binding.root, onCustomContainerColorAttr, Color.BLACK)
+                        binding.viewDivider.setBackgroundColor(themeAwareOnCustomContainerColor)
+                    }
+                }
+            }
         }
     }
 
-
-    class TaskDiffCallback: DiffUtil.ItemCallback<TaskDisplayItem>() {
-        override fun areItemsTheSame(
-            oldItem: TaskDisplayItem,
-            newItem: TaskDisplayItem
-        ): Boolean {
-            return oldItem.id == newItem.id
+    inner class FooterTaskViewHolder(private val binding: RowSingleTextViewBinding): BaseViewHolder(binding.root){
+        override fun bind(item: BaseDisplayListItem) {
+            super.bind(item)
+            if (item is DisplayItemTask.FooterTask){
+                binding.tvContent.text = "Count: ${item.count}"
+            }
         }
-
-        override fun areContentsTheSame(
-            oldItem: TaskDisplayItem,
-            newItem: TaskDisplayItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-
     }
 }

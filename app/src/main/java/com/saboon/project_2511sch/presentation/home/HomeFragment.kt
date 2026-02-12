@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
+import com.saboon.project_2511sch.presentation.common.FilterTask
 import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
 import com.saboon.project_2511sch.util.Resource
@@ -205,8 +206,8 @@ class HomeFragment : Fragment() {
         }
         recyclerAdapterHome.onItemClickListener = { course ->
             Log.d(tag, "Recycler item clicked. Course: ${course.title}")
-            val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(course)
-            findNavController().navigate(action)
+//            val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(course)
+//            findNavController().navigate(action)
         }
     }
 }

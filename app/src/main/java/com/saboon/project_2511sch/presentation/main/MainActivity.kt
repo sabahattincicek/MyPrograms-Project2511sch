@@ -2,10 +2,7 @@ package com.saboon.project_2511sch.presentation.main
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.saboon.project_2511sch.R
@@ -17,16 +14,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val bottomNavVisibleDestinations = setOf(
-        R.id.homeFragment,
-        R.id.programTableFragment,
-        R.id.fileFragment,
-        R.id.menuId3,
-        R.id.courseFragment,
-        R.id.courseDetailsFragment,
-    )
 
-    private val bottomNavHiddenDestionation = setOf(
+    private val bottomNavHiddenDestination = setOf(
         R.id.splashFragment
     )
 
@@ -41,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id in bottomNavHiddenDestionation) {
+            if (destination.id in bottomNavHiddenDestination) {
                 binding.bottomNavigationView.visibility = View.GONE
             } else {
                 binding.bottomNavigationView.visibility = View.VISIBLE

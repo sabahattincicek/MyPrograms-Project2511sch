@@ -1,6 +1,5 @@
 package com.saboon.project_2511sch.data.repository
 
-import com.saboon.project_2511sch.data.local.dao.FileDao
 import com.saboon.project_2511sch.data.local.dao.TaskDao
 import com.saboon.project_2511sch.data.local.entity.TaskExamEntity
 import com.saboon.project_2511sch.data.local.entity.TaskHomeworkEntity
@@ -18,7 +17,6 @@ import javax.inject.Inject
 
 class TaskRepositoryImp @Inject constructor(
     private val taskDao: TaskDao,
-    private val fileDao: FileDao
 ): ITaskRepository {
     override suspend fun insertTask(task: Task): Resource<Task> {
         try {
@@ -32,7 +30,6 @@ class TaskRepositoryImp @Inject constructor(
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
     }
-
     override suspend fun updateTask(task: Task): Resource<Task> {
         try {
             when(task) {
@@ -45,10 +42,8 @@ class TaskRepositoryImp @Inject constructor(
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
     }
-
     override suspend fun deleteTask(task: Task): Resource<Task> {
         try{
-            fileDao.deleteAllByTaskId(task.id)
             when(task) {
                 is Task.Lesson -> taskDao.deleteLesson(task.toEntity())
                 is Task.Exam -> taskDao.deleteExam(task.toEntity())
@@ -57,6 +52,27 @@ class TaskRepositoryImp @Inject constructor(
             return Resource.Success(task)
         }catch (e: Exception){
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
+        }
+    }
+
+    override fun getAll(): Flow<Resource<List<Task>>> {
+        return combine<List<TaskLessonEntity>, List<TaskExamEntity>, List<TaskHomeworkEntity>, Resource<List<Task>>>(
+            taskDao.getAllLessons(),
+            taskDao.getAllExams(),
+            taskDao.getAllHomeworks()
+        ) { lessons, exams, homeworks ->
+            // Convert entities to domain models and combine into one list
+            val allTasks = mutableListOf<Task>()
+            allTasks.addAll(lessons.map { it.toDomain() })
+            allTasks.addAll(exams.map { it.toDomain() })
+            allTasks.addAll(homeworks.map { it.toDomain() })
+
+            // Optionally sort by date/time if needed
+            // allTasks.sortBy { it.date }
+
+            Resource.Success(allTasks.toList())
+        }.catch { e ->
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         }
     }
 
@@ -80,7 +96,6 @@ class TaskRepositoryImp @Inject constructor(
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         }
     }
-
     override fun getAllTasksByCourseIds(ids: List<String>): Flow<Resource<List<Task>>> {
         return combine<List<TaskLessonEntity>, List<TaskExamEntity>, List<TaskHomeworkEntity>, Resource<List<Task>>>(
             taskDao.getAllLessonsByCourseIds(ids),
@@ -101,7 +116,6 @@ class TaskRepositoryImp @Inject constructor(
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         }
     }
-
     override fun getAllTaskByProgramTableId(id: String): Flow<Resource<List<Task>>> {
         return combine<List<TaskLessonEntity>, List<TaskExamEntity>, List<TaskHomeworkEntity>, Resource<List<Task>>>(
             taskDao.getAllLessonsByProgramTableId(id),
@@ -121,7 +135,6 @@ class TaskRepositoryImp @Inject constructor(
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         }
     }
-
     override fun getAllTasksByProgramTableIds(ids: List<String>): Flow<Resource<List<Task>>> {
         return combine<List<TaskLessonEntity>, List<TaskExamEntity>, List<TaskHomeworkEntity>, Resource<List<Task>>>(
             taskDao.getAllLessonsByProgramTableIds(ids),

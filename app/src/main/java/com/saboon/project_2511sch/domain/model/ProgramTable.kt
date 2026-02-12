@@ -1,7 +1,6 @@
 package com.saboon.project_2511sch.domain.model
 
 import android.os.Parcelable
-import androidx.core.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

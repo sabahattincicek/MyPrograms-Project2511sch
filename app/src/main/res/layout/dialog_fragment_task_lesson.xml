@@ -301,7 +301,6 @@
                 android:id="@+id/ll_files_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -336,7 +335,7 @@
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="1"
-                    tools:listitem="@layout/recycler_list_row_mini_file_preview"/>
+                    tools:listitem="@layout/recycler_list_row_file_mini_content"/>
             </LinearLayout>
         </LinearLayout>
 

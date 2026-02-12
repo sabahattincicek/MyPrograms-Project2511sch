@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.file.FileFragment"
+    tools:context=".presentation.sfile.FileFragment"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -103,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:itemCount="4"
-            tools:listitem="@layout/recycler_list_row_file"
+            tools:listitem="@layout/row_file"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

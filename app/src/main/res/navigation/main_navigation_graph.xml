@@ -7,27 +7,12 @@
 
     <fragment
         android:id="@+id/programTableFragment"
-        android:name="com.saboon.project_2511sch.presentation.programtable.ProgramTableFragment"
+        android:name="com.saboon.project_2511sch.presentation.programtable.ProgramTableListFragment"
         android:label="fragment_program_table"
-        tools:layout="@layout/fragment_program_table" >
+        tools:layout="@layout/fragment_program_table_list" >
         <action
-            android:id="@+id/action_programTableFragment_to_courseFragment"
-            app:destination="@id/courseFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/courseFragment"
-        android:name="com.saboon.project_2511sch.presentation.course.CourseFragment"
-        android:label="fragment_course"
-        tools:layout="@layout/fragment_course" >
-        <argument
-            android:name="programTable"
-            app:argType="com.saboon.project_2511sch.domain.model.ProgramTable"/>
-        <action
-            android:id="@+id/action_courseFragment_to_programTableFragment"
-            app:destination="@id/programTableFragment" />
-        <action
-            android:id="@+id/action_courseFragment_to_courseDetailsFragment"
-            app:destination="@id/courseDetailsFragment" />
+            android:id="@+id/action_programTableFragment_to_programTableDetailsFragment"
+            app:destination="@id/programTableDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -45,15 +30,15 @@
         android:name="com.saboon.project_2511sch.presentation.course.CourseDetailsFragment"
         android:label="fragment_course_details"
         tools:layout="@layout/fragment_course_details" >
-        <action
-            android:id="@+id/action_courseDetailsFragment_to_courseFragment"
-            app:destination="@id/courseFragment" />
         <argument
-            android:name="course"
-            app:argType="com.saboon.project_2511sch.domain.model.Course" />
+            android:name="programTable"
+            app:argType="com.saboon.project_2511sch.domain.model.ProgramTable" />
         <action
             android:id="@+id/action_courseDetailsFragment_to_fileFragment"
             app:destination="@id/fileFragment" />
+        <argument
+            android:name="course"
+            app:argType="com.saboon.project_2511sch.domain.model.Course" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -66,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/fileFragment"
-        android:name="com.saboon.project_2511sch.presentation.file.FileFragment"
+        android:name="com.saboon.project_2511sch.presentation.sfile.FileFragment"
         android:label="fragment_file"
         tools:layout="@layout/fragment_file" >
         <action
@@ -87,5 +72,20 @@
             app:argType="com.saboon.project_2511sch.domain.model.Task"
             app:nullable="true"
             android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/programTableDetailsFragment"
+        android:name="com.saboon.project_2511sch.presentation.programtable.ProgramTableDetailsFragment"
+        android:label="fragment_program_table_details"
+        tools:layout="@layout/fragment_program_table_details" >
+        <action
+            android:id="@+id/action_programTableDetailsFragment_to_courseDetailsFragment"
+            app:destination="@id/courseDetailsFragment" />
+        <argument
+            android:name="programTable"
+            app:argType="com.saboon.project_2511sch.domain.model.ProgramTable" />
+        <action
+            android:id="@+id/action_programTableDetailsFragment_to_fileFragment"
+            app:destination="@id/fileFragment" />
     </fragment>
 </navigation>

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface IProgramTableRepository {
     suspend fun insert(programTable: ProgramTable) : Resource<ProgramTable>
     suspend fun delete(programTable: ProgramTable) : Resource<ProgramTable>
-    suspend fun update(programTable: ProgramTable) : Resource<Unit>
+    suspend fun update(programTable: ProgramTable) : Resource<ProgramTable>
     suspend fun activationById(id: String, isActive: Boolean): Resource<Unit>
     fun getById(id: String): Flow<Resource<ProgramTable>>
     fun getAll(): Flow<Resource<List<ProgramTable>>>
