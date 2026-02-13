@@ -89,7 +89,9 @@
             <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout
                 android:id="@+id/osa_over_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -141,7 +143,7 @@
                     android:layout_height="match_parent"
                     android:background="?attr/colorSurface"
                     tools:itemCount="4"
-                    tools:listitem="@layout/recycler_list_row_home_content" />
+                    tools:listitem="@layout/row_main_content" />
             </com.saboon.project_2511sch.presentation.home.OverscrollActionLayout>
         </LinearLayout>
 
