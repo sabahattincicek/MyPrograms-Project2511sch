@@ -8,6 +8,7 @@ import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
+import com.saboon.project_2511sch.presentation.common.FilterGeneric
 import com.saboon.project_2511sch.presentation.common.FilterTask
 import com.saboon.project_2511sch.presentation.home.HomeDisplayItem
 import com.saboon.project_2511sch.util.RecurrenceRule
@@ -25,32 +26,52 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private val taskRepository: ITaskRepository
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(filterTask: FilterTask, startDate: Long, endDate: Long): Flow<Resource<List<HomeDisplayItem>>> {
+    operator fun invoke(filterGeneric: FilterGeneric, filterTask: FilterTask, startDate: Long, endDate: Long): Flow<Resource<List<HomeDisplayItem>>> {
         return programTableRepository.getAllActive().flatMapLatest { ptResource ->
             when(ptResource) {
                 is Resource.Error -> flowOf(Resource.Error(ptResource.message ?: "ProgramTables can not loaded"))
                 is Resource.Idle -> flowOf(Resource.Idle())
                 is Resource.Loading -> flowOf(Resource.Loading())
                 is Resource.Success -> {
-                    val activeTables = ptResource.data ?: emptyList()
-                    val tableIds = activeTables.map { it.id }
+                    val allActiveProgramTables = ptResource.data ?: emptyList()
 
-                    courseRepository.getAllActivesByProgramTableIds(tableIds).flatMapLatest { courseResource ->
+                    val filteredActiveProgramTables = allActiveProgramTables.filter { programTable ->
+                        when{
+                            filterGeneric.course != null -> programTable.id == filterGeneric.course.programTableId  // Eğer spesifik bir kurs seçiliyse, sadece o kursun ait olduğu tabloyu tut
+                            filterGeneric.programTable != null -> programTable.id == filterGeneric.programTable.id // Eğer spesifik bir tablo seçiliyse, sadece o tabloyu tut
+                            else -> true // Filtre yoksa hepsini getir
+                        }
+                    }
+
+                    // Eğer filtreleme sonucu hiç tablo kalmadıysa boş liste dön (gereksiz DB sorgusunu önler)
+                    if (filteredActiveProgramTables.isEmpty()) return@flatMapLatest flowOf(Resource.Success(emptyList()))
+
+                    val programTableIds = allActiveProgramTables.map { it.id }
+
+                    courseRepository.getAllActivesByProgramTableIds(programTableIds).flatMapLatest { courseResource ->
                         when(courseResource) {
                             is Resource.Error -> flowOf(Resource.Error(courseResource.message ?: "Courses can not loaded"))
                             is Resource.Idle -> flowOf(Resource.Idle())
                             is Resource.Loading -> flowOf(Resource.Loading())
                             is Resource.Success -> {
-                                val activeCourses = courseResource.data ?: emptyList()
-                                val courseIds = activeCourses.map { it.id }
+                                val allActiveCourses = courseResource.data ?: emptyList()
+
+                                val filteredActiveCourses = allActiveCourses.filter { course ->
+                                    filterGeneric.course == null || course.id == filterGeneric.course.id // Kursları da filterGeneric.course'a göre daralt (Eğer seçili bir kurs varsa)
+                                }
+
+                                if (filteredActiveCourses.isEmpty()) return@flatMapLatest flowOf(Resource.Success(emptyList()))
+
+                                val courseIds = allActiveCourses.map { it.id }
 
                                 taskRepository.getAllTasksByCourseIds(courseIds).map { taskResource ->
                                     when(taskResource) {
-                                        is Resource.Error -> Resource.Error(taskResource.message ?: "Courses can not loaded")
+                                        is Resource.Error -> Resource.Error(taskResource.message ?: "Tasks can not loaded")
                                         is Resource.Idle -> Resource.Idle()
                                         is Resource.Loading -> Resource.Loading()
                                         is Resource.Success -> {
                                             val tasks = taskResource.data ?: emptyList()
+                                            // Görev tipine göre (Lesson, Exam, Homework) filtreleme
                                             val filteredTasks = tasks.filter { task ->
                                                 when(task) {
                                                     is Task.Lesson -> filterTask.lesson
@@ -58,7 +79,13 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                                                     is Task.Homework -> filterTask.homework
                                                 }
                                             }
-                                            val displayItems = generateAndGroupDisplayList(activeTables, activeCourses, filteredTasks, startDate, endDate)
+                                            val displayItems = generateAndGroupDisplayList(
+                                                filteredActiveProgramTables,
+                                                filteredActiveCourses,
+                                                filteredTasks,
+                                                startDate,
+                                                endDate
+                                            )
                                             Resource.Success(displayItems)
                                         }
                                     }

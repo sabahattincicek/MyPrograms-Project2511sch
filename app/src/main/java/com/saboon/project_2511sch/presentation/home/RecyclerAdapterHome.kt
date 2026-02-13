@@ -20,6 +20,7 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.RecyclerListRowHomeContentBinding
 import com.saboon.project_2511sch.databinding.RecyclerListRowHomeFooterBinding
 import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.ModelColors
 import java.util.Calendar
@@ -28,7 +29,7 @@ import java.util.concurrent.TimeUnit
 class RecyclerAdapterHome :
     ListAdapter<HomeDisplayItem, RecyclerView.ViewHolder>(HomeDiffCallback()) {
 
-    var onItemClickListener:((Course) -> Unit)? = null
+    var onItemClickListener:((ProgramTable, Course) -> Unit)? = null
 
     companion object {
         private const val VIEW_TYPE_HEADER = 0
@@ -196,7 +197,7 @@ class RecyclerAdapterHome :
             when(item) {
                 is HomeDisplayItem.HeaderItem -> {}
                 is HomeDisplayItem.ContentItem -> {
-                    onItemClickListener?.invoke(item.course)
+                    onItemClickListener?.invoke(item.programTable, item.course)
                 }
                 is HomeDisplayItem.FooterItem -> {}
             }
