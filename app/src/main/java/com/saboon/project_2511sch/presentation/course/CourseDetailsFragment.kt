@@ -96,6 +96,11 @@ class CourseDetailsFragment : Fragment() {
         }
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
+                R.id.action_toggle_switch -> {
+                    menuItem.isChecked = !menuItem.isChecked
+                    viewModelCourse.activationById(course.id, menuItem.isChecked)
+                    true
+                }
                 R.id.action_delete -> {
                     val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete", "Are you sure?")
                     dialog.show(childFragmentManager, "Delete Course")
@@ -231,6 +236,8 @@ class CourseDetailsFragment : Fragment() {
                         is Resource.Success -> {
                             course = resource.data!!
                             applyDataToView()
+                            val toggleItem = binding.topAppBar.menu.findItem(R.id.action_toggle_switch)
+                            toggleItem?.isChecked = course.isActive
                             viewModelTask.updateFilter(programTable, course)
                             viewModelSFile.updateProgramTable(programTable)
                             viewModelSFile.updateCourse(course, false)

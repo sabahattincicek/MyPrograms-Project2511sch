@@ -50,9 +50,6 @@ class ProgramTableListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: View created.")
 
-//        Log.d(TAG, "onViewCreated: Setting up toolbar.")
-//        (activity as AppCompatActivity).setSupportActionBar(binding.topAppBar)
-
         setupAdapters()
         setupObservers()
 

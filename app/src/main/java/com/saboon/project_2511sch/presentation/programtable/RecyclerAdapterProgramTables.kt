@@ -58,6 +58,8 @@ class RecyclerAdapterProgramTables :
             if (item is DisplayItemProgramTable.ContentProgramTable){
                 binding.tvMainContent.text = item.programTable.title
                 binding.tvSubContent.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
+                if (!item.programTable.isActive) binding.llContainer.alpha = 0.3f
+                else binding.llContainer.alpha = 1.0f
             }
         }
     }
