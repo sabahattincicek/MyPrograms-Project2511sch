@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.saboon.project_2511sch.domain.usecase.course.CourseAbsenceUseCase
 import com.saboon.project_2511sch.domain.usecase.course.CourseReadUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.assisted.Assisted
@@ -17,7 +16,6 @@ class IncrementAbsenceWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val courseReadUseCase: CourseReadUseCase,
-    private val courseAbsenceUseCase: CourseAbsenceUseCase,
 ): CoroutineWorker(appContext, workerParams) {
 
     private val tag = "IncrementAbsenceWorker"
@@ -37,7 +35,7 @@ class IncrementAbsenceWorker @AssistedInject constructor(
 
             if (resource is Resource.Success && resource.data != null) {
                 Log.i(tag, "Course '${resource.data.title}' fetched successfully. Incrementing absence.")
-                courseAbsenceUseCase.increment(resource.data)
+//                courseAbsenceUseCase.increment(resource.data)
                 Log.i(tag, "Work finished successfully for course ID: $courseId")
                 Result.success()
             } else {
