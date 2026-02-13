@@ -1,13 +1,8 @@
 package com.saboon.project_2511sch.presentation.home
 
 import android.graphics.Color
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
-import android.graphics.Paint
 import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getString
 import androidx.recyclerview.widget.DiffUtil
@@ -27,7 +22,7 @@ import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class RecyclerAdapterHome :
-    ListAdapter<HomeDisplayItem, RecyclerView.ViewHolder>(HomeDiffCallback()) {
+    ListAdapter<DisplayItemHome, RecyclerView.ViewHolder>(HomeDiffCallback()) {
 
     var onItemClickListener:((ProgramTable, Course) -> Unit)? = null
 
@@ -39,7 +34,7 @@ class RecyclerAdapterHome :
 
     class HeaderViewHolder(private val binding: RecyclerListRowHomeHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(today: Long, item: HomeDisplayItem.HeaderItem) {
+        fun bind(today: Long, item: DisplayItemHome.HeaderItemHome) {
             binding.tvContent1.text = item.date.toFormattedString("EEEE - dd MMMM yyyy")
 
             val diffMillis = item.date - today
@@ -60,7 +55,7 @@ class RecyclerAdapterHome :
 
     class ContentViewHolder(private val binding: RecyclerListRowHomeContentBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(today: Long, item: HomeDisplayItem.ContentItem) {
+        fun bind(today: Long, item: DisplayItemHome.ContentItemHome) {
             val programTable = item.programTable
             val course = item.course
             val task = item.task
@@ -135,7 +130,7 @@ class RecyclerAdapterHome :
         }
     }
     class FooterViewHolder(private val binding: RecyclerListRowHomeFooterBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(today: Long, item: HomeDisplayItem.FooterItem){
+        fun bind(today: Long, item: DisplayItemHome.FooterItemHome){
             val startDay = item.startDate
             val endDay = item.endDate
             val itemCount = item.itemCount
@@ -189,26 +184,26 @@ class RecyclerAdapterHome :
         }.timeInMillis
         val item = getItem(position)
         when (holder) {
-            is HeaderViewHolder -> holder.bind(today, item as HomeDisplayItem.HeaderItem)
-            is ContentViewHolder -> holder.bind(today, item as HomeDisplayItem.ContentItem)
-            is FooterViewHolder -> holder.bind(today, item as HomeDisplayItem.FooterItem)
+            is HeaderViewHolder -> holder.bind(today, item as DisplayItemHome.HeaderItemHome)
+            is ContentViewHolder -> holder.bind(today, item as DisplayItemHome.ContentItemHome)
+            is FooterViewHolder -> holder.bind(today, item as DisplayItemHome.FooterItemHome)
         }
         holder.itemView.setOnClickListener {
             when(item) {
-                is HomeDisplayItem.HeaderItem -> {}
-                is HomeDisplayItem.ContentItem -> {
+                is DisplayItemHome.HeaderItemHome -> {}
+                is DisplayItemHome.ContentItemHome -> {
                     onItemClickListener?.invoke(item.programTable, item.course)
                 }
-                is HomeDisplayItem.FooterItem -> {}
+                is DisplayItemHome.FooterItemHome -> {}
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is HomeDisplayItem.HeaderItem -> VIEW_TYPE_HEADER
-            is HomeDisplayItem.ContentItem -> VIEW_TYPE_CONTENT
-            is HomeDisplayItem.FooterItem -> VIEW_TYPE_FOOTER
+            is DisplayItemHome.HeaderItemHome -> VIEW_TYPE_HEADER
+            is DisplayItemHome.ContentItemHome -> VIEW_TYPE_CONTENT
+            is DisplayItemHome.FooterItemHome -> VIEW_TYPE_FOOTER
         }
     }
 
@@ -220,20 +215,20 @@ class RecyclerAdapterHome :
             set(Calendar.MILLISECOND, 0)
         }.timeInMillis
         return currentList.indexOfFirst {
-            it is HomeDisplayItem.HeaderItem && it.date == today
+            it is DisplayItemHome.HeaderItemHome && it.date == today
         }
     }
-    class HomeDiffCallback : DiffUtil.ItemCallback<HomeDisplayItem>() {
+    class HomeDiffCallback : DiffUtil.ItemCallback<DisplayItemHome>() {
         override fun areItemsTheSame(
-            oldItem: HomeDisplayItem,
-            newItem: HomeDisplayItem
+            oldItem: DisplayItemHome,
+            newItem: DisplayItemHome
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: HomeDisplayItem,
-            newItem: HomeDisplayItem
+            oldItem: DisplayItemHome,
+            newItem: DisplayItemHome
         ): Boolean {
             return oldItem == newItem
         }
