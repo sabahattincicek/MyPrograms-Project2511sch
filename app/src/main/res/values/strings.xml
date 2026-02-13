@@ -200,6 +200,7 @@
     <string name="file_preview">File preview</string>
     <string name="details">Details</string>
     <string name="courses">Courses</string>
+    <string name="activate">Activate</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
