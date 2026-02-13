@@ -111,7 +111,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Swipe to get previous 30 item" />
+                        android:text="Swipe to get previous 30 days" />
 
                 </LinearLayout>
 
@@ -133,7 +133,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Swipe to get next 30 item" />
+                        android:text="Swipe to get next 30 days" />
 
                 </LinearLayout>
 

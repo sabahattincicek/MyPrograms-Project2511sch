@@ -92,6 +92,11 @@ class ProgramTableDetailsFragment : Fragment() {
         }
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
+                R.id.action_toggle_switch -> {
+                    menuItem.isChecked = !menuItem.isChecked
+                    viewModelProgramTable.activationById(programTable.id, menuItem.isChecked)
+                    true
+                }
                 R.id.action_delete -> {
                     val diaolog = DialogFragmentDeleteConfirmation.newInstance("Delete", "Are you sure?")
                     diaolog.show(childFragmentManager, "Delete Program Table")
@@ -179,6 +184,8 @@ class ProgramTableDetailsFragment : Fragment() {
                         is Resource.Success -> {
                             programTable = resource.data!!
                             applyDataToView()
+                            val toggleItem = binding.topAppBar.menu.findItem(R.id.action_toggle_switch)
+                            toggleItem?.isChecked = programTable.isActive
                             viewModelCourse.updateFilter(programTable)
                             viewModelSFile.updateProgramTable(programTable, false)
                         }

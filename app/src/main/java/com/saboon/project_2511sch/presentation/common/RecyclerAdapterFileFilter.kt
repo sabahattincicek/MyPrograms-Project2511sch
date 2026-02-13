@@ -49,13 +49,13 @@ class RecyclerAdapterFileFilter: ListAdapter<BaseDisplayListItem, BaseViewHolder
         holder.onItemClickListener = { baseItem ->
             when(baseItem){
                 is DisplayItemProgramTable.ContentProgramTable -> {
-                    onClickItemListener?.invoke(baseItem.programTable)
+                    if (baseItem.programTable.isActive) onClickItemListener?.invoke(baseItem.programTable)
                 }
                 is DisplayItemCourse.ContentCourse -> {
-                    onClickItemListener?.invoke(baseItem.course)
+                    if (baseItem.course.isActive) onClickItemListener?.invoke(baseItem.course)
                 }
                 is DisplayItemTask.ContentTask -> {
-                    onClickItemListener?.invoke(baseItem.task)
+                    if (baseItem.task.isActive) onClickItemListener?.invoke(baseItem.task)
                 }
             }
         }
@@ -85,14 +85,21 @@ class RecyclerAdapterFileFilter: ListAdapter<BaseDisplayListItem, BaseViewHolder
                 is DisplayItemProgramTable.ContentProgramTable -> {
                     binding.tvMainContent.text = item.programTable.title
                     binding.tvSubContent.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
+                    if (!item.programTable.isActive) binding.llContainer.alpha = 0.3f
+                    else binding.llContainer.alpha = 1.0f
                 }
                 is DisplayItemCourse.ContentCourse -> {
                     binding.tvMainContent.text = item.course.title
                     binding.tvSubContent.text = item.course.createdAt.toFormattedString("MMM yyyy")
+                    if (!item.course.isActive) binding.llContainer.alpha = 0.3f
+                    else binding.llContainer.alpha = 1.0f
                 }
                 is DisplayItemTask.ContentTask -> {
                     binding.tvMainContent.text = item.task.title
                     binding.tvSubContent.text = item.task.createdAt.toFormattedString("MMM yyyy")
+                    if (!item.task.isActive) binding.llContainer.alpha = 0.3f
+                    else binding.llContainer.alpha = 1.0f
+
                 }
             }
         }

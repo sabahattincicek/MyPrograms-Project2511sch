@@ -68,6 +68,8 @@ class RecyclerAdapterCourse: ListAdapter<DisplayItemCourse, BaseViewHolder>(Base
             if (item is DisplayItemCourse.ContentCourse){
                 binding.tvMainContent.text = item.course.title
                 binding.tvSubContent.text = item.course.createdAt.toFormattedString("MMM yyyy")
+                if (!item.course.isActive) binding.llContainer.alpha = 0.3f
+                else binding.llContainer.alpha = 1.0f
             }
         }
     }
