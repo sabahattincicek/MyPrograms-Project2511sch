@@ -67,6 +67,9 @@ class DialogFragmentFilter: DialogFragment() {
                 viewModelProgramTable.getAllProgramTables()
             }
         }
+        binding.topAppBar.setNavigationOnClickListener {
+            dismiss()
+        }
     }
     override fun onDestroyView() {
         super.onDestroyView()

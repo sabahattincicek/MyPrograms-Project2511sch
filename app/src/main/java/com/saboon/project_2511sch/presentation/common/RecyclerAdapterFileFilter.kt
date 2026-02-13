@@ -2,10 +2,7 @@ package com.saboon.project_2511sch.presentation.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.saboon.project_2511sch.databinding.RecyclerListRowFileFilterBinding
 import com.saboon.project_2511sch.databinding.RowGeneralItemBinding
 import com.saboon.project_2511sch.databinding.RowSingleTextViewBinding
 import com.saboon.project_2511sch.databinding.RowSingleTextViewLeftBinding

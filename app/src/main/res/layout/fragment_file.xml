@@ -69,30 +69,21 @@
                 style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/program_table"
-                app:closeIcon="@drawable/baseline_arrow_drop_down_24"
-                app:closeIconEnabled="false"
-                app:closeIconVisible="true"/>
+                android:text="@string/program_table"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/cp_course"
                 style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/course"
-                app:closeIcon="@drawable/baseline_arrow_drop_down_24"
-                app:closeIconEnabled="false"
-                app:closeIconVisible="true"/>
+                android:text="@string/course"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/cp_task"
                 style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/task"
-                app:closeIcon="@drawable/baseline_arrow_drop_down_24"
-                app:closeIconEnabled="false"
-                app:closeIconVisible="true"/>
+                android:text="@string/task"/>
 
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
