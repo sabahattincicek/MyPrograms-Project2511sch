@@ -167,7 +167,15 @@ class DialogFragmentTaskLesson: DialogFragment() {
         binding.etDate.setOnClickListener {
             dateTimePicker.pickDateMillis("Date", selectedDateMillis){ result ->
                 selectedDateMillis = result
-                binding.etDate.setText(selectedDateMillis.toFormattedString("dd MMMM yyyy EEEE"))
+
+                selectedRecurrenceRule.dtStart = selectedDateMillis
+                binding.etDateRangeStart.setText(selectedRecurrenceRule.dtStart.toFormattedString("dd.MM.yyyy"))
+                val cal = Calendar.getInstance().apply {
+                    timeInMillis = selectedRecurrenceRule.dtStart
+                    add(Calendar.MONTH, 9)
+                }
+                selectedRecurrenceRule.until = cal.timeInMillis // add 9 month
+                binding.etDateRangeEnd.setText(selectedRecurrenceRule.until.toFormattedString("dd.MM.yyyy"))
             }
         }
         binding.etDateRangeStart.setOnClickListener {
