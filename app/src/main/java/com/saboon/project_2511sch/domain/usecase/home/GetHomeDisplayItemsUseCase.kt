@@ -10,7 +10,7 @@ import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.presentation.common.FilterGeneric
 import com.saboon.project_2511sch.presentation.common.FilterTask
-import com.saboon.project_2511sch.presentation.home.HomeDisplayItem
+import com.saboon.project_2511sch.presentation.home.DisplayItemHome
 import com.saboon.project_2511sch.util.RecurrenceRule
 import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +26,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private val taskRepository: ITaskRepository
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(filterGeneric: FilterGeneric, filterTask: FilterTask, startDate: Long, endDate: Long): Flow<Resource<List<HomeDisplayItem>>> {
+    operator fun invoke(filterGeneric: FilterGeneric, filterTask: FilterTask, startDate: Long, endDate: Long): Flow<Resource<List<DisplayItemHome>>> {
         return programTableRepository.getAllActive().flatMapLatest { ptResource ->
             when(ptResource) {
                 is Resource.Error -> flowOf(Resource.Error(ptResource.message ?: "ProgramTables can not loaded"))
@@ -104,9 +104,9 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         tasks: List<Task>,
         startDate: Long,
         endDate: Long
-    ): List<HomeDisplayItem> {
+    ): List<DisplayItemHome> {
         Log.d("GetHomeDisplayItemsUC", "generate: Processing ${tasks.size} tasks for ${programTables.size} tables")
-        val finalEvents = mutableListOf<HomeDisplayItem.ContentItem>()
+        val finalEvents = mutableListOf<DisplayItemHome.ContentItemHome>()
 
         val programTableMap = programTables.associateBy { it.id }
         val courseMap = courses.associateBy { it.id }
@@ -132,7 +132,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                         if (rRule.freq == RecurrenceRule.Frequency.ONCE){
                             if (task.date in startDate..endDate && task.date in fromDate..untilDate){
                                 finalEvents.add(
-                                    HomeDisplayItem.ContentItem(
+                                    DisplayItemHome.ContentItemHome(
                                         programTable = programTable,
                                         course = course,
                                         task = task,
@@ -148,7 +148,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                             }
                             while (occurrenceDate in startDate..endDate && occurrenceDate in fromDate..untilDate){
                                 finalEvents.add(
-                                    HomeDisplayItem.ContentItem(
+                                    DisplayItemHome.ContentItemHome(
                                         programTable = programTable,
                                         course = course,
                                         task = task.copy(date = occurrenceDate),
@@ -164,7 +164,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
 
                         if (task.date in startDate..endDate) {
                             finalEvents.add(
-                                HomeDisplayItem.ContentItem(
+                                DisplayItemHome.ContentItemHome(
                                     occurrenceId = "single_${task.id}",
                                     programTable = programTable,
                                     course = course,
@@ -178,7 +178,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
 
                         if (task.dueDate in startDate..endDate) {
                             finalEvents.add(
-                                HomeDisplayItem.ContentItem(
+                                DisplayItemHome.ContentItemHome(
                                     occurrenceId = "single_${task.id}",
                                     programTable = programTable,
                                     course = course,
@@ -193,7 +193,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
 
 
         finalEvents
-            .sortWith(compareBy<HomeDisplayItem.ContentItem> {
+            .sortWith(compareBy<DisplayItemHome.ContentItemHome> {
                 when(val t = it.task) {
                     is Task.Lesson -> getDayStartMillis(t.date)
                     is Task.Exam -> getDayStartMillis(t.date)
@@ -207,7 +207,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                 }
             })
 
-        val displayItemsWithHeaders = mutableListOf<HomeDisplayItem>()
+        val displayItemsWithHeaders = mutableListOf<DisplayItemHome>()
         var lastHeaderDate: Long? = null
 
         finalEvents.forEach { event ->
@@ -218,12 +218,12 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
             }
             val eventDay = getDayStartMillis(taskDate)
             if (eventDay != lastHeaderDate){
-                displayItemsWithHeaders.add(HomeDisplayItem.HeaderItem(date = eventDay))
+                displayItemsWithHeaders.add(DisplayItemHome.HeaderItemHome(date = eventDay))
                 lastHeaderDate = eventDay
             }
             displayItemsWithHeaders.add(event)
         }
-        val footerItem = HomeDisplayItem.FooterItem(startDate, endDate, finalEvents.size)
+        val footerItem = DisplayItemHome.FooterItemHome(startDate, endDate, finalEvents.size)
         displayItemsWithHeaders.add(footerItem)
         Log.d("GetHomeDisplayItemsUC", "generate: Final list size with headers: ${displayItemsWithHeaders.size}")
         return displayItemsWithHeaders
