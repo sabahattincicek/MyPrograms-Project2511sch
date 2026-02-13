@@ -126,28 +126,21 @@ class ViewModelCourse @Inject constructor(
             }
         }
     }
-
-    fun getAllCount(onResult: (Resource<Int>) -> Unit) {
+    fun decrementAbsence(course: Course){
         viewModelScope.launch {
             try {
-                val result = courseReadUseCase.getAllCount()
-                onResult(result)
-            } catch (e: Exception) {
-                onResult(
-                    Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-                )
+                courseWriteUseCase.decrementAbsence(course)
+            }catch (e: Exception){
+
             }
         }
     }
-    fun getAllActivesCount(onResult: (Resource<Int>) -> Unit){
+    fun incrementAbsence(course: Course){
         viewModelScope.launch {
             try {
-                val result = courseReadUseCase.getAllActiveCount()
-                onResult(result)
-            } catch (e: Exception) {
-                onResult(
-                    Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-                )
+                courseWriteUseCase.incrementAbsence(course)
+            }catch (e: Exception){
+
             }
         }
     }

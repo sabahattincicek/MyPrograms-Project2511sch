@@ -24,4 +24,16 @@ class CourseWriteUseCase @Inject constructor(
     suspend fun activationById(id: String, isActive: Boolean): Resource<Unit>{
         return courseRepository.activationById(id, isActive)
     }
+    suspend fun decrementAbsence(course: Course): Resource<Course>{
+        val decrementedCourse = course.copy(
+            absence = course.absence - 1
+        )
+        return courseRepository.update(decrementedCourse)
+    }
+    suspend fun incrementAbsence(course: Course): Resource<Course>{
+        val incrementedCourse = course.copy(
+            absence = course.absence + 1
+        )
+        return courseRepository.update(incrementedCourse)
+    }
 }

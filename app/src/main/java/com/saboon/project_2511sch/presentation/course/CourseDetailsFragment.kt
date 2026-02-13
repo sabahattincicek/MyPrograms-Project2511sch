@@ -127,13 +127,13 @@ class CourseDetailsFragment : Fragment() {
             val decrementedCourse = course.copy(
                 absence = course.absence + 1
             )
-            viewModelCourse.update(decrementedCourse)
+            viewModelCourse.decrementAbsence(course)
         }
         binding.btnAbsenceIncrease.setOnClickListener {
             val incrementedCourse = course.copy(
                 absence = course.absence - 1
             )
-            viewModelCourse.update(incrementedCourse)
+            viewModelCourse.incrementAbsence(course)
         }
     }
     private fun applyDataToView(){
