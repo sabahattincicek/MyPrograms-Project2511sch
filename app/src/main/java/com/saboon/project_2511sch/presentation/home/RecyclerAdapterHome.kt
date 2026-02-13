@@ -208,10 +208,17 @@ class RecyclerAdapterHome :
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemHome.FooterItemHome){
+                val itemCount = item.itemCount
                 val startDay = item.startDate
                 val endDay = item.endDate
-                val itemCount = item.itemCount
+                val today = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }.timeInMillis
 
+                binding.tvToday.text = "Today: ${today.toFormattedString("dd.MM.yyyy")}"
                 binding.tvDateRange.text = "Showing date range: ${startDay.toFormattedString("dd.MM.yyyy")} - ${endDay.toFormattedString("dd.MM.yyyy")}"
                 binding.tvItemCount.text = "Showing items: ${itemCount}"
             }
