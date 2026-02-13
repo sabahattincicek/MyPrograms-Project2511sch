@@ -8,7 +8,10 @@ import android.widget.ArrayAdapter
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentTaskHomeworkBinding
 import com.saboon.project_2511sch.domain.model.Course
@@ -16,17 +19,23 @@ import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
+import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.toFormattedString
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class DialogFragmentTaskHomework: DialogFragment() {
 
     private var _binding: DialogFragmentTaskHomeworkBinding?=null
     private val binding get() = _binding!!
+    private val viewModelTask: ViewModelTask by viewModels()
 
     private lateinit var dateTimePicker: Picker
 
     private var course: Course?= null
-    private var task: Task.Homework? = null
+    private var task: Task? = null
+    private var homework: Task.Homework? = null
     private var selectedDueDateMillis: Long = System.currentTimeMillis()
     private var selectedDueTimeMillis: Long = System.currentTimeMillis()
     private var selectedRemindBeforeMinutes: Int = 0
@@ -51,25 +60,27 @@ class DialogFragmentTaskHomework: DialogFragment() {
         arguments?.let {
             course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)
             task = BundleCompat.getParcelable(it, ARG_TASK, Task.Homework::class.java)
+            if (task != null) homework = task as Task.Homework
         }
 
         dateTimePicker = Picker(requireContext(), childFragmentManager)
         setupAdapters()
-        setupFragmentResultListeners()
+        setupListeners()
+        setupObservers()
 
         val isEditMode = task != null
         if (isEditMode){
             binding.toolbar.title = getString(R.string.edit_task)
             binding.toolbar.subtitle = course!!.title
-            binding.etTitle.setText(task!!.title)
-            binding.etDescription.setText(task!!.description)
-            binding.etDueDate.setText(task!!.dueDate.toFormattedString("dd MMMM yyyy EEEE"))
-            binding.etDueTime.setText(task!!.dueTime.toFormattedString("HH:mm"))
-            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
+            binding.etTitle.setText(homework!!.title)
+            binding.etDescription.setText(homework!!.description)
+            binding.etDueDate.setText(homework!!.dueDate.toFormattedString("dd MMMM yyyy EEEE"))
+            binding.etDueTime.setText(homework!!.dueTime.toFormattedString("HH:mm"))
+            binding.actvReminder.setText(mapMinutesToDisplayString(homework!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
 
-            selectedDueDateMillis = task!!.dueDate
-            selectedDueTimeMillis = task!!.dueTime
-            selectedRemindBeforeMinutes = task!!.remindBefore
+            selectedDueDateMillis = homework!!.dueDate
+            selectedDueTimeMillis = homework!!.dueTime
+            selectedRemindBeforeMinutes = homework!!.remindBefore
         }else{
 
         }
@@ -89,17 +100,16 @@ class DialogFragmentTaskHomework: DialogFragment() {
         }
         binding.btnSave.setOnClickListener {
             if (isEditMode){
-                val updatedTask = task!!.copy(
+                val updatedHomework = homework!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     dueDate = selectedDueDateMillis,
                     dueTime = selectedDueTimeMillis,
                     remindBefore = selectedRemindBeforeMinutes
                 )
-                setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(RESULT_KEY_TASK to updatedTask))
-                dismiss()
+                viewModelTask.update(updatedHomework)
             }else{
-                val newTask = Task.Homework(
+                val newHomework = Task.Homework(
                     id = IdGenerator.generateTaskId(binding.etTitle.text.toString()),
                     appVersionAtCreation = getString(R.string.app_version),
                     programTableId = course!!.programTableId,
@@ -110,8 +120,7 @@ class DialogFragmentTaskHomework: DialogFragment() {
                     dueTime = selectedDueTimeMillis,
                     remindBefore = selectedRemindBeforeMinutes
                 )
-                setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))
-                dismiss()
+                viewModelTask.insert(newHomework)
             }
         }
         binding.btnCancel.setOnClickListener {
@@ -157,12 +166,59 @@ class DialogFragmentTaskHomework: DialogFragment() {
         )
     }
 
-    private fun setupFragmentResultListeners(){
+    private fun setupListeners(){
         childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, viewLifecycleOwner){ requestKey, result ->
             val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
             if (isYes){
-                setFragmentResult(REQUEST_KEY_DELETE, bundleOf(ARG_TASK to task))
-                dismiss()
+                viewModelTask.delete(task!!)
+            }
+        }
+    }
+
+    private fun setupObservers(){
+        //INSERT EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelTask.insertEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            dismiss()
+                        }
+                    }
+                }
+            }
+        }
+        //UPDATE EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelTask.updateEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            dismiss()
+                        }
+                    }
+                }
+            }
+        }
+        //DELETE EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelTask.deleteEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            dismiss()
+                        }
+                    }
+                }
             }
         }
     }
@@ -192,7 +248,7 @@ class DialogFragmentTaskHomework: DialogFragment() {
             }
         }
 
-        fun newInstanceForEdit(course: Course, task: Task.Homework): DialogFragmentTaskHomework{
+        fun newInstanceForEdit(course: Course, task: Task): DialogFragmentTaskHomework{
             return DialogFragmentTaskHomework().apply {
                 arguments = bundleOf(ARG_COURSE to course, ARG_TASK to task)
             }

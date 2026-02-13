@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -110,7 +109,7 @@ class DialogFragmentTaskExam: DialogFragment() {
         }
         binding.btnSave.setOnClickListener {
             if (isEditMode){
-                val updatedTask = exam!!.copy(
+                val updatedExam = exam!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     targetScore = binding.etTargetScore.text.toString().toIntOrNull(),
@@ -121,9 +120,9 @@ class DialogFragmentTaskExam: DialogFragment() {
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString()
                 )
-                viewModelTask.update(updatedTask)
+                viewModelTask.update(updatedExam)
             }else{
-                val newTask = Task.Exam(
+                val newExam = Task.Exam(
                     id = IdGenerator.generateTaskId(binding.etTitle.text.toString()),
                     appVersionAtCreation = getString(R.string.app_version),
                     programTableId = course!!.programTableId,
@@ -138,7 +137,7 @@ class DialogFragmentTaskExam: DialogFragment() {
                     targetScore = binding.etTargetScore.text.toString().toIntOrNull(),
                     achievedScore = binding.etAchievedScore.text.toString().toIntOrNull()
                 )
-                viewModelTask.insert(newTask)
+                viewModelTask.insert(newExam)
             }
         }
         binding.btnCancel.setOnClickListener {

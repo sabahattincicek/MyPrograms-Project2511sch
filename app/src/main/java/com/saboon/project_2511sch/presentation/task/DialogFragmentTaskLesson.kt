@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -120,7 +119,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
         }
         binding.btnSave.setOnClickListener {
             if (isEditMode){
-                val updatedTask = lesson!!.copy(
+                val updatedLesson = lesson!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     date = selectedDateMillis,
@@ -130,9 +129,9 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString()
                 )
-                viewModelTask.update(updatedTask)
+                viewModelTask.update(updatedLesson)
             }else{
-                val newTask = Task.Lesson(
+                val newLesson = Task.Lesson(
                     id = IdGenerator.generateTaskId(binding.etTitle.text.toString()),
                     appVersionAtCreation = getString(R.string.app_version),
                     programTableId = course!!.programTableId,
@@ -146,7 +145,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString(),
                 )
-                viewModelTask.insert(newTask)
+                viewModelTask.insert(newLesson)
             }
         }
         binding.btnCancel.setOnClickListener {
