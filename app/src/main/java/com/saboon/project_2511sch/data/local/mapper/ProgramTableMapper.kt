@@ -6,15 +6,18 @@ import com.saboon.project_2511sch.domain.model.ProgramTable
 fun ProgramTableEntity.toDomain(): ProgramTable {
     return ProgramTable(
         id = id,
-        createdBy = createdBy,
-        updatedBy = updatedBy,
         createdAt = createdAt,
+        createdBy = createdBy,
+        appVersionAtCreation = appVersionAtCreation,
         updatedAt = updatedAt,
+        updatedBy = updatedBy,
         version = version,
         isActive = isActive,
         isDeleted = isDeleted,
         deletedAt = deletedAt,
-        appVersionAtCreation = appVersionAtCreation,
+        syncStatus = syncStatus,
+        contentHash = contentHash,
+        serverVersion = serverVersion,
         title = title,
         description = description,
         color = color
@@ -24,15 +27,18 @@ fun ProgramTableEntity.toDomain(): ProgramTable {
 fun ProgramTable.toEntity(): ProgramTableEntity {
     return ProgramTableEntity(
         id = id,
-        createdBy = createdBy,
-        updatedBy = updatedBy,
         createdAt = createdAt,
+        createdBy = createdBy,
+        appVersionAtCreation = appVersionAtCreation,
         updatedAt = updatedAt,
+        updatedBy = updatedBy,
         version = version,
         isActive = isActive,
         isDeleted = isDeleted,
         deletedAt = deletedAt,
-        appVersionAtCreation = appVersionAtCreation,
+        syncStatus = syncStatus,
+        contentHash = contentHash,
+        serverVersion = serverVersion,
         title = title,
         description = description,
         color = color

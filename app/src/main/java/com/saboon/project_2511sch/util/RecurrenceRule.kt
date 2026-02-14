@@ -1,12 +1,15 @@
 package com.saboon.project_2511sch.util
 
 import android.icu.util.Calendar
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class RecurrenceRule(
     var freq: Frequency = Frequency.ONCE,
     var dtStart: Long = 0L,
     var until: Long = Long.MAX_VALUE,
-){
+): Parcelable {
     enum class Frequency {
         ONCE, DAILY, WEEKLY, MONTHLY, YEARLY
     }

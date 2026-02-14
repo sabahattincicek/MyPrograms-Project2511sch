@@ -1,26 +1,30 @@
 package com.saboon.project_2511sch.domain.model
 
 import android.os.Parcelable
+import com.saboon.project_2511sch.util.ModelColors
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Course(
     override val id: String,
-    override val createdBy: String,
-    override val updatedBy: String,
     override val createdAt: Long = System.currentTimeMillis(),
+    override val createdBy: String,
+    override val appVersionAtCreation: String,
     override val updatedAt: Long = System.currentTimeMillis(),
-    override val version: Int = 0,
+    override val updatedBy: String,
+    override val version: Int = 1,
     override val isActive: Boolean = true,
     override val isDeleted: Boolean = false,
     override val deletedAt: Long = 0L,
-    override val appVersionAtCreation: String,
-    override val title: String,
-    override val description: String,
+    override val syncStatus: Int = 0,
+    override val contentHash: String = "",
+    override val serverVersion: Int = 1,
 
     val programTableId: String,
 
+    val title: String,
+    val description: String,
     val people: String,
-    val color: String,
+    val color: String = ModelColors.MODEL_COLOR_1,
     val absence: Int = 0,
 ) : Parcelable, BaseModel

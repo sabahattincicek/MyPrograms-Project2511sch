@@ -24,24 +24,14 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-//    val MIGRATION_3_4 = object: Migration(3,4) {
-//        override fun migrate(database: SupportSQLiteDatabase) {
-//            database.execSQL("DROP TABLE IF EXISTS files")
-//            database.execSQL("ALTER TABLE program_tables ADD COLUMN files")
-//            database.execSQL("ALTER TABLE courses ADD COLUMN files")
-//            database.execSQL("ALTER TABLE task_lessons ADD COLUMN files")
-//            database.execSQL("ALTER TABLE task_exams ADD COLUMN files")
-//            database.execSQL("ALTER TABLE task_homeworks ADD COLUMN files")
-//        }
-//    }
-
     @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext context: Context) = Room.databaseBuilder(
         context,
         Database::class.java,
         "Project2511schDatabase"
-    ).build()
+    ).fallbackToDestructiveMigration(true) // TODO: DELETE THIS WHEN RELEASE
+        .build()
 
     @Singleton
     @Provides

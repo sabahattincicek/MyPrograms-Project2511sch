@@ -12,9 +12,11 @@ import com.saboon.project_2511sch.data.local.entity.SFileEntity
 import com.saboon.project_2511sch.data.local.entity.TaskExamEntity
 import com.saboon.project_2511sch.data.local.entity.TaskHomeworkEntity
 import com.saboon.project_2511sch.data.local.entity.TaskLessonEntity
+import com.saboon.project_2511sch.data.local.entity.UserEntity
 
 @Database(
     entities = [
+        UserEntity::class,
         ProgramTableEntity::class,
         CourseEntity::class,
         TaskLessonEntity::class,
