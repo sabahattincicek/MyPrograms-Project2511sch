@@ -202,6 +202,7 @@
     <string name="courses">Courses</string>
     <string name="activate">Activate</string>
     <string name="set_active">Set Active</string>
+    <string name="synchronization">Synchronization</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>
