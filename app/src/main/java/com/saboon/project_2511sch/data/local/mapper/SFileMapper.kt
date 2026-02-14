@@ -6,6 +6,8 @@ import com.saboon.project_2511sch.domain.model.SFile
 fun SFileEntity.toDomain(): SFile {
     return SFile(
         id = id,
+        createdBy = createdBy,
+        updatedBy = updatedBy,
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version,
@@ -25,6 +27,8 @@ fun SFileEntity.toDomain(): SFile {
 fun SFile.toEntity(): SFileEntity {
     return SFileEntity(
         id = id,
+        createdBy = createdBy,
+        updatedBy = updatedBy,
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version,

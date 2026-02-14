@@ -6,6 +6,8 @@ import com.saboon.project_2511sch.domain.model.Course
 fun CourseEntity.toDomain(): Course {
     return Course(
         id = id,
+        createdBy = createdBy,
+        updatedBy = updatedBy,
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version,
@@ -25,6 +27,8 @@ fun CourseEntity.toDomain(): Course {
 fun Course.toEntity(): CourseEntity {
     return CourseEntity(
         id = id,
+        createdBy = createdBy,
+        updatedBy = updatedBy,
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version,

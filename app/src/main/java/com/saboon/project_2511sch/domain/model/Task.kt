@@ -13,6 +13,8 @@ sealed class Task: BaseModel, Parcelable {
     @Parcelize
     data class Lesson(
         override val id: String,
+        override val createdBy: String,
+        override val updatedBy: String,
         override val createdAt: Long = System.currentTimeMillis(),
         override val updatedAt: Long = System.currentTimeMillis(),
         override val version: Int = 0,
@@ -38,6 +40,8 @@ sealed class Task: BaseModel, Parcelable {
     @Parcelize
     data class Exam(
         override val id: String,
+        override val createdBy: String,
+        override val updatedBy: String,
         override val createdAt: Long = System.currentTimeMillis(),
         override val updatedAt: Long = System.currentTimeMillis(),
         override val version: Int = 0,
@@ -64,6 +68,8 @@ sealed class Task: BaseModel, Parcelable {
     @Parcelize
     data class Homework(
         override val id: String,
+        override val createdBy: String,
+        override val updatedBy: String,
         override val createdAt: Long = System.currentTimeMillis(),
         override val updatedAt: Long = System.currentTimeMillis(),
         override val version: Int = 0,

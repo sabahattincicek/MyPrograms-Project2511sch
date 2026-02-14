@@ -6,6 +6,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ProgramTable(
     override val id: String,
+    override val createdBy: String,
+    override val updatedBy: String,
     override val createdAt: Long = System.currentTimeMillis(),
     override val updatedAt: Long = System.currentTimeMillis(),
     override val version: Int = 0,

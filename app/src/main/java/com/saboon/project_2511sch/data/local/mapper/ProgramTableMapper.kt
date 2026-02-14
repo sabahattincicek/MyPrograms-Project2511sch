@@ -6,6 +6,8 @@ import com.saboon.project_2511sch.domain.model.ProgramTable
 fun ProgramTableEntity.toDomain(): ProgramTable {
     return ProgramTable(
         id = id,
+        createdBy = createdBy,
+        updatedBy = updatedBy,
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version,
@@ -22,6 +24,8 @@ fun ProgramTableEntity.toDomain(): ProgramTable {
 fun ProgramTable.toEntity(): ProgramTableEntity {
     return ProgramTableEntity(
         id = id,
+        createdBy = createdBy,
+        updatedBy = updatedBy,
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version,

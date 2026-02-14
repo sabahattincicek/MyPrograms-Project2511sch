@@ -6,6 +6,8 @@ import com.saboon.project_2511sch.domain.model.Task
 fun TaskExamEntity.toDomain(): Task.Exam{
     return Task.Exam(
         id = id,
+        createdBy = createdBy,
+        updatedBy = updatedBy,
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version,
@@ -30,6 +32,8 @@ fun TaskExamEntity.toDomain(): Task.Exam{
 fun Task.Exam.toEntity(): TaskExamEntity{
     return TaskExamEntity(
         id = id,
+        createdBy = createdBy,
+        updatedBy = updatedBy,
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version,
