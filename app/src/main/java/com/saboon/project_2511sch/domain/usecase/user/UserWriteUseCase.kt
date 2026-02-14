@@ -3,7 +3,6 @@ package com.saboon.project_2511sch.domain.usecase.user
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.domain.repository.IUserRepository
 import com.saboon.project_2511sch.util.Resource
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class UserWriteUseCase @Inject constructor(
@@ -17,8 +16,5 @@ class UserWriteUseCase @Inject constructor(
     }
     suspend fun delete(user: User): Resource<User>{
         return userRepository.delete(user)
-    }
-    fun getById(id: String): Flow<Resource<User>>{
-        return userRepository.getById(id)
     }
 }
