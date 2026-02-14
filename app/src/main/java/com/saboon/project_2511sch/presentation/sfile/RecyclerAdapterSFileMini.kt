@@ -140,6 +140,7 @@ class RecyclerAdapterSFileMini :
                 binding.tvTitle.visibility = View.GONE
                 binding.tvDate.visibility = View.GONE
                 binding.tvFileType.visibility = View.GONE
+                binding.ivFilePreview.visibility = View.VISIBLE
                 binding.ivFilePreview.setImageResource(R.drawable.baseline_add_24)
                 binding.ivFilePreview.scaleType = ImageView.ScaleType.CENTER_INSIDE
             }
