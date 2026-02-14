@@ -6,6 +6,7 @@ import com.saboon.project_2511sch.data.local.dao.CourseDao
 import com.saboon.project_2511sch.data.local.dao.ProgramTableDao
 import com.saboon.project_2511sch.data.local.dao.SFileDao
 import com.saboon.project_2511sch.data.local.dao.TaskDao
+import com.saboon.project_2511sch.data.local.dao.UserDao
 import com.saboon.project_2511sch.data.local.entity.CourseEntity
 import com.saboon.project_2511sch.data.local.entity.ProgramTableEntity
 import com.saboon.project_2511sch.data.local.entity.SFileEntity
@@ -28,6 +29,7 @@ import com.saboon.project_2511sch.data.local.entity.UserEntity
     exportSchema = true
 )
 abstract class Database(): RoomDatabase() {
+    abstract fun userDao(): UserDao
     abstract fun programDao(): ProgramTableDao
     abstract fun courseDao(): CourseDao
     abstract fun taskDao(): TaskDao

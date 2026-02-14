@@ -35,6 +35,9 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideUserDao(database: Database) = database.userDao()
+    @Singleton
+    @Provides
     fun provideProgramTableDao(database: Database) = database.programDao()
 
     @Singleton
