@@ -9,9 +9,6 @@ import javax.inject.Inject
 class UserReadUseCase @Inject constructor(
     private val userRepository: IUserRepository
 ){
-    fun getById(id: String): Flow<Resource<User>>{
-        return userRepository.getById(id)
-    }
     fun getActive(): Flow<Resource<User?>>{
         return userRepository.getActive()
     }

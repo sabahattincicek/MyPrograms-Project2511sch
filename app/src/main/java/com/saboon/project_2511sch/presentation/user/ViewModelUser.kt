@@ -8,9 +8,10 @@ import com.saboon.project_2511sch.domain.usecase.user.UserWriteUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,73 +20,36 @@ class ViewModelUser @Inject constructor(
     private val userWriteUseCase: UserWriteUseCase,
     private val userReadUseCase: UserReadUseCase
 ): ViewModel() {
-    private val _insertEvent = Channel<Resource<User>>()
-    val insertEvent = _insertEvent.receiveAsFlow()
-    private val _updateEvent = Channel<Resource<User>>()
-    val updateEvent = _updateEvent.receiveAsFlow()
-    private val _deleteEvent = Channel<Resource<User>>()
-    val deleteEvent = _deleteEvent.receiveAsFlow()
-
-    private val _userState = MutableStateFlow<Resource<User?>>(Resource.Idle())
-    val userState = _userState.asStateFlow()
+    private val _operationEvent = Channel<Resource<User>>()
+    val operationEvent = _operationEvent.receiveAsFlow()
 
     //STATE
-    fun getById(id: String){
-        viewModelScope.launch {
-            try {
-                _userState.value = Resource.Loading()
-                userReadUseCase.getById(id).collect { resource ->
-                    _userState.value = resource as Resource<User?>
-                }
-            }catch (e: Exception){
-                _userState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-            }
-        }
+    val currentUser: StateFlow<Resource<User?>> = userReadUseCase.getActive()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = Resource.Idle()
+        )
+
+
+    // ACTIONS
+    fun insert(user: User) = executeWriteAction {
+        userWriteUseCase.insert(user)
     }
-    fun getActive(){
-        viewModelScope.launch {
-            try {
-                _userState.value = Resource.Loading()
-                userReadUseCase.getActive().collect { resource ->
-                    _userState.value = resource
-                }
-            }catch (e: Exception){
-                _userState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-            }
-        }
+    fun update(user: User) = executeWriteAction {
+        userWriteUseCase.update(user)
+    }
+    fun delete(user: User) = executeWriteAction {
+        userWriteUseCase.delete(user)
     }
 
-    //EVENT
-    fun insert(user: User){
+    private fun executeWriteAction(action: suspend () -> Resource<User>) {
         viewModelScope.launch {
-            try{
-                _insertEvent.send(Resource.Loading())
-                val insertResult = userWriteUseCase.insert(user)
-                _insertEvent.send(insertResult)
-            }catch (e: Exception){
-                _insertEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
-            }
-        }
-    }
-    fun update(user: User){
-        viewModelScope.launch {
-            try{
-                _updateEvent.send(Resource.Loading())
-                val updateResult = userWriteUseCase.update(user)
-                _updateEvent.send(updateResult)
-            }catch (e: Exception){
-                _updateEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
-            }
-        }
-    }
-    fun delete(user: User){
-        viewModelScope.launch {
-            try{
-                _deleteEvent.send(Resource.Loading())
-                val deleteResult = userWriteUseCase.delete(user)
-                _deleteEvent.send(deleteResult)
-            }catch (e: Exception){
-                _deleteEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+            try {
+                _operationEvent.send(Resource.Loading())
+                _operationEvent.send(action())
+            } catch (e: Exception) {
+                _operationEvent.send(Resource.Error(e.localizedMessage ?: "Unexpected error"))
             }
         }
     }

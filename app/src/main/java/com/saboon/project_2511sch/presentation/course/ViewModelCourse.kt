@@ -1,11 +1,9 @@
 package com.saboon.project_2511sch.presentation.course
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
-import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.usecase.course.CourseReadUseCase
 import com.saboon.project_2511sch.domain.usecase.course.CourseWriteUseCase
 import com.saboon.project_2511sch.domain.usecase.course.GetCourseDisplayItemListUseCase
@@ -16,7 +14,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -30,20 +29,23 @@ class ViewModelCourse @Inject constructor(
     private val courseReadUseCase: CourseReadUseCase,
     private val getCourseDisplayItemListUseCase: GetCourseDisplayItemListUseCase,
 ) : ViewModel() {
-    private val _insertEvent = Channel<Resource<Course>>()
-    val insertEvent = _insertEvent.receiveAsFlow()
-    private val _updateEvent = Channel<Resource<Course>>()
-    val updateEvent = _updateEvent.receiveAsFlow()
-    private val _deleteEvent = Channel<Resource<Course>>()
-    val deleteEvent = _deleteEvent.receiveAsFlow()
+    private val _operationEvent = Channel<Resource<Course>>()
+    val operationEvent = _operationEvent.receiveAsFlow()
 
-
-    private val _courseState = MutableStateFlow<Resource<Course>>(Resource.Idle())
-    val courseState = _courseState.asStateFlow()
+    private val _selectedId = MutableStateFlow<String?>(null)
 
     private val _filterState = MutableStateFlow(FilterGeneric())
 
     //STATE
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val courseState: StateFlow<Resource<Course>> = _selectedId
+        .filterNotNull()
+        .flatMapLatest { id -> courseReadUseCase.getById(id) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = Resource.Idle()
+        )
     @OptIn(ExperimentalCoroutinesApi::class)
     val coursesState = _filterState.flatMapLatest { filter ->
         getCourseDisplayItemListUseCase.invoke(filter)
@@ -53,20 +55,6 @@ class ViewModelCourse @Inject constructor(
         initialValue = Resource.Idle()
     )
 
-    fun getById(id: String){
-        viewModelScope.launch {
-            try {
-                _courseState.value = Resource.Loading()
-                courseReadUseCase.getById(id).collect { resource ->
-                    _courseState.value = resource
-                }
-            } catch (e: Exception) {
-                _courseState.value =
-                    Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-            }
-        }
-    }
-
     //FILTER
     fun updateFilter(programTable: ProgramTable?){
         _filterState.update { current ->
@@ -75,47 +63,18 @@ class ViewModelCourse @Inject constructor(
         }
     }
 
-    //EVENT
-    fun insert(course: Course) {
-        viewModelScope.launch {
-            try {
-                _insertEvent.send(Resource.Loading())
-                val insertResult = courseWriteUseCase.insert(course)
-                _insertEvent.send(insertResult)
-            } catch (e: Exception) {
-                _insertEvent.send(
-                    Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-                )
-            }
-        }
+    //ACTIONS
+    fun getById(id: String){
+        _selectedId.value = id
     }
-    fun update(course: Course) {
-        viewModelScope.launch {
-            try {
-                _updateEvent.send(Resource.Loading())
-                val updateResult = courseWriteUseCase.update(course)
-                _updateEvent.send(updateResult)
-            } catch (e: Exception) {
-                _updateEvent.send(
-                    Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-                )
-            }
-        }
+    fun insert(course: Course) = executeWriteAction{
+        courseWriteUseCase.insert(course)
     }
-    fun deleteCourse(course: Course) {
-        viewModelScope.launch {
-            try {
-                _deleteEvent.send(Resource.Loading())
-
-                val deleteResult = courseWriteUseCase.delete(course)
-
-                _deleteEvent.send(deleteResult)
-            } catch (e: Exception) {
-                _deleteEvent.send(
-                    Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
-                )
-            }
-        }
+    fun update(course: Course) = executeWriteAction{
+        courseWriteUseCase.update(course)
+    }
+    fun delete(course: Course) = executeWriteAction{
+        courseWriteUseCase.delete(course)
     }
     fun activationById(id: String, isActive: Boolean){
         viewModelScope.launch {
@@ -141,6 +100,16 @@ class ViewModelCourse @Inject constructor(
                 courseWriteUseCase.incrementAbsence(course)
             }catch (e: Exception){
 
+            }
+        }
+    }
+    private fun executeWriteAction(action: suspend () -> Resource<Course>) {
+        viewModelScope.launch {
+            try {
+                _operationEvent.send(Resource.Loading())
+                _operationEvent.send(action())
+            } catch (e: Exception) {
+                _operationEvent.send(Resource.Error(e.localizedMessage ?: "Unexpected error"))
             }
         }
     }

@@ -17,8 +17,6 @@ interface UserDao {
     suspend fun update(userEntity: UserEntity)
     @Delete
     suspend fun delete(userEntity: UserEntity)
-    @Query("SELECT * FROM users WHERE id = :id")
-    fun getById(id: String): Flow<UserEntity>
     @Query("SELECT * FROM users WHERE is_active = 1 LIMIT 1")
     fun getActive(): Flow<UserEntity?>
 }

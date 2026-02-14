@@ -29,12 +29,8 @@ class ViewModelSFile @Inject constructor(
     private val sFileWriteUseCase: SFileWriteUseCase,
     private val getFileDisplayItemListUseCase: GetFileDisplayItemListUseCase
 ): ViewModel() {
-    private val _insertEvent = Channel<Resource<SFile>>()
-    val insertEvent = _insertEvent.receiveAsFlow()
-    private val _updateEvent = Channel<Resource<SFile>>()
-    val updateEvent = _updateEvent.receiveAsFlow()
-    private val _deleteEvent = Channel<Resource<SFile>>()
-    val deleteEvent = _deleteEvent.receiveAsFlow()
+    private val _operationEvent = Channel<Resource<SFile>>()
+    val operationEvent = _operationEvent.receiveAsFlow()
 
 
     private val _filterState = MutableStateFlow(FilterGeneric())
@@ -67,37 +63,23 @@ class ViewModelSFile @Inject constructor(
         }
     }
 
-    //EVENT
-    fun insert(sFile: SFile, uri: Uri){
-        viewModelScope.launch {
-            try {
-                _insertEvent.send(Resource.Loading())
-                val result = sFileWriteUseCase.insert(sFile, uri)
-                _insertEvent.send(result)
-            }catch (e: Exception){
-                _insertEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
-            }
-        }
+    //ACTIONS
+    fun insert(sFile: SFile, uri: Uri) = executeWriteAction{
+        sFileWriteUseCase.insert(sFile, uri)
     }
-    fun update(sFile: SFile){
-        viewModelScope.launch {
-            try {
-                _updateEvent.send(Resource.Loading())
-                val result = sFileWriteUseCase.update(sFile)
-                _updateEvent.send(result)
-            }catch (e: Exception){
-                _updateEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
-            }
-        }
+    fun update(sFile: SFile) = executeWriteAction{
+        sFileWriteUseCase.update(sFile)
     }
-    fun delete(sFile: SFile){
+    fun delete(sFile: SFile) = executeWriteAction{
+        sFileWriteUseCase.delete(sFile)
+    }
+    private fun executeWriteAction(action: suspend () -> Resource<SFile>) {
         viewModelScope.launch {
             try {
-                _deleteEvent.send(Resource.Loading())
-                val result = sFileWriteUseCase.delete(sFile)
-                _deleteEvent.send(result)
-            }catch (e: Exception){
-                _deleteEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+                _operationEvent.send(Resource.Loading())
+                _operationEvent.send(action())
+            } catch (e: Exception) {
+                _operationEvent.send(Resource.Error(e.localizedMessage ?: "Unexpected error"))
             }
         }
     }

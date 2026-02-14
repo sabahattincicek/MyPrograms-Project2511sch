@@ -36,8 +36,6 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModelHome: ViewModelHome by viewModels()
-    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
-    private val viewModelCourse: ViewModelCourse by viewModels()
 
     private var filteredProgramTable: ProgramTable? = null
     private var filteredCourse: Course? = null

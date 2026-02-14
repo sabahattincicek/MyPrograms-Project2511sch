@@ -64,7 +64,6 @@ class DialogFragmentFilter: DialogFragment() {
                 viewModelCourse.updateFilter(programTable)
             }else{
                 observeProgramTableState()
-                viewModelProgramTable.getAllProgramTables()
             }
         }
         binding.topAppBar.setNavigationOnClickListener {

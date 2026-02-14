@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BundleCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -20,12 +21,15 @@ import com.saboon.project_2511sch.domain.model.BaseModel
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 @AndroidEntryPoint
 class FileFragment : Fragment() {
@@ -33,7 +37,9 @@ class FileFragment : Fragment() {
     private var _binding: FragmentFileBinding?=null
     private val binding get() = _binding!!
     private val args : FileFragmentArgs by navArgs()
+    private val viewModelUser: ViewModelUser by activityViewModels()
     private val viewModelSFile: ViewModelSFile by viewModels()
+    private lateinit var currentUser: User
     private var programTable: ProgramTable? = null
     private var course: Course? = null
     private var task: Task? = null
@@ -302,42 +308,47 @@ class FileFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        Log.d(tag, "setupObservers: Setting up data flow observers.")
+        //USER STATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelUser.currentUser.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            currentUser = resource.data!!
+                        }
+                    }
+                }
+            }
+        }
         //FILES STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModelSFile.filesState.collect { resource ->
                     Log.d(tag, "fileState: New resource collected - ${resource::class.java.simpleName}")
                     when(resource) {
-                        is Resource.Error -> {
-                            Log.e(tag, "fileState: Error - ${resource.message}")
-                        }
-                        is Resource.Idle -> {
-                            Log.d(tag, "fileState: Idle")
-                        }
-                        is Resource.Loading -> {
-                            Log.d(tag, "fileState: Loading...")
-                        }
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
                         is Resource.Success -> {
                             val sFileDisplayItemList = resource.data
-                            Log.i(tag, "fileState: Success. Submitting ${sFileDisplayItemList?.size ?: 0} items to adapter.")
                             recyclerAdapterSFile.submitList(sFileDisplayItemList)
                         }
                     }
                 }
             }
         }
-        //FILE DELETE EVENT
+        //FILE EVENT: DELETE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSFile.deleteEvent.collect { resource ->
+                viewModelSFile.operationEvent.collect { resource ->
                     when(resource) {
                         is Resource.Error -> {}
                         is Resource.Idle -> {}
                         is Resource.Loading -> {}
-                        is Resource.Success -> {
-
-                        }
+                        is Resource.Success -> {}
                     }
                 }
             }

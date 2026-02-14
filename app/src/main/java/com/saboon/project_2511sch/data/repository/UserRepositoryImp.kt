@@ -42,16 +42,6 @@ class UserRepositoryImp @Inject constructor(
         }
     }
 
-    override fun getById(id: String): Flow<Resource<User>> {
-        return userDao.getById(id)
-            .map<UserEntity, Resource<User>> { entity ->
-                Resource.Success(entity.toDomain())
-            }
-            .catch { e ->
-                emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-            }
-    }
-
     override fun getActive(): Flow<Resource<User?>> {
         return userDao.getActive()
             .map<UserEntity?, Resource<User?>> { entity ->
