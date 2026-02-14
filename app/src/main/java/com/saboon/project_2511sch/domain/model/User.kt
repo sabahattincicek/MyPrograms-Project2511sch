@@ -22,7 +22,7 @@ data class User(
     val userName: String,
     val email: String,
     val photoUrl: String,
-    val lastLoginAt: Long,
+    val lastLoginAt: Long = System.currentTimeMillis(),
     val fullName: String,
     val role: String,
     val academicLevel: String,

@@ -2,7 +2,6 @@ package com.saboon.project_2511sch.presentation.main
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +19,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentSplashBinding
+import com.saboon.project_2511sch.domain.model.User
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,25 +34,18 @@ class SplashFragment : Fragment() {
 
     private val tag = "SplashFragment"
 
-    private val viewModelMain : ViewModelMain by viewModels()
+    private val viewModelUser : ViewModelUser by viewModels()
 
-    // A flag to prevent multiple navigation calls
-    private var hasNavigated = false
-
-    // İzin isteme ve sonucunu dinleme mekanizması
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted ->
-            // Kullanıcı izin verdi ya da vermedi, kararını verdi.
-            // Her iki durumda da artık kullanıcı durumunu kontrol edip yönlendirme yapabiliriz.
             Log.d(tag, "Permission result received: isGranted = $isGranted")
-            navigateToHome()
+            viewModelUser.getActive()
         }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentSplashBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -69,9 +63,8 @@ class SplashFragment : Fragment() {
                     requireContext(),
                     Manifest.permission.POST_NOTIFICATIONS
                 ) == PackageManager.PERMISSION_GRANTED -> {
-                    // İzin zaten verilmiş, direkt kullanıcı durumunu kontrol etmeye geç.
                     Log.d(tag, "Notification permission already granted.")
-                    navigateToHome()
+                    viewModelUser.getActive()
                 }
                 shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
                     // Kullanıcı daha önce izni reddetmiş. Neden önemli olduğunu
@@ -80,20 +73,16 @@ class SplashFragment : Fragment() {
                     Log.d(tag, "Showing rationale and requesting permission again.")
                     Toast.makeText(context, "Notification permission is needed for reminders.", Toast.LENGTH_LONG).show()
                     requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-
-
                 }
                 else -> {
-                    // İlk defa izin isteniyor.
                     Log.d(tag, "Requesting notification permission for the first time.")
                     requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
             }
         }
         else {
-            // Android 13'ten eski cihazlarda bu izne gerek yok.
             Log.d(tag, "OS version is below Tiramisu, no permission needed.")
-            navigateToHome()
+            viewModelUser.getActive()
         }
     }
 
@@ -102,9 +91,56 @@ class SplashFragment : Fragment() {
         _binding = null
     }
 
-    private fun navigateToHome(){
-        Log.d(tag, "All checks complete. Navigating to HomeFragment.")
-        val action = SplashFragmentDirections.actionSplashFragmentToHomeFragment()
-        findNavController().navigate(action)
+    private fun setupObservers(){
+        //STATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelUser.userState.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            val user = resource.data
+                            if (user != null){
+                                val action = SplashFragmentDirections.actionSplashFragmentToHomeFragment()
+                                findNavController().navigate(action)
+                            }else{
+                                val newUser = User(
+                                    id = IdGenerator.generateId("default-user"),
+                                    createdBy = "",
+                                    appVersionAtCreation = getString(R.string.app_version),
+                                    updatedBy = "",
+                                    userName = "",
+                                    email = "",
+                                    photoUrl = "",
+                                    fullName = "",
+                                    role = "",
+                                    academicLevel = "",
+                                    organisation = ""
+                                )
+                                viewModelUser.insert(newUser)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelUser.insertEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            val action = SplashFragmentDirections.actionSplashFragmentToHomeFragment()
+                            findNavController().navigate(action)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

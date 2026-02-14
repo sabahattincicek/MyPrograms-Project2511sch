@@ -27,7 +27,7 @@ class ViewModelUser @Inject constructor(
     val deleteEvent = _deleteEvent.receiveAsFlow()
 
     private val _userState = MutableStateFlow<Resource<User?>>(Resource.Idle())
-    private val userState = _userState.asStateFlow()
+    val userState = _userState.asStateFlow()
 
     //STATE
     fun getById(id: String){
