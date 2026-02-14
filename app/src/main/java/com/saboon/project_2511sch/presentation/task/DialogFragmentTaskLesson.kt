@@ -1,37 +1,53 @@
 package com.saboon.project_2511sch.presentation.task
 
 import android.icu.util.Calendar
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentTaskLessonBinding
 import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
+import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
 import com.saboon.project_2511sch.util.RecurrenceRule
+import com.saboon.project_2511sch.util.Resource
+import com.saboon.project_2511sch.util.open
 import com.saboon.project_2511sch.util.toFormattedString
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DialogFragmentTaskLesson: DialogFragment() {
     private var _binding: DialogFragmentTaskLessonBinding?= null
     private val binding get() = _binding!!
 
+    private val viewModelTask: ViewModelTask by viewModels()
+    private val viewModelSFile: ViewModelSFile by viewModels()
+
     private lateinit var dateTimePicker: Picker
 
-    private var course: Course?= null
-    private var task: Task.Lesson? = null
+    private lateinit var programTable: ProgramTable
+    private lateinit var course: Course
+    private var task: Task? = null
+    private var lesson: Task.Lesson? = null
 
     private lateinit var recyclerAdapterSFileMini: RecyclerAdapterSFileMini
 
@@ -40,6 +56,25 @@ class DialogFragmentTaskLesson: DialogFragment() {
     private var selectedTimeStartMillis: Long = System.currentTimeMillis()
     private var selectedTimeEndMillis: Long = System.currentTimeMillis()
     private var selectedRemindBeforeMinutes: Int = 0
+
+    private var uri: Uri? = null
+
+    private val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if (uri != null) {
+            this.uri = uri
+            val sFile = SFile(
+                id = "generate in repository",
+                appVersionAtCreation = getString(R.string.app_version),
+                title = "generate in repository",
+                description = "",
+                programTableId = programTable.id,
+                courseId = course.id,
+                taskId = task!!.id,
+                filePath = "generate in repository"
+            )
+            viewModelSFile.insert(sFile, uri)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,40 +94,49 @@ class DialogFragmentTaskLesson: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)
+            programTable = BundleCompat.getParcelable(it, ARG_PROGRAM_TABLE, ProgramTable::class.java)!!
+            course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)!!
             task = BundleCompat.getParcelable(it, ARG_TASK, Task.Lesson::class.java)
+            if (task != null) lesson = task as Task.Lesson
         }
 
         dateTimePicker = Picker(requireContext(), childFragmentManager)
         setupAdapters()
-        setupFragmentResultListeners()
+        setupListeners()
         setupObservers()
 
         val isEditMode = task != null
         if (isEditMode){
             binding.toolbar.title = getString(R.string.edit_task)
-            binding.toolbar.subtitle = course!!.title
-            binding.etTitle.setText(task!!.title)
-            binding.etDescription.setText(task!!.description)
-            binding.etDate.setText(task!!.date.toFormattedString("dd MMMM yyyy EEEE"))
-            binding.actvRepeat.setText(mapRuleToDisplayString(RecurrenceRule.fromRuleString(task!!.recurrenceRule), resources.getStringArray(R.array.recurrence_options)), false)
-            binding.etDateRangeStart.setText(RecurrenceRule.fromRuleString(task!!.recurrenceRule).dtStart.toFormattedString("dd.MM.yyyy"))
-            binding.etDateRangeEnd.setText(RecurrenceRule.fromRuleString(task!!.recurrenceRule).until.toFormattedString("dd.MM.yyyy"))
-            binding.etTimeStart.setText(task!!.timeStart.toFormattedString("HH:mm"))
-            binding.etTimeEnd.setText(task!!.timeEnd.toFormattedString("HH:mm"))
-            binding.actvReminder.setText(mapMinutesToDisplayString(task!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
-            binding.etPlace.setText(task!!.place)
+            binding.toolbar.subtitle = course.title
+            binding.etTitle.setText(lesson!!.title)
+            binding.etDescription.setText(lesson!!.description)
+            binding.etDate.setText(lesson!!.date.toFormattedString("dd MMMM yyyy EEEE"))
+            binding.actvRepeat.setText(mapRuleToDisplayString(RecurrenceRule.fromRuleString(lesson!!.recurrenceRule), resources.getStringArray(R.array.recurrence_options)), false)
+            binding.etDateRangeStart.setText(RecurrenceRule.fromRuleString(lesson!!.recurrenceRule).dtStart.toFormattedString("dd.MM.yyyy"))
+            binding.etDateRangeEnd.setText(RecurrenceRule.fromRuleString(lesson!!.recurrenceRule).until.toFormattedString("dd.MM.yyyy"))
+            binding.etTimeStart.setText(lesson!!.timeStart.toFormattedString("HH:mm"))
+            binding.etTimeEnd.setText(lesson!!.timeEnd.toFormattedString("HH:mm"))
+            binding.actvReminder.setText(mapMinutesToDisplayString(lesson!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
+            binding.etPlace.setText(lesson!!.place)
 
             //apply files section
             binding.llFilesSection.visibility = View.VISIBLE
 
-            selectedDateMillis = task!!.date
-            selectedRecurrenceRule = RecurrenceRule.fromRuleString(task!!.recurrenceRule)
-            selectedTimeStartMillis = task!!.timeStart
-            selectedTimeEndMillis = task!!.timeEnd
-            selectedRemindBeforeMinutes = task!!.remindBefore
-        }else{
+            selectedDateMillis = lesson!!.date
+            selectedRecurrenceRule = RecurrenceRule.fromRuleString(lesson!!.recurrenceRule)
+            selectedTimeStartMillis = lesson!!.timeStart
+            selectedTimeEndMillis = lesson!!.timeEnd
+            selectedRemindBeforeMinutes = lesson!!.remindBefore
 
+            viewModelSFile.updateProgramTable(programTable)
+            viewModelSFile.updateCourse(course, false)
+            viewModelSFile.updateTask(task)
+            binding.llFilesSection.visibility = View.VISIBLE
+        }else{
+//            viewModelSFile.updateProgramTable(programTable)
+//            viewModelSFile.updateCourse(course, false)
+            binding.llFilesSection.visibility = View.GONE
         }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -110,7 +154,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
         }
         binding.btnSave.setOnClickListener {
             if (isEditMode){
-                val updatedTask = task!!.copy(
+                val updatedLesson = lesson!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     date = selectedDateMillis,
@@ -120,14 +164,13 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString()
                 )
-                setFragmentResult(REQUEST_KEY_UPDATE, bundleOf(RESULT_KEY_TASK to updatedTask))
-                dismiss()
+                viewModelTask.update(updatedLesson)
             }else{
-                val newTask = Task.Lesson(
+                val newLesson = Task.Lesson(
                     id = IdGenerator.generateTaskId(binding.etTitle.text.toString()),
                     appVersionAtCreation = getString(R.string.app_version),
-                    programTableId = course!!.programTableId,
-                    courseId = course!!.id,
+                    programTableId = course.programTableId,
+                    courseId = course.id,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     date = selectedDateMillis,
@@ -137,8 +180,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString(),
                 )
-                setFragmentResult(REQUEST_KEY_CREATE, bundleOf(RESULT_KEY_TASK to newTask))
-                dismiss()
+                viewModelTask.insert(newLesson)
             }
         }
         binding.btnCancel.setOnClickListener {
@@ -167,7 +209,15 @@ class DialogFragmentTaskLesson: DialogFragment() {
         binding.etDate.setOnClickListener {
             dateTimePicker.pickDateMillis("Date", selectedDateMillis){ result ->
                 selectedDateMillis = result
-                binding.etDate.setText(selectedDateMillis.toFormattedString("dd MMMM yyyy EEEE"))
+
+                selectedRecurrenceRule.dtStart = selectedDateMillis
+                binding.etDateRangeStart.setText(selectedRecurrenceRule.dtStart.toFormattedString("dd.MM.yyyy"))
+                val cal = Calendar.getInstance().apply {
+                    timeInMillis = selectedRecurrenceRule.dtStart
+                    add(Calendar.MONTH, 9)
+                }
+                selectedRecurrenceRule.until = cal.timeInMillis // add 9 month
+                binding.etDateRangeEnd.setText(selectedRecurrenceRule.until.toFormattedString("dd.MM.yyyy"))
             }
         }
         binding.etDateRangeStart.setOnClickListener {
@@ -226,40 +276,102 @@ class DialogFragmentTaskLesson: DialogFragment() {
                 resources.getStringArray(R.array.reminder_options))
         )
         recyclerAdapterSFileMini = RecyclerAdapterSFileMini()
-        recyclerAdapterSFileMini.onItemClickListener = { file ->
-
+        recyclerAdapterSFileMini.onItemClickListener = { sFile ->
+            sFile.open(requireContext())
+        }
+        recyclerAdapterSFileMini.onAddItemClickListener = {
+            selectFileLauncher.launch(arrayOf("*/*"))
         }
         binding.rvMiniFilePreviews.apply {
             adapter = recyclerAdapterSFileMini
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
-    private fun setupFragmentResultListeners(){
+    private fun setupListeners(){
         childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, viewLifecycleOwner){ requestKey, result ->
             val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
             if (isYes){
-                setFragmentResult(REQUEST_KEY_DELETE, bundleOf(ARG_TASK to task))
-                dismiss()
+                viewModelTask.delete(task!!)
             }
         }
     }
     private fun setupObservers(){
-        //file states
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-//                viewModelFile.filesState.collect { resource ->
-//                    when(resource) {
-//                        is Resource.Error -> {}
-//                        is Resource.Idle -> {}
-//                        is Resource.Loading -> {}
-//                        is Resource.Success -> {
-//                            val list = resource.data
-//                            recyclerAdapterFileMini.submitList(list)
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        //FILES STATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelSFile.filesState.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            val sFileDisplayItemList = resource.data
+                            recyclerAdapterSFileMini.submitList(sFileDisplayItemList)
+                        }
+                    }
+                }
+            }
+        }
+        //INSERT EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelTask.insertEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            dismiss()
+                        }
+                    }
+                }
+            }
+        }
+        //UPDATE EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelTask.updateEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            dismiss()
+                        }
+                    }
+                }
+            }
+        }
+        //DELETE EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelTask.deleteEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            dismiss()
+                        }
+                    }
+                }
+            }
+        }
+        //INSERT FILE EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelSFile.insertEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading ->{}
+                        is Resource.Success -> {
+
+                        }
+                    }
+                }
+            }
+        }
     }
     private fun mapRuleToDisplayString(rule: RecurrenceRule, options: Array<String>): String{
         return when(rule.freq){
@@ -283,22 +395,26 @@ class DialogFragmentTaskLesson: DialogFragment() {
     }
 
     companion object{
+        const val ARG_PROGRAM_TABLE = "dialog_task_lesson_arg_program_table"
         const val ARG_COURSE = "dialog_task_lesson_arg_course"
         const val ARG_TASK = "dialog_task_lesson_arg_task"
-        const val REQUEST_KEY_CREATE = "dialog_task_lesson_request_key_create"
-        const val REQUEST_KEY_UPDATE = "dialog_task_lesson_request_key_update"
-        const val REQUEST_KEY_DELETE = "dialog_task_lesson_request_key_delete"
-        const val RESULT_KEY_TASK = "dialog_task_lesson_result_key_task"
 
-        fun newInstanceForCreate(course: Course): DialogFragmentTaskLesson{
+        fun newInstanceForCreate(programTable: ProgramTable, course: Course): DialogFragmentTaskLesson{
             return DialogFragmentTaskLesson().apply {
-                arguments = bundleOf(ARG_COURSE to course)
+                arguments = bundleOf(
+                    ARG_PROGRAM_TABLE to programTable,
+                    ARG_COURSE to course
+                )
             }
         }
 
-        fun newInstanceForEdit(course: Course, task: Task.Lesson): DialogFragmentTaskLesson{
+        fun newInstanceForEdit(programTable: ProgramTable, course: Course, task: Task): DialogFragmentTaskLesson{
             return DialogFragmentTaskLesson().apply {
-                arguments = bundleOf(ARG_COURSE to course, ARG_TASK to task)
+                arguments = bundleOf(
+                    ARG_PROGRAM_TABLE to programTable,
+                    ARG_COURSE to course,
+                    ARG_TASK to task
+                )
             }
         }
     }
