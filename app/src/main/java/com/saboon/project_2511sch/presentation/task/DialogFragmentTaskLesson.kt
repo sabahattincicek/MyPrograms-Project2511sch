@@ -403,7 +403,8 @@ class DialogFragmentTaskLesson: DialogFragment() {
             return DialogFragmentTaskLesson().apply {
                 arguments = bundleOf(
                     ARG_PROGRAM_TABLE to programTable,
-                    ARG_COURSE to course)
+                    ARG_COURSE to course
+                )
             }
         }
 
@@ -412,7 +413,8 @@ class DialogFragmentTaskLesson: DialogFragment() {
                 arguments = bundleOf(
                     ARG_PROGRAM_TABLE to programTable,
                     ARG_COURSE to course,
-                    ARG_TASK to task)
+                    ARG_TASK to task
+                )
             }
         }
     }
