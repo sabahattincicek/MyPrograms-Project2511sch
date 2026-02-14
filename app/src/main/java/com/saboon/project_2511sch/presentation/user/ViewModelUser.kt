@@ -2,7 +2,6 @@ package com.saboon.project_2511sch.presentation.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.domain.usecase.user.UserReadUseCase
 import com.saboon.project_2511sch.domain.usecase.user.UserWriteUseCase
@@ -27,7 +26,7 @@ class ViewModelUser @Inject constructor(
     private val _deleteEvent = Channel<Resource<User>>()
     val deleteEvent = _deleteEvent.receiveAsFlow()
 
-    private val _userState = MutableStateFlow<Resource<User>>(Resource.Idle())
+    private val _userState = MutableStateFlow<Resource<User?>>(Resource.Idle())
     private val userState = _userState.asStateFlow()
 
     //STATE
@@ -36,6 +35,18 @@ class ViewModelUser @Inject constructor(
             try {
                 _userState.value = Resource.Loading()
                 userReadUseCase.getById(id).collect { resource ->
+                    _userState.value = resource as Resource<User?>
+                }
+            }catch (e: Exception){
+                _userState.value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel.")
+            }
+        }
+    }
+    fun getActive(){
+        viewModelScope.launch {
+            try {
+                _userState.value = Resource.Loading()
+                userReadUseCase.getActive().collect { resource ->
                     _userState.value = resource
                 }
             }catch (e: Exception){

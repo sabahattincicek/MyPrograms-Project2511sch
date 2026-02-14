@@ -51,4 +51,14 @@ class UserRepositoryImp @Inject constructor(
                 emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
             }
     }
+
+    override fun getActive(): Flow<Resource<User?>> {
+        return userDao.getActive()
+            .map<UserEntity?, Resource<User?>> { entity ->
+                Resource.Success(entity?.toDomain())
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+            }
+    }
 }
