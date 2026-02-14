@@ -170,7 +170,7 @@ class CourseDetailsFragment : Fragment() {
                     dialog.show(childFragmentManager, "UpdateTaskDialog")
                 }
                 is Task.Homework -> {
-                    val dialog = DialogFragmentTaskHomework.newInstanceForEdit(course, task)
+                    val dialog = DialogFragmentTaskHomework.newInstanceForEdit(programTable, course, task)
                     dialog.show(childFragmentManager, "UpdateTaskDialog")
                 }
             }
@@ -207,7 +207,7 @@ class CourseDetailsFragment : Fragment() {
                         true
                     }
                     R.id.action_add_homework -> {
-                        val dialog = DialogFragmentTaskHomework.newInstanceForCreate(course)
+                        val dialog = DialogFragmentTaskHomework.newInstanceForCreate(programTable, course)
                         dialog.show(childFragmentManager, "dialogFragmentTaskHomework")
                         true
                     }
