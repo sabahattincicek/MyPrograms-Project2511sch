@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.ui.window.Dialog
 import androidx.core.content.FileProvider
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
@@ -24,7 +23,6 @@ import com.saboon.project_2511sch.databinding.FragmentProfileBinding
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
-import com.saboon.project_2511sch.util.toFormattedString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
@@ -48,7 +46,6 @@ class ProfileFragment : Fragment() {
         ActivityResultContracts.CreateDocument("application/zip")
     ) { uri ->
         uri?.let {
-            // Kullanıcı bir yer seçti, şimdi veriyi oraya yazacağız
             saveExportFile(it)
         }
     }
