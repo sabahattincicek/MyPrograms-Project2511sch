@@ -59,7 +59,6 @@ class ProgramTableDetailsFragment : Fragment() {
             val sFile = SFile(
                 id = "generate in repository",
                 createdBy = currentUser.id,
-                updatedBy = currentUser.id,
                 appVersionAtCreation = getString(R.string.app_version),
                 title = "generate in repository",
                 description = "",

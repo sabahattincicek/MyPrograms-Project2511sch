@@ -85,24 +85,6 @@ class ViewModelCourse @Inject constructor(
             }
         }
     }
-    fun decrementAbsence(course: Course){
-        viewModelScope.launch {
-            try {
-                courseWriteUseCase.decrementAbsence(course)
-            }catch (e: Exception){
-
-            }
-        }
-    }
-    fun incrementAbsence(course: Course){
-        viewModelScope.launch {
-            try {
-                courseWriteUseCase.incrementAbsence(course)
-            }catch (e: Exception){
-
-            }
-        }
-    }
     private fun executeWriteAction(action: suspend () -> Resource<Course>) {
         viewModelScope.launch {
             try {

@@ -66,7 +66,6 @@ class CourseDetailsFragment : Fragment() {
             val sFile = SFile(
                 id = "generate in repository",
                 createdBy = currentUser.id,
-                updatedBy = currentUser.id,
                 appVersionAtCreation = getString(R.string.app_version),
                 title = "generate in repository",
                 description = "",
@@ -131,10 +130,18 @@ class CourseDetailsFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.btnAbsenceDecrease.setOnClickListener {
-            viewModelCourse.decrementAbsence(course)
+            if (course.absence > 0){
+                val decrementedCourse = course.copy(
+                    absence = course.absence - 1
+                )
+                viewModelCourse.update(decrementedCourse)
+            }
         }
         binding.btnAbsenceIncrease.setOnClickListener {
-            viewModelCourse.incrementAbsence(course)
+            val incrementedCourse = course.copy(
+                absence = course.absence + 1
+            )
+            viewModelCourse.update(incrementedCourse)
         }
     }
     private fun applyDataToView(){

@@ -10,7 +10,6 @@ fun UserEntity.toDomain(): User{
         createdBy = createdBy,
         appVersionAtCreation = appVersionAtCreation,
         updatedAt = updatedAt,
-        updatedBy = updatedBy,
         version = version,
         isActive = isActive,
         isDeleted = isDeleted,
@@ -25,7 +24,8 @@ fun UserEntity.toDomain(): User{
         fullName = fullName,
         role = role,
         academicLevel = academicLevel,
-        organisation = organisation
+        organisation = organisation,
+        aboutMe = aboutMe
     )
 }
 fun User.toEntity(): UserEntity{
@@ -35,7 +35,6 @@ fun User.toEntity(): UserEntity{
         createdBy = createdBy,
         appVersionAtCreation = appVersionAtCreation,
         updatedAt = updatedAt,
-        updatedBy = updatedBy,
         version = version,
         isActive = isActive,
         isDeleted = isDeleted,
@@ -50,6 +49,7 @@ fun User.toEntity(): UserEntity{
         fullName = fullName,
         role = role,
         academicLevel = academicLevel,
-        organisation = organisation
+        organisation = organisation,
+        aboutMe = aboutMe
     )
 }

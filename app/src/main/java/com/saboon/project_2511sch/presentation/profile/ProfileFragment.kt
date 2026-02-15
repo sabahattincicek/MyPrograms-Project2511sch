@@ -75,6 +75,12 @@ class ProfileFragment : Fragment() {
                 viewModelUser.update(currentUser.copy(organisation = text))
             }
         }
+        binding.etAboutMe.doAfterTextChanged {
+            val text = it.toString().trim()
+            if (text != currentUser.aboutMe) {
+                viewModelUser.update(currentUser.copy(aboutMe = text))
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -91,6 +97,7 @@ class ProfileFragment : Fragment() {
             binding.etRole.setText(currentUser.role)
             binding.etAcademicLevel.setText(currentUser.academicLevel)
             binding.etOrganization.setText(currentUser.organisation)
+            binding.etAboutMe.setText(currentUser.aboutMe)
             isInitialDataLoaded = true
         }
     }

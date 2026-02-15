@@ -30,11 +30,6 @@ interface BaseModel {
     val updatedAt: Long
 
     /**
-     * The identifier of the last user or service that performed a mutation on this record.
-     */
-    val updatedBy: String
-
-    /**
      * Local version counter for Optimistic Concurrency Control.
      * Prevents "lost updates" during simultaneous local transactions.
      */

@@ -10,7 +10,6 @@ data class User(
     override val createdBy: String,
     override val appVersionAtCreation: String,
     override val updatedAt: Long = System.currentTimeMillis(),
-    override val updatedBy: String,
     override val version: Int = 1,
     override val isActive: Boolean = true,
     override val isDeleted: Boolean = false,
@@ -27,4 +26,5 @@ data class User(
     val role: String,
     val academicLevel: String,
     val organisation: String,
+    val aboutMe: String,
 ): BaseModel, Parcelable

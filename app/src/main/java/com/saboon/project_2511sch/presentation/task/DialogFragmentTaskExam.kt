@@ -67,7 +67,6 @@ class DialogFragmentTaskExam: DialogFragment() {
             val sFile = SFile(
                 id = "generate in repository",
                 createdBy = currentUser.id,
-                updatedBy = currentUser.id,
                 appVersionAtCreation = getString(R.string.app_version),
                 title = "generate in repository",
                 description = "",
@@ -169,7 +168,6 @@ class DialogFragmentTaskExam: DialogFragment() {
                 val newExam = Task.Exam(
                     id = IdGenerator.generateId(binding.etTitle.text.toString()),
                     createdBy = currentUser.id,
-                    updatedBy = currentUser.id,
                     appVersionAtCreation = getString(R.string.app_version),
                     programTableId = course.programTableId,
                     courseId = course.id,

@@ -12,7 +12,11 @@ class UserWriteUseCase @Inject constructor(
         return userRepository.insert(user)
     }
     suspend fun update(user: User): Resource<User>{
-        return userRepository.update(user)
+        val updatedUser = user.copy(
+            version = user.version + 1,
+            updatedAt = System.currentTimeMillis()
+        )
+        return userRepository.update(updatedUser)
     }
     suspend fun delete(user: User): Resource<User>{
         return userRepository.delete(user)

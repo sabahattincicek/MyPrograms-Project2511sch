@@ -133,14 +133,14 @@ class SplashFragment : Fragment() {
                                     id = IdGenerator.generateId("default-user"),
                                     createdBy = "",
                                     appVersionAtCreation = getString(R.string.app_version),
-                                    updatedBy = "",
                                     userName = "",
                                     email = "",
                                     photoUrl = "",
                                     fullName = "",
                                     role = "",
                                     academicLevel = "",
-                                    organisation = ""
+                                    organisation = "",
+                                    aboutMe = ""
                                 )
                                 viewModelUser.insert(newUser)
                             }

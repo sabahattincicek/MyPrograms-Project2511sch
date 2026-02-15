@@ -13,7 +13,11 @@ class SFileWriteUseCase @Inject constructor(
         return sFileRepository.insert(sFile, uri)
     }
     suspend fun update(sFile: SFile): Resource<SFile>{
-        return sFileRepository.update(sFile)
+        val updatedSFile = sFile.copy(
+            version = sFile.version + 1,
+            updatedAt = System.currentTimeMillis()
+        )
+        return sFileRepository.update(updatedSFile)
     }
     suspend fun delete(sFile: SFile): Resource<SFile>{
         return sFileRepository.delete(sFile)

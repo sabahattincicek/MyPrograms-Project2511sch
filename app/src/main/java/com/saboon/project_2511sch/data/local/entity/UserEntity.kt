@@ -11,7 +11,6 @@ data class UserEntity(
     @ColumnInfo(name = "created_by") val createdBy: String,
     @ColumnInfo(name = "app_version_at_creation") val appVersionAtCreation: String,
     @ColumnInfo(name = "updated_at") val updatedAt: Long,
-    @ColumnInfo(name = "updated_by") val updatedBy: String,
     @ColumnInfo(name = "version") val version: Int,
     @ColumnInfo(name = "is_active") val isActive: Boolean,
     @ColumnInfo(name = "is_deleted") val isDeleted: Boolean,
@@ -28,4 +27,5 @@ data class UserEntity(
     @ColumnInfo(name = "role") val role: String,
     @ColumnInfo(name = "academic_level") val academicLevel: String,
     @ColumnInfo(name = "organisation") val organisation: String,
+    @ColumnInfo(name = "about_me") val aboutMe: String,
 )

@@ -11,7 +11,6 @@ data class ProgramTable(
     override val createdBy: String,
     override val appVersionAtCreation: String,
     override val updatedAt: Long = System.currentTimeMillis(),
-    override val updatedBy: String,
     override val version: Int = 1,
     override val isActive: Boolean = true,
     override val isDeleted: Boolean = false,

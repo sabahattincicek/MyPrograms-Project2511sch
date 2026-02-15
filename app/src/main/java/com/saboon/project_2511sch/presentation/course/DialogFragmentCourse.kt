@@ -97,7 +97,6 @@ class DialogFragmentCourse: DialogFragment() {
                 val newCourse = Course(
                     id = IdGenerator.generateId(binding.etTitle.text.toString()),
                     createdBy = currentUser.id,
-                    updatedBy = currentUser.id,
                     appVersionAtCreation = getString(R.string.app_version),
                     programTableId = programTable.id,
                     title = binding.etTitle.text.toString(),
