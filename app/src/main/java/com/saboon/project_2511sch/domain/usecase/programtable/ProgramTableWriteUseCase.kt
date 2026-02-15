@@ -3,7 +3,7 @@ package com.saboon.project_2511sch.domain.usecase.programtable
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
-import com.saboon.project_2511sch.presentation.profile.ViewModelUser
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import javax.inject.Inject
 

@@ -39,7 +39,7 @@ import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskExam
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskHomework
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskLesson
-import com.saboon.project_2511sch.presentation.profile.ViewModelUser
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.open
 import kotlin.getValue
 

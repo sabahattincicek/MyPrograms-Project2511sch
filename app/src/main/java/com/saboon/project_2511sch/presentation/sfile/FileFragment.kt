@@ -29,7 +29,7 @@ import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
-import com.saboon.project_2511sch.presentation.profile.ViewModelUser
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open
 import dagger.hilt.android.AndroidEntryPoint

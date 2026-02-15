@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.profile
+package com.saboon.project_2511sch.presentation.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
