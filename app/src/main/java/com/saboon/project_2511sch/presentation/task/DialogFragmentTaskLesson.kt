@@ -28,7 +28,7 @@ import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfir
 import com.saboon.project_2511sch.presentation.course.DialogFragmentCourse
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
 import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
-import com.saboon.project_2511sch.presentation.user.ViewModelUser
+import com.saboon.project_2511sch.presentation.profile.ViewModelUser
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
 import com.saboon.project_2511sch.util.RecurrenceRule

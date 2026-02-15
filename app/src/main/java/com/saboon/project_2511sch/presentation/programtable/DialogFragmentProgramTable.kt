@@ -20,7 +20,7 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentProgramTableBinding
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.User
-import com.saboon.project_2511sch.presentation.user.ViewModelUser
+import com.saboon.project_2511sch.presentation.profile.ViewModelUser
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.ModelColors
 import com.saboon.project_2511sch.util.Resource

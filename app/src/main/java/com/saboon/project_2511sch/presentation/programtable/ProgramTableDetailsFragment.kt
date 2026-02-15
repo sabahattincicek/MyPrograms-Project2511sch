@@ -29,7 +29,7 @@ import com.saboon.project_2511sch.presentation.course.DisplayItemCourse
 import com.saboon.project_2511sch.presentation.course.RecyclerAdapterCourse
 import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
-import com.saboon.project_2511sch.presentation.user.ViewModelUser
+import com.saboon.project_2511sch.presentation.profile.ViewModelUser
 import com.saboon.project_2511sch.util.ModelColors
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open

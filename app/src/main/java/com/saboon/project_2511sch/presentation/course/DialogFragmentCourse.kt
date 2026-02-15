@@ -20,7 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.saboon.project_2511sch.domain.model.User
-import com.saboon.project_2511sch.presentation.user.ViewModelUser
+import com.saboon.project_2511sch.presentation.profile.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.user
+package com.saboon.project_2511sch.presentation.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +27,7 @@ class ViewModelUser @Inject constructor(
     val currentUser: StateFlow<Resource<User?>> = userReadUseCase.getActive()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.Companion.WhileSubscribed(5000),
             initialValue = Resource.Idle()
         )
 
