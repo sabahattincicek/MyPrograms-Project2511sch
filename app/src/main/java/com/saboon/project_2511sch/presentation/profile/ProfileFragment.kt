@@ -1,14 +1,18 @@
 package com.saboon.project_2511sch.presentation.profile
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.setText
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -30,9 +34,21 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModelUser: ViewModelUser by activityViewModels()
+    private val viewModelProfile: ViewModelProfile by viewModels()
+
+    private var exportFile: File? = null
 
     private lateinit var currentUser: User
     private var isInitialDataLoaded = false
+
+    private val createDocumentLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("application/zip")
+    ) { uri ->
+        uri?.let {
+            // Kullanıcı bir yer seçti, şimdi veriyi oraya yazacağız
+            saveExportFile(it)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +98,7 @@ class ProfileFragment : Fragment() {
             }
         }
         binding.tvExportData.setOnClickListener {
-
+            viewModelProfile.exportData()
         }
     }
 
@@ -133,6 +149,61 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
+        }
+        //EXPORT EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelProfile.exportState.collect { resource ->
+                    Log.d("ProfileFragment", "exportState: $resource")
+                    when(resource) {
+                        is Resource.Error -> {
+                            Log.e("ProfileFragment", "Export error: ${resource.message}")
+                            viewModelProfile.resetExportOperation()
+                        }
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            Log.d("ProfileFragment", "Export success")
+                            exportFile = resource.data!!
+//                            shareBackupFile(file)
+                            val fileName = "MyProgram_Backup_${System.currentTimeMillis()}.zip"
+                            createDocumentLauncher.launch(fileName)
+                            viewModelProfile.resetExportOperation() // Tekrar tıklanabilirlik için sıfırla
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun shareBackupFile(file: File){
+        val uri = FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().packageName}.provider",
+            file
+        )
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "application/zip"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        startActivity(Intent.createChooser(intent, "Share Backup"))
+    }
+
+    private fun saveExportFile(uri: Uri){
+        val file = exportFile ?: return
+        try {
+            requireContext().contentResolver.openOutputStream(uri)?.use { outputStream ->
+                file.inputStream().use { inputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
+        }catch (e: Exception){
+            Log.e("ProfileFragment", "Dosya kaydedilemedi: ${e.message}")
+        }finally {
+            if (file.exists()) file.delete()
+            exportFile = null
         }
     }
 }

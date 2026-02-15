@@ -2,8 +2,10 @@ package com.saboon.project_2511sch.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 data class SFile(
     override val id: String,
     override val createdAt: Long = System.currentTimeMillis(),

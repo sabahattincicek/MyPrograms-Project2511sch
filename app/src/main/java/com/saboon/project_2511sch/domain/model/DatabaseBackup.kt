@@ -1,5 +1,8 @@
 package com.saboon.project_2511sch.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class DatabaseBackup(
     val programTables: List<ProgramTable>,
     val courses: List<Course>,
