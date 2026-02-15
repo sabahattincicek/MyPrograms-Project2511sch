@@ -6,6 +6,7 @@ import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
+import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.ZipUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +24,7 @@ class ExportDataUseCase @Inject constructor(
     private val sFileRepository: ISFileRepository,
     private val json: Json
 ) {
-    suspend fun execute(): File? = withContext(Dispatchers.IO){
+    suspend fun execute(): Resource<File> = withContext(Dispatchers.IO){
         try {
             // 1. Verileri topla
             val programTables = programTableRepository.getAll().first().data ?: emptyList()
@@ -60,10 +61,10 @@ class ExportDataUseCase @Inject constructor(
             // Temizlik
             jsonFile.delete()
 
-            zipFile
+            Resource.Success(zipFile)
 
         }catch (e: Exception){
-            null
+            Resource.Error(e.message ?: "Bilinmeyen bir hata oluştu")
         }
     }
 }
