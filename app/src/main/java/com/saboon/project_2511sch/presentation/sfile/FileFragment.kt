@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BundleCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -84,28 +85,30 @@ class FileFragment : Fragment() {
         viewModelSFile.updateCourse(course)
         viewModelSFile.updateTask(task)
 
-//        binding.etSearch.doAfterTextChanged {
-//            val query = it.toString().trim()
-//            Log.d(tag, "Search query changed: $query")
-//            val originalList = (viewModelFile.filesState.value as? Resource.Success<List<File>>)?.data
-//            if(originalList != null){
-//                if (query.isNotEmpty()){
-//                    val filteredList = originalList.filter { file ->
-//                        val titleMatches = file.title.contains(query, true)
-//                        val descriptionMatches = file.title.contains(query, true)
-//                        val taskTitleMatches = (file.taskId ?: "").contains(query, true)
-//                        val courseTitleMatches = (file.courseId ?: "").contains(query, true)
-//                        val programTableTitleMatches = (file.programTableId ?: "").contains(query, true)
-//                        titleMatches || descriptionMatches || taskTitleMatches || courseTitleMatches || programTableTitleMatches
-//                    }
-//                    Log.d(tag, "Filtering list. Original size: ${originalList.size}, Filtered size: ${filteredList.size}")
-//                    recyclerAdapter.submitList(filteredList)
-//                }else{
-//                    Log.d(tag, "Query empty, submitting original list.")
-//                    recyclerAdapter.submitList(originalList)
-//                }
-//            }
-//        }
+        binding.etSearch.doAfterTextChanged { it ->
+            val query = it.toString().trim()
+            Log.d(tag, "Search query changed: $query")
+            val sFileDisplayList = viewModelSFile.filesState.value.data
+            if(sFileDisplayList != null){
+                if (query.isNotEmpty()){
+                    val filteredList = sFileDisplayList.filter { item ->
+                        if (item is DisplayItemSFile.ContentSFile){
+                            val sFile = item.sFile
+                            val titleMatches = sFile.title.contains(query, ignoreCase = true)
+                            val taskTitleMatches = (sFile.taskId ?: "").contains(query, ignoreCase = true)
+                            val courseTitleMatches = (sFile.courseId ?: "").contains(query, ignoreCase = true)
+                            val programTableTitleMatches = (sFile.programTableId ?: "").contains(query, ignoreCase = true)
+                            titleMatches || taskTitleMatches || courseTitleMatches || programTableTitleMatches
+                        }else{
+                            false
+                        }
+                    }
+                    recyclerAdapterSFile.submitList(filteredList)
+                }else{
+                    recyclerAdapterSFile.submitList(sFileDisplayList)
+                }
+            }
+        }
          binding.fabAddNewFile.setOnClickListener { anchorView ->
             Log.d(tag, "fabAddNewFile: FAB clicked.")
 //            showAddFileMenu(anchorView)
