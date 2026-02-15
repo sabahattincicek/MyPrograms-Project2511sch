@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.window.Dialog
 import androidx.core.content.FileProvider
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
@@ -18,10 +19,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil3.load
 import coil3.request.crossfade
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.databinding.FragmentProfileBinding
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
+import com.saboon.project_2511sch.util.toFormattedString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
@@ -165,10 +168,21 @@ class ProfileFragment : Fragment() {
                         is Resource.Success -> {
                             Log.d("ProfileFragment", "Export success")
                             exportFile = resource.data!!
-//                            shareBackupFile(file)
-                            val fileName = "MyProgram_Backup_${System.currentTimeMillis()}.zip"
-                            createDocumentLauncher.launch(fileName)
-                            viewModelProfile.resetExportOperation() // Tekrar tıklanabilirlik için sıfırla
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(exportFile!!.name)
+                                .setItems(arrayOf("Share", "Save to device")){ _, which ->
+                                    when(which){
+                                        0 -> {shareBackupFile(exportFile!!)} //SHARE
+                                        1 -> {createDocumentLauncher.launch(exportFile!!.name)} //SAVE TO DEVICE
+                                    }
+                                    viewModelProfile.resetExportOperation()
+                                }
+                                .setNegativeButton("Cancel") { dialog, which ->
+                                    viewModelProfile.resetExportOperation() // Tekrar tıklanabilirlik için sıfırla
+                                    dialog.dismiss()
+                                }
+                                .show()
                         }
                     }
                 }

@@ -1,13 +1,14 @@
 package com.saboon.project_2511sch.domain.usecase.settings
 
 import android.content.Context
-import com.saboon.project_2511sch.domain.model.DatabaseBackup
+import com.saboon.project_2511sch.presentation.profile.DatabaseBackup
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.ZipUtil
+import com.saboon.project_2511sch.util.toFormattedString
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -55,7 +56,7 @@ class ExportDataUseCase @Inject constructor(
             }
 
             // 4. Final ZIP dosyasını oluştur
-            val zipFile = File(context.cacheDir, "MyProgram_Backup_${System.currentTimeMillis()}.zip")
+            val zipFile = File(context.cacheDir, "MyProgram_Backup_${System.currentTimeMillis().toFormattedString("yyyyMMdd_HHddss")}.zip")
             ZipUtil.zipFiles(zipFile, filesMap)
 
             // Temizlik
