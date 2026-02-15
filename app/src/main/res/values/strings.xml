@@ -203,6 +203,7 @@
     <string name="activate">Activate</string>
     <string name="set_active">Set Active</string>
     <string name="synchronization">Synchronization</string>
+    <string name="about_you">About You</string>
 
     <string-array name="recurrence_options">
         <item>Does not repeat</item>

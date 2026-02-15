@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.setText
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -29,10 +32,10 @@ class ProfileFragment : Fragment() {
     private val viewModelUser: ViewModelUser by activityViewModels()
 
     private lateinit var currentUser: User
+    private var isInitialDataLoaded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -48,6 +51,30 @@ class ProfileFragment : Fragment() {
 
         setupObservers()
 
+        binding.etFullName.doAfterTextChanged {
+            val text = it.toString().trim()
+            if (text != currentUser.fullName) {
+                viewModelUser.update(currentUser.copy(fullName = text))
+            }
+        }
+        binding.etRole.doAfterTextChanged {
+            val text = it.toString().trim()
+            if (text != currentUser.role) {
+                viewModelUser.update(currentUser.copy(role = text))
+            }
+        }
+        binding.etAcademicLevel.doAfterTextChanged {
+            val text = it.toString().trim()
+            if (text != currentUser.academicLevel) {
+                viewModelUser.update(currentUser.copy(academicLevel = text))
+            }
+        }
+        binding.etOrganization.doAfterTextChanged {
+            val text = it.toString().trim()
+            if (text != currentUser.organisation) {
+                viewModelUser.update(currentUser.copy(organisation = text))
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -59,10 +86,13 @@ class ProfileFragment : Fragment() {
         binding.ivProfilePicture.load(File(currentUser.photoUrl)){
             crossfade(true)
         }
-        binding.etFullName.setText(currentUser.fullName)
-        binding.etRole.setText(currentUser.role)
-        binding.etAcademicLevel.setText(currentUser.academicLevel)
-        binding.etOrganization.setText(currentUser.organisation)
+        if (!isInitialDataLoaded) {
+            binding.etFullName.setText(currentUser.fullName)
+            binding.etRole.setText(currentUser.role)
+            binding.etAcademicLevel.setText(currentUser.academicLevel)
+            binding.etOrganization.setText(currentUser.organisation)
+            isInitialDataLoaded = true
+        }
     }
     private fun setupObservers(){
         //USER STATE
@@ -77,6 +107,19 @@ class ProfileFragment : Fragment() {
                             currentUser = resource.data!!
                             applyDataToView()
                         }
+                    }
+                }
+            }
+        }
+        //USER EVENT: UPDATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelUser.operationEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {}
                     }
                 }
             }

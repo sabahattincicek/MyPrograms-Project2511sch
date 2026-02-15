@@ -34,17 +34,39 @@
             android:orientation="vertical">
 
             <!--PROFILE PICTURE-->
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:gravity="center_horizontal"
                 android:layout_marginTop="16dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="72dp"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_character_vibe"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/colorCustomColor1" />
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/materialCardView"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
-                    app:cardCornerRadius="30dp">
+                    app:cardCornerRadius="100dp"
+                    android:elevation="20dp"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <ImageView
                         android:id="@+id/iv_profile_picture"
@@ -54,14 +76,40 @@
                         tools:src="@tools:sample/avatars" />
 
                 </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Refik"
+                    android:maxLines="1"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@+id/materialCardView"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView2" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="8dp"
+                    android:maxLines="3"
+                    android:text="Lanet olsun cok iyiyim ya."
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/materialCardView"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <!-- FULL NAME -->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_full_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:enabled="true"
+                android:maxLines="1"
                 android:hint="Full Name"/>
             <!-- ROLE -->
             <com.google.android.material.textfield.TextInputEditText
@@ -69,6 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="true"
+                android:maxLines="1"
                 android:hint="Role (eg: Mechatronic Engineer)" />
             <!-- ACADEMIC LEVEL -->
             <com.google.android.material.textfield.TextInputEditText
@@ -76,6 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="true"
+                android:maxLines="1"
                 android:hint="Academic Level (eg: 3th class)" />
             <!-- ORGANISATION -->
             <com.google.android.material.textfield.TextInputEditText
@@ -83,7 +133,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="true"
+                android:maxLines="1"
                 android:hint="Organisation (eg: Kocaeli University)" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_about_me"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="true"
+                android:gravity="top"
+                android:maxLines="4"
+                android:hint="About Me" />
 
             <!-- A divider to separate header from options -->
             <com.google.android.material.divider.MaterialDivider
@@ -113,6 +173,7 @@
                     android:clickable="true"
                     android:drawablePadding="16dp"
                     android:focusable="true"
+                    android:enabled="false"
                     android:gravity="center_vertical"
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
