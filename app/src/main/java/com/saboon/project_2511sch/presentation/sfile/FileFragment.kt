@@ -1,12 +1,15 @@
 package com.saboon.project_2511sch.presentation.sfile
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.BundleCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
@@ -21,6 +24,7 @@ import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.BaseModel
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
@@ -40,13 +44,31 @@ class FileFragment : Fragment() {
     private val args : FileFragmentArgs by navArgs()
     private val viewModelUser: ViewModelUser by activityViewModels()
     private val viewModelSFile: ViewModelSFile by viewModels()
+    private lateinit var recyclerAdapterSFile: RecyclerAdapterSFile
     private lateinit var currentUser: User
     private var programTable: ProgramTable? = null
     private var course: Course? = null
     private var task: Task? = null
+    private var uri: Uri? = null
 
+    private val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if (uri != null) {
+            this.uri = uri
+            val sFile = SFile(
+                id = "generate in repository",
+                createdBy = currentUser.id,
+                appVersionAtCreation = getString(R.string.app_version),
+                title = "generate in repository",
+                description = "",
+                programTableId = programTable?.id,
+                courseId = course?.id,
+                taskId = task?.id,
+                filePath = "generate in repository"
+            )
+            viewModelSFile.insert(sFile, uri)
+        }
+    }
 
-    private lateinit var recyclerAdapterSFile: RecyclerAdapterSFile
 
     private val tag = "FileFragment"
 
@@ -110,8 +132,7 @@ class FileFragment : Fragment() {
             }
         }
          binding.fabAddNewFile.setOnClickListener { anchorView ->
-            Log.d(tag, "fabAddNewFile: FAB clicked.")
-//            showAddFileMenu(anchorView)
+             selectFileLauncher.launch(arrayOf("*/*"))
          }
         binding.cpProgramTable.setOnClickListener {
             Log.d(tag, "cpProgramTable: Chip clicked. Opening ProgramTable filter.")
