@@ -245,41 +245,6 @@ class FileFragment : Fragment() {
         }
     }
 
-//    private fun showAddFileMenu(anchorView: View) {
-//        Log.d(tag, "showAddFileMenu: Displaying PopupMenu.")
-//        PopupMenu(requireContext(), anchorView).apply {
-//            menuInflater.inflate(R.menu.add_file_menu, menu)
-//            setOnMenuItemClickListener { item ->
-//                Log.d(tag, "AddFileMenu item clicked: ${item.itemId}")
-//                when (item.itemId) {
-//                    R.id.action_add_file -> {
-//                        if (task != null) DialogFragmentFile.newInstanceCreateForTask(task!!).show(childFragmentManager, "DialogFragmentFile")
-//                        else if (course != null) DialogFragmentFile.newInstanceCreateForCourse(course!!).show(childFragmentManager, "DialogFragmentFile")
-//                        else if (programTable != null) DialogFragmentFile.newInstanceCreateForProgramTable(programTable!!).show(childFragmentManager, "DialogFragmentFile")
-//                        else DialogFragmentFile.newInstanceCreate().show(childFragmentManager, "DialogFragmentFile")
-//                        true
-//                    }
-//                    R.id.action_add_note -> {
-//                        if (task != null) DialogFragmentNote.newInstanceCreateForTask(task!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else if (course != null) DialogFragmentNote.newInstanceCreateForCourse(course!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else if (programTable != null) DialogFragmentNote.newInstanceCreateForProgramTable(programTable!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else DialogFragmentNote.newInstanceCreate().show(childFragmentManager, "DialogFragmentNote")
-//                        true
-//                    }
-//                    R.id.action_add_link -> {
-//                        if (task != null) DialogFragmentLink.newInstanceCreateForTask(task!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else if (course != null) DialogFragmentLink.newInstanceCreateForCourse(course!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else if (programTable != null) DialogFragmentLink.newInstanceCreateForProgramTable(programTable!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else DialogFragmentLink.newInstanceCreate().show(childFragmentManager, "DialogFragmentNote")
-//                        true
-//                    }
-//                    else -> false
-//                }
-//            }
-//            show()
-//        }
-//    }
-
     private fun setupFragmentResultListeners() {
         Log.d(tag, "setupFragmentResultListeners: Initializing FragmentResultListeners.")
 

@@ -17,7 +17,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:subtitle="@string/course"
             app:title="@string/files"/>
 
     </com.google.android.material.appbar.AppBarLayout>

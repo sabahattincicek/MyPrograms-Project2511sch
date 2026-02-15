@@ -145,7 +145,6 @@ class CourseDetailsFragment : Fragment() {
         }
     }
     private fun applyDataToView(){
-        binding.topAppBar.subtitle = course.title
         binding.tvTitleCourse.text = course.title
         binding.tvPersonPrimary.text = course.people.split(",").firstOrNull()?.trim()
         binding.tvPersonSecondary.text = course.people.split(",").drop(1).joinToString(", ") { it.trim() }
