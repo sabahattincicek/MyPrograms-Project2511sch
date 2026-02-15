@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +21,7 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentProgramTableDetailsBinding
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.SFile
+import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.course.DialogFragmentCourse
@@ -27,6 +29,7 @@ import com.saboon.project_2511sch.presentation.course.DisplayItemCourse
 import com.saboon.project_2511sch.presentation.course.RecyclerAdapterCourse
 import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.ModelColors
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open
@@ -39,12 +42,14 @@ class ProgramTableDetailsFragment : Fragment() {
 
     private var _binding: FragmentProgramTableDetailsBinding?=null
     private val binding get()=_binding!!
+    private val viewModelUser: ViewModelUser by activityViewModels()
     private val viewModelProgramTable: ViewModelProgramTable by viewModels()
     private val viewModelCourse: ViewModelCourse by viewModels()
     private val viewModelSFile: ViewModelSFile by viewModels()
     private lateinit var recyclerAdapterSFileMini: RecyclerAdapterSFileMini
     private lateinit var recyclerAdapterCourse: RecyclerAdapterCourse
     private val args: ProgramTableDetailsFragmentArgs by navArgs()
+    private lateinit var currentUser: User
     private lateinit var programTable: ProgramTable
     private var uri: Uri? = null
 
@@ -53,6 +58,7 @@ class ProgramTableDetailsFragment : Fragment() {
             this.uri = uri
             val sFile = SFile(
                 id = "generate in repository",
+                createdBy = currentUser.id,
                 appVersionAtCreation = getString(R.string.app_version),
                 title = "generate in repository",
                 description = "",
@@ -81,11 +87,11 @@ class ProgramTableDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModelProgramTable.getById(args.programTable.id)
-
         setupAdapters()
         setupListeners()
         setupObservers()
+
+        viewModelProgramTable.getById(args.programTable.id)
 
         binding.topAppBar.setNavigationOnClickListener{
             findNavController().popBackStack()
@@ -98,12 +104,12 @@ class ProgramTableDetailsFragment : Fragment() {
                     true
                 }
                 R.id.action_delete -> {
-                    val diaolog = DialogFragmentDeleteConfirmation.newInstance("Delete", "Are you sure?")
-                    diaolog.show(childFragmentManager, "Delete Program Table")
+                    val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete", "Are you sure?")
+                    dialog.show(childFragmentManager, "Delete Program Table")
                     true
                 }
                 R.id.action_edit -> {
-                    val dialog = DialogFragmentProgramTable.newInstanceForUpdate(programTable)
+                    val dialog = DialogFragmentProgramTable.newInstanceForUpdate(currentUser, programTable)
                     dialog.show(childFragmentManager, "Edit Program Table")
                     true
                 }
@@ -113,7 +119,7 @@ class ProgramTableDetailsFragment : Fragment() {
             }
         }
         binding.fabAdd.setOnClickListener {
-            val dialogCourse = DialogFragmentCourse.newInstanceForCreate(programTable)
+            val dialogCourse = DialogFragmentCourse.newInstanceForCreate(currentUser, programTable)
             dialogCourse.show(childFragmentManager, "Create Course")
         }
         binding.ivFiles.setOnClickListener {
@@ -173,6 +179,21 @@ class ProgramTableDetailsFragment : Fragment() {
     }
 
     private fun setupObservers(){
+        //USER STATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelUser.currentUser.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            currentUser = resource.data!!
+                        }
+                    }
+                }
+            }
+        }
         //PROGRAM TABLE STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -188,6 +209,21 @@ class ProgramTableDetailsFragment : Fragment() {
                             toggleItem?.isChecked = programTable.isActive
                             viewModelCourse.updateFilter(programTable)
                             viewModelSFile.updateProgramTable(programTable, false)
+                        }
+                    }
+                }
+            }
+        }
+        //PROGRAM TABLE EVENT: DELETE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelProgramTable.operationEvent.collect { event ->
+                    when(event){
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading ->{}
+                        is Resource.Success -> {
+                            findNavController().popBackStack()
                         }
                     }
                 }
@@ -226,32 +262,15 @@ class ProgramTableDetailsFragment : Fragment() {
                 }
             }
         }
-        //DELETE
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.deleteEvent.collect { event ->
-                    when(event){
-                        is Resource.Error -> {}
-                        is Resource.Idle -> {}
-                        is Resource.Loading ->{}
-                        is Resource.Success -> {
-                            findNavController().popBackStack()
-                        }
-                    }
-                }
-            }
-        }
-        //FILE INSERT EVENT
+        //FILE EVENT: INSERT
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSFile.insertEvent.collect { resource ->
+                viewModelSFile.operationEvent.collect { resource ->
                     when(resource) {
                         is Resource.Error -> {}
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
-                        is Resource.Success -> {
-
-                        }
+                        is Resource.Success -> {}
                     }
                 }
             }

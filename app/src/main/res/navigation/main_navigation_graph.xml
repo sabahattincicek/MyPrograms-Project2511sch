@@ -88,4 +88,9 @@
             android:id="@+id/action_programTableDetailsFragment_to_fileFragment"
             app:destination="@id/fileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.saboon.project_2511sch.presentation.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

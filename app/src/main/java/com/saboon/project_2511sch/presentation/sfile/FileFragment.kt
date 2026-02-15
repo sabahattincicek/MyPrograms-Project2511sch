@@ -1,13 +1,18 @@
 package com.saboon.project_2511sch.presentation.sfile
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.BundleCompat
+import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,13 +24,17 @@ import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.BaseModel
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 @AndroidEntryPoint
 class FileFragment : Fragment() {
@@ -33,13 +42,33 @@ class FileFragment : Fragment() {
     private var _binding: FragmentFileBinding?=null
     private val binding get() = _binding!!
     private val args : FileFragmentArgs by navArgs()
+    private val viewModelUser: ViewModelUser by activityViewModels()
     private val viewModelSFile: ViewModelSFile by viewModels()
+    private lateinit var recyclerAdapterSFile: RecyclerAdapterSFile
+    private lateinit var currentUser: User
     private var programTable: ProgramTable? = null
     private var course: Course? = null
     private var task: Task? = null
+    private var uri: Uri? = null
 
+    private val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if (uri != null) {
+            this.uri = uri
+            val sFile = SFile(
+                id = "generate in repository",
+                createdBy = currentUser.id,
+                appVersionAtCreation = getString(R.string.app_version),
+                title = "generate in repository",
+                description = "",
+                programTableId = programTable?.id,
+                courseId = course?.id,
+                taskId = task?.id,
+                filePath = "generate in repository"
+            )
+            viewModelSFile.insert(sFile, uri)
+        }
+    }
 
-    private lateinit var recyclerAdapterSFile: RecyclerAdapterSFile
 
     private val tag = "FileFragment"
 
@@ -78,31 +107,32 @@ class FileFragment : Fragment() {
         viewModelSFile.updateCourse(course)
         viewModelSFile.updateTask(task)
 
-//        binding.etSearch.doAfterTextChanged {
-//            val query = it.toString().trim()
-//            Log.d(tag, "Search query changed: $query")
-//            val originalList = (viewModelFile.filesState.value as? Resource.Success<List<File>>)?.data
-//            if(originalList != null){
-//                if (query.isNotEmpty()){
-//                    val filteredList = originalList.filter { file ->
-//                        val titleMatches = file.title.contains(query, true)
-//                        val descriptionMatches = file.title.contains(query, true)
-//                        val taskTitleMatches = (file.taskId ?: "").contains(query, true)
-//                        val courseTitleMatches = (file.courseId ?: "").contains(query, true)
-//                        val programTableTitleMatches = (file.programTableId ?: "").contains(query, true)
-//                        titleMatches || descriptionMatches || taskTitleMatches || courseTitleMatches || programTableTitleMatches
-//                    }
-//                    Log.d(tag, "Filtering list. Original size: ${originalList.size}, Filtered size: ${filteredList.size}")
-//                    recyclerAdapter.submitList(filteredList)
-//                }else{
-//                    Log.d(tag, "Query empty, submitting original list.")
-//                    recyclerAdapter.submitList(originalList)
-//                }
-//            }
-//        }
+        binding.etSearch.doAfterTextChanged { it ->
+            val query = it.toString().trim()
+            Log.d(tag, "Search query changed: $query")
+            val sFileDisplayList = viewModelSFile.filesState.value.data
+            if(sFileDisplayList != null){
+                if (query.isNotEmpty()){
+                    val filteredList = sFileDisplayList.filter { item ->
+                        if (item is DisplayItemSFile.ContentSFile){
+                            val sFile = item.sFile
+                            val titleMatches = sFile.title.contains(query, ignoreCase = true)
+                            val taskTitleMatches = (sFile.taskId ?: "").contains(query, ignoreCase = true)
+                            val courseTitleMatches = (sFile.courseId ?: "").contains(query, ignoreCase = true)
+                            val programTableTitleMatches = (sFile.programTableId ?: "").contains(query, ignoreCase = true)
+                            titleMatches || taskTitleMatches || courseTitleMatches || programTableTitleMatches
+                        }else{
+                            false
+                        }
+                    }
+                    recyclerAdapterSFile.submitList(filteredList)
+                }else{
+                    recyclerAdapterSFile.submitList(sFileDisplayList)
+                }
+            }
+        }
          binding.fabAddNewFile.setOnClickListener { anchorView ->
-            Log.d(tag, "fabAddNewFile: FAB clicked.")
-//            showAddFileMenu(anchorView)
+             selectFileLauncher.launch(arrayOf("*/*"))
          }
         binding.cpProgramTable.setOnClickListener {
             Log.d(tag, "cpProgramTable: Chip clicked. Opening ProgramTable filter.")
@@ -215,41 +245,6 @@ class FileFragment : Fragment() {
         }
     }
 
-//    private fun showAddFileMenu(anchorView: View) {
-//        Log.d(tag, "showAddFileMenu: Displaying PopupMenu.")
-//        PopupMenu(requireContext(), anchorView).apply {
-//            menuInflater.inflate(R.menu.add_file_menu, menu)
-//            setOnMenuItemClickListener { item ->
-//                Log.d(tag, "AddFileMenu item clicked: ${item.itemId}")
-//                when (item.itemId) {
-//                    R.id.action_add_file -> {
-//                        if (task != null) DialogFragmentFile.newInstanceCreateForTask(task!!).show(childFragmentManager, "DialogFragmentFile")
-//                        else if (course != null) DialogFragmentFile.newInstanceCreateForCourse(course!!).show(childFragmentManager, "DialogFragmentFile")
-//                        else if (programTable != null) DialogFragmentFile.newInstanceCreateForProgramTable(programTable!!).show(childFragmentManager, "DialogFragmentFile")
-//                        else DialogFragmentFile.newInstanceCreate().show(childFragmentManager, "DialogFragmentFile")
-//                        true
-//                    }
-//                    R.id.action_add_note -> {
-//                        if (task != null) DialogFragmentNote.newInstanceCreateForTask(task!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else if (course != null) DialogFragmentNote.newInstanceCreateForCourse(course!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else if (programTable != null) DialogFragmentNote.newInstanceCreateForProgramTable(programTable!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else DialogFragmentNote.newInstanceCreate().show(childFragmentManager, "DialogFragmentNote")
-//                        true
-//                    }
-//                    R.id.action_add_link -> {
-//                        if (task != null) DialogFragmentLink.newInstanceCreateForTask(task!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else if (course != null) DialogFragmentLink.newInstanceCreateForCourse(course!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else if (programTable != null) DialogFragmentLink.newInstanceCreateForProgramTable(programTable!!).show(childFragmentManager, "DialogFragmentNote")
-//                        else DialogFragmentLink.newInstanceCreate().show(childFragmentManager, "DialogFragmentNote")
-//                        true
-//                    }
-//                    else -> false
-//                }
-//            }
-//            show()
-//        }
-//    }
-
     private fun setupFragmentResultListeners() {
         Log.d(tag, "setupFragmentResultListeners: Initializing FragmentResultListeners.")
 
@@ -302,42 +297,47 @@ class FileFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        Log.d(tag, "setupObservers: Setting up data flow observers.")
+        //USER STATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelUser.currentUser.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            currentUser = resource.data!!
+                        }
+                    }
+                }
+            }
+        }
         //FILES STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModelSFile.filesState.collect { resource ->
                     Log.d(tag, "fileState: New resource collected - ${resource::class.java.simpleName}")
                     when(resource) {
-                        is Resource.Error -> {
-                            Log.e(tag, "fileState: Error - ${resource.message}")
-                        }
-                        is Resource.Idle -> {
-                            Log.d(tag, "fileState: Idle")
-                        }
-                        is Resource.Loading -> {
-                            Log.d(tag, "fileState: Loading...")
-                        }
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
                         is Resource.Success -> {
                             val sFileDisplayItemList = resource.data
-                            Log.i(tag, "fileState: Success. Submitting ${sFileDisplayItemList?.size ?: 0} items to adapter.")
                             recyclerAdapterSFile.submitList(sFileDisplayItemList)
                         }
                     }
                 }
             }
         }
-        //FILE DELETE EVENT
+        //FILE EVENT: DELETE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSFile.deleteEvent.collect { resource ->
+                viewModelSFile.operationEvent.collect { resource ->
                     when(resource) {
                         is Resource.Error -> {}
                         is Resource.Idle -> {}
                         is Resource.Loading -> {}
-                        is Resource.Success -> {
-
-                        }
+                        is Resource.Success -> {}
                     }
                 }
             }

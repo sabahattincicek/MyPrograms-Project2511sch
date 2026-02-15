@@ -122,7 +122,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
             if (programTable != null && course != null) {
                 when(task) {
                     is Task.Lesson -> {
-                        val rRule = RecurrenceRule.fromRuleString(task.recurrenceRule)
+                        val rRule = task.recurrenceRule
                         Log.d("GetHomeDisplayItemsUC", "Lesson Rule: ${task.recurrenceRule}, Task Date: ${task.date}, Week: $startDate - $endDate")
 
                         val fromDate = rRule.dtStart

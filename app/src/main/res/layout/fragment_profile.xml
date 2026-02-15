@@ -17,7 +17,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/menu_action_account"
             app:title="@string/profile"/>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -30,109 +29,128 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical">
 
-            <!-- Profile Header Section -->
+            <!--PROFILE PICTURE-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="250dp"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="16dp">
 
-                <ImageView
-                    android:id="@+id/iv_profile_picture"
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
-                    android:contentDescription="@string/profile_picture"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="72dp"
+                    app:cardCornerRadius="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@tools:sample/avatars" />
+                    app:layout_constraintTop_toTopOf="parent">
 
-<!--                &lt;!&ndash; Edit/Save Button &ndash;&gt;-->
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/btn_edit_profile"-->
-<!--                    style="@style/Widget.Material3.Button.IconButton"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:icon="@drawable/baseline_edit_24"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent" />-->
+                    <ImageView
+                        android:id="@+id/iv_character_vibe"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/colorCustomColor1" />
+                </com.google.android.material.card.MaterialCardView>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    app:cardCornerRadius="100dp"
+                    android:elevation="20dp"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
+                    <ImageView
+                        android:id="@+id/iv_profile_picture"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/profile_picture"
+                        tools:src="@tools:sample/avatars" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Refik"
+                    android:maxLines="1"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@+id/materialCardView"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView2" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="8dp"
+                    android:maxLines="3"
+                    android:text="Lanet olsun cok iyiyim ya."
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/materialCardView"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Full Name -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/name"/>
+            <!-- FULL NAME -->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_full_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:enabled="false"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="?android:attr/textColorPrimary"
-                tools:text="Sabo" />
-
-            <!-- Role -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/role"/>
+                android:layout_marginTop="16dp"
+                android:enabled="true"
+                android:maxLines="1"
+                android:hint="Full Name"/>
+            <!-- ROLE -->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_role"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:enabled="false"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="?android:attr/textColorPrimary"
-                tools:text="Mechatronic Engineering" />
-
-            <!-- Academic level -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/academic_level"/>
+                android:enabled="true"
+                android:maxLines="1"
+                android:hint="Role (eg: Mechatronic Engineer)" />
+            <!-- ACADEMIC LEVEL -->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_academic_level"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:enabled="false"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="?android:attr/textColorPrimary"
-                tools:text="3th Class" />
-
-            <!-- Organization -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/organization"/>
+                android:enabled="true"
+                android:maxLines="1"
+                android:hint="Academic Level (eg: 3th class)" />
+            <!-- ORGANISATION -->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_organization"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:enabled="false"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="?android:attr/textColorPrimary"
-                tools:text="Kocaeli University" />
+                android:enabled="true"
+                android:maxLines="1"
+                android:hint="Organisation (eg: Kocaeli University)" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_about_me"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="true"
+                android:gravity="top"
+                android:maxLines="4"
+                android:hint="About Me" />
 
             <!-- A divider to separate header from options -->
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="16dp"/>
 
             <!-- Options List -->
             <LinearLayout
@@ -140,7 +158,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider">
+
+                <!-- Synchronization Option -->
+                <TextView
+                    android:id="@+id/tv_synchronization"
+                    style="?attr/textAppearanceSubtitle1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:drawablePadding="16dp"
+                    android:focusable="true"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="@string/synchronization"
+                    app:drawableStartCompat="@drawable/baseline_sync_24"
+                    app:drawableTint="?attr/colorOnSurface" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
 
                 <!-- Settings Option -->
                 <TextView
@@ -153,9 +198,11 @@
                     android:drawablePadding="16dp"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/settings"
-                    app:drawableStartCompat="@drawable/baseline_settings_24" />
+                    app:drawableStartCompat="@drawable/baseline_settings_24"
+                    app:drawableTint="?attr/colorOnSurface" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -174,9 +221,11 @@
                     android:drawablePadding="16dp"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/export_data"
-                    app:drawableStartCompat="@drawable/baseline_file_upload_24" />
+                    app:drawableStartCompat="@drawable/baseline_file_upload_24"
+                    app:drawableTint="?attr/colorOnSurface" />
 
                 <!-- Import Option -->
                 <TextView
@@ -189,9 +238,11 @@
                     android:drawablePadding="16dp"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/import_data"
-                    app:drawableStartCompat="@drawable/baseline_file_download_24" />
+                    app:drawableStartCompat="@drawable/baseline_file_download_24"
+                    app:drawableTint="?attr/colorOnSurface" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -210,9 +261,11 @@
                     android:drawablePadding="16dp"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/contact_support"
-                    app:drawableStartCompat="@drawable/baseline_help_outline_24" />
+                    app:drawableStartCompat="@drawable/baseline_help_outline_24"
+                    app:drawableTint="?attr/colorOnSurface" />
 
                 <!-- Privacy Policy -->
                 <TextView
@@ -225,9 +278,11 @@
                     android:drawablePadding="16dp"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/privacy_policy"
-                    app:drawableStartCompat="@drawable/baseline_privacy_tip_24" />
+                    app:drawableStartCompat="@drawable/baseline_privacy_tip_24"
+                    app:drawableTint="?attr/colorOnSurface" />
 
                 <!-- Terms and Conditions -->
                 <TextView
@@ -240,9 +295,11 @@
                     android:drawablePadding="16dp"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/terms_amp_conditions"
-                    app:drawableStartCompat="@drawable/baseline_gavel_24" />
+                    app:drawableStartCompat="@drawable/baseline_gavel_24"
+                    app:drawableTint="?attr/colorOnSurface" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -261,27 +318,31 @@
                     android:drawablePadding="16dp"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/delete_all_data"
                     android:textColor="?attr/colorError"
                     app:drawableStartCompat="@drawable/baseline_delete_forever_24"
                     app:drawableTint="?attr/colorError" />
             </LinearLayout>
 
-            <!-- App Version -->
-            <TextView
-                android:id="@+id/tv_app_version"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp"
-                android:textAppearance="?attr/textAppearanceCaption"
-                android:textColor="?android:attr/textColorSecondary"
-                tools:text="@string/app_version" />
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="50dp">
 
+                <!-- App Version -->
+                <TextView
+                    android:id="@+id/tv_app_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    tools:text="@string/app_version" />
+            </LinearLayout>
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
+
 
 </LinearLayout>

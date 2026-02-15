@@ -1,12 +1,14 @@
 package com.saboon.project_2511sch.domain.usecase.programtable
 
 import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import javax.inject.Inject
 
 class ProgramTableWriteUseCase @Inject constructor(
-    private val programTableRepository: IProgramTableRepository
+    private val programTableRepository: IProgramTableRepository,
 ) {
     suspend fun insert(programTable: ProgramTable): Resource<ProgramTable>{
         return programTableRepository.insert(programTable)

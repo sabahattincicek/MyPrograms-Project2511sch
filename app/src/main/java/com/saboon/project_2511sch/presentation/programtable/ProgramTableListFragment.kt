@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,9 +14,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.databinding.FragmentProgramTableListBinding
+import com.saboon.project_2511sch.domain.model.User
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 @AndroidEntryPoint
 class ProgramTableListFragment : Fragment() {
@@ -24,13 +27,17 @@ class ProgramTableListFragment : Fragment() {
     private var _binding: FragmentProgramTableListBinding?= null
     private val binding get() = _binding!!
 
+    private val viewModelUser: ViewModelUser by activityViewModels()
+    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
+
+    private lateinit var currentUser: User
+
     companion object {
         private const val TAG = "ProgramTableFragment"
     }
 
     private lateinit var recyclerAdapterProgramTables: RecyclerAdapterProgramTables
 
-    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,31 +60,37 @@ class ProgramTableListFragment : Fragment() {
         setupAdapters()
         setupObservers()
 
-        Log.d(TAG, "onViewCreated: Fetching all program tables.")
-        viewModelProgramTable.getAllProgramTables()
-
-
         binding.fabAdd.setOnClickListener {
-            val dialog = DialogFragmentProgramTable.newInstanceForCreate()
+            val dialog = DialogFragmentProgramTable.newInstanceForCreate(currentUser)
             dialog.show(childFragmentManager, "CreateProgramTableDialog")
         }
     }
 
     private fun setupObservers(){
+        //USER STATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelUser.currentUser.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            currentUser = resource.data!!
+                        }
+                    }
+                }
+            }
+        }
         //PROGRAM TABLE STATES
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModelProgramTable.programTablesState.collect { resource ->
-                    Log.v(TAG, "observeProgramTablesState: New state received: ${resource::class.java.simpleName}")
                     when(resource) {
-                        is Resource.Error<*> -> {
-                            Log.e(TAG, "observeProgramTablesState: Error state, message: ${resource.message}")
-                            Toast.makeText(requireContext(), resource.message, Toast.LENGTH_LONG).show()
-                        }
-                        is Resource.Idle<*> -> Log.v(TAG, "observeProgramTablesState: Idle state.")
-                        is Resource.Loading<*> -> Log.i(TAG, "observeProgramTablesState: Loading state.")
-                        is Resource.Success<*> -> {
-                            Log.i(TAG, "observeProgramTablesState: Success state. Submitting list to adapter. Item count: ${resource.data?.size}")
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
                             recyclerAdapterProgramTables.submitList(resource.data)
                         }
                     }

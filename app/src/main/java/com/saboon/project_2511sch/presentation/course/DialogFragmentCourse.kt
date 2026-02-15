@@ -14,13 +14,17 @@ import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.ModelColors
 import androidx.core.os.BundleCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.saboon.project_2511sch.domain.model.User
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 @AndroidEntryPoint
 class DialogFragmentCourse: DialogFragment() {
@@ -28,6 +32,7 @@ class DialogFragmentCourse: DialogFragment() {
     private var _binding: DialogFragmentCourseBinding ?= null
     private val binding get() = _binding!!
     private val viewModelCourse: ViewModelCourse by viewModels()
+    private lateinit var currentUser: User
     private lateinit var programTable: ProgramTable
     private var course: Course? = null
     private var color: String = ModelColors.MODEL_COLOR_1
@@ -47,6 +52,7 @@ class DialogFragmentCourse: DialogFragment() {
         Log.d(TAG, "onCreateView: View created.")
 
         arguments?.let {
+            currentUser = BundleCompat.getParcelable(it, ARG_PROGRAM_USER, User::class.java)!!
             programTable = BundleCompat.getParcelable(it,ARG_PROGRAM_TABLE, ProgramTable::class.java)!!
             course = BundleCompat.getParcelable(it,ARG_COURSE, Course::class.java)
         }
@@ -89,7 +95,8 @@ class DialogFragmentCourse: DialogFragment() {
             }else{
                 Log.d(TAG, "onCreateView: Creating new course.")
                 val newCourse = Course(
-                    id = IdGenerator.generateCourseId(binding.etTitle.text.toString()),
+                    id = IdGenerator.generateId(binding.etTitle.text.toString()),
+                    createdBy = currentUser.id,
                     appVersionAtCreation = getString(R.string.app_version),
                     programTableId = programTable.id,
                     title = binding.etTitle.text.toString(),
@@ -136,26 +143,11 @@ class DialogFragmentCourse: DialogFragment() {
     }
 
     private fun setupObservers(){
-        //INSERT
+        //COURSE EVENT: INSERT, UPDATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourse.insertEvent.collect { event ->
+                viewModelCourse.operationEvent.collect { event ->
                     when(event){
-                        is Resource.Error -> {}
-                        is Resource.Idle -> {}
-                        is Resource.Loading ->{}
-                        is Resource.Success -> {
-                            dismiss()
-                        }
-                    }
-                }
-            }
-        }
-        //UPDATE
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourse.updateEvent.collect { resource ->
-                    when(resource){
                         is Resource.Error -> {}
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
@@ -170,19 +162,22 @@ class DialogFragmentCourse: DialogFragment() {
 
 
     companion object{
+        const val ARG_PROGRAM_USER = "course_dialog_fragment_arg_user"
         const val ARG_PROGRAM_TABLE = "course_dialog_fragment_arg_program_table"
         const val ARG_COURSE = "course_dialog_fragment_arg_course"
 
-        fun newInstanceForCreate(programTable: ProgramTable):DialogFragmentCourse{
+        fun newInstanceForCreate(user: User, programTable: ProgramTable):DialogFragmentCourse{
             val fragment = DialogFragmentCourse()
             fragment.arguments = bundleOf(
+                ARG_PROGRAM_USER to user,
                 ARG_PROGRAM_TABLE to programTable
             )
             return fragment
         }
-        fun newInstanceForUpdate(programTable: ProgramTable, course: Course): DialogFragmentCourse{
+        fun newInstanceForUpdate(user: User, programTable: ProgramTable, course: Course): DialogFragmentCourse{
             val fragment = DialogFragmentCourse()
             fragment.arguments = bundleOf(
+                ARG_PROGRAM_USER to user,
                 ARG_PROGRAM_TABLE to programTable,
                 ARG_COURSE to course
             )

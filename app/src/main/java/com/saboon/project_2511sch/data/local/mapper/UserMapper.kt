@@ -1,10 +1,10 @@
 package com.saboon.project_2511sch.data.local.mapper
 
-import com.saboon.project_2511sch.data.local.entity.SFileEntity
-import com.saboon.project_2511sch.domain.model.SFile
+import com.saboon.project_2511sch.data.local.entity.UserEntity
+import com.saboon.project_2511sch.domain.model.User
 
-fun SFileEntity.toDomain(): SFile {
-    return SFile(
+fun UserEntity.toDomain(): User{
+    return User(
         id = id,
         createdAt = createdAt,
         createdBy = createdBy,
@@ -17,17 +17,19 @@ fun SFileEntity.toDomain(): SFile {
         syncStatus = syncStatus,
         contentHash = contentHash,
         serverVersion = serverVersion,
-        title = title,
-        description = description,
-        programTableId = programTableId,
-        courseId = courseId,
-        taskId = taskId,
-        filePath = filePath
+        userName = userName,
+        email = email,
+        photoUrl = photoUrl,
+        lastLoginAt = lastLoginAt,
+        fullName = fullName,
+        role = role,
+        academicLevel = academicLevel,
+        organisation = organisation,
+        aboutMe = aboutMe
     )
 }
-
-fun SFile.toEntity(): SFileEntity {
-    return SFileEntity(
+fun User.toEntity(): UserEntity{
+    return UserEntity(
         id = id,
         createdAt = createdAt,
         createdBy = createdBy,
@@ -40,11 +42,14 @@ fun SFile.toEntity(): SFileEntity {
         syncStatus = syncStatus,
         contentHash = contentHash,
         serverVersion = serverVersion,
-        title = title,
-        description = description,
-        programTableId = programTableId,
-        courseId = courseId,
-        taskId = taskId,
-        filePath = filePath
+        userName = userName,
+        email = email,
+        photoUrl = photoUrl,
+        lastLoginAt = lastLoginAt,
+        fullName = fullName,
+        role = role,
+        academicLevel = academicLevel,
+        organisation = organisation,
+        aboutMe = aboutMe
     )
 }

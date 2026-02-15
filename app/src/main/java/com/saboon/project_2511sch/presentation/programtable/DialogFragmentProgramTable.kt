@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,11 +19,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentProgramTableBinding
 import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.User
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.ModelColors
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 @AndroidEntryPoint
 class DialogFragmentProgramTable: DialogFragment() {
@@ -31,17 +35,10 @@ class DialogFragmentProgramTable: DialogFragment() {
 
     private var _binding: DialogFragmentProgramTableBinding? = null
     private val binding get() = _binding!!
+    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
+    private lateinit var currentUser: User
     private var programTable: ProgramTable? = null
     private var color: String = ModelColors.MODEL_COLOR_1
-    private var uri: Uri? = null
-    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
-
-    private val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-        Log.d(TAG, "selectFileLauncher: result received, uri: $uri")
-        if (uri != null) {
-            this.uri = uri
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +61,7 @@ class DialogFragmentProgramTable: DialogFragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         arguments?.let {
+            currentUser = BundleCompat.getParcelable(it, ARG_PROGRAM_USER, User::class.java)!!
             programTable = BundleCompat.getParcelable(it,ARG_PROGRAM_TABLE, ProgramTable::class.java)
         }
 
@@ -99,7 +97,8 @@ class DialogFragmentProgramTable: DialogFragment() {
                 viewModelProgramTable.update(updatedProgramTable)
             }else{
                 val newProgramTable = ProgramTable(
-                    id = IdGenerator.generateProgramTableId(binding.etTitle.text.toString()),
+                    id = IdGenerator.generateId(binding.etTitle.text.toString()),
+                    createdBy = currentUser.id,
                     appVersionAtCreation = getString(R.string.app_version),
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
@@ -137,26 +136,11 @@ class DialogFragmentProgramTable: DialogFragment() {
         Log.d(TAG, "onDestroy: called, binding set to null")
     }
     private fun setupObservers(){
-        //INSERT
+        //PROFRAM TABLE EVENT: INSERT, UPDATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.insertEvent.collect { event ->
+                viewModelProgramTable.operationEvent.collect { event ->
                     when(event){
-                        is Resource.Error -> {}
-                        is Resource.Idle -> {}
-                        is Resource.Loading ->{}
-                        is Resource.Success -> {
-                            dismiss()
-                        }
-                    }
-                }
-            }
-        }
-        //UPDATE
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.updateEvent.collect { resource ->
-                    when(resource){
                         is Resource.Error -> {}
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
@@ -170,15 +154,20 @@ class DialogFragmentProgramTable: DialogFragment() {
     }
 
     companion object {
+        const val ARG_PROGRAM_USER = "program_table_dialog_fragment_arg_user"
         const val ARG_PROGRAM_TABLE = "program_table_dialog_fragment_arg_program_table"
 
-        fun newInstanceForCreate():DialogFragmentProgramTable{
-            val fragment = DialogFragmentProgramTable()
-            return fragment
-        }
-        fun newInstanceForUpdate(programTable: ProgramTable): DialogFragmentProgramTable {
+        fun newInstanceForCreate(user: User):DialogFragmentProgramTable{
             val fragment = DialogFragmentProgramTable()
             fragment.arguments = bundleOf(
+                ARG_PROGRAM_USER to user
+            )
+            return fragment
+        }
+        fun newInstanceForUpdate(user: User, programTable: ProgramTable): DialogFragmentProgramTable {
+            val fragment = DialogFragmentProgramTable()
+            fragment.arguments = bundleOf(
+                ARG_PROGRAM_USER to user,
                 ARG_PROGRAM_TABLE to programTable
             )
             return fragment

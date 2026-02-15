@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "program_tables")
-data class ProgramTableEntity(
+@Entity(tableName = "users")
+data class UserEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "created_at") val createdAt: Long,
     @ColumnInfo(name = "created_by") val createdBy: String,
@@ -19,7 +19,13 @@ data class ProgramTableEntity(
     @ColumnInfo(name = "content_hash") val contentHash: String,
     @ColumnInfo(name = "server_version") val serverVersion: Int,
 
-    @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "color") val color: String,
+    @ColumnInfo(name = "user_name") val userName: String,
+    @ColumnInfo(name = "email") val email: String,
+    @ColumnInfo(name = "photo_url") val photoUrl: String,
+    @ColumnInfo(name = "last_login_at") val lastLoginAt: Long,
+    @ColumnInfo(name = "full_name") val fullName: String,
+    @ColumnInfo(name = "role") val role: String,
+    @ColumnInfo(name = "academic_level") val academicLevel: String,
+    @ColumnInfo(name = "organisation") val organisation: String,
+    @ColumnInfo(name = "about_me") val aboutMe: String,
 )

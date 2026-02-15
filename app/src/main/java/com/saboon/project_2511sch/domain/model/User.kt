@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class SFile(
+data class User(
     override val id: String,
     override val createdAt: Long = System.currentTimeMillis(),
     override val createdBy: String,
@@ -18,11 +18,13 @@ data class SFile(
     override val contentHash: String = "",
     override val serverVersion: Int = 1,
 
-    val programTableId: String?,
-    val courseId: String?,
-    val taskId: String?,
-
-    val title: String,
-    val description: String,
-    val filePath: String,
+    val userName: String,
+    val email: String,
+    val photoUrl: String,
+    val lastLoginAt: Long = System.currentTimeMillis(),
+    val fullName: String,
+    val role: String,
+    val academicLevel: String,
+    val organisation: String,
+    val aboutMe: String,
 ): BaseModel, Parcelable

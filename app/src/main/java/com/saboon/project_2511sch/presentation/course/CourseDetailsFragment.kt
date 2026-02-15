@@ -26,11 +26,12 @@ import com.saboon.project_2511sch.util.ModelColors
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import androidx.core.os.BundleCompat
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.SFile
+import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.programtable.DialogFragmentProgramTable
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
@@ -38,7 +39,9 @@ import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskExam
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskHomework
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskLesson
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.open
+import kotlin.getValue
 
 @AndroidEntryPoint
 class CourseDetailsFragment : Fragment() {
@@ -46,11 +49,13 @@ class CourseDetailsFragment : Fragment() {
     private var _binding: FragmentCourseDetailsBinding? =  null
     private val binding get() = _binding!!
     private val args : CourseDetailsFragmentArgs by navArgs()
+    private val viewModelUser: ViewModelUser by activityViewModels()
     private val viewModelCourse : ViewModelCourse by viewModels()
     private val viewModelTask: ViewModelTask by viewModels()
     private val viewModelSFile: ViewModelSFile by viewModels()
     private lateinit var recyclerAdapterSFileMini: RecyclerAdapterSFileMini
     private lateinit var recyclerAdapterTask: RecyclerAdapterTask
+    private lateinit var currentUser: User
     private lateinit var programTable: ProgramTable
     private lateinit var course: Course
     private var uri: Uri? = null
@@ -60,6 +65,7 @@ class CourseDetailsFragment : Fragment() {
             this.uri = uri
             val sFile = SFile(
                 id = "generate in repository",
+                createdBy = currentUser.id,
                 appVersionAtCreation = getString(R.string.app_version),
                 title = "generate in repository",
                 description = "",
@@ -84,12 +90,12 @@ class CourseDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        programTable = args.programTable
-        viewModelCourse.getById(args.course.id) //course initialized in setupObservers() function
-
         setupAdapters()
         setupListeners()
         setupObservers()
+
+        programTable = args.programTable
+        viewModelCourse.getById(args.course.id) //course initialized in setupObservers() function
 
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -107,7 +113,7 @@ class CourseDetailsFragment : Fragment() {
                     true
                 }
                 R.id.action_edit -> {
-                    val dialog = DialogFragmentProgramTable.newInstanceForUpdate(programTable)
+                    val dialog = DialogFragmentCourse.newInstanceForUpdate(currentUser, programTable, course)
                     dialog.show(childFragmentManager, "Edit Course")
                     true
                 }
@@ -124,17 +130,24 @@ class CourseDetailsFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.btnAbsenceDecrease.setOnClickListener {
-            viewModelCourse.decrementAbsence(course)
+            if (course.absence > 0){
+                val decrementedCourse = course.copy(
+                    absence = course.absence - 1
+                )
+                viewModelCourse.update(decrementedCourse)
+            }
         }
         binding.btnAbsenceIncrease.setOnClickListener {
-            viewModelCourse.incrementAbsence(course)
+            val incrementedCourse = course.copy(
+                absence = course.absence + 1
+            )
+            viewModelCourse.update(incrementedCourse)
         }
     }
     private fun applyDataToView(){
-        binding.topAppBar.subtitle = course.title
         binding.tvTitleCourse.text = course.title
-        binding.tvPersonPrimary.text = course.people?.split(",")?.firstOrNull()?.trim()?:""
-        binding.tvPersonSecondary.text = course.people?.split(",")?.drop(1)?.joinToString(", ") { it.trim() } ?: ""
+        binding.tvPersonPrimary.text = course.people.split(",").firstOrNull()?.trim()
+        binding.tvPersonSecondary.text = course.people.split(",").drop(1).joinToString(", ") { it.trim() }
         binding.tvDescription.text = course.description
         binding.tvAbsenceCount.text = course.absence.toString()
 
@@ -162,15 +175,15 @@ class CourseDetailsFragment : Fragment() {
         recyclerAdapterTask.onItemClickListener = { task ->
             when(task) {
                 is Task.Lesson -> {
-                    val dialog = DialogFragmentTaskLesson.newInstanceForEdit(programTable, course, task)
+                    val dialog = DialogFragmentTaskLesson.newInstanceForEdit(currentUser, programTable, course, task)
                     dialog.show(childFragmentManager, "UpdateTaskDialog")
                 }
                 is Task.Exam -> {
-                    val dialog = DialogFragmentTaskExam.newInstanceForEdit(programTable, course, task)
+                    val dialog = DialogFragmentTaskExam.newInstanceForEdit(currentUser, programTable, course, task)
                     dialog.show(childFragmentManager, "UpdateTaskDialog")
                 }
                 is Task.Homework -> {
-                    val dialog = DialogFragmentTaskHomework.newInstanceForEdit(programTable, course, task)
+                    val dialog = DialogFragmentTaskHomework.newInstanceForEdit(currentUser, programTable, course, task)
                     dialog.show(childFragmentManager, "UpdateTaskDialog")
                 }
             }
@@ -197,17 +210,17 @@ class CourseDetailsFragment : Fragment() {
             setOnMenuItemClickListener { item ->
                 when(item.itemId){
                     R.id.action_add_lesson -> {
-                        val dialog = DialogFragmentTaskLesson.newInstanceForCreate(programTable, course)
+                        val dialog = DialogFragmentTaskLesson.newInstanceForCreate(currentUser, programTable, course)
                         dialog.show(childFragmentManager, "dialogFragmentTaskLesson")
                         true
                     }
                     R.id.action_add_exam -> {
-                        val dialog = DialogFragmentTaskExam.newInstanceForCreate(programTable, course)
+                        val dialog = DialogFragmentTaskExam.newInstanceForCreate(currentUser, programTable, course)
                         dialog.show(childFragmentManager, "dialogFragmentTaskExam")
                         true
                     }
                     R.id.action_add_homework -> {
-                        val dialog = DialogFragmentTaskHomework.newInstanceForCreate(programTable, course)
+                        val dialog = DialogFragmentTaskHomework.newInstanceForCreate(currentUser, programTable, course)
                         dialog.show(childFragmentManager, "dialogFragmentTaskHomework")
                         true
                     }
@@ -219,6 +232,21 @@ class CourseDetailsFragment : Fragment() {
     }
 
     private fun setupObservers(){
+        //USER STATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelUser.currentUser.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            currentUser = resource.data!!
+                        }
+                    }
+                }
+            }
+        }
         //COURSE STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -271,35 +299,30 @@ class CourseDetailsFragment : Fragment() {
                 }
             }
         }
-        //DELETE COURSE EVENT
+        //COURSE EVENT: DELETE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourse.deleteEvent.collect { event ->
+                viewModelCourse.operationEvent.collect { event ->
                     when(event) {
-                        is Resource.Error<*> -> {
-                            Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
-                        }
-                        is Resource.Idle<*> -> {}
-                        is Resource.Loading<*> -> {}
-                        is Resource.Success<*> -> {
-                            Toast.makeText(context, getString(R.string.course_deleted_successfully), Toast.LENGTH_SHORT).show()
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
                             findNavController().popBackStack()
                         }
                     }
                 }
             }
         }
-        //FILE INSERT EVENT
+        //FILE EVENT: INSERT
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSFile.insertEvent.collect { resource ->
+                viewModelSFile.operationEvent.collect { resource ->
                     when(resource) {
                         is Resource.Error -> {}
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
-                        is Resource.Success -> {
-
-                        }
+                        is Resource.Success -> {}
                     }
                 }
             }
@@ -308,11 +331,10 @@ class CourseDetailsFragment : Fragment() {
     }
 
     private fun setupListeners(){
-        //DELETE
         childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, this) { requestKey, result ->
             val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
             if (isYes) {
-                viewModelCourse.deleteCourse(course)
+                viewModelCourse.delete(course)
             }
         }
     }

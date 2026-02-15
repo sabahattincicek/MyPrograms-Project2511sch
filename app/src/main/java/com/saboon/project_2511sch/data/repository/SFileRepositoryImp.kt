@@ -45,7 +45,7 @@ class SFileRepositoryImp @Inject constructor(
             outputStream.close()
 
             val sFileToSave = sFile.copy(
-                id = IdGenerator.generateFileId(originalFileName),
+                id = IdGenerator.generateId(originalFileName),
                 title = originalFileName,
                 filePath = newLocalFile.absolutePath,
             )

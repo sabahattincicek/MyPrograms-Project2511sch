@@ -25,12 +25,16 @@ import androidx.room.PrimaryKey
 data class TaskExamEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "created_at") val createdAt: Long,
+    @ColumnInfo(name = "created_by") val createdBy: String,
+    @ColumnInfo(name = "app_version_at_creation") val appVersionAtCreation: String,
     @ColumnInfo(name = "updated_at") val updatedAt: Long,
     @ColumnInfo(name = "version") val version: Int,
     @ColumnInfo(name = "is_active") val isActive: Boolean,
     @ColumnInfo(name = "is_deleted") val isDeleted: Boolean,
     @ColumnInfo(name = "deleted_at") val deletedAt: Long,
-    @ColumnInfo(name = "app_version_at_creation") val appVersionAtCreation: String,
+    @ColumnInfo(name = "sync_status") val syncStatus: Int,
+    @ColumnInfo(name = "content_hash") val contentHash: String,
+    @ColumnInfo(name = "server_version") val serverVersion: Int,
 
     @ColumnInfo(name = "program_table_id") val programTableId: String,
     @ColumnInfo(name = "course_id") val courseId: String,

@@ -30,13 +30,8 @@ class ViewModelTask @Inject constructor(
     private val getTaskDisplayItemUseCase: GetTaskDisplayItemUseCase,
     private val alarmScheduler: IAlarmScheduler
 ): ViewModel() {
-    private val _insertEvent = Channel<Resource<Task>>()
-    val insertEvent = _insertEvent.receiveAsFlow()
-    private val _updateEvent = Channel<Resource<Task>>()
-    val updateEvent = _updateEvent.receiveAsFlow()
-    private val _deleteEvent = Channel<Resource<Task>>()
-    val deleteEvent = _deleteEvent.receiveAsFlow()
-
+    private val _operationEvent = Channel<Resource<Task>>()
+    val operationEvent = _operationEvent.receiveAsFlow()
 
     private val _filterState = MutableStateFlow(FilterGeneric())
 
@@ -58,38 +53,23 @@ class ViewModelTask @Inject constructor(
         }
     }
 
-    //EVENT
-    fun insert(task: Task){
-        viewModelScope.launch {
-            try {
-                _insertEvent.send(Resource.Loading())
-                val insertResult = taskWriteUseCase.insert(task)
-                _insertEvent.send(insertResult)
-            }catch (e: Exception){
-                _insertEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
-            }
-        }
+    //ACTIONS
+    fun insert(task: Task) = executeWriteAction{
+        taskWriteUseCase.insert(task)
     }
-    fun update(task: Task){
-        viewModelScope.launch {
-            try {
-                _updateEvent.send(Resource.Loading())
-                val updateResult = taskWriteUseCase.update(task)
-                _updateEvent.send(updateResult)
-            }catch (e: Exception){
-                _updateEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
-            }
-        }
+    fun update(task: Task) = executeWriteAction{
+        taskWriteUseCase.update(task)
     }
-    fun delete(task: Task){
+    fun delete(task: Task) = executeWriteAction{
+        taskWriteUseCase.delete(task)
+    }
+    private fun executeWriteAction(action: suspend () -> Resource<Task>) {
         viewModelScope.launch {
             try {
-                _deleteEvent.send(Resource.Loading())
-                val deleteResult = taskWriteUseCase.delete(task)
-                _deleteEvent.send(deleteResult)
-                alarmScheduler.cancel(task)
-            }catch (e: Exception){
-                _deleteEvent.send(Resource.Error(e.localizedMessage ?: "An unexpected error occurred in ViewModel."))
+                _operationEvent.send(Resource.Loading())
+                _operationEvent.send(action())
+            } catch (e: Exception) {
+                _operationEvent.send(Resource.Error(e.localizedMessage ?: "Unexpected error"))
             }
         }
     }
