@@ -3,8 +3,10 @@ package com.saboon.project_2511sch.domain.model
 import android.os.Parcelable
 import com.saboon.project_2511sch.util.RecurrenceRule
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 sealed class Task: BaseModel, Parcelable {
 
     abstract val programTableId: String
@@ -14,6 +16,7 @@ sealed class Task: BaseModel, Parcelable {
     abstract val description: String
 
     @Parcelize
+    @Serializable
     data class Lesson(
         override val id: String,
         override val createdAt: Long = System.currentTimeMillis(),
@@ -44,6 +47,7 @@ sealed class Task: BaseModel, Parcelable {
     ): Parcelable, Task()
 
     @Parcelize
+    @Serializable
     data class Exam(
         override val id: String,
         override val createdAt: Long = System.currentTimeMillis(),
@@ -75,6 +79,7 @@ sealed class Task: BaseModel, Parcelable {
     ): Parcelable, Task()
 
     @Parcelize
+    @Serializable
     data class Homework(
         override val id: String,
         override val createdAt: Long = System.currentTimeMillis(),

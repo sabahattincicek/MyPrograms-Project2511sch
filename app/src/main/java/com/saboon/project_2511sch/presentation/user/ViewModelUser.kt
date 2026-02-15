@@ -27,7 +27,7 @@ class ViewModelUser @Inject constructor(
     val currentUser: StateFlow<Resource<User?>> = userReadUseCase.getActive()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.Companion.WhileSubscribed(5000),
             initialValue = Resource.Idle()
         )
 
