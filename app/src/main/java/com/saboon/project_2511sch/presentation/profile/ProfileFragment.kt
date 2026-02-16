@@ -42,18 +42,22 @@ class ProfileFragment : Fragment() {
     private lateinit var currentUser: User
     private var isInitialDataLoaded = false
 
-    private val createDocumentLauncher = registerForActivityResult(
+
+    //select folder to save export file
+    private val exportFileToDeviceLauncher = registerForActivityResult(
         ActivityResultContracts.CreateDocument("application/zip")
     ) { uri ->
         uri?.let {
-            saveExportFile(it)
+            saveExportFileIntoDevice(it)
         }
     }
+
+    //select file to import
     private val importFileLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ){ uri ->
         uri?.let {
-            handleImportFile(uri)
+            viewModelProfile.importData(uri)
         }
     }
 
@@ -163,17 +167,12 @@ class ProfileFragment : Fragment() {
         //EXPORT EVENT
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProfile.exportState.collect { resource ->
-                    Log.d("ProfileFragment", "exportState: $resource")
+                viewModelProfile.exportEvent.collect { resource ->
                     when(resource) {
-                        is Resource.Error -> {
-                            Log.e("ProfileFragment", "Export error: ${resource.message}")
-                            viewModelProfile.resetExportOperation()
-                        }
+                        is Resource.Error -> {}
                         is Resource.Idle -> {}
                         is Resource.Loading -> {}
                         is Resource.Success -> {
-                            Log.d("ProfileFragment", "Export success")
                             exportFile = resource.data!!
 
                             MaterialAlertDialogBuilder(requireContext())
@@ -181,12 +180,10 @@ class ProfileFragment : Fragment() {
                                 .setItems(arrayOf("Share", "Save to device")){ _, which ->
                                     when(which){
                                         0 -> {shareBackupFile(exportFile!!)} //SHARE
-                                        1 -> {createDocumentLauncher.launch(exportFile!!.name)} //SAVE TO DEVICE
+                                        1 -> {exportFileToDeviceLauncher.launch(exportFile!!.name)} //SAVE TO DEVICE
                                     }
-                                    viewModelProfile.resetExportOperation()
                                 }
                                 .setNegativeButton("Cancel") { dialog, which ->
-                                    viewModelProfile.resetExportOperation() // Tekrar tıklanabilirlik için sıfırla
                                     dialog.dismiss()
                                 }
                                 .show()
@@ -198,16 +195,12 @@ class ProfileFragment : Fragment() {
         //IMPORT EVENT
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProfile.importState.collect { resource ->
+                viewModelProfile.importEvent.collect { resource ->
                     when(resource) {
-                        is Resource.Error -> {
-                            viewModelProfile.resetImportOperation()
-                        }
+                        is Resource.Error -> {}
                         is Resource.Idle -> {}
                         is Resource.Loading -> {}
-                        is Resource.Success -> {
-                            viewModelProfile.resetImportOperation()
-                        }
+                        is Resource.Success -> {}
                     }
                 }
             }
@@ -229,7 +222,7 @@ class ProfileFragment : Fragment() {
         startActivity(Intent.createChooser(intent, "Share Backup"))
     }
 
-    private fun saveExportFile(uri: Uri){
+    private fun saveExportFileIntoDevice(uri: Uri){
         val file = exportFile ?: return
         try {
             requireContext().contentResolver.openOutputStream(uri)?.use { outputStream ->
@@ -242,31 +235,6 @@ class ProfileFragment : Fragment() {
         }finally {
             if (file.exists()) file.delete()
             exportFile = null
-        }
-    }
-    private fun handleImportFile(uri: Uri){
-        try {
-            // 1. Seçilen dosyayı okumak için bir InputStream aç
-            requireContext().contentResolver.openInputStream(uri)?.use { inputStream ->
-                // 2. Cache dizininde geçici bir dosya oluştur
-                val tempFile = File(requireContext().cacheDir, "temp_import_${System.currentTimeMillis()}.zip")
-
-                // 3. Seçilen dosyanın içeriğini bu geçici dosyaya kopyala
-                tempFile.outputStream().use { outputStream ->
-                    inputStream.copyTo(outputStream)
-                }
-
-                // 4. Hazırlanan dosyayı ViewModel'e gönder
-                viewModelProfile.importData(tempFile)
-                Log.d("ProfileFragment", "File successfully prepared for import: ${tempFile.absolutePath}")
-            }
-        } catch (e: Exception) {
-            Log.e("ProfileFragment", "Error while preparing import file: ${e.message}")
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Hata")
-                .setMessage("Dosya okunamadı: ${e.localizedMessage}")
-                .setPositiveButton("Tamam", null)
-                .show()
         }
     }
 }
