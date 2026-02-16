@@ -57,6 +57,17 @@ class SFileRepositoryImp @Inject constructor(
         }
     }
 
+    override suspend fun insert(sFile: SFile): Resource<SFile> {
+        try {
+            // Dosya kopyalama işlemi YAPMIYORUZ, çünkü ImportUseCase zaten dosyayı
+            // doğru yere (filesDir/sfiles) koydu ve sFile.filePath'i güncelledi.
+            sFileDao.insert(sFile.toEntity())
+            return Resource.Success(sFile)
+        }catch (e: Exception){
+            return Resource.Error(e.localizedMessage ?: "Database insertion failed")
+        }
+    }
+
     override suspend fun update(sFile: SFile): Resource<SFile> {
         try {
             sFileDao.update(sFile.toEntity())

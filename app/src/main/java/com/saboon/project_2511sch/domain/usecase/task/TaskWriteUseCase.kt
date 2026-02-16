@@ -9,7 +9,7 @@ class TaskWriteUseCase @Inject constructor(
     private val taskRepository: ITaskRepository
 ) {
     suspend fun insert(task: Task): Resource<Task>{
-        return taskRepository.insertTask(task)
+        return taskRepository.insert(task)
     }
     suspend fun update(task: Task): Resource<Task>{
         val updatedTask = when(task) {

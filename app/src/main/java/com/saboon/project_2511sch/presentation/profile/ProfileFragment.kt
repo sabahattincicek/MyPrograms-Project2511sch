@@ -49,6 +49,13 @@ class ProfileFragment : Fragment() {
             saveExportFile(it)
         }
     }
+    private val importFileLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ){ uri ->
+        uri?.let {
+            handleImportFile(uri)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +106,9 @@ class ProfileFragment : Fragment() {
         }
         binding.tvExportData.setOnClickListener {
             viewModelProfile.exportData()
+        }
+        binding.tvImportData.setOnClickListener {
+            importFileLauncher.launch("application/zip")
         }
     }
 
@@ -185,6 +195,23 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+        //IMPORT EVENT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelProfile.importState.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {
+                            viewModelProfile.resetImportOperation()
+                        }
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            viewModelProfile.resetImportOperation()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun shareBackupFile(file: File){
@@ -215,6 +242,31 @@ class ProfileFragment : Fragment() {
         }finally {
             if (file.exists()) file.delete()
             exportFile = null
+        }
+    }
+    private fun handleImportFile(uri: Uri){
+        try {
+            // 1. Seçilen dosyayı okumak için bir InputStream aç
+            requireContext().contentResolver.openInputStream(uri)?.use { inputStream ->
+                // 2. Cache dizininde geçici bir dosya oluştur
+                val tempFile = File(requireContext().cacheDir, "temp_import_${System.currentTimeMillis()}.zip")
+
+                // 3. Seçilen dosyanın içeriğini bu geçici dosyaya kopyala
+                tempFile.outputStream().use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+
+                // 4. Hazırlanan dosyayı ViewModel'e gönder
+                viewModelProfile.importData(tempFile)
+                Log.d("ProfileFragment", "File successfully prepared for import: ${tempFile.absolutePath}")
+            }
+        } catch (e: Exception) {
+            Log.e("ProfileFragment", "Error while preparing import file: ${e.message}")
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Hata")
+                .setMessage("Dosya okunamadı: ${e.localizedMessage}")
+                .setPositiveButton("Tamam", null)
+                .show()
         }
     }
 }
