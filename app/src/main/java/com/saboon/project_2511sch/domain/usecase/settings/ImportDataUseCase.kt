@@ -1,11 +1,12 @@
 package com.saboon.project_2511sch.domain.usecase.settings
 
 import android.content.Context
+import android.net.Uri
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
-import com.saboon.project_2511sch.presentation.profile.DatabaseBackup
+import com.saboon.project_2511sch.presentation.profile.DataTransferPackage
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.ZipUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -23,30 +24,39 @@ class ImportDataUseCase @Inject constructor(
     private val sFileRepository: ISFileRepository,
     private val json: Json
 ) {
-    suspend fun execute(zipFile: File): Resource<Unit> = withContext(Dispatchers.IO){
+    suspend fun execute(uri: Uri): Resource<Unit> = withContext(Dispatchers.IO){
+        // Geçici dosyaları try bloğu dışında tanımlıyoruz ki finally içinde silebiliriz
+        var tempZipFile: File? = null
+        val extractFolder = File(context.cacheDir, "extracted_backup_${System.currentTimeMillis()}")
+
         try {
-            // 1. Geçici bir klasör oluştur ve ZIP'i oraya çıkart
-            val extractFolder = File(context.cacheDir, "extracted_backup")
+            // 1. Uri içeriğini geçici bir ZIP dosyasına kopyala
+            tempZipFile = File(context.cacheDir, "temp_import_${System.currentTimeMillis()}.zip")
+            context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                tempZipFile.outputStream().use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            } ?: return@withContext Resource.Error("Dosya okunamadı (InputStream null)")
+
+            // 2. ZIP'i çıkart
             if (extractFolder.exists()) extractFolder.deleteRecursively()
             extractFolder.mkdirs()
-
-            ZipUtil.unzip(zipFile, extractFolder)
+            ZipUtil.unzip(tempZipFile, extractFolder)
 
             // 2. JSON dosyasını oku ve modelleri oluştur
             val jsonFile = File(extractFolder, "backup.json")
             if (!jsonFile.exists()) return@withContext Resource.Error("Not found backup file")
-
             val jsonString = jsonFile.readText()
-            val backup = json.decodeFromString<DatabaseBackup>(jsonString)
+            val dataTransferPackage = json.decodeFromString<DataTransferPackage>(jsonString)
 
             // 3. Fiziksel dosyaları kalıcı klasöre taşı ve yolları güncelle
-            val sfilesFolder = File(context.filesDir, "sFiles")
-            if (!sfilesFolder.exists()) sfilesFolder.mkdirs()
+            val sFilesFolder = File(context.filesDir, "sFiles")
+            if (!sFilesFolder.exists()) sFilesFolder.mkdirs()
 
-            val updatedSFiles = backup.sFiles.map { sFile ->
+            val updatedSFiles = dataTransferPackage.sFiles.map { sFile ->
                 val extractedPhysicalFile = File(extractFolder, "files/${File(sFile.filePath).name}")
                 if (extractedPhysicalFile.exists()){
-                    val targetFile = File(sfilesFolder, extractedPhysicalFile.name)
+                    val targetFile = File(sFilesFolder, extractedPhysicalFile.name)
                     extractedPhysicalFile.copyTo(targetFile, overwrite = true)
                     // Veritabanı için yolu bu telefonun dizinine göre güncelle
                     sFile.copy(filePath = targetFile.absolutePath)
@@ -56,17 +66,21 @@ class ImportDataUseCase @Inject constructor(
             }
             // 4. Veritabanına kaydet (Sıralama Önemlidir: Foreign Key kısıtlamaları için)
             // Önce tablolar, sonra kurslar, sonra tasklar ve dosyalar
-            backup.programTables.forEach { programTableRepository.insert(it) }
-            backup.courses.forEach { courseRepository.insert(it) }
-            backup.tasks.forEach { taskRepository.insert(it) }
+            dataTransferPackage.programTables.forEach { programTableRepository.insert(it) }
+            dataTransferPackage.courses.forEach { courseRepository.insert(it) }
+            dataTransferPackage.tasks.forEach { taskRepository.insert(it) }
             updatedSFiles.forEach { sFileRepository.insert(it) }
-
-            // 5. Temizlik (Geçici klasörü sil)
-            extractFolder.deleteRecursively()
 
             Resource.Success(Unit)
         }catch (e: Exception){
             Resource.Error(e.message ?: "İçe aktarma sırasında bir hata oluştu")
+        }finally {
+            try {
+                tempZipFile?.deleteRecursively()
+                extractFolder.deleteRecursively()
+            }catch (e: Exception){
+
+            }
         }
     }
 }

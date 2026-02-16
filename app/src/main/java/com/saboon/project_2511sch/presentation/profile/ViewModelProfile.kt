@@ -1,14 +1,17 @@
 package com.saboon.project_2511sch.presentation.profile
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.usecase.settings.ExportDataUseCase
 import com.saboon.project_2511sch.domain.usecase.settings.ImportDataUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
@@ -19,31 +22,24 @@ class ViewModelProfile @Inject constructor(
     private val importDataUseCase: ImportDataUseCase
 ): ViewModel() {
 
-    private val _exportState = MutableStateFlow<Resource<File>>(Resource.Idle())
-    val exportState: StateFlow<Resource<File>> = _exportState.asStateFlow()
+    private val _exportEvent = Channel<Resource<File>>(Channel.BUFFERED)
+    val exportEvent = _exportEvent.receiveAsFlow()
 
-    private val _importState = MutableStateFlow<Resource<Unit>>(Resource.Idle())
-    val importState: StateFlow<Resource<Unit>> = _importState.asStateFlow()
+    private val _importEvent = Channel<Resource<Unit>>(Channel.BUFFERED)
+    val importEvent = _importEvent.receiveAsFlow()
 
-    fun exportData(){
+
+    fun exportData() {
         viewModelScope.launch {
-            _exportState.value = Resource.Loading()
-            _exportState.value = exportDataUseCase.execute()
-        }
-    }
-    fun importData(zipFile: File){
-        viewModelScope.launch {
-            _importState.value = Resource.Loading()
-            _importState.value = importDataUseCase.execute(zipFile)
+            _exportEvent.send(Resource.Loading())
+            _exportEvent.send(exportDataUseCase.execute())
         }
     }
 
-    // İşlem bittikten sonra UI'da Toast vb. gösterince durumu sıfırlamak için
-    fun resetExportOperation(){
-        _exportState.value = Resource.Idle()
-    }
-
-    fun resetImportOperation(){
-        _importState.value = Resource.Idle()
+    fun importData(uri: Uri) {
+        viewModelScope.launch {
+            _importEvent.send(Resource.Loading())
+            _importEvent.send(importDataUseCase.execute(uri))
+        }
     }
 }

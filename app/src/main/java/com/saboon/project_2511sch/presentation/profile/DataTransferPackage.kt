@@ -8,7 +8,7 @@ import com.saboon.project_2511sch.util.toFormattedString
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DatabaseBackup(
+data class DataTransferPackage( // for export and import operations
     val programTables: List<ProgramTable>,
     val courses: List<Course>,
     val tasks: List<Task>,

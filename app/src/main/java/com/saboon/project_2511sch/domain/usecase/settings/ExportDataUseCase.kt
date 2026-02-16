@@ -1,7 +1,7 @@
 package com.saboon.project_2511sch.domain.usecase.settings
 
 import android.content.Context
-import com.saboon.project_2511sch.presentation.profile.DatabaseBackup
+import com.saboon.project_2511sch.presentation.profile.DataTransferPackage
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
@@ -33,19 +33,19 @@ class ExportDataUseCase @Inject constructor(
             val tasks = taskRepository.getAll().first().data ?: emptyList()
             val sFiles = sFileRepository.getAll().first().data ?: emptyList()
 
-            val backup = DatabaseBackup(programTables, courses, tasks, sFiles)
-            val jsonString = json.encodeToString(backup)
+            val dataTransferPackage = DataTransferPackage(programTables, courses, tasks, sFiles)
+            val jsonString = json.encodeToString(dataTransferPackage)
 
             // 2. Geçici dosyaları hazırla
-            val backupFolder = File(context.cacheDir, "backup_temp")
-            backupFolder.mkdirs()
+            val exportFolderTemp = File(context.cacheDir, "export_temp")
+            exportFolderTemp.mkdirs()
 
-            val jsonFile = File(backupFolder, "backup.json")
+            val jsonFile = File(exportFolderTemp, "export.json")
             jsonFile.writeText(jsonString)
 
             // 3. ZIP'e eklenecek dosyaların listesini hazırla
             val filesMap = mutableMapOf<String, File>()
-            filesMap["backup.json"] = jsonFile
+            filesMap["export.json"] = jsonFile
 
             sFiles.forEach { sFile ->
                 val physicalFile = File(sFile.filePath)
@@ -56,7 +56,7 @@ class ExportDataUseCase @Inject constructor(
             }
 
             // 4. Final ZIP dosyasını oluştur
-            val zipFile = File(context.cacheDir, "MyProgram_Backup_${System.currentTimeMillis().toFormattedString("yyyyMMdd_HHddss")}.zip")
+            val zipFile = File(context.cacheDir, "MyProgram_Export_${System.currentTimeMillis().toFormattedString("yyyyMMdd_HHddss")}.zip")
             ZipUtil.zipFiles(zipFile, filesMap)
 
             // Temizlik
