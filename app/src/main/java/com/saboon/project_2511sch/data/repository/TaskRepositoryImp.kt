@@ -18,7 +18,7 @@ import javax.inject.Inject
 class TaskRepositoryImp @Inject constructor(
     private val taskDao: TaskDao,
 ): ITaskRepository {
-    override suspend fun insertTask(task: Task): Resource<Task> {
+    override suspend fun insert(task: Task): Resource<Task> {
         try {
             when(task) {
                 is Task.Exam -> taskDao.insertExam(task.toEntity())

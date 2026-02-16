@@ -5,7 +5,7 @@ import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface ITaskRepository {
-    suspend fun insertTask(task: Task): Resource<Task>
+    suspend fun insert(task: Task): Resource<Task>
     suspend fun updateTask(task: Task): Resource<Task>
     suspend fun deleteTask(task: Task): Resource<Task>
     fun getAll():Flow<Resource<List<Task>>>
