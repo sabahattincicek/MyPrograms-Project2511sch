@@ -1,12 +1,14 @@
 package com.saboon.project_2511sch.domain.usecase.task
 
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.util.Resource
 import javax.inject.Inject
 
 class TaskWriteUseCase @Inject constructor(
-    private val taskRepository: ITaskRepository
+    private val taskRepository: ITaskRepository,
+    private val sFileRepository: ISFileRepository
 ) {
     suspend fun insert(task: Task): Resource<Task>{
         return taskRepository.insert(task)
@@ -29,6 +31,7 @@ class TaskWriteUseCase @Inject constructor(
         return taskRepository.updateTask(updatedTask)
     }
     suspend fun delete(task: Task): Resource<Task>{
+
         return taskRepository.deleteTask(task)
     }
 }

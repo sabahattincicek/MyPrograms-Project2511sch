@@ -132,7 +132,7 @@ class DialogFragmentTaskExam: DialogFragment() {
             viewModelSFile.updateProgramTable(programTable)
             viewModelSFile.updateCourse(course, false)
             viewModelSFile.updateTask(task)
-            binding.llFilesSection.visibility = View.VISIBLE
+//            binding.llFilesSection.visibility = View.VISIBLE  ------- suanlik database seviyesinde cascade ile otomatik silme islemi yapilamadigi icin tasklara file ekleme islemi engellendi
         }else{
             binding.llFilesSection.visibility = View.GONE
         }
