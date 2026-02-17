@@ -139,7 +139,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
             viewModelSFile.updateProgramTable(programTable)
             viewModelSFile.updateCourse(course, false)
             viewModelSFile.updateTask(task)
-            binding.llFilesSection.visibility = View.VISIBLE
+//            binding.llFilesSection.visibility = View.VISIBLE  ------- suanlik database seviyesinde cascade ile otomatik silme islemi yapilamadigi icin tasklara file ekleme islemi engellendi
         }else{
 //            viewModelSFile.updateProgramTable(programTable)
 //            viewModelSFile.updateCourse(course, false)
@@ -217,7 +217,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
         binding.etDate.setOnClickListener {
             dateTimePicker.pickDateMillis("Date", selectedDateMillis){ result ->
                 selectedDateMillis = result
-
+                binding.etDate.setText(selectedDateMillis.toFormattedString("dd.MM.yyyy"))
                 selectedRecurrenceRule.dtStart = selectedDateMillis
                 binding.etDateRangeStart.setText(selectedRecurrenceRule.dtStart.toFormattedString("dd.MM.yyyy"))
                 val cal = Calendar.getInstance().apply {
