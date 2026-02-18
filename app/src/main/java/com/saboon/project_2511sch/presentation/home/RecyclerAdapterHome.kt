@@ -29,6 +29,12 @@ class RecyclerAdapterHome :
 
     var onItemClickListener:((ProgramTable, Course) -> Unit)? = null
 
+    var isColorEnabled: Boolean = true
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
     var colorSource: String = SettingsConstants.HomeListItemColorSource.DEFAULT
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
@@ -134,22 +140,24 @@ class RecyclerAdapterHome :
                         binding.tvContent2.text = task.date.toFormattedString("EEEE")
                         binding.tvContent2Sub.text = task.place
 
-                        val customColorAttrContainer =
-                            ModelColors.getThemeAttrForCustomContainerColor(baseColor)
-                        val customColorAttrTask =
-                            ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_LESSON)
-                        val themeAwareCustomColorContainer = MaterialColors.getColor(
-                            binding.root,
-                            customColorAttrContainer,
-                            Color.BLACK
-                        )
-                        val themeAwareCustomColorTask =
-                            MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
-                        binding.llContainer.background = GradientDrawable(
-                            GradientDrawable.Orientation.LEFT_RIGHT,
-                            intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
-                        )
-                        binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
+                        if (isColorEnabled){
+                            val customColorAttrContainer =
+                                ModelColors.getThemeAttrForCustomContainerColor(baseColor)
+                            val customColorAttrTask =
+                                ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_LESSON)
+                            val themeAwareCustomColorContainer = MaterialColors.getColor(
+                                binding.root,
+                                customColorAttrContainer,
+                                Color.BLACK
+                            )
+                            val themeAwareCustomColorTask =
+                                MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
+                            binding.llContainer.background = GradientDrawable(
+                                GradientDrawable.Orientation.LEFT_RIGHT,
+                                intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
+                            )
+                            binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
+                        }
                     }
 
                     is Task.Exam -> {
@@ -160,22 +168,24 @@ class RecyclerAdapterHome :
                         binding.tvContent2.text = task.date.toFormattedString("dd.MM.yyyy")
                         binding.tvContent2Sub.text = task.place
 
-                        val customColorAttrContainer =
-                            ModelColors.getThemeAttrForCustomContainerColor(baseColor)
-                        val customColorAttrTask =
-                            ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_EXAM)
-                        val themeAwareCustomColorContainer = MaterialColors.getColor(
-                            binding.root,
-                            customColorAttrContainer,
-                            Color.BLACK
-                        )
-                        val themeAwareCustomColorTask =
-                            MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
-                        binding.llContainer.background = GradientDrawable(
-                            GradientDrawable.Orientation.LEFT_RIGHT,
-                            intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
-                        )
-                        binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
+                        if (isColorEnabled){
+                            val customColorAttrContainer =
+                                ModelColors.getThemeAttrForCustomContainerColor(baseColor)
+                            val customColorAttrTask =
+                                ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_EXAM)
+                            val themeAwareCustomColorContainer = MaterialColors.getColor(
+                                binding.root,
+                                customColorAttrContainer,
+                                Color.BLACK
+                            )
+                            val themeAwareCustomColorTask =
+                                MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
+                            binding.llContainer.background = GradientDrawable(
+                                GradientDrawable.Orientation.LEFT_RIGHT,
+                                intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
+                            )
+                            binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
+                        }
                     }
 
                     is Task.Homework -> {
@@ -186,22 +196,24 @@ class RecyclerAdapterHome :
                         binding.tvContent2.text = ""
                         binding.tvContent2Sub.text = ""
 
-                        val customColorAttrContainer =
-                            ModelColors.getThemeAttrForCustomContainerColor(baseColor)
-                        val customColorAttrTask =
-                            ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_HOMEWORK)
-                        val themeAwareCustomColorContainer = MaterialColors.getColor(
-                            binding.root,
-                            customColorAttrContainer,
-                            Color.BLACK
-                        )
-                        val themeAwareCustomColorTask =
-                            MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
-                        binding.llContainer.background = GradientDrawable(
-                            GradientDrawable.Orientation.LEFT_RIGHT,
-                            intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
-                        )
-                        binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
+                        if (isColorEnabled){
+                            val customColorAttrContainer =
+                                ModelColors.getThemeAttrForCustomContainerColor(baseColor)
+                            val customColorAttrTask =
+                                ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_HOMEWORK)
+                            val themeAwareCustomColorContainer = MaterialColors.getColor(
+                                binding.root,
+                                customColorAttrContainer,
+                                Color.BLACK
+                            )
+                            val themeAwareCustomColorTask =
+                                MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
+                            binding.llContainer.background = GradientDrawable(
+                                GradientDrawable.Orientation.LEFT_RIGHT,
+                                intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
+                            )
+                            binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
+                        }
                     }
                 }
 

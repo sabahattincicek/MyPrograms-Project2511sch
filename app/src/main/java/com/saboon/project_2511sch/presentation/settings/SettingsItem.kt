@@ -7,6 +7,7 @@ sealed class SettingsItem {
 
     data class Action(
         val key: String,
+        val isUIEnabled: Boolean = true,
         val title: String,
         val summary: String? = null,
         val value: Any
@@ -14,9 +15,9 @@ sealed class SettingsItem {
 
     data class Toggle(
         val key: String,
+        val isUIEnabled: Boolean = true,
         val title: String,
         val summary: String? = null,
-        val value: Any,
         var isChecked: Boolean,
     ): SettingsItem()
 

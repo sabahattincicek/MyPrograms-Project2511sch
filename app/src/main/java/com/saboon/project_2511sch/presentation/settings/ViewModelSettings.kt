@@ -29,6 +29,12 @@ class ViewModelSettings @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = SettingsConstants.HomeViewRange.DEFAULT
         )
+    val homeListItemColorEnabledState: StateFlow<Boolean> = settingsRepository.getHomeListItemColorEnabled()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = true
+        )
     val homeListItemColorSourceState: StateFlow<String> = settingsRepository.getHomeListItemColorSource()
         .stateIn(
             scope = viewModelScope,
@@ -37,25 +43,21 @@ class ViewModelSettings @Inject constructor(
         )
 
     //ACTIONS
-    /**
-     * Called when user selects a new Dark Mode option from the UI.
-     */
     fun onDarkModeSelected(darkModeValue: String){
         viewModelScope.launch {
             settingsRepository.setDarkMode(darkModeValue)
         }
     }
-    /**
-     * Called when user selects a new display range for the home page.
-     */
     fun onHomeViewRangeSelected(viewRange: String) {
         viewModelScope.launch {
             settingsRepository.setHomeViewRange(viewRange)
         }
     }
-    /**
-     * Called when user selects a source for set background color in home list items.
-     */
+    fun onHomeListItemColorEnabledChanged(enabled: Boolean){
+        viewModelScope.launch {
+            settingsRepository.setHomeListItemColorEnabled(enabled)
+        }
+    }
     fun onHomeListItemColorSourceSelected(source: String) {
         viewModelScope.launch {
             settingsRepository.setHomeListItemColorSource(source)

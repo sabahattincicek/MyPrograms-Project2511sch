@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.key
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,9 +25,10 @@ class SettingsFragment : Fragment() {
     private val viewModelSettings: ViewModelSettings by viewModels()
     private lateinit var recyclerAdapterSettings: RecyclerAdapterSettings
 
-    private var currentDarkModeValue: String = SettingsConstants.DarkMode.DEFAULT
-    private var currentHomeViewRangeValue: String = SettingsConstants.HomeViewRange.DEFAULT
-    private var currentHomeListItemColorSource: String = SettingsConstants.HomeListItemColorSource.DEFAULT
+    private var currentDarkModeValue: String? = null
+    private var currentHomeViewRangeValue: String? = null
+    private var currentHomeListItemColorEnabledValue: Boolean? = null
+    private var currentHomeListItemColorSource: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,65 +57,66 @@ class SettingsFragment : Fragment() {
 
     private fun setupAdapters(){
         recyclerAdapterSettings = RecyclerAdapterSettings()
-        recyclerAdapterSettings.onSettingsClick = { settingsItem ->
-            when(settingsItem){
-                is SettingsItem.Action -> {
-                    when(settingsItem.key){
-                        SettingsConstants.PREF_KEY_DARK_MODE -> {
-                            val darkModeEntries = resources.getStringArray(R.array.pref_dark_mode)
-                            val darkModeValues = SettingsConstants.DarkMode.getValuesAsArray()
+        recyclerAdapterSettings.onActionClick = { settingItem ->
+            val item = settingItem as SettingsItem.Action
+            when(item.key){
+                SettingsConstants.PREF_KEY_DARK_MODE -> {
+                    val darkModeEntries = resources.getStringArray(R.array.pref_dark_mode)
+                    val darkModeValues = SettingsConstants.DarkMode.getValuesAsArray()
 
-                            val checkedItem = darkModeValues.indexOf(currentDarkModeValue)
+                    val checkedItem = darkModeValues.indexOf(currentDarkModeValue)
 
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Dark Mode")
-                                .setSingleChoiceItems(darkModeEntries, checkedItem) { dialog, which ->
-                                    val selectedValue = darkModeValues[which]
-                                    viewModelSettings.onDarkModeSelected(selectedValue)
-                                    dialog.dismiss()
-                                }
-                                .setNegativeButton(getString(R.string.cancel), null)
-                                .show()
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Dark Mode")
+                        .setSingleChoiceItems(darkModeEntries, checkedItem) { dialog, which ->
+                            val selectedValue = darkModeValues[which]
+                            viewModelSettings.onDarkModeSelected(selectedValue)
+                            dialog.dismiss()
                         }
-                        SettingsConstants.PREF_KEY_HOME_VIEW_RANGE -> {
-                            val homeViewRangeEntries = resources.getStringArray(R.array.pref_home_view_range)
-                            val homeViewRangeValues = SettingsConstants.HomeViewRange.getValuesAsArray()
-
-                            val checkedItem = homeViewRangeValues.indexOf(currentHomeViewRangeValue)
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Home View Range")
-                                .setSingleChoiceItems(homeViewRangeEntries, checkedItem) { dialog, which ->
-                                    val selectedValue = homeViewRangeValues[which]
-                                    viewModelSettings.onHomeViewRangeSelected(selectedValue)
-                                    dialog.dismiss()
-                                }
-                                .setNegativeButton(getString(R.string.cancel), null)
-                                .show()
-                        }
-
-                        SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE -> {
-                            val homeListItemColorSourceEntries = resources.getStringArray(R.array.pref_home_list_item_color_source)
-                            val homeListItemColorSourceValues = SettingsConstants.HomeListItemColorSource.getValuesAsArray()
-
-                            val checkedItem = homeListItemColorSourceValues.indexOf(currentHomeListItemColorSource)
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Home List Item Color Source")
-                                .setSingleChoiceItems(homeListItemColorSourceEntries, checkedItem) { dialog, which ->
-                                    val selectedValue = homeListItemColorSourceValues[which]
-                                    viewModelSettings.onHomeListItemColorSourceSelected(selectedValue)
-                                    dialog.dismiss()
-                                }
-                                .setNegativeButton(getString(R.string.cancel), null)
-                                .show()
-                        }
-                    }
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show()
                 }
-                is SettingsItem.Toggle -> {
+                SettingsConstants.PREF_KEY_HOME_VIEW_RANGE -> {
+                    val homeViewRangeEntries = resources.getStringArray(R.array.pref_home_view_range)
+                    val homeViewRangeValues = SettingsConstants.HomeViewRange.getValuesAsArray()
 
+                    val checkedItem = homeViewRangeValues.indexOf(currentHomeViewRangeValue)
+
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Home View Range")
+                        .setSingleChoiceItems(homeViewRangeEntries, checkedItem) { dialog, which ->
+                            val selectedValue = homeViewRangeValues[which]
+                            viewModelSettings.onHomeViewRangeSelected(selectedValue)
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show()
                 }
-                else -> {}
+
+                SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE -> {
+                    val homeListItemColorSourceEntries = resources.getStringArray(R.array.pref_home_list_item_color_source)
+                    val homeListItemColorSourceValues = SettingsConstants.HomeListItemColorSource.getValuesAsArray()
+
+                    val checkedItem = homeListItemColorSourceValues.indexOf(currentHomeListItemColorSource)
+
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Home List Item Color Source")
+                        .setSingleChoiceItems(homeListItemColorSourceEntries, checkedItem) { dialog, which ->
+                            val selectedValue = homeListItemColorSourceValues[which]
+                            viewModelSettings.onHomeListItemColorSourceSelected(selectedValue)
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show()
+                }
+            }
+        }
+        recyclerAdapterSettings.onSwitchChange = { settingItem ->
+            val item = settingItem as SettingsItem.Toggle
+            when(item.key){
+                SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED -> {
+                    viewModelSettings.onHomeListItemColorEnabledChanged(item.isChecked)
+                }
             }
         }
         binding.rvSettings.apply {
@@ -126,61 +127,67 @@ class SettingsFragment : Fragment() {
     private fun renderSettingsList() {
         val settingsList = mutableListOf<SettingsItem>()
 
-        // APPEARANCE SECTION
+        // DARK MODE
         settingsList.add(SettingsItem.Category("Appearance"))
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_DARK_MODE,
                 title = "Dark Mode",
-                value = currentDarkModeValue,
+                value = currentDarkModeValue!!
             )
         )
 
-        // HOME PAGE
+        // HOME VIEW RANGE
         settingsList.add(SettingsItem.Category("Home Page"))
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_HOME_VIEW_RANGE,
                 title = "Display Items View Range",
-                summary = "Ana sayfada listelenecek gorevlerin tarih araligini secin",
-                value = currentHomeViewRangeValue
+                summary = "Ana sayfada listelenecek görevlerin tarih aralığını seçin",
+                value = currentHomeViewRangeValue!!
             )
         )
+
+        // HOME LIST ITEM COLOR ENABLED
+        settingsList.add(
+            SettingsItem.Toggle(
+                key = SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED,
+                title = "Show List Item Colors",
+                summary = "Enable or disable background colors in the home list",
+                isChecked = currentHomeListItemColorEnabledValue!! // Artık kesinlikle doğru değer
+            )
+        )
+
+        //HOME LIST ITEM COLOR SOURCE
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE,
-                title = "Color Source",
-                summary = "Ana sayfadaki listelerin arkaplan renklerinin kaynagi",
-                value = currentHomeListItemColorSource
+                isUIEnabled = currentHomeListItemColorEnabledValue!!,
+                title = "List Item Color Source",
+                summary = "Determine the source of background colors for home list items",
+                value = currentHomeListItemColorSource?.replaceFirstChar { it.uppercase() } ?: ""
             )
         )
 
         recyclerAdapterSettings.submitList(settingsList)
     }
     private fun setupObservers() {
-        // DARK MODE STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModelSettings.appDarkModeState.collect { darkModeValue ->
-                    currentDarkModeValue = darkModeValue
-                    renderSettingsList()
-                }
-            }
-        }
-        // HOME VIEW RANGE
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModelSettings.homeViewRangeState.collect { homeViewRangeValue ->
-                    currentHomeViewRangeValue = homeViewRangeValue
-                    renderSettingsList()
-                }
-            }
-        }
-        //HOME LIST ITEM COLOR SOURCE
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModelSettings.homeListItemColorSourceState.collect { homeListItemColorSourceValue ->
-                    currentHomeListItemColorSource = homeListItemColorSourceValue
+                // Tüm ayar akışlarını birleştiriyoruz
+                kotlinx.coroutines.flow.combine(
+                    viewModelSettings.appDarkModeState,
+                    viewModelSettings.homeViewRangeState,
+                    viewModelSettings.homeListItemColorEnabledState,
+                    viewModelSettings.homeListItemColorSourceState
+                ) { darkMode, viewRange, isColorEnabled, colorSource ->
+                    // Değerleri güncelle
+                    currentDarkModeValue = darkMode
+                    currentHomeViewRangeValue = viewRange
+                    currentHomeListItemColorEnabledValue = isColorEnabled
+                    currentHomeListItemColorSource = colorSource
+                }.collect {
+                    // SADECE tüm veriler atandıktan sonra listeyi çiz
                     renderSettingsList()
                 }
             }

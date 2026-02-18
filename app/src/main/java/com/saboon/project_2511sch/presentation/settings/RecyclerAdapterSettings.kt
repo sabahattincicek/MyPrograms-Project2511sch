@@ -6,14 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.saboon.project_2511sch.databinding.RowSingleTextViewLeftBinding
 import com.saboon.project_2511sch.databinding.SettingsRowActionBinding
 import com.saboon.project_2511sch.databinding.SettingsRowCategoryBinding
 import com.saboon.project_2511sch.databinding.SettingsRowToggleBinding
 
 class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolder>(SettingsDiffCallback()){
-    var onSettingsClick: ((SettingsItem) -> Unit)? = null
-
+    var onActionClick: ((SettingsItem) -> Unit)? = null
+    var onSwitchChange: ((SettingsItem) -> Unit)? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -63,7 +62,14 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
             }
             binding.tvValue.visibility = View.VISIBLE
             binding.tvValue.text = item.value.toString()
-            binding.root.setOnClickListener { onSettingsClick?.invoke(item) }
+            binding.root.setOnClickListener { onActionClick?.invoke(item) }
+
+            if (item.isUIEnabled) {
+                binding.llContainer.alpha = 1.0f
+            } else {
+                binding.llContainer.alpha = 0.3f
+            }
+            binding.llContainer.isEnabled = false
         }
     }
 
@@ -76,12 +82,18 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
                 binding.tvSummary.visibility = View.VISIBLE
                 binding.tvSummary.text = item.summary
             }
-            binding.tvValue.visibility = View.VISIBLE
-            binding.tvValue.text = item.value.toString()
+            binding.swSettings.isChecked = item.isChecked
             binding.swSettings.setOnCheckedChangeListener { _, isChecked ->
                 item.isChecked = isChecked
-                onSettingsClick?.invoke(item)
+                onSwitchChange?.invoke(item)
             }
+
+            if (item.isUIEnabled) {
+                binding.llContainer.alpha = 1.0f
+            } else {
+                binding.llContainer.alpha = 0.3f
+            }
+            binding.llContainer.isEnabled = false
         }
     }
 

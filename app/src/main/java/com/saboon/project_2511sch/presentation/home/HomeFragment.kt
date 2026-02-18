@@ -201,7 +201,14 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-
+        //HOME LIST ITEM COLOR ENABLED
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModelSettings.homeListItemColorEnabledState.collect { isEnabled ->
+                    recyclerAdapterHome.isColorEnabled = isEnabled
+                }
+            }
+        }
         //HOME LIST ITEM COLOR SOURCE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {

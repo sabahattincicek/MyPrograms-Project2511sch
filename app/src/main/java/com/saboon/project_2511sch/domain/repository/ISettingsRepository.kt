@@ -9,6 +9,8 @@ interface ISettingsRepository {
     fun getHomeViewRange(): Flow<String>
     suspend fun setHomeViewRange(viewRange: String)
 
+    fun getHomeListItemColorEnabled(): Flow<Boolean>
+    suspend fun setHomeListItemColorEnabled(enabled: Boolean)
     fun getHomeListItemColorSource(): Flow<String>
     suspend fun setHomeListItemColorSource(source: String)
 }

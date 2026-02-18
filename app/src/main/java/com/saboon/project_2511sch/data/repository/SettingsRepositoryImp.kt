@@ -44,6 +44,25 @@ class SettingsRepositoryImp @Inject constructor(
         }
     }
 
+    // HOME LIST ITEM COLOR ENABLED
+    override fun getHomeListItemColorEnabled(): Flow<Boolean> = callbackFlow {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            if (key == SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED) {
+                trySend(prefs.getBoolean(SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED, true))
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+        trySend(sharedPreferences.getBoolean(SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED, true))
+        awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
+    }
+    override suspend fun setHomeListItemColorEnabled(enabled: Boolean) {
+        withContext(Dispatchers.IO) {
+            sharedPreferences.edit {
+                putBoolean( SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED, enabled)
+            }
+        }
+    }
+
     //HOME LIST ITEM COLOR SOURCE
     override fun getHomeListItemColorSource() = getStringFlow(SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE, SettingsConstants.HomeListItemColorSource.DEFAULT)
     override suspend fun setHomeListItemColorSource(source: String) {
