@@ -2,28 +2,17 @@
 <resources>
 <!--    SETTINGS-->
 <!--    THEME-->
-    <string-array name="pref_dark_mode_entries">
+    <string-array name="pref_dark_mode">
         <item>Open</item>
         <item>Close</item>
         <item>System Default</item>
     </string-array>
-    <string-array name="pref_dark_mode_values">
-        <item>dark_mode_open</item>
-        <item>dark_mode_close</item>
-        <item>system</item>
-    </string-array>
 
-    <string-array name="pref_theme_color_entries">
-        <item>Color Palette 1</item>
-        <item>Color Palette 2</item>
-        <item>Color Palette 3</item>
+<!--    HOME PAGE-->
+    <string-array name="pref_home_view_range">
+        <item>Current week</item>
+        <item>Current month</item>
     </string-array>
-    <string-array name="pref_theme_color_values">
-        <item>color_palette_1</item>
-        <item>color_palette_2</item>
-        <item>color_palette_3</item>
-    </string-array>
-
 
 <!--    APP STRINGS-->
     <string-array name="recurrence_options">

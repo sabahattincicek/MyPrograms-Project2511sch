@@ -9,41 +9,37 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import androidx.core.content.edit
+import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 
 class SettingsRepositoryImp @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : ISettingsRepository {
-    companion object {
-        const val KEY_APP_THEME = "pref_key_app_theme"
-        const val DEFAULT_THEME = "system"
-    }
 
-    override fun getDarkMode(): Flow<String> = callbackFlow  {
-        // 1. SharedPreferences değişikliklerini dinleyen bir listener oluştur
-        val listener = SharedPreferences.OnSharedPreferenceChangeListener { preferences, string ->
-            if (string == KEY_APP_THEME){
-                val theme = preferences.getString(KEY_APP_THEME, DEFAULT_THEME) ?: DEFAULT_THEME
-                trySend(theme)
-            }
+    private fun getStringFlow(key: String, defaultValue: String): Flow<String> = callbackFlow {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { preference, string ->
+            if (string == key) trySend(preference.getString(key, defaultValue) ?: defaultValue)
         }
-
-        // 2. Dinleyiciyi kaydet
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-
-        // 3. Flow ilk başladığında mevcut değeri hemen gönder
-        val initialTheme = sharedPreferences.getString(KEY_APP_THEME, DEFAULT_THEME)?:DEFAULT_THEME
-        trySend(initialTheme)
-
-        // 4. Flow kapandığında (Job iptal edildiğinde) dinleyiciyi kayıttan sil (Bellek sızıntısını önler)
-        awaitClose {
-            sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
-        }
+        trySend(sharedPreferences.getString(key, defaultValue) ?: defaultValue)
+        awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
     }
 
+    //DARK MODE
+    override fun getDarkMode() = getStringFlow(SettingsConstants.PREF_KEY_DARK_MODE, SettingsConstants.DarkMode.DEFAULT)
     override suspend fun setDarkMode(darkMode: String) {
         withContext(Dispatchers.IO){
             sharedPreferences.edit {
-                putString(KEY_APP_THEME, darkMode)
+                putString(SettingsConstants.PREF_KEY_DARK_MODE, darkMode)
+            }
+        }
+    }
+
+    //HOME VIEW RANGE
+    override fun getHomeViewRange() = getStringFlow(SettingsConstants.PREF_KEY_HOME_VIEW_RANGE, SettingsConstants.HomeViewRange.DEFAULT)
+    override suspend fun setHomeViewRange(viewRange: String) {
+        withContext(Dispatchers.IO){
+            sharedPreferences.edit {
+                putString(SettingsConstants.PREF_KEY_HOME_VIEW_RANGE, viewRange)
             }
         }
     }

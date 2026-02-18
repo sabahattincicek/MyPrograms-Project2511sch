@@ -5,4 +5,7 @@ import kotlinx.coroutines.flow.Flow
 interface ISettingsRepository {
     fun getDarkMode(): Flow<String>
     suspend fun setDarkMode(darkMode: String)
+
+    fun getHomeViewRange(): Flow<String>
+    suspend fun setHomeViewRange(viewRange: String)
 }

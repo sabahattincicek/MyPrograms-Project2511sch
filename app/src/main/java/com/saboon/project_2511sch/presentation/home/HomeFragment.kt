@@ -19,12 +19,8 @@ import com.saboon.project_2511sch.databinding.FragmentHomeBinding
 import com.saboon.project_2511sch.domain.model.BaseModel
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
-import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
-import com.saboon.project_2511sch.presentation.common.FilterGeneric
 import com.saboon.project_2511sch.presentation.common.FilterTask
-import com.saboon.project_2511sch.presentation.course.ViewModelCourse
-import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -66,7 +62,7 @@ class HomeFragment : Fragment() {
         setupListeners()
         observeHomeDisplayItemsState()
 
-        viewModelHome.loadCurrentWeek()
+        viewModelHome.loadData()
 
         ////////////////////////////////////////////////
         binding.cpProgramTable.setOnClickListener {

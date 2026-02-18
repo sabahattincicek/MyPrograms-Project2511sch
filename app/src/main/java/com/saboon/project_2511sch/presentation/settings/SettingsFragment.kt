@@ -25,7 +25,8 @@ class SettingsFragment : Fragment() {
     private val viewModelSettings: ViewModelSettings by viewModels()
     private lateinit var recyclerAdapterSettings: RecyclerAdapterSettings
 
-    private lateinit var currentDarkModeValue: String
+    private var currentDarkModeValue: String = SettingsConstants.DarkMode.DEFAULT
+    private var currentHomeViewRangeValue: String = SettingsConstants.HomeViewRange.DEFAULT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +58,40 @@ class SettingsFragment : Fragment() {
         recyclerAdapterSettings.onSettingsClick = { settingsItem ->
             when(settingsItem){
                 is SettingsItem.Action -> {
-                    if (settingsItem.key == SettingsItem.PREF_KEY_DARK_MODE) {
-                        showThemeSelectionDialog()
+                    when(settingsItem.key){
+                        SettingsConstants.PREF_KEY_DARK_MODE -> {
+                            val darkModeEntries = resources.getStringArray(R.array.pref_dark_mode)
+                            val darkModeValues = SettingsConstants.DarkMode.getValuesAsArray()
+
+                            val checkedItem = darkModeValues.indexOf(currentDarkModeValue)
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Dark Mode")
+                                .setSingleChoiceItems(darkModeEntries, checkedItem) { dialog, which ->
+                                    val selectedValue = darkModeValues[which]
+                                    viewModelSettings.onDarkModeSelected(selectedValue)
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton(getString(R.string.cancel), null)
+                                .show()
+                        }
+
+                        SettingsConstants.PREF_KEY_HOME_VIEW_RANGE -> {
+                            val homeViewRangeEntries = resources.getStringArray(R.array.pref_home_view_range)
+                            val homeViewRangeValues = SettingsConstants.HomeViewRange.getValuesAsArray()
+
+                            val checkedItem = homeViewRangeValues.indexOf(currentHomeViewRangeValue)
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Home View Range")
+                                .setSingleChoiceItems(homeViewRangeEntries, checkedItem) { dialog, which ->
+                                    val selectedValue = homeViewRangeValues[which]
+                                    viewModelSettings.onHomeViewRangeSelected(selectedValue)
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton(getString(R.string.cancel), null)
+                                .show()
+                        }
                     }
                 }
                 is SettingsItem.Toggle -> {
@@ -72,24 +105,6 @@ class SettingsFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
     }
-    private fun showThemeSelectionDialog() {
-        val darkModeEntries = resources.getStringArray(R.array.pref_dark_mode_entries)
-        val darkModeValues = resources.getStringArray(R.array.pref_dark_mode_values)
-
-        // Mevcut seçili olanı bul
-        val currentDarkModeValue = viewModelSettings.appDarkModeState.value
-        val checkedItem = darkModeValues.indexOf(currentDarkModeValue)
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Select Dark Mode")
-            .setSingleChoiceItems(darkModeEntries, checkedItem) { dialog, which ->
-                val selectedThemeValue = darkModeValues[which]
-                viewModelSettings.onDarkModeSelected(selectedThemeValue)
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
     private fun renderSettingsList() {
         val settingsList = mutableListOf<SettingsItem>()
 
@@ -97,9 +112,20 @@ class SettingsFragment : Fragment() {
         settingsList.add(SettingsItem.Category("Appearance"))
         settingsList.add(
             SettingsItem.Action(
-                key = SettingsItem.PREF_KEY_DARK_MODE,
+                key = SettingsConstants.PREF_KEY_DARK_MODE,
                 title = "Dark Mode",
                 value = currentDarkModeValue,
+            )
+        )
+
+        // HOME PAGE
+        settingsList.add(SettingsItem.Category("Home Page"))
+        settingsList.add(
+            SettingsItem.Action(
+                key = SettingsConstants.PREF_KEY_HOME_VIEW_RANGE,
+                title = "Display Items View Range",
+                summary = "Ana sayfada listelenecek gorevlerin tarih araligini secin",
+                value = currentHomeViewRangeValue
             )
         )
 
@@ -111,6 +137,15 @@ class SettingsFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModelSettings.appDarkModeState.collect { darkModeValue ->
                     currentDarkModeValue = darkModeValue
+                    renderSettingsList()
+                }
+            }
+        }
+        // HOME VIEW RANGE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModelSettings.homeViewRangeState.collect { homeViewRangeValue ->
+                    currentHomeViewRangeValue = homeViewRangeValue
                     renderSettingsList()
                 }
             }

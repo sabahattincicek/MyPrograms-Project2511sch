@@ -25,8 +25,5 @@ sealed class SettingsItem {
         const val VIEW_TYPE_CATEGORY = 1
         const val VIEW_TYPE_ACTION = 2
         const val VIEW_TYPE_TOGGLE = 3
-
-        //KEYS
-        const val PREF_KEY_DARK_MODE = "pref_key_dark_mode"
     }
 }
