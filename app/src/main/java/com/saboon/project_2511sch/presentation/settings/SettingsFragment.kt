@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.key
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +28,7 @@ class SettingsFragment : Fragment() {
 
     private var currentDarkModeValue: String = SettingsConstants.DarkMode.DEFAULT
     private var currentHomeViewRangeValue: String = SettingsConstants.HomeViewRange.DEFAULT
+    private var currentHomeListItemColorSource: String = SettingsConstants.HomeListItemColorSource.DEFAULT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +77,6 @@ class SettingsFragment : Fragment() {
                                 .setNegativeButton(getString(R.string.cancel), null)
                                 .show()
                         }
-
                         SettingsConstants.PREF_KEY_HOME_VIEW_RANGE -> {
                             val homeViewRangeEntries = resources.getStringArray(R.array.pref_home_view_range)
                             val homeViewRangeValues = SettingsConstants.HomeViewRange.getValuesAsArray()
@@ -87,6 +88,23 @@ class SettingsFragment : Fragment() {
                                 .setSingleChoiceItems(homeViewRangeEntries, checkedItem) { dialog, which ->
                                     val selectedValue = homeViewRangeValues[which]
                                     viewModelSettings.onHomeViewRangeSelected(selectedValue)
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton(getString(R.string.cancel), null)
+                                .show()
+                        }
+
+                        SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE -> {
+                            val homeListItemColorSourceEntries = resources.getStringArray(R.array.pref_home_list_item_color_source)
+                            val homeListItemColorSourceValues = SettingsConstants.HomeListItemColorSource.getValuesAsArray()
+
+                            val checkedItem = homeListItemColorSourceValues.indexOf(currentHomeListItemColorSource)
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Home List Item Color Source")
+                                .setSingleChoiceItems(homeListItemColorSourceEntries, checkedItem) { dialog, which ->
+                                    val selectedValue = homeListItemColorSourceValues[which]
+                                    viewModelSettings.onHomeListItemColorSourceSelected(selectedValue)
                                     dialog.dismiss()
                                 }
                                 .setNegativeButton(getString(R.string.cancel), null)
@@ -128,6 +146,14 @@ class SettingsFragment : Fragment() {
                 value = currentHomeViewRangeValue
             )
         )
+        settingsList.add(
+            SettingsItem.Action(
+                key = SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE,
+                title = "Color Source",
+                summary = "Ana sayfadaki listelerin arkaplan renklerinin kaynagi",
+                value = currentHomeListItemColorSource
+            )
+        )
 
         recyclerAdapterSettings.submitList(settingsList)
     }
@@ -146,6 +172,15 @@ class SettingsFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModelSettings.homeViewRangeState.collect { homeViewRangeValue ->
                     currentHomeViewRangeValue = homeViewRangeValue
+                    renderSettingsList()
+                }
+            }
+        }
+        //HOME LIST ITEM COLOR SOURCE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModelSettings.homeListItemColorSourceState.collect { homeListItemColorSourceValue ->
+                    currentHomeListItemColorSource = homeListItemColorSourceValue
                     renderSettingsList()
                 }
             }

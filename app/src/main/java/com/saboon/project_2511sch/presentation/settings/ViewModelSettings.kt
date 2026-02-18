@@ -29,6 +29,12 @@ class ViewModelSettings @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = SettingsConstants.HomeViewRange.DEFAULT
         )
+    val homeListItemColorSourceState: StateFlow<String> = settingsRepository.getHomeListItemColorSource()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = SettingsConstants.HomeListItemColorSource.DEFAULT
+        )
 
     //ACTIONS
     /**
@@ -47,7 +53,14 @@ class ViewModelSettings @Inject constructor(
             settingsRepository.setHomeViewRange(viewRange)
         }
     }
-
+    /**
+     * Called when user selects a source for set background color in home list items.
+     */
+    fun onHomeListItemColorSourceSelected(source: String) {
+        viewModelScope.launch {
+            settingsRepository.setHomeListItemColorSource(source)
+        }
+    }
 
     //HELPERS
     /**

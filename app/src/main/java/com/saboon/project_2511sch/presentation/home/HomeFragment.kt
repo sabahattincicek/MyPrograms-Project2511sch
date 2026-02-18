@@ -21,6 +21,7 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
 import com.saboon.project_2511sch.presentation.common.FilterTask
+import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -32,6 +33,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModelHome: ViewModelHome by viewModels()
+    private val viewModelSettings: ViewModelSettings by viewModels()
 
     private var filteredProgramTable: ProgramTable? = null
     private var filteredCourse: Course? = null
@@ -60,7 +62,7 @@ class HomeFragment : Fragment() {
 
         setupRecyclerAdapter()
         setupListeners()
-        observeHomeDisplayItemsState()
+        setupObservers()
 
         viewModelHome.loadData()
 
@@ -175,7 +177,8 @@ class HomeFragment : Fragment() {
         Log.d(tag, "onDestroyView: View is being destroyed, nullifying binding to prevent memory leaks.")
         _binding = null
     }
-    private fun observeHomeDisplayItemsState() {
+    private fun setupObservers(){
+        // DISPLAY ITEMS STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 Log.d(tag, "Subscribing to displayItemsState flow.")
@@ -195,6 +198,15 @@ class HomeFragment : Fragment() {
                             recyclerAdapterHome.submitList(homeDisplayItemList)
                         }
                     }
+                }
+            }
+        }
+
+        //HOME LIST ITEM COLOR SOURCE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModelSettings.homeListItemColorSourceState.collect { source ->
+                    recyclerAdapterHome.colorSource = source
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.saboon.project_2511sch.presentation.home
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.saboon.project_2511sch.databinding.RowMainContentBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.util.BaseDiffCallback
 import com.saboon.project_2511sch.util.BaseDisplayListItem
 import com.saboon.project_2511sch.util.BaseViewHolder
@@ -26,6 +28,13 @@ class RecyclerAdapterHome :
     ListAdapter<DisplayItemHome, BaseViewHolder>(BaseDiffCallback()) {
 
     var onItemClickListener:((ProgramTable, Course) -> Unit)? = null
+
+    var colorSource: String = SettingsConstants.HomeListItemColorSource.DEFAULT
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -110,6 +119,12 @@ class RecyclerAdapterHome :
                     set(Calendar.MILLISECOND, 0)
                 }.timeInMillis
 
+                val baseColor = if (colorSource == SettingsConstants.HomeListItemColorSource.FROM_PROGRAM_TABLE) {
+                    programTable.color
+                } else {
+                    course.color
+                }
+
                 when (task) {
                     is Task.Lesson -> {
                         binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
@@ -120,7 +135,7 @@ class RecyclerAdapterHome :
                         binding.tvContent2Sub.text = task.place
 
                         val customColorAttrContainer =
-                            ModelColors.getThemeAttrForCustomContainerColor(course.color)
+                            ModelColors.getThemeAttrForCustomContainerColor(baseColor)
                         val customColorAttrTask =
                             ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_LESSON)
                         val themeAwareCustomColorContainer = MaterialColors.getColor(
@@ -146,7 +161,7 @@ class RecyclerAdapterHome :
                         binding.tvContent2Sub.text = task.place
 
                         val customColorAttrContainer =
-                            ModelColors.getThemeAttrForCustomContainerColor(course.color)
+                            ModelColors.getThemeAttrForCustomContainerColor(baseColor)
                         val customColorAttrTask =
                             ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_EXAM)
                         val themeAwareCustomColorContainer = MaterialColors.getColor(
@@ -172,7 +187,7 @@ class RecyclerAdapterHome :
                         binding.tvContent2Sub.text = ""
 
                         val customColorAttrContainer =
-                            ModelColors.getThemeAttrForCustomContainerColor(course.color)
+                            ModelColors.getThemeAttrForCustomContainerColor(baseColor)
                         val customColorAttrTask =
                             ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_HOMEWORK)
                         val themeAwareCustomColorContainer = MaterialColors.getColor(

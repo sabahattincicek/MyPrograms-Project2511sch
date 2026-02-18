@@ -43,4 +43,14 @@ class SettingsRepositoryImp @Inject constructor(
             }
         }
     }
+
+    //HOME LIST ITEM COLOR SOURCE
+    override fun getHomeListItemColorSource() = getStringFlow(SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE, SettingsConstants.HomeListItemColorSource.DEFAULT)
+    override suspend fun setHomeListItemColorSource(source: String) {
+        withContext(Dispatchers.IO){
+            sharedPreferences.edit{
+                putString(SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE, source)
+            }
+        }
+    }
 }
