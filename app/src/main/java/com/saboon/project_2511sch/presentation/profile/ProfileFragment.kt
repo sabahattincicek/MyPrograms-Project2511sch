@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import coil3.load
 import coil3.request.crossfade
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -107,6 +108,10 @@ class ProfileFragment : Fragment() {
             if (text != currentUser.aboutMe) {
                 viewModelUser.update(currentUser.copy(aboutMe = text))
             }
+        }
+        binding.tvSettings.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToSettingsFragment()
+            findNavController().navigate(action)
         }
         binding.tvExportData.setOnClickListener {
             viewModelProfile.exportData()

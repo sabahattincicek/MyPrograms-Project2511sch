@@ -1,28 +1,45 @@
 package com.saboon.project_2511sch.presentation.settings
 
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import androidx.core.content.edit
+import androidx.lifecycle.viewModelScope
+import com.saboon.project_2511sch.domain.repository.ISettingsRepository
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ViewModelSettings @Inject constructor(
-    private val sharedPreferences: SharedPreferences
+    private val settingsRepository: ISettingsRepository
 ): ViewModel() {
-    fun applyTheme(themeValue: String){
-        when(themeValue){
-            "light" -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-            "dark" -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-            "system" -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            }
+
+    // STATES
+    val appDarkModeState: StateFlow<String> = settingsRepository.getDarkMode()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = "system"
+        )
+
+    /**
+     * Updates the app theme both in the UI and persistent storage.
+     */
+    fun onDarkModeSelected(darkModeValue: String){
+        viewModelScope.launch {
+            settingsRepository.setDarkMode(darkModeValue)
         }
-        sharedPreferences.edit { putString("pref_key_app_theme", themeValue) }
+    }
+    /**
+     * Logic to switch the AppCompatDelegate mode
+     */
+    fun applyDarkMode(darkModeValue: String) {
+        when (darkModeValue) {
+            "dark_mode_open" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "dark_mode_close" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
     }
 }

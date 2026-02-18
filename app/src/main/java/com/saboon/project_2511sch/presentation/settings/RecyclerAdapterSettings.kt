@@ -1,6 +1,7 @@
 package com.saboon.project_2511sch.presentation.settings
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,7 +11,7 @@ import com.saboon.project_2511sch.databinding.SettingsRowActionBinding
 import com.saboon.project_2511sch.databinding.SettingsRowToggleBinding
 
 class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolder>(SettingsDiffCallback()){
-    private var onSettingsClick: ((SettingsItem) -> Unit)? = null
+    var onSettingsClick: ((SettingsItem) -> Unit)? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -29,7 +30,12 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
         holder: RecyclerView.ViewHolder,
         position: Int
     ) {
-        TODO("Not yet implemented")
+        val item = getItem(position)
+        when (holder) {
+            is SettingsCategoryViewHolder -> holder.bind(item as SettingsItem.Category)
+            is SettingsActionViewHolder -> holder.bind(item as SettingsItem.Action)
+            is SettingsToggleViewHolder -> holder.bind(item as SettingsItem.Toggle)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -48,7 +54,18 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
     inner class SettingsActionViewHolder(private val binding: SettingsRowActionBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: SettingsItem.Action){
             binding.tvTitle.text = item.title
-            binding.tvSummary.text = item.summary
+            if (item.summary == null ){
+                binding.tvSummary.visibility = View.GONE
+            }else{
+                binding.tvSummary.visibility = View.VISIBLE
+                binding.tvSummary.text = item.summary
+            }
+            if (item.value == null){
+                binding.tvValue.visibility = View.GONE
+            }else{
+                binding.tvValue.visibility = View.VISIBLE
+                binding.tvValue.text = item.value.toString()
+            }
             binding.root.setOnClickListener { onSettingsClick?.invoke(item) }
         }
     }
@@ -56,7 +73,18 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
     inner class SettingsToggleViewHolder(private val binding: SettingsRowToggleBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: SettingsItem.Toggle){
             binding.tvTitle.text = item.title
-            binding.tvSummary.text = item.summary
+            if (item.summary.equals("") && item.summary == null ){
+                binding.tvSummary.visibility = View.GONE
+            }else{
+                binding.tvSummary.visibility = View.VISIBLE
+                binding.tvSummary.text = item.summary
+            }
+            if (item.value == null){
+                binding.tvValue.visibility = View.GONE
+            }else{
+                binding.tvValue.visibility = View.VISIBLE
+                binding.tvValue.text = item.value.toString()
+            }
             binding.swSettings.setOnCheckedChangeListener { _, isChecked ->
                 item.isChecked = isChecked
                 onSettingsClick?.invoke(item)

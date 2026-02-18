@@ -1,14 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="pref_theme_entries">
-        <item>Light</item>
-        <item>Dark</item>
+<!--    SETTINGS-->
+<!--    THEME-->
+    <string-array name="pref_dark_mode_entries">
+        <item>Open</item>
+        <item>Close</item>
         <item>System Default</item>
     </string-array>
-
-    <string-array name="pref_theme_values">
-        <item>light</item>
-        <item>dark</item>
+    <string-array name="pref_dark_mode_values">
+        <item>dark_mode_open</item>
+        <item>dark_mode_close</item>
         <item>system</item>
+    </string-array>
+
+    <string-array name="pref_theme_color_entries">
+        <item>Color Palette 1</item>
+        <item>Color Palette 2</item>
+        <item>Color Palette 3</item>
+    </string-array>
+    <string-array name="pref_theme_color_values">
+        <item>color_palette_1</item>
+        <item>color_palette_2</item>
+        <item>color_palette_3</item>
+    </string-array>
+
+
+<!--    APP STRINGS-->
+    <string-array name="recurrence_options">
+        <item>Does not repeat</item>
+        <item>Repeats daily</item>
+        <item>Repeats weekly</item>
+        <item>Repeats monthly</item>
+        <item>Repeats yearly</item>
+    </string-array>
+
+    <string-array name="reminder_options">
+        <item>No reminder</item>
+        <item>On Time</item>
+        <item>10 minutes before</item>
+        <item>30 minutes before</item>
+        <item>1 hour before</item>
+        <item>1 day before</item>
+    </string-array>
+
+    <string-array name="task_types">
+        <item>Lesson</item>
+        <item>Exam</item>
+        <item>Homework</item>
     </string-array>
 </resources>
