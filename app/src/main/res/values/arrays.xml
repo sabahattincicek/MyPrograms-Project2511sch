@@ -13,6 +13,12 @@
         <item>Current week</item>
         <item>Current month</item>
     </string-array>
+    <string-array name="pref_overscroll_days_count">
+        <item>7 Days</item>
+        <item>14 Days</item>
+        <item>30 Days</item>
+        <item>60 Days</item>
+    </string-array>
     <string-array name="pref_home_list_item_color_source">
         <item>Course</item>
         <item>Program Table</item>

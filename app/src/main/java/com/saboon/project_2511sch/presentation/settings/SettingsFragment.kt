@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.R
@@ -28,8 +29,8 @@ class SettingsFragment : Fragment() {
     private var currentDarkModeValue: String? = null
     private var currentHomeViewRangeValue: String? = null
     private var currentHomeListItemColorEnabledValue: Boolean? = null
-    private var currentHomeListItemColorSource: String? = null
-
+    private var currentHomeListItemColorSourceValue: String? = null
+    private var currentOverscrollDaysCountValue: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,6 +49,10 @@ class SettingsFragment : Fragment() {
 
         setupAdapters()
         setupObservers()
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {
@@ -92,12 +97,27 @@ class SettingsFragment : Fragment() {
                         .setNegativeButton(getString(R.string.cancel), null)
                         .show()
                 }
+                SettingsConstants.PREF_KEY_OVERSCROLL_DAYS_COUNT -> {
+                    val overscrollDaysCountEntries = resources.getStringArray(R.array.pref_overscroll_days_count)
+                    val overscrollDaysCountValues = SettingsConstants.OverscrollDaysCount.getValuesAsArray()
 
+                    val checkedItem = overscrollDaysCountValues.indexOf(currentOverscrollDaysCountValue)
+
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Overscroll Days Count")
+                        .setSingleChoiceItems(overscrollDaysCountEntries, checkedItem) { dialog, which ->
+                            val selectedValue = overscrollDaysCountValues[which]
+                            viewModelSettings.onOversrollDaysCountChanged(selectedValue)
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show()
+                }
                 SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE -> {
                     val homeListItemColorSourceEntries = resources.getStringArray(R.array.pref_home_list_item_color_source)
                     val homeListItemColorSourceValues = SettingsConstants.HomeListItemColorSource.getValuesAsArray()
 
-                    val checkedItem = homeListItemColorSourceValues.indexOf(currentHomeListItemColorSource)
+                    val checkedItem = homeListItemColorSourceValues.indexOf(currentHomeListItemColorSourceValue)
 
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Home List Item Color Source")
@@ -148,6 +168,16 @@ class SettingsFragment : Fragment() {
             )
         )
 
+        // OVERSCROLL DAYS COUNT
+        settingsList.add(
+            SettingsItem.Action(
+                key = SettingsConstants.PREF_KEY_OVERSCROLL_DAYS_COUNT,
+                title = "Overscroll days count",
+                summary = "How many extra days to load when scrolling",
+                value = currentOverscrollDaysCountValue!!
+            )
+        )
+
         // HOME LIST ITEM COLOR ENABLED
         settingsList.add(
             SettingsItem.Toggle(
@@ -165,7 +195,7 @@ class SettingsFragment : Fragment() {
                 isUIEnabled = currentHomeListItemColorEnabledValue!!,
                 title = "List Item Color Source",
                 summary = "Determine the source of background colors for home list items",
-                value = currentHomeListItemColorSource?.replaceFirstChar { it.uppercase() } ?: ""
+                value = currentHomeListItemColorSourceValue?.replaceFirstChar { it.uppercase() } ?: ""
             )
         )
 
@@ -178,14 +208,16 @@ class SettingsFragment : Fragment() {
                 kotlinx.coroutines.flow.combine(
                     viewModelSettings.appDarkModeState,
                     viewModelSettings.homeViewRangeState,
+                    viewModelSettings.overScrollDaysCountState,
                     viewModelSettings.homeListItemColorEnabledState,
                     viewModelSettings.homeListItemColorSourceState
-                ) { darkMode, viewRange, isColorEnabled, colorSource ->
+                ) { darkMode, viewRange, overscrollDaysCount, isColorEnabled, colorSource ->
                     // Değerleri güncelle
                     currentDarkModeValue = darkMode
                     currentHomeViewRangeValue = viewRange
+                    currentOverscrollDaysCountValue = overscrollDaysCount
                     currentHomeListItemColorEnabledValue = isColorEnabled
-                    currentHomeListItemColorSource = colorSource
+                    currentHomeListItemColorSourceValue = colorSource
                 }.collect {
                     // SADECE tüm veriler atandıktan sonra listeyi çiz
                     renderSettingsList()

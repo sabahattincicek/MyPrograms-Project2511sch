@@ -74,23 +74,23 @@ class ViewModelHome @Inject constructor(
         _dateRange.value = getInitialRange()
     }
 
-    // Geriye doğru 30 gün daha ekle
-    fun loadPrevious() {
+    // Geriye doğru x gün daha ekle
+    fun loadPrevious(daysCount: Int) {
         _dateRange.update { current ->
             val newStart = Calendar.getInstance().apply {
                 timeInMillis = current.start
-                add(Calendar.DAY_OF_YEAR, -30)
+                add(Calendar.DAY_OF_YEAR, -daysCount)
             }.timeInMillis
             current.copy(start = getDayStartMillis(newStart))
         }
     }
 
-    // İleriye doğru 30 gün daha ekle
-    fun loadNext() {
+    // İleriye doğru x gün daha ekle
+    fun loadNext(daysCount: Int) {
         _dateRange.update { current ->
             val newEnd = Calendar.getInstance().apply {
                 timeInMillis = current.end
-                add(Calendar.DAY_OF_YEAR, 30)
+                add(Calendar.DAY_OF_YEAR, daysCount)
             }.timeInMillis
             current.copy(end = getDayEndMillis(newEnd))
         }

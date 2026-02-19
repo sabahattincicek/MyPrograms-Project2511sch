@@ -44,15 +44,38 @@ class SettingsRepositoryImp @Inject constructor(
         }
     }
 
+    //OVERSCROLL DAYS COUNT
+    override fun getOverscrollDaysCount(): Flow<Int> = callbackFlow{
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { preferences, key ->
+            if (key == SettingsConstants.PREF_KEY_OVERSCROLL_DAYS_COUNT){
+                trySend(preferences.getInt(SettingsConstants.PREF_KEY_OVERSCROLL_DAYS_COUNT,
+                    SettingsConstants.OverscrollDaysCount.DEFAULT))
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+        trySend(sharedPreferences.getInt(SettingsConstants.PREF_KEY_OVERSCROLL_DAYS_COUNT,
+            SettingsConstants.OverscrollDaysCount.DEFAULT))
+        awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
+    }
+    override suspend fun setOverscrollDaysCount(count: Int) {
+        withContext(Dispatchers.IO){
+            sharedPreferences.edit {
+                putInt(SettingsConstants.PREF_KEY_OVERSCROLL_DAYS_COUNT, count)
+            }
+        }
+    }
+
     // HOME LIST ITEM COLOR ENABLED
     override fun getHomeListItemColorEnabled(): Flow<Boolean> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
             if (key == SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED) {
-                trySend(prefs.getBoolean(SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED, true))
+                trySend(prefs.getBoolean(SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED,
+                    SettingsConstants.HomeListItemColorEnabled.DEFAULT))
             }
         }
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-        trySend(sharedPreferences.getBoolean(SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED, true))
+        trySend(sharedPreferences.getBoolean(SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED,
+            SettingsConstants.HomeListItemColorEnabled.DEFAULT))
         awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
     }
     override suspend fun setHomeListItemColorEnabled(enabled: Boolean) {

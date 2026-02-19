@@ -29,11 +29,17 @@ class ViewModelSettings @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = SettingsConstants.HomeViewRange.DEFAULT
         )
+    val overScrollDaysCountState: StateFlow<Int> = settingsRepository.getOverscrollDaysCount()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = SettingsConstants.OverscrollDaysCount.DEFAULT
+        )
     val homeListItemColorEnabledState: StateFlow<Boolean> = settingsRepository.getHomeListItemColorEnabled()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = true
+            initialValue = SettingsConstants.HomeListItemColorEnabled.DEFAULT
         )
     val homeListItemColorSourceState: StateFlow<String> = settingsRepository.getHomeListItemColorSource()
         .stateIn(
@@ -51,6 +57,11 @@ class ViewModelSettings @Inject constructor(
     fun onHomeViewRangeSelected(viewRange: String) {
         viewModelScope.launch {
             settingsRepository.setHomeViewRange(viewRange)
+        }
+    }
+    fun onOversrollDaysCountChanged(count: Int){
+        viewModelScope.launch {
+            settingsRepository.setOverscrollDaysCount(count)
         }
     }
     fun onHomeListItemColorEnabledChanged(enabled: Boolean){

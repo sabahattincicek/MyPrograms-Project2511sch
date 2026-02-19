@@ -8,7 +8,8 @@ interface ISettingsRepository {
 
     fun getHomeViewRange(): Flow<String>
     suspend fun setHomeViewRange(viewRange: String)
-
+    fun getOverscrollDaysCount(): Flow<Int>
+    suspend fun setOverscrollDaysCount(count: Int)
     fun getHomeListItemColorEnabled(): Flow<Boolean>
     suspend fun setHomeListItemColorEnabled(enabled: Boolean)
     fun getHomeListItemColorSource(): Flow<String>

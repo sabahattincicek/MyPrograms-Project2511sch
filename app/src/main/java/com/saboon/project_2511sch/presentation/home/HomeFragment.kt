@@ -21,6 +21,7 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
 import com.saboon.project_2511sch.presentation.common.FilterTask
+import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +40,8 @@ class HomeFragment : Fragment() {
     private var filteredCourse: Course? = null
 
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
+
+    private var overscrollDaysCount = SettingsConstants.OverscrollDaysCount.DEFAULT
 
     private val tag = "HomeFragment"
 
@@ -141,10 +144,10 @@ class HomeFragment : Fragment() {
         binding.osaOverScroll.onActionTriggered = {isTop ->
             if (isTop) {
                 Log.d(tag, "overscroll triggered: Top")
-                viewModelHome.loadPrevious()
+                viewModelHome.loadPrevious(overscrollDaysCount)
             } else {
                 Log.d(tag, "overscroll triggered: Bottom")
-                viewModelHome.loadNext()
+                viewModelHome.loadNext(overscrollDaysCount)
             }
         }
         binding.rvHome.addOnScrollListener(object: RecyclerView.OnScrollListener(){
@@ -198,6 +201,14 @@ class HomeFragment : Fragment() {
                             recyclerAdapterHome.submitList(homeDisplayItemList)
                         }
                     }
+                }
+            }
+        }
+        //OVERSCROLL DAYS COUNT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModelSettings.overScrollDaysCountState.collect { daysCount ->
+                    overscrollDaysCount = daysCount
                 }
             }
         }
