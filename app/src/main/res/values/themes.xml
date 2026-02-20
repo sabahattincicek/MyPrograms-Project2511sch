@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.Project_2511sch" parent="Theme.Material3.DayNight.NoActionBar">
 
         <item name="modelColor1">@color/modelColor1</item>
@@ -25,7 +24,6 @@
 
         <item name="modelColor8">@color/modelColor8</item>
         <item name="modelColorContainer8">@color/modelColorContainer8</item>
-
 
         /////////////////////////////////////////////////////////////////////////////////////////
 
