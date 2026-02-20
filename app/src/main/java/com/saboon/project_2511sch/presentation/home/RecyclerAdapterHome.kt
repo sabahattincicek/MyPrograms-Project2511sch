@@ -142,9 +142,9 @@ class RecyclerAdapterHome :
 
                         if (isColorEnabled){
                             val customColorAttrContainer =
-                                ModelColors.getThemeAttrForCustomContainerColor(baseColor)
+                                ModelColors.getThemeAttrForModelColorContainer(baseColor)
                             val customColorAttrTask =
-                                ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_LESSON)
+                                ModelColors.getThemeAttrForModelColor(ModelColors.MODEL_COLOR_LESSON)
                             val themeAwareCustomColorContainer = MaterialColors.getColor(
                                 binding.root,
                                 customColorAttrContainer,
@@ -170,9 +170,9 @@ class RecyclerAdapterHome :
 
                         if (isColorEnabled){
                             val customColorAttrContainer =
-                                ModelColors.getThemeAttrForCustomContainerColor(baseColor)
+                                ModelColors.getThemeAttrForModelColorContainer(baseColor)
                             val customColorAttrTask =
-                                ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_EXAM)
+                                ModelColors.getThemeAttrForModelColor(ModelColors.MODEL_COLOR_EXAM)
                             val themeAwareCustomColorContainer = MaterialColors.getColor(
                                 binding.root,
                                 customColorAttrContainer,
@@ -198,9 +198,9 @@ class RecyclerAdapterHome :
 
                         if (isColorEnabled){
                             val customColorAttrContainer =
-                                ModelColors.getThemeAttrForCustomContainerColor(baseColor)
+                                ModelColors.getThemeAttrForModelColorContainer(baseColor)
                             val customColorAttrTask =
-                                ModelColors.getThemeAttrForCustomColor(ModelColors.MODEL_COLOR_HOMEWORK)
+                                ModelColors.getThemeAttrForModelColor(ModelColors.MODEL_COLOR_HOMEWORK)
                             val themeAwareCustomColorContainer = MaterialColors.getColor(
                                 binding.root,
                                 customColorAttrContainer,

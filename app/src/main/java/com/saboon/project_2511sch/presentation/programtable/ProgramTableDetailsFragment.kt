@@ -132,17 +132,17 @@ class ProgramTableDetailsFragment : Fragment() {
         binding.tvTitle.text = programTable.title
         binding.tvDescription.text = "${getString(R.string.description)}: ${programTable.description}"
 
-        val color = programTable.color
+        val colorName = programTable.color
 
-        val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor(color)
-        val themeAwareCustomContainerColor = MaterialColors.getColor(requireContext(), customContainerColorAttr, Color.BLACK)
+        val modelColorAttr = ModelColors.getThemeAttrForModelColor(colorName)
+        val themeAwareModelColor = MaterialColors.getColor(requireContext(), modelColorAttr, Color.BLACK)
 
-        val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(color)
-        val themeAwareOnCustomContainerColor = MaterialColors.getColor(requireContext(), onCustomContainerColorAttr, Color.BLACK)
+        val modelColorContainerAttr = ModelColors.getThemeAttrForModelColorContainer(colorName)
+        val themeAwareModelColorContainer = MaterialColors.getColor(requireContext(), modelColorContainerAttr, Color.BLACK)
 
-        binding.llProgramTableContainer.setBackgroundColor(themeAwareCustomContainerColor)
-        binding.tvTitle.setTextColor(themeAwareOnCustomContainerColor)
-        binding.tvDescription.setTextColor(themeAwareOnCustomContainerColor)
+        binding.llProgramTableContainer.setBackgroundColor(themeAwareModelColorContainer)
+        binding.tvTitle.setTextColor(themeAwareModelColor)
+        binding.tvDescription.setTextColor(themeAwareModelColor)
     }
 
     private fun setupAdapters(){

@@ -1,59 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="modelColor1" format="color" />
-    <attr name="colorOnCustomColor1" format="color" />
     <attr name="modelColorContainer1" format="color" />
-    <attr name="colorOnCustomColor1Container" format="color" />
 
     <attr name="modelColor2" format="color" />
-    <attr name="colorOnCustomColor2" format="color" />
     <attr name="modelColorContainer2" format="color" />
-    <attr name="colorOnCustomColor2Container" format="color" />
 
     <attr name="modelColor3" format="color" />
-    <attr name="colorOnCustomColor3" format="color" />
     <attr name="modelColorContainer3" format="color" />
-    <attr name="colorOnCustomColor3Container" format="color" />
 
     <attr name="modelColor4" format="color" />
-    <attr name="colorOnCustomColor4" format="color" />
     <attr name="modelColorContainer4" format="color" />
-    <attr name="colorOnCustomColor4Container" format="color" />
 
     <attr name="modelColor5" format="color" />
-    <attr name="colorOnCustomColor5" format="color" />
     <attr name="modelColorContainer5" format="color" />
-    <attr name="colorOnCustomColor5Container" format="color" />
 
     <attr name="modelColor6" format="color" />
-    <attr name="colorOnCustomColor6" format="color" />
     <attr name="modelColorContainer6" format="color" />
-    <attr name="colorOnCustomColor6Container" format="color" />
 
     <attr name="modelColor7" format="color" />
-    <attr name="colorOnCustomColor7" format="color" />
     <attr name="modelColorContainer7" format="color" />
-    <attr name="colorOnCustomColor7Container" format="color" />
 
     <attr name="modelColor8" format="color" />
-    <attr name="colorOnCustomColor8" format="color" />
     <attr name="modelColorContainer8" format="color" />
-    <attr name="colorOnCustomColor8Container" format="color" />
 
     ////////////////////////////////////////////////////////////////////////////////////
 
     <attr name="modelColorLesson" format="color" />
-    <attr name="colorOnCustomColorLesson" format="color" />
     <attr name="modelColorLessonContainer" format="color" />
-    <attr name="colorOnCustomColorLessonContainer" format="color" />
 
     <attr name="modelColorExam" format="color" />
-    <attr name="colorOnCustomColorExam" format="color" />
     <attr name="modelColorExamContainer" format="color" />
-    <attr name="colorOnCustomColorExamContainer" format="color" />
 
     <attr name="modelColorHomework" format="color" />
-    <attr name="colorOnCustomColorHomework" format="color" />
     <attr name="modelColorHomeworkContainer" format="color" />
-    <attr name="colorOnCustomColorHomeworkContainer" format="color" />
 </resources>

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,7 +32,6 @@ import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
-import com.saboon.project_2511sch.presentation.programtable.DialogFragmentProgramTable
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
 import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskExam
@@ -153,22 +151,23 @@ class CourseDetailsFragment : Fragment() {
 
         val colorName = course.color
 
-        val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor(colorName)
-        val themeAwareCustomContainerColor = MaterialColors.getColor(requireContext(), customContainerColorAttr, Color.BLACK)
+        val modelColorAttr = ModelColors.getThemeAttrForModelColor(colorName)
+        val themeAwareModelColor = MaterialColors.getColor(requireContext(), modelColorAttr, Color.BLACK)
 
-        val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(colorName)
-        val themeAwareOnCustomContainerColor = MaterialColors.getColor(requireContext(), onCustomContainerColorAttr, Color.BLACK)
+        val modelColorContainerAttr = ModelColors.getThemeAttrForModelColorContainer(colorName)
+        val themeAwareModelColorContainer = MaterialColors.getColor(requireContext(), modelColorContainerAttr, Color.BLACK)
 
-        binding.llCourseInfo.setBackgroundColor(themeAwareCustomContainerColor)
 
-        binding.tvTitleCourse.setTextColor(themeAwareOnCustomContainerColor)
-        binding.tvPersonPrimary.setTextColor(themeAwareOnCustomContainerColor)
-        binding.tvPersonSecondary.setTextColor(themeAwareOnCustomContainerColor)
-        binding.tvDescription.setTextColor(themeAwareOnCustomContainerColor)
-        binding.tvAbsenceLabel.setTextColor(themeAwareOnCustomContainerColor)
-        binding.tvAbsenceCount.setTextColor(themeAwareOnCustomContainerColor)
-        binding.btnAbsenceDecrease.setColorFilter(themeAwareOnCustomContainerColor)
-        binding.btnAbsenceIncrease.setColorFilter(themeAwareOnCustomContainerColor)
+        binding.llCourseInfo.setBackgroundColor(themeAwareModelColorContainer)
+
+        binding.tvTitleCourse.setTextColor(themeAwareModelColor)
+        binding.tvPersonPrimary.setTextColor(themeAwareModelColor)
+        binding.tvPersonSecondary.setTextColor(themeAwareModelColor)
+        binding.tvDescription.setTextColor(themeAwareModelColor)
+        binding.tvAbsenceLabel.setTextColor(themeAwareModelColor)
+        binding.tvAbsenceCount.setTextColor(themeAwareModelColor)
+        binding.btnAbsenceDecrease.setColorFilter(themeAwareModelColor)
+        binding.btnAbsenceIncrease.setColorFilter(themeAwareModelColor)
     }
     private fun setupAdapters(){
         recyclerAdapterTask = RecyclerAdapterTask()

@@ -25,7 +25,7 @@ object ModelColors {
      * Use this for text, icons, borders, etc.
      */
     @AttrRes
-    fun getThemeAttrForCustomColor(colorName: String?): Int {
+    fun getThemeAttrForModelColor(colorName: String?): Int {
         return when (colorName) {
             MODEL_COLOR_1 -> R.attr.modelColor1
             MODEL_COLOR_2 -> R.attr.modelColor2
@@ -42,36 +42,12 @@ object ModelColors {
             else -> androidx.appcompat.R.attr.colorPrimary
         }
     }
-
-    /**
-     * Returns the theme attribute for the container color.
-     * Use this for backgrounds.
-     */
-    @AttrRes
-    fun getThemeAttrForOnCustomColor(colorName: String?): Int {
-        return when (colorName) {
-            MODEL_COLOR_1 -> R.attr.colorOnCustomColor1
-            MODEL_COLOR_2 -> R.attr.colorOnCustomColor2
-            MODEL_COLOR_3 -> R.attr.colorOnCustomColor3
-            MODEL_COLOR_4 -> R.attr.colorOnCustomColor4
-            MODEL_COLOR_5 -> R.attr.colorOnCustomColor5
-            MODEL_COLOR_6 -> R.attr.colorOnCustomColor6
-            MODEL_COLOR_7 -> R.attr.colorOnCustomColor7
-            MODEL_COLOR_8 -> R.attr.colorOnCustomColor8
-
-            MODEL_COLOR_LESSON -> R.attr.colorOnCustomColorLesson
-            MODEL_COLOR_EXAM -> R.attr.colorOnCustomColorExam
-            MODEL_COLOR_HOMEWORK -> R.attr.colorOnCustomColorHomework
-            else -> com.google.android.material.R.attr.colorOnPrimary
-        }
-    }
-
     /**
      * Returns the theme attribute for content (e.g., text) that is placed ON a container color.
      * In most cases, this is the same as the main color.
      */
     @AttrRes
-    fun getThemeAttrForCustomContainerColor(colorName: String?): Int {
+    fun getThemeAttrForModelColorContainer(colorName: String?): Int {
         return when (colorName) {
             MODEL_COLOR_1 -> R.attr.modelColorContainer1
             MODEL_COLOR_2 -> R.attr.modelColorContainer2
@@ -86,29 +62,6 @@ object ModelColors {
             MODEL_COLOR_EXAM -> R.attr.modelColorExamContainer
             MODEL_COLOR_HOMEWORK -> R.attr.modelColorHomeworkContainer
             else -> com.google.android.material.R.attr.colorSurface
-        }
-    }
-
-    /**
-     * Returns the theme attribute for content (e.g., text) that is placed ON a container color.
-     * In most cases, this is the same as the main color.
-     */
-    @AttrRes
-    fun getThemeAttrForOnCustomContainerColor(colorName: String?): Int {
-        return when (colorName) {
-            MODEL_COLOR_1 -> R.attr.colorOnCustomColor1Container
-            MODEL_COLOR_2 -> R.attr.colorOnCustomColor2Container
-            MODEL_COLOR_3 -> R.attr.colorOnCustomColor3Container
-            MODEL_COLOR_4 -> R.attr.colorOnCustomColor4Container
-            MODEL_COLOR_5 -> R.attr.colorOnCustomColor5Container
-            MODEL_COLOR_6 -> R.attr.colorOnCustomColor6Container
-            MODEL_COLOR_7 -> R.attr.colorOnCustomColor7Container
-            MODEL_COLOR_8 -> R.attr.colorOnCustomColor8Container
-
-            MODEL_COLOR_LESSON -> R.attr.colorOnCustomColorLessonContainer
-            MODEL_COLOR_EXAM -> R.attr.colorOnCustomColorExamContainer
-            MODEL_COLOR_HOMEWORK -> R.attr.colorOnCustomColorHomeworkContainer
-            else -> com.google.android.material.R.attr.colorOnSurface
         }
     }
 }
