@@ -23,6 +23,12 @@ class ViewModelSettings @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = SettingsConstants.DarkMode.DEFAULT
         )
+    val appThemeState: StateFlow<String> = settingsRepository.getAppTheme()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = SettingsConstants.AppTheme.DEFAULT
+        )
     val homeViewRangeState: StateFlow<String> = settingsRepository.getHomeViewRange()
         .stateIn(
             scope = viewModelScope,
@@ -54,6 +60,11 @@ class ViewModelSettings @Inject constructor(
             settingsRepository.setDarkMode(darkModeValue)
         }
     }
+    fun onAppThemeSelected(theme: String){
+        viewModelScope.launch {
+            settingsRepository.setAppTheme(theme)
+        }
+    }
     fun onHomeViewRangeSelected(viewRange: String) {
         viewModelScope.launch {
             settingsRepository.setHomeViewRange(viewRange)
@@ -72,18 +83,6 @@ class ViewModelSettings @Inject constructor(
     fun onHomeListItemColorSourceSelected(source: String) {
         viewModelScope.launch {
             settingsRepository.setHomeListItemColorSource(source)
-        }
-    }
-
-    //HELPERS
-    /**
-     * Logic to switch the AppCompatDelegate mode
-     */
-    fun applyDarkMode(darkModeValue: String) {
-        when (darkModeValue) {
-            SettingsConstants.DarkMode.OPEN  -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            SettingsConstants.DarkMode.CLOSE -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
     }
 }
