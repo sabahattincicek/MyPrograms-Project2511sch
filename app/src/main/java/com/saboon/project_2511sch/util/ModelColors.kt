@@ -16,7 +16,6 @@ object ModelColors {
     const val MODEL_COLOR_6 = "modelColor_6"
     const val MODEL_COLOR_7 = "modelColor_7"
     const val MODEL_COLOR_8 = "modelColor_8"
-
     const val MODEL_COLOR_LESSON = "modelColor_lesson"
     const val MODEL_COLOR_EXAM = "modelColor_exam"
     const val MODEL_COLOR_HOMEWORK = "modelColor_homework"
@@ -28,18 +27,18 @@ object ModelColors {
     @AttrRes
     fun getThemeAttrForCustomColor(colorName: String?): Int {
         return when (colorName) {
-            MODEL_COLOR_1 -> R.attr.colorCustomColor1
-            MODEL_COLOR_2 -> R.attr.colorCustomColor2
-            MODEL_COLOR_3 -> R.attr.colorCustomColor3
-            MODEL_COLOR_4 -> R.attr.colorCustomColor4
-            MODEL_COLOR_5 -> R.attr.colorCustomColor5
-            MODEL_COLOR_6 -> R.attr.colorCustomColor6
-            MODEL_COLOR_7 -> R.attr.colorCustomColor7
-            MODEL_COLOR_8 -> R.attr.colorCustomColor8
+            MODEL_COLOR_1 -> R.attr.modelColor1
+            MODEL_COLOR_2 -> R.attr.modelColor2
+            MODEL_COLOR_3 -> R.attr.modelColor3
+            MODEL_COLOR_4 -> R.attr.modelColor4
+            MODEL_COLOR_5 -> R.attr.modelColor5
+            MODEL_COLOR_6 -> R.attr.modelColor6
+            MODEL_COLOR_7 -> R.attr.modelColor7
+            MODEL_COLOR_8 -> R.attr.modelColor8
 
-            MODEL_COLOR_LESSON -> R.attr.colorCustomColorLesson
-            MODEL_COLOR_EXAM -> R.attr.colorCustomColorExam
-            MODEL_COLOR_HOMEWORK -> R.attr.colorCustomColorHomework
+            MODEL_COLOR_LESSON -> R.attr.modelColorLesson
+            MODEL_COLOR_EXAM -> R.attr.modelColorExam
+            MODEL_COLOR_HOMEWORK -> R.attr.modelColorHomework
             else -> androidx.appcompat.R.attr.colorPrimary
         }
     }
@@ -74,18 +73,18 @@ object ModelColors {
     @AttrRes
     fun getThemeAttrForCustomContainerColor(colorName: String?): Int {
         return when (colorName) {
-            MODEL_COLOR_1 -> R.attr.colorCustomColor1Container
-            MODEL_COLOR_2 -> R.attr.colorCustomColor2Container
-            MODEL_COLOR_3 -> R.attr.colorCustomColor3Container
-            MODEL_COLOR_4 -> R.attr.colorCustomColor4Container
-            MODEL_COLOR_5 -> R.attr.colorCustomColor5Container
-            MODEL_COLOR_6 -> R.attr.colorCustomColor6Container
-            MODEL_COLOR_7 -> R.attr.colorCustomColor7Container
-            MODEL_COLOR_8 -> R.attr.colorCustomColor8Container
+            MODEL_COLOR_1 -> R.attr.modelColorContainer1
+            MODEL_COLOR_2 -> R.attr.modelColorContainer2
+            MODEL_COLOR_3 -> R.attr.modelColorContainer3
+            MODEL_COLOR_4 -> R.attr.modelColorContainer4
+            MODEL_COLOR_5 -> R.attr.modelColorContainer5
+            MODEL_COLOR_6 -> R.attr.modelColorContainer6
+            MODEL_COLOR_7 -> R.attr.modelColorContainer7
+            MODEL_COLOR_8 -> R.attr.modelColorContainer8
 
-            MODEL_COLOR_LESSON -> R.attr.colorCustomColorLessonContainer
-            MODEL_COLOR_EXAM -> R.attr.colorCustomColorExamContainer
-            MODEL_COLOR_HOMEWORK -> R.attr.colorCustomColorHomeworkContainer
+            MODEL_COLOR_LESSON -> R.attr.modelColorLessonContainer
+            MODEL_COLOR_EXAM -> R.attr.modelColorExamContainer
+            MODEL_COLOR_HOMEWORK -> R.attr.modelColorHomeworkContainer
             else -> com.google.android.material.R.attr.colorSurface
         }
     }

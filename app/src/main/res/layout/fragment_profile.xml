@@ -55,7 +55,7 @@
                         android:id="@+id/iv_character_vibe"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="?attr/colorCustomColor1" />
+                        android:background="?attr/modelColor1" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView

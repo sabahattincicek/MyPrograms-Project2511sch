@@ -53,7 +53,7 @@
                     android:id="@+id/ll_program_table_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorCustomColor1Container"
+                    android:background="?attr/modelColorContainer1"
                     android:orientation="vertical"
                     android:padding="16dp">
 
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:text="Mekatronik 3. sinif guz"
-                        android:textColor="?attr/colorOnCustomColor1Container"
+                        android:textColor="?attr/modelColor1"
                         android:textSize="24sp" />
 
                     <TextView
@@ -74,7 +74,7 @@
                         android:layout_marginTop="8dp"
                         android:maxLines="4"
                         android:text="description lkasfdlaksd flkasdlfksadl fjlasfjlka sdjflks djflksjadf"
-                        android:textColor="?attr/colorOnCustomColor1Container"
+                        android:textColor="?attr/modelColor1"
                         android:visibility="visible" />
 
                 </LinearLayout>
