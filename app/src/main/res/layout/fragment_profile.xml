@@ -103,47 +103,85 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- FULL NAME -->
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_full_name"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:enabled="true"
-                android:maxLines="1"
-                android:hint="Full Name"/>
+                android:layout_marginTop="12dp"
+                app:boxBackgroundMode="none"
+                app:hintEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_full_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Full Name"
+                    android:padding="0dp"
+                    android:maxLines="1"
+                    android:background="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
             <!-- ROLE -->
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_role"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="true"
-                android:maxLines="1"
-                android:hint="Role (eg: Mechatronic Engineer)" />
+                android:layout_marginTop="12dp"
+                app:boxBackgroundMode="none"
+                app:hintEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Role"
+                    android:padding="0dp"
+                    android:maxLines="1"
+                    android:background="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
             <!-- ACADEMIC LEVEL -->
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_academic_level"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="true"
-                android:maxLines="1"
-                android:hint="Academic Level (eg: 3th class)" />
+                android:layout_marginTop="12dp"
+                app:boxBackgroundMode="none"
+                app:hintEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_academic_level"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Academic level"
+                    android:padding="0dp"
+                    android:maxLines="1"
+                    android:background="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
             <!-- ORGANISATION -->
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_organization"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="true"
-                android:maxLines="1"
-                android:hint="Organisation (eg: Kocaeli University)" />
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_about_me"
+                android:layout_marginTop="12dp"
+                app:boxBackgroundMode="none"
+                app:hintEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_organisation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Organisation"
+                    android:padding="0dp"
+                    android:maxLines="1"
+                    android:background="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- ABOUT ME -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="true"
-                android:gravity="top"
-                android:maxLines="4"
-                android:hint="About Me" />
+                android:layout_marginTop="12dp"
+                app:boxBackgroundMode="none"
+                app:hintEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_about_me"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="About Me"
+                    android:padding="0dp"
+                    android:maxLines="4"
+                    android:background="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- A divider to separate header from options -->
             <com.google.android.material.divider.MaterialDivider
@@ -164,28 +202,28 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider">
 
                 <!-- Synchronization Option -->
-                <TextView
-                    android:id="@+id/tv_synchronization"
-                    style="?attr/textAppearanceSubtitle1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawablePadding="16dp"
-                    android:focusable="true"
-                    android:enabled="false"
-                    android:gravity="center_vertical"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp"
-                    android:text="@string/synchronization"
-                    app:drawableStartCompat="@drawable/baseline_sync_24"
-                    app:drawableTint="?attr/colorOnSurface" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_synchronization"-->
+<!--                    style="?attr/textAppearanceSubtitle1"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="?attr/selectableItemBackground"-->
+<!--                    android:clickable="true"-->
+<!--                    android:drawablePadding="16dp"-->
+<!--                    android:focusable="true"-->
+<!--                    android:enabled="false"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:paddingTop="16dp"-->
+<!--                    android:paddingBottom="16dp"-->
+<!--                    android:text="@string/synchronization"-->
+<!--                    app:drawableStartCompat="@drawable/baseline_sync_24"-->
+<!--                    app:drawableTint="?attr/colorOnSurface" />-->
 
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp" />
+<!--                <com.google.android.material.divider.MaterialDivider-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:layout_marginBottom="8dp" />-->
 
                 <!-- Settings Option -->
                 <TextView

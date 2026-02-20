@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    SETTINGS-->
+<!--    THEME-->
+    <string-array name="pref_dark_mode">
+        <item>Open</item>
+        <item>Close</item>
+        <item>System Default</item>
+    </string-array>
+
+<!--    HOME PAGE-->
+    <string-array name="pref_home_view_range">
+        <item>Current week</item>
+        <item>Current month</item>
+    </string-array>
+    <string-array name="pref_overscroll_days_count">
+        <item>7 Days</item>
+        <item>14 Days</item>
+        <item>30 Days</item>
+        <item>60 Days</item>
+    </string-array>
+    <string-array name="pref_home_list_item_color_source">
+        <item>Course</item>
+        <item>Program Table</item>
+    </string-array>
+
+<!--    APP STRINGS-->
+    <string-array name="recurrence_options">
+        <item>Does not repeat</item>
+        <item>Repeats daily</item>
+        <item>Repeats weekly</item>
+        <item>Repeats monthly</item>
+        <item>Repeats yearly</item>
+    </string-array>
+
+    <string-array name="reminder_options">
+        <item>No reminder</item>
+        <item>On Time</item>
+        <item>10 minutes before</item>
+        <item>30 minutes before</item>
+        <item>1 hour before</item>
+        <item>1 day before</item>
+    </string-array>
+
+    <string-array name="task_types">
+        <item>Lesson</item>
+        <item>Exam</item>
+        <item>Homework</item>
+    </string-array>
+</resources>

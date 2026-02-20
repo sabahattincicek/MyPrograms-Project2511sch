@@ -19,12 +19,10 @@ import com.saboon.project_2511sch.databinding.FragmentHomeBinding
 import com.saboon.project_2511sch.domain.model.BaseModel
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.ProgramTable
-import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
-import com.saboon.project_2511sch.presentation.common.FilterGeneric
 import com.saboon.project_2511sch.presentation.common.FilterTask
-import com.saboon.project_2511sch.presentation.course.ViewModelCourse
-import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
+import com.saboon.project_2511sch.presentation.settings.SettingsConstants
+import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -36,11 +34,14 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModelHome: ViewModelHome by viewModels()
+    private val viewModelSettings: ViewModelSettings by viewModels()
 
     private var filteredProgramTable: ProgramTable? = null
     private var filteredCourse: Course? = null
 
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
+
+    private var overscrollDaysCount = SettingsConstants.OverscrollDaysCount.DEFAULT
 
     private val tag = "HomeFragment"
 
@@ -64,9 +65,9 @@ class HomeFragment : Fragment() {
 
         setupRecyclerAdapter()
         setupListeners()
-        observeHomeDisplayItemsState()
+        setupObservers()
 
-        viewModelHome.loadCurrentWeek()
+        viewModelHome.loadData()
 
         ////////////////////////////////////////////////
         binding.cpProgramTable.setOnClickListener {
@@ -143,10 +144,10 @@ class HomeFragment : Fragment() {
         binding.osaOverScroll.onActionTriggered = {isTop ->
             if (isTop) {
                 Log.d(tag, "overscroll triggered: Top")
-                viewModelHome.loadPrevious()
+                viewModelHome.loadPrevious(overscrollDaysCount)
             } else {
                 Log.d(tag, "overscroll triggered: Bottom")
-                viewModelHome.loadNext()
+                viewModelHome.loadNext(overscrollDaysCount)
             }
         }
         binding.rvHome.addOnScrollListener(object: RecyclerView.OnScrollListener(){
@@ -179,7 +180,8 @@ class HomeFragment : Fragment() {
         Log.d(tag, "onDestroyView: View is being destroyed, nullifying binding to prevent memory leaks.")
         _binding = null
     }
-    private fun observeHomeDisplayItemsState() {
+    private fun setupObservers(){
+        // DISPLAY ITEMS STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 Log.d(tag, "Subscribing to displayItemsState flow.")
@@ -199,6 +201,30 @@ class HomeFragment : Fragment() {
                             recyclerAdapterHome.submitList(homeDisplayItemList)
                         }
                     }
+                }
+            }
+        }
+        //OVERSCROLL DAYS COUNT
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModelSettings.overScrollDaysCountState.collect { daysCount ->
+                    overscrollDaysCount = daysCount
+                }
+            }
+        }
+        //HOME LIST ITEM COLOR ENABLED
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModelSettings.homeListItemColorEnabledState.collect { isEnabled ->
+                    recyclerAdapterHome.isColorEnabled = isEnabled
+                }
+            }
+        }
+        //HOME LIST ITEM COLOR SOURCE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModelSettings.homeListItemColorSourceState.collect { source ->
+                    recyclerAdapterHome.colorSource = source
                 }
             }
         }

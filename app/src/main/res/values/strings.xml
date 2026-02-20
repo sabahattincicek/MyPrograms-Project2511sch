@@ -204,27 +204,4 @@
     <string name="set_active">Set Active</string>
     <string name="synchronization">Synchronization</string>
     <string name="about_you">About You</string>
-
-    <string-array name="recurrence_options">
-        <item>Does not repeat</item>
-        <item>Repeats daily</item>
-        <item>Repeats weekly</item>
-        <item>Repeats monthly</item>
-        <item>Repeats yearly</item>
-    </string-array>
-
-    <string-array name="reminder_options">
-        <item>No reminder</item>
-        <item>On Time</item>
-        <item>10 minutes before</item>
-        <item>30 minutes before</item>
-        <item>1 hour before</item>
-        <item>1 day before</item>
-    </string-array>
-
-    <string-array name="task_types">
-        <item>Lesson</item>
-        <item>Exam</item>
-        <item>Homework</item>
-    </string-array>
 </resources>

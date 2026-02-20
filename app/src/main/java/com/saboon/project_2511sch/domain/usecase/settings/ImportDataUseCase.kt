@@ -27,7 +27,7 @@ class ImportDataUseCase @Inject constructor(
     suspend fun execute(uri: Uri): Resource<Unit> = withContext(Dispatchers.IO){
         // Geçici dosyaları try bloğu dışında tanımlıyoruz ki finally içinde silebiliriz
         var tempZipFile: File? = null
-        val extractFolder = File(context.cacheDir, "extracted_backup_${System.currentTimeMillis()}")
+        val extractFolder = File(context.cacheDir, "extracted_file_${System.currentTimeMillis()}")
 
         try {
             // 1. Uri içeriğini geçici bir ZIP dosyasına kopyala
@@ -44,7 +44,7 @@ class ImportDataUseCase @Inject constructor(
             ZipUtil.unzip(tempZipFile, extractFolder)
 
             // 2. JSON dosyasını oku ve modelleri oluştur
-            val jsonFile = File(extractFolder, "backup.json")
+            val jsonFile = File(extractFolder, "export.json")
             if (!jsonFile.exists()) return@withContext Resource.Error("Not found backup file")
             val jsonString = jsonFile.readText()
             val dataTransferPackage = json.decodeFromString<DataTransferPackage>(jsonString)

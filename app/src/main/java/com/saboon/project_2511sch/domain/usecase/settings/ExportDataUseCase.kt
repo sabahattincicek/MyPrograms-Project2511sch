@@ -37,7 +37,7 @@ class ExportDataUseCase @Inject constructor(
             val jsonString = json.encodeToString(dataTransferPackage)
 
             // 2. Geçici dosyaları hazırla
-            val exportFolderTemp = File(context.cacheDir, "export_temp")
+            val exportFolderTemp = File(context.cacheDir, "temp_export")
             exportFolderTemp.mkdirs()
 
             val jsonFile = File(exportFolderTemp, "export.json")
