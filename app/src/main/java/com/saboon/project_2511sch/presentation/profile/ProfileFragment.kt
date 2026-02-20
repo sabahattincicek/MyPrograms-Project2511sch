@@ -97,7 +97,7 @@ class ProfileFragment : Fragment() {
                 viewModelUser.update(currentUser.copy(academicLevel = text))
             }
         }
-        binding.etOrganization.doAfterTextChanged {
+        binding.etOrganisation.doAfterTextChanged {
             val text = it.toString().trim()
             if (text != currentUser.organisation) {
                 viewModelUser.update(currentUser.copy(organisation = text))
@@ -134,7 +134,7 @@ class ProfileFragment : Fragment() {
             binding.etFullName.setText(currentUser.fullName)
             binding.etRole.setText(currentUser.role)
             binding.etAcademicLevel.setText(currentUser.academicLevel)
-            binding.etOrganization.setText(currentUser.organisation)
+            binding.etOrganisation.setText(currentUser.organisation)
             binding.etAboutMe.setText(currentUser.aboutMe)
             isInitialDataLoaded = true
         }
