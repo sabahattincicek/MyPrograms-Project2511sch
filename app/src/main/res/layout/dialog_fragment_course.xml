@@ -180,11 +180,9 @@
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:layout_margin="3dp"
-                            android:checked="true"
                             android:button="@null"
                             android:background="@drawable/bg_radiobutton_color_picker_color_custom_1"
                             android:textAlignment="center"
-                            android:text="@string/modelColor_1"
                             android:tag="modelColor_1"
                             android:layout_weight="1"/>
 
@@ -196,7 +194,6 @@
                             android:button="@null"
                             android:background="@drawable/bg_radiobutton_color_picker_color_custom_2"
                             android:textAlignment="center"
-                            android:text="@string/modelColor_2"
                             android:tag="modelColor_2"
                             android:layout_weight="1"/>
 
@@ -208,7 +205,6 @@
                             android:button="@null"
                             android:background="@drawable/bg_radiobutton_color_picker_color_custom_3"
                             android:textAlignment="center"
-                            android:text="@string/modelColor_3"
                             android:tag="modelColor_3"
                             android:layout_weight="1"/>
 
@@ -220,7 +216,6 @@
                             android:button="@null"
                             android:background="@drawable/bg_radiobutton_color_picker_color_custom_4"
                             android:textAlignment="center"
-                            android:text="@string/modelColor_4"
                             android:tag="modelColor_4"
                             android:layout_weight="1"/>
 
@@ -241,7 +236,6 @@
                             android:button="@null"
                             android:background="@drawable/bg_radiobutton_color_picker_color_custom_5"
                             android:textAlignment="center"
-                            android:text="@string/modelColor_5"
                             android:tag="modelColor_5"
                             android:layout_weight="1"/>
 
@@ -253,7 +247,6 @@
                             android:button="@null"
                             android:background="@drawable/bg_radiobutton_color_picker_color_custom_6"
                             android:textAlignment="center"
-                            android:text="@string/modelColor_6"
                             android:tag="modelColor_6"
                             android:layout_weight="1"/>
 
@@ -265,7 +258,6 @@
                             android:button="@null"
                             android:background="@drawable/bg_radiobutton_color_picker_color_custom_7"
                             android:textAlignment="center"
-                            android:text="@string/modelColor_7"
                             android:tag="modelColor_7"
                             android:layout_weight="1"/>
 
@@ -277,7 +269,6 @@
                             android:button="@null"
                             android:background="@drawable/bg_radiobutton_color_picker_color_custom_8"
                             android:textAlignment="center"
-                            android:text="@string/modelColor_8"
                             android:tag="modelColor_8"
                             android:layout_weight="1"/>
                     </RadioGroup>
