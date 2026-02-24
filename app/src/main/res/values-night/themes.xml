@@ -1,28 +1,5 @@
 <resources>
     <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
 
-        <item name="modelColor1">@color/modelColor1</item>
-
-        <item name="modelColor2">@color/modelColor2</item>
-
-        <item name="modelColor3">@color/modelColor3</item>
-
-        <item name="modelColor4">@color/modelColor4</item>
-
-        <item name="modelColor5">@color/modelColor5</item>
-
-        <item name="modelColor6">@color/modelColor6</item>
-
-        <item name="modelColor7">@color/modelColor7</item>
-
-        <item name="modelColor8">@color/modelColor8</item>
-
-        /////////////////////////////////////////////////////////////////////////////////////////
-
-        <item name="modelColorLesson">@color/modelColorLesson</item>
-
-        <item name="modelColorExam">@color/modelColorExam</item>
-
-        <item name="modelColorHomework">@color/modelColorHomework</item>
     </style>
 </resources>

@@ -1,28 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.Project_2511sch" parent="Theme.Material3.DayNight.NoActionBar">
 
-        <item name="modelColor1">@color/modelColor1</item>
-
-        <item name="modelColor2">@color/modelColor2</item>
-
-        <item name="modelColor3">@color/modelColor3</item>
-        <item name="modelColor4">@color/modelColor4</item>
-
-        <item name="modelColor5">@color/modelColor5</item>
-
-        <item name="modelColor6">@color/modelColor6</item>
-
-        <item name="modelColor7">@color/modelColor7</item>
-
-        <item name="modelColor8">@color/modelColor8</item>
-
-        /////////////////////////////////////////////////////////////////////////////////////////
-
-        <item name="modelColorLesson">@color/modelColorLesson</item>
-
-        <item name="modelColorExam">@color/modelColorExam</item>
-
-        <item name="modelColorHomework">@color/modelColorHomework</item>
     </style>
 
     <style name="Theme.Project_2511sch" parent="Base.Theme.Project_2511sch" />

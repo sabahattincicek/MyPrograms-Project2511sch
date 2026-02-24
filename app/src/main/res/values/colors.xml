@@ -1,26 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="modelColor1">#012E03</color>
 
-    <color name="modelColor2">#303000</color>
-
-    <color name="modelColor3">#6F5D0E</color>
-
-    <color name="modelColor4">#525A92</color>
-
-    <color name="modelColor5">#3B6939</color>
-
-    <color name="modelColor6">#88511D</color>
-
-    <color name="modelColor7">#8E4958</color>
-
-    <color name="modelColor8">#8F4C36</color>
-
-    ///////////////////////////////////////////////////////////////////////////
-
-    <color name="modelColorLesson">#4A6FA5</color>
-
-    <color name="modelColorExam">#B5655D</color>
-
-    <color name="modelColorHomework">#5E8B6F</color>
 </resources>

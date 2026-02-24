@@ -1,26 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="modelColor1" format="color" />
 
-    <attr name="modelColor2" format="color" />
-
-    <attr name="modelColor3" format="color" />
-
-    <attr name="modelColor4" format="color" />
-
-    <attr name="modelColor5" format="color" />
-
-    <attr name="modelColor6" format="color" />
-
-    <attr name="modelColor7" format="color" />
-
-    <attr name="modelColor8" format="color" />
-
-    ////////////////////////////////////////////////////////////////////////////////////
-
-    <attr name="modelColorLesson" format="color" />
-
-    <attr name="modelColorExam" format="color" />
-
-    <attr name="modelColorHomework" format="color" />
 </resources>
