@@ -1,7 +1,7 @@
 package com.saboon.project_2511sch.domain.model
 
 import android.os.Parcelable
-import com.saboon.project_2511sch.util.ModelColors
+import com.saboon.project_2511sch.util.ModelColor
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -26,6 +26,6 @@ data class Course(
     val title: String,
     val description: String,
     val people: String,
-    val color: String = ModelColors.MODEL_COLOR_1,
+    val color: ModelColor,
     val absence: Int = 0,
 ) : Parcelable, BaseModel

@@ -56,7 +56,6 @@
                     android:id="@+id/ll_course_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/modelColorContainer1"
                     android:orientation="vertical"
                     android:padding="8dp">
 

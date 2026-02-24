@@ -2,39 +2,27 @@
     <style name="Base.Theme.Project_2511sch" parent="Theme.Material3.DayNight.NoActionBar">
 
         <item name="modelColor1">@color/modelColor1</item>
-        <item name="modelColorContainer1">@color/modelColorContainer1</item>
 
         <item name="modelColor2">@color/modelColor2</item>
-        <item name="modelColorContainer2">@color/modelColorContainer2</item>
 
         <item name="modelColor3">@color/modelColor3</item>
-        <item name="modelColorContainer3">@color/modelColorContainer3</item>
-
         <item name="modelColor4">@color/modelColor4</item>
-        <item name="modelColorContainer4">@color/modelColorContainer4</item>
 
         <item name="modelColor5">@color/modelColor5</item>
-        <item name="modelColorContainer5">@color/modelColorContainer5</item>
 
         <item name="modelColor6">@color/modelColor6</item>
-        <item name="modelColorContainer6">@color/modelColorContainer6</item>
 
         <item name="modelColor7">@color/modelColor7</item>
-        <item name="modelColorContainer7">@color/modelColorContainer7</item>
 
         <item name="modelColor8">@color/modelColor8</item>
-        <item name="modelColorContainer8">@color/modelColorContainer8</item>
 
         /////////////////////////////////////////////////////////////////////////////////////////
 
         <item name="modelColorLesson">@color/modelColorLesson</item>
-        <item name="modelColorLessonContainer">@color/modelColorLessonContainer</item>
 
         <item name="modelColorExam">@color/modelColorExam</item>
-        <item name="modelColorExamContainer">@color/modelColorExamContainer</item>
 
         <item name="modelColorHomework">@color/modelColorHomework</item>
-        <item name="modelColorHomeworkContainer">@color/modelColorHomeworkContainer</item>
     </style>
 
     <style name="Theme.Project_2511sch" parent="Base.Theme.Project_2511sch" />

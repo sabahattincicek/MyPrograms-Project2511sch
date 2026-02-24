@@ -21,7 +21,6 @@ import com.saboon.project_2511sch.databinding.FragmentCourseDetailsBinding
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.presentation.task.RecyclerAdapterTask
 import com.saboon.project_2511sch.presentation.task.ViewModelTask
-import com.saboon.project_2511sch.util.ModelColors
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -149,25 +148,19 @@ class CourseDetailsFragment : Fragment() {
         binding.tvDescription.text = course.description
         binding.tvAbsenceCount.text = course.absence.toString()
 
-        val colorName = course.color
+        val containerColor = course.color.getInt()
+        val textColor = course.color.getOnMainTextColor()
 
-        val modelColorAttr = ModelColors.getThemeAttrForModelColor(colorName)
-        val themeAwareModelColor = MaterialColors.getColor(requireContext(), modelColorAttr, Color.BLACK)
+        binding.llCourseInfo.setBackgroundColor(containerColor)
 
-        val modelColorContainerAttr = ModelColors.getThemeAttrForModelColorContainer(colorName)
-        val themeAwareModelColorContainer = MaterialColors.getColor(requireContext(), modelColorContainerAttr, Color.BLACK)
-
-
-        binding.llCourseInfo.setBackgroundColor(themeAwareModelColorContainer)
-
-        binding.tvTitleCourse.setTextColor(themeAwareModelColor)
-        binding.tvPersonPrimary.setTextColor(themeAwareModelColor)
-        binding.tvPersonSecondary.setTextColor(themeAwareModelColor)
-        binding.tvDescription.setTextColor(themeAwareModelColor)
-        binding.tvAbsenceLabel.setTextColor(themeAwareModelColor)
-        binding.tvAbsenceCount.setTextColor(themeAwareModelColor)
-        binding.btnAbsenceDecrease.setColorFilter(themeAwareModelColor)
-        binding.btnAbsenceIncrease.setColorFilter(themeAwareModelColor)
+        binding.tvTitleCourse.setTextColor(textColor)
+        binding.tvPersonPrimary.setTextColor(textColor)
+        binding.tvPersonSecondary.setTextColor(textColor)
+        binding.tvDescription.setTextColor(textColor)
+        binding.tvAbsenceLabel.setTextColor(textColor)
+        binding.tvAbsenceCount.setTextColor(textColor)
+        binding.btnAbsenceDecrease.setColorFilter(textColor)
+        binding.btnAbsenceIncrease.setColorFilter(textColor)
     }
     private fun setupAdapters(){
         recyclerAdapterTask = RecyclerAdapterTask()

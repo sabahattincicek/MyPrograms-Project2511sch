@@ -1,17 +1,15 @@
 package com.saboon.project_2511sch.presentation.programtable
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.toColorInt
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -20,9 +18,9 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentProgramTableBinding
 import com.saboon.project_2511sch.domain.model.ProgramTable
 import com.saboon.project_2511sch.domain.model.User
-import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.IdGenerator
-import com.saboon.project_2511sch.util.ModelColors
+import com.saboon.project_2511sch.util.ModelColor
+import com.saboon.project_2511sch.util.ModelColorConstats
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -38,7 +36,7 @@ class DialogFragmentProgramTable: DialogFragment() {
     private val viewModelProgramTable: ViewModelProgramTable by viewModels()
     private lateinit var currentUser: User
     private var programTable: ProgramTable? = null
-    private var color: String = ModelColors.MODEL_COLOR_1
+    private var selectedColor =  ModelColor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,22 +63,23 @@ class DialogFragmentProgramTable: DialogFragment() {
             programTable = BundleCompat.getParcelable(it,ARG_PROGRAM_TABLE, ProgramTable::class.java)
         }
 
+        setupColorCheckers()
         setupObservers()
 
         val isEditMode = programTable != null
         if (isEditMode){
             binding.etTitle.setText(programTable!!.title)
             binding.etDescription.setText(programTable!!.description)
-            color = programTable!!.color
-            when(color){
-                ModelColors.MODEL_COLOR_1 -> {binding.radioColor1.isChecked = true}
-                ModelColors.MODEL_COLOR_2 -> {binding.radioColor2.isChecked = true}
-                ModelColors.MODEL_COLOR_3 -> {binding.radioColor3.isChecked = true}
-                ModelColors.MODEL_COLOR_4 -> {binding.radioColor4.isChecked = true}
-                ModelColors.MODEL_COLOR_5 -> {binding.radioColor5.isChecked = true}
-                ModelColors.MODEL_COLOR_6 -> {binding.radioColor6.isChecked = true}
-                ModelColors.MODEL_COLOR_7 -> {binding.radioColor7.isChecked = true}
-                ModelColors.MODEL_COLOR_8 -> {binding.radioColor8.isChecked = true}
+            selectedColor = programTable!!.color
+            when(selectedColor.colorHex){
+                ModelColorConstats.COLOR_1 -> {clearAllChecks(); binding.ivColorCk1.visibility = View.VISIBLE}
+                ModelColorConstats.COLOR_2 -> {clearAllChecks(); binding.ivColorCk2.visibility = View.VISIBLE}
+                ModelColorConstats.COLOR_3 -> {clearAllChecks(); binding.ivColorCk3.visibility = View.VISIBLE}
+                ModelColorConstats.COLOR_4 -> {clearAllChecks(); binding.ivColorCk4.visibility = View.VISIBLE}
+                ModelColorConstats.COLOR_5 -> {clearAllChecks(); binding.ivColorCk5.visibility = View.VISIBLE}
+                ModelColorConstats.COLOR_6 -> {clearAllChecks(); binding.ivColorCk6.visibility = View.VISIBLE}
+                ModelColorConstats.COLOR_7 -> {clearAllChecks(); binding.ivColorCk7.visibility = View.VISIBLE}
+                ModelColorConstats.COLOR_8 -> {clearAllChecks(); binding.ivColorCk8.visibility = View.VISIBLE}
             }
         }else{
 
@@ -91,7 +90,7 @@ class DialogFragmentProgramTable: DialogFragment() {
                 val updatedProgramTable = programTable!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    color = color
+                    color = selectedColor
                 )
 
                 viewModelProgramTable.update(updatedProgramTable)
@@ -102,27 +101,52 @@ class DialogFragmentProgramTable: DialogFragment() {
                     appVersionAtCreation = getString(R.string.app_version),
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    color = color,
+                    color = selectedColor,
                 )
                 viewModelProgramTable.insert(newProgramTable)
             }
         }
-        binding.rg1.setOnCheckedChangeListener { radioGroup, checkedId ->
-            when(checkedId){
-                R.id.radio_color1 -> {if(binding.radioColor1.isChecked){binding.rg2.clearCheck(); color = ModelColors.MODEL_COLOR_1}}
-                R.id.radio_color2 -> {if(binding.radioColor2.isChecked){binding.rg2.clearCheck(); color = ModelColors.MODEL_COLOR_2}}
-                R.id.radio_color3 -> {if(binding.radioColor3.isChecked){binding.rg2.clearCheck(); color = ModelColors.MODEL_COLOR_3}}
-                R.id.radio_color4 -> {if(binding.radioColor4.isChecked){binding.rg2.clearCheck(); color = ModelColors.MODEL_COLOR_4}}
-            }
+        binding.mcvColor1.setOnClickListener {
+            selectedColor = ModelColor(ModelColorConstats.COLOR_1)
+            clearAllChecks()
+            binding.ivColorCk1.visibility = View.VISIBLE
         }
-        binding.rg2.setOnCheckedChangeListener { radioGroup, checkedId ->
-            when(checkedId){
-                R.id.radio_color5 -> {if(binding.radioColor5.isChecked){binding.rg1.clearCheck(); color = ModelColors.MODEL_COLOR_5}}
-                R.id.radio_color6 -> {if(binding.radioColor6.isChecked){binding.rg1.clearCheck(); color = ModelColors.MODEL_COLOR_6}}
-                R.id.radio_color7 -> {if(binding.radioColor7.isChecked){binding.rg1.clearCheck(); color = ModelColors.MODEL_COLOR_7}}
-                R.id.radio_color8 -> {if(binding.radioColor8.isChecked){binding.rg1.clearCheck(); color = ModelColors.MODEL_COLOR_8}}
-            }
+        binding.mcvColor2.setOnClickListener {
+            selectedColor = ModelColor(ModelColorConstats.COLOR_2)
+            clearAllChecks()
+            binding.ivColorCk2.visibility = View.VISIBLE
         }
+        binding.mcvColor3.setOnClickListener {
+            selectedColor = ModelColor(ModelColorConstats.COLOR_3)
+            clearAllChecks()
+            binding.ivColorCk3.visibility = View.VISIBLE
+        }
+        binding.mcvColor4.setOnClickListener {
+            selectedColor = ModelColor(ModelColorConstats.COLOR_4)
+            clearAllChecks()
+            binding.ivColorCk4.visibility = View.VISIBLE
+        }
+        binding.mcvColor5.setOnClickListener {
+            selectedColor = ModelColor(ModelColorConstats.COLOR_5)
+            clearAllChecks()
+            binding.ivColorCk5.visibility = View.VISIBLE
+        }
+        binding.mcvColor6.setOnClickListener {
+            selectedColor = ModelColor(ModelColorConstats.COLOR_6)
+            clearAllChecks()
+            binding.ivColorCk6.visibility = View.VISIBLE
+        }
+        binding.mcvColor7.setOnClickListener {
+            selectedColor = ModelColor(ModelColorConstats.COLOR_7)
+            clearAllChecks()
+            binding.ivColorCk7.visibility = View.VISIBLE
+        }
+        binding.mcvColor8.setOnClickListener {
+            selectedColor = ModelColor(ModelColorConstats.COLOR_8)
+            clearAllChecks()
+            binding.ivColorCk8.visibility = View.VISIBLE
+        }
+
         binding.toolbar.setNavigationOnClickListener {
             dismiss()
         }
@@ -134,6 +158,17 @@ class DialogFragmentProgramTable: DialogFragment() {
         super.onDestroy()
         _binding = null
         Log.d(TAG, "onDestroy: called, binding set to null")
+    }
+
+    private fun setupColorCheckers(){
+        binding.ivColorBg1.setBackgroundColor(ModelColorConstats.COLOR_1.toColorInt())
+        binding.ivColorBg2.setBackgroundColor(ModelColorConstats.COLOR_2.toColorInt())
+        binding.ivColorBg3.setBackgroundColor(ModelColorConstats.COLOR_3.toColorInt())
+        binding.ivColorBg4.setBackgroundColor(ModelColorConstats.COLOR_4.toColorInt())
+        binding.ivColorBg5.setBackgroundColor(ModelColorConstats.COLOR_5.toColorInt())
+        binding.ivColorBg6.setBackgroundColor(ModelColorConstats.COLOR_6.toColorInt())
+        binding.ivColorBg7.setBackgroundColor(ModelColorConstats.COLOR_7.toColorInt())
+        binding.ivColorBg8.setBackgroundColor(ModelColorConstats.COLOR_8.toColorInt())
     }
     private fun setupObservers(){
         //PROFRAM TABLE EVENT: INSERT, UPDATE
@@ -151,6 +186,17 @@ class DialogFragmentProgramTable: DialogFragment() {
                 }
             }
         }
+    }
+
+    private fun clearAllChecks(){
+        binding.ivColorCk1.visibility = View.GONE
+        binding.ivColorCk2.visibility = View.GONE
+        binding.ivColorCk3.visibility = View.GONE
+        binding.ivColorCk4.visibility = View.GONE
+        binding.ivColorCk5.visibility = View.GONE
+        binding.ivColorCk6.visibility = View.GONE
+        binding.ivColorCk7.visibility = View.GONE
+        binding.ivColorCk8.visibility = View.GONE
     }
 
     companion object {

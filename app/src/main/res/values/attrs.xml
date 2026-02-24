@@ -1,37 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="modelColor1" format="color" />
-    <attr name="modelColorContainer1" format="color" />
 
     <attr name="modelColor2" format="color" />
-    <attr name="modelColorContainer2" format="color" />
 
     <attr name="modelColor3" format="color" />
-    <attr name="modelColorContainer3" format="color" />
 
     <attr name="modelColor4" format="color" />
-    <attr name="modelColorContainer4" format="color" />
 
     <attr name="modelColor5" format="color" />
-    <attr name="modelColorContainer5" format="color" />
 
     <attr name="modelColor6" format="color" />
-    <attr name="modelColorContainer6" format="color" />
 
     <attr name="modelColor7" format="color" />
-    <attr name="modelColorContainer7" format="color" />
 
     <attr name="modelColor8" format="color" />
-    <attr name="modelColorContainer8" format="color" />
 
     ////////////////////////////////////////////////////////////////////////////////////
 
     <attr name="modelColorLesson" format="color" />
-    <attr name="modelColorLessonContainer" format="color" />
 
     <attr name="modelColorExam" format="color" />
-    <attr name="modelColorExamContainer" format="color" />
 
     <attr name="modelColorHomework" format="color" />
-    <attr name="modelColorHomeworkContainer" format="color" />
 </resources>

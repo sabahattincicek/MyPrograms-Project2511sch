@@ -1,11 +1,10 @@
 package com.saboon.project_2511sch.presentation.task
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getString
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.ListAdapter
-import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.RowMainContentBinding
 import com.saboon.project_2511sch.databinding.RowSingleTextViewBinding
@@ -14,7 +13,8 @@ import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.BaseDiffCallback
 import com.saboon.project_2511sch.util.BaseDisplayListItem
 import com.saboon.project_2511sch.util.BaseViewHolder
-import com.saboon.project_2511sch.util.ModelColors
+import com.saboon.project_2511sch.util.ModelColor
+import com.saboon.project_2511sch.util.ModelColorConstats
 import com.saboon.project_2511sch.util.toFormattedString
 
 class RecyclerAdapterTask:
@@ -83,13 +83,7 @@ class RecyclerAdapterTask:
                         binding.tvContent2.text = task.date.toFormattedString("EEEE")
                         binding.tvContent2Sub.text = task.place
 
-                        val modelColorContainerAttr = ModelColors.getThemeAttrForModelColorContainer( ModelColors.MODEL_COLOR_LESSON)
-                        val themeAwareModelColorContainer = MaterialColors.getColor(binding.root, modelColorContainerAttr, Color.BLACK)
-                        binding.llContainer.setBackgroundColor(themeAwareModelColorContainer)
-
-                        val modelColorAttr = ModelColors.getThemeAttrForModelColor(ModelColors.MODEL_COLOR_LESSON)
-                        val themeAwareModelColor = MaterialColors.getColor(binding.root, modelColorAttr, Color.BLACK)
-                        binding.viewDivider.setBackgroundColor(themeAwareModelColor)
+                        binding.viewDivider.setBackgroundColor(ModelColorConstats.LESSON.toColorInt())
                     }
                     is Task.Exam -> {
                         binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
@@ -99,13 +93,7 @@ class RecyclerAdapterTask:
                         binding.tvContent2.text = task.date.toFormattedString("dd MMMM yyyy EEEE")
                         binding.tvContent2Sub.text = task.place
 
-                        val modelColorContainerAttr = ModelColors.getThemeAttrForModelColorContainer( ModelColors.MODEL_COLOR_EXAM)
-                        val themeAwareModelColorContainer = MaterialColors.getColor(binding.root, modelColorContainerAttr, Color.BLACK)
-                        binding.llContainer.setBackgroundColor(themeAwareModelColorContainer)
-
-                        val modelColorAttr = ModelColors.getThemeAttrForModelColor(ModelColors.MODEL_COLOR_EXAM)
-                        val themeAwareModelColor = MaterialColors.getColor(binding.root, modelColorAttr, Color.BLACK)
-                        binding.viewDivider.setBackgroundColor(themeAwareModelColor)
+                        binding.viewDivider.setBackgroundColor(ModelColorConstats.EXAM.toColorInt())
                     }
                     is Task.Homework -> {
                         binding.tvDate1.text = task.dueTime.toFormattedString("HH:mm")
@@ -115,13 +103,7 @@ class RecyclerAdapterTask:
                         binding.tvContent2.text = task.dueDate.toFormattedString("dd MMMM yyyy EEEE")
                         binding.tvContent2Sub.text = ""
 
-                        val modelColorContainerAttr = ModelColors.getThemeAttrForModelColorContainer( ModelColors.MODEL_COLOR_HOMEWORK)
-                        val themeAwareModelColorContainer = MaterialColors.getColor(binding.root, modelColorContainerAttr, Color.BLACK)
-                        binding.llContainer.setBackgroundColor(themeAwareModelColorContainer)
-
-                        val modelColorAttr = ModelColors.getThemeAttrForModelColor(ModelColors.MODEL_COLOR_HOMEWORK)
-                        val themeAwareModelColor = MaterialColors.getColor(binding.root, modelColorAttr, Color.BLACK)
-                        binding.viewDivider.setBackgroundColor(themeAwareModelColor)
+                        binding.viewDivider.setBackgroundColor(ModelColorConstats.HOMEWORK.toColorInt())
                     }
                 }
             }

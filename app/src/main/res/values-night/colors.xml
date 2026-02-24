@@ -1,38 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="modelColor1">#012E03</color>
-    <color name="modelColorContainer1">#00FE18</color>
 
     <color name="modelColor2">#303000</color>
-    <color name="modelColorContainer2">#FFFB00</color>
 
     <color name="modelColor3">#DDC66E</color>
-    <color name="modelColorContainer3">#544600</color>
 
     <color name="modelColor4">#BBC3FF</color>
-    <color name="modelColorContainer4">#3A4379</color>
 
     <color name="modelColor5">#A1D39A</color>
-    <color name="modelColorContainer5">#235024</color>
 
     <color name="modelColor6">#FFB77B</color>
-    <color name="modelColorContainer6">#6B3A05</color>
 
     <color name="modelColor7">#FFB2BF</color>
-    <color name="modelColorContainer7">#713341</color>
 
     <color name="modelColor8">#FFB59E</color>
-    <color name="modelColorContainer8">#723521</color>
 
     ///////////////////////////////////////////////////////////////////////////
 
     <color name="modelColorLesson">#8FB2E5</color>
-    <color name="modelColorLessonContainer">#2B3F5E</color>
 
     <color name="modelColorExam">#E3A09A</color>
-    <color name="modelColorExamContainer">#5A2A26</color>
 
     <color name="modelColorHomework">#9BCFB1</color>
-    <color name="modelColorHomeworkContainer">#2E4B3B</color>
 </resources>
 

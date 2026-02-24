@@ -6,6 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getString
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.ListAdapter
 import com.saboon.project_2511sch.util.toFormattedString
 import com.google.android.material.color.MaterialColors
@@ -20,7 +21,8 @@ import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.util.BaseDiffCallback
 import com.saboon.project_2511sch.util.BaseDisplayListItem
 import com.saboon.project_2511sch.util.BaseViewHolder
-import com.saboon.project_2511sch.util.ModelColors
+import com.saboon.project_2511sch.util.ModelColor
+import com.saboon.project_2511sch.util.ModelColorConstats
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -125,7 +127,7 @@ class RecyclerAdapterHome :
                     set(Calendar.MILLISECOND, 0)
                 }.timeInMillis
 
-                val baseColor = if (colorSource == SettingsConstants.HomeListItemColorSource.FROM_PROGRAM_TABLE) {
+                val color = if (colorSource == SettingsConstants.HomeListItemColorSource.FROM_PROGRAM_TABLE) {
                     programTable.color
                 } else {
                     course.color
@@ -141,22 +143,14 @@ class RecyclerAdapterHome :
                         binding.tvContent2Sub.text = task.place
 
                         if (isColorEnabled){
-                            val customColorAttrContainer =
-                                ModelColors.getThemeAttrForModelColorContainer(baseColor)
-                            val customColorAttrTask =
-                                ModelColors.getThemeAttrForModelColor(ModelColors.MODEL_COLOR_LESSON)
-                            val themeAwareCustomColorContainer = MaterialColors.getColor(
-                                binding.root,
-                                customColorAttrContainer,
-                                Color.BLACK
-                            )
-                            val themeAwareCustomColorTask =
-                                MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
+                            val containerColor = color.getContainerColor(binding.root.context)
+                            val dividerColor = ModelColorConstats.LESSON.toColorInt()
+
                             binding.llContainer.background = GradientDrawable(
                                 GradientDrawable.Orientation.LEFT_RIGHT,
-                                intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
+                                intArrayOf(Color.TRANSPARENT, containerColor)
                             )
-                            binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
+                            binding.viewDivider.setBackgroundColor(dividerColor)
                         }
                     }
 
@@ -169,22 +163,14 @@ class RecyclerAdapterHome :
                         binding.tvContent2Sub.text = task.place
 
                         if (isColorEnabled){
-                            val customColorAttrContainer =
-                                ModelColors.getThemeAttrForModelColorContainer(baseColor)
-                            val customColorAttrTask =
-                                ModelColors.getThemeAttrForModelColor(ModelColors.MODEL_COLOR_EXAM)
-                            val themeAwareCustomColorContainer = MaterialColors.getColor(
-                                binding.root,
-                                customColorAttrContainer,
-                                Color.BLACK
-                            )
-                            val themeAwareCustomColorTask =
-                                MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
+                            val containerColor = color.getContainerColor(binding.root.context)
+                            val dividerColor = ModelColorConstats.EXAM.toColorInt()
+
                             binding.llContainer.background = GradientDrawable(
                                 GradientDrawable.Orientation.LEFT_RIGHT,
-                                intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
+                                intArrayOf(Color.TRANSPARENT, containerColor)
                             )
-                            binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
+                            binding.viewDivider.setBackgroundColor(dividerColor)
                         }
                     }
 
@@ -197,22 +183,14 @@ class RecyclerAdapterHome :
                         binding.tvContent2Sub.text = ""
 
                         if (isColorEnabled){
-                            val customColorAttrContainer =
-                                ModelColors.getThemeAttrForModelColorContainer(baseColor)
-                            val customColorAttrTask =
-                                ModelColors.getThemeAttrForModelColor(ModelColors.MODEL_COLOR_HOMEWORK)
-                            val themeAwareCustomColorContainer = MaterialColors.getColor(
-                                binding.root,
-                                customColorAttrContainer,
-                                Color.BLACK
-                            )
-                            val themeAwareCustomColorTask =
-                                MaterialColors.getColor(binding.root, customColorAttrTask, Color.BLACK)
+                            val containerColor = color.getContainerColor(binding.root.context)
+                            val dividerColor = ModelColorConstats.HOMEWORK.toColorInt()
+
                             binding.llContainer.background = GradientDrawable(
                                 GradientDrawable.Orientation.LEFT_RIGHT,
-                                intArrayOf(Color.TRANSPARENT, themeAwareCustomColorContainer)
+                                intArrayOf(Color.TRANSPARENT, containerColor)
                             )
-                            binding.viewDivider.setBackgroundColor(themeAwareCustomColorTask)
+                            binding.viewDivider.setBackgroundColor(dividerColor)
                         }
                     }
                 }
