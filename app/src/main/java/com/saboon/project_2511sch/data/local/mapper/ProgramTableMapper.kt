@@ -2,6 +2,7 @@ package com.saboon.project_2511sch.data.local.mapper
 
 import com.saboon.project_2511sch.data.local.entity.ProgramTableEntity
 import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.util.ModelColor
 
 fun ProgramTableEntity.toDomain(): ProgramTable {
     return ProgramTable(
@@ -19,7 +20,7 @@ fun ProgramTableEntity.toDomain(): ProgramTable {
         serverVersion = serverVersion,
         title = title,
         description = description,
-        color = color
+        color = ModelColor(color)
     )
 }
 
@@ -39,6 +40,6 @@ fun ProgramTable.toEntity(): ProgramTableEntity {
         serverVersion = serverVersion,
         title = title,
         description = description,
-        color = color
+        color = color.colorHex
     )
 }

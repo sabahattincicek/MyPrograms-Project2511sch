@@ -34,6 +34,16 @@ class SettingsRepositoryImp @Inject constructor(
         }
     }
 
+    //APP THEME
+    override fun getAppTheme() = getStringFlow(SettingsConstants.PREF_KEY_APP_THEME, SettingsConstants.AppTheme.DEFAULT)
+    override suspend fun setAppTheme(theme: String) {
+        withContext(Dispatchers.IO){
+            sharedPreferences.edit{
+                putString(SettingsConstants.PREF_KEY_APP_THEME, theme)
+            }
+        }
+    }
+
     //HOME VIEW RANGE
     override fun getHomeViewRange() = getStringFlow(SettingsConstants.PREF_KEY_HOME_VIEW_RANGE, SettingsConstants.HomeViewRange.DEFAULT)
     override suspend fun setHomeViewRange(viewRange: String) {

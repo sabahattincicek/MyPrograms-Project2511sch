@@ -15,6 +15,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -27,6 +29,7 @@ class SettingsFragment : Fragment() {
     private lateinit var recyclerAdapterSettings: RecyclerAdapterSettings
 
     private var currentDarkModeValue: String? = null
+    private var currentAppThemeValue: String? = null
     private var currentHomeViewRangeValue: String? = null
     private var currentHomeListItemColorEnabledValue: Boolean? = null
     private var currentHomeListItemColorSourceValue: String? = null
@@ -76,6 +79,22 @@ class SettingsFragment : Fragment() {
                         .setSingleChoiceItems(darkModeEntries, checkedItem) { dialog, which ->
                             val selectedValue = darkModeValues[which]
                             viewModelSettings.onDarkModeSelected(selectedValue)
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show()
+                }
+                SettingsConstants.PREF_KEY_APP_THEME -> {
+                    val appThemeEntries = resources.getStringArray(R.array.pref_app_theme)
+                    val appThemeValues = SettingsConstants.AppTheme.getValuesAsArray()
+
+                    val checkedItem = appThemeValues.indexOf(currentAppThemeValue)
+
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("App Theme")
+                        .setSingleChoiceItems(appThemeEntries, checkedItem) { dialog, which ->
+                            val selectedValue = appThemeValues[which]
+                            viewModelSettings.onAppThemeSelected(selectedValue)
                             dialog.dismiss()
                         }
                         .setNegativeButton(getString(R.string.cancel), null)
@@ -157,6 +176,15 @@ class SettingsFragment : Fragment() {
             )
         )
 
+        // APP THEME
+        settingsList.add(
+            SettingsItem.Action(
+                key = SettingsConstants.PREF_KEY_APP_THEME,
+                title = "App Theme",
+                value = currentAppThemeValue!!
+            )
+        )
+
         // HOME VIEW RANGE
         settingsList.add(SettingsItem.Category("Home Page"))
         settingsList.add(
@@ -204,22 +232,29 @@ class SettingsFragment : Fragment() {
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Tüm ayar akışlarını birleştiriyoruz
-                kotlinx.coroutines.flow.combine(
+                val flows = listOf(
                     viewModelSettings.appDarkModeState,
+                    viewModelSettings.appThemeState,
                     viewModelSettings.homeViewRangeState,
                     viewModelSettings.overScrollDaysCountState,
                     viewModelSettings.homeListItemColorEnabledState,
                     viewModelSettings.homeListItemColorSourceState
-                ) { darkMode, viewRange, overscrollDaysCount, isColorEnabled, colorSource ->
-                    // Değerleri güncelle
-                    currentDarkModeValue = darkMode
-                    currentHomeViewRangeValue = viewRange
-                    currentOverscrollDaysCountValue = overscrollDaysCount
-                    currentHomeListItemColorEnabledValue = isColorEnabled
-                    currentHomeListItemColorSourceValue = colorSource
+                )
+                kotlinx.coroutines.flow.combine(flows) { values ->
+                    val newAppTheme = values[1] as String
+                    // Eğer App Theme değişmişse (ve ilk açılış değilse) activity'yi yeniden başlat
+                    if (currentAppThemeValue != null && currentAppThemeValue != newAppTheme) {
+                        currentAppThemeValue = newAppTheme
+                        activity?.recreate()
+                    }
+
+                    currentDarkModeValue = values[0] as String
+                    currentAppThemeValue = values[1] as String
+                    currentHomeViewRangeValue = values[2] as String
+                    currentOverscrollDaysCountValue = values[3] as Int
+                    currentHomeListItemColorEnabledValue = values[4] as Boolean
+                    currentHomeListItemColorSourceValue = values[5] as String
                 }.collect {
-                    // SADECE tüm veriler atandıktan sonra listeyi çiz
                     renderSettingsList()
                 }
             }

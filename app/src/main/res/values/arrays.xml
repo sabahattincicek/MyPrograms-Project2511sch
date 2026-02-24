@@ -7,6 +7,13 @@
         <item>Close</item>
         <item>System Default</item>
     </string-array>
+    <string-array name="pref_app_theme">
+        <item>Coffee</item>
+        <item>Forest</item>
+        <item>Ocean</item>
+        <item>Pony</item>
+        <item>Volcano</item>
+    </string-array>
 
 <!--    HOME PAGE-->
     <string-array name="pref_home_view_range">

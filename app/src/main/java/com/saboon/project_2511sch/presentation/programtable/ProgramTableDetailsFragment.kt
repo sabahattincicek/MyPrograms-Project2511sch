@@ -30,7 +30,6 @@ import com.saboon.project_2511sch.presentation.course.RecyclerAdapterCourse
 import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
-import com.saboon.project_2511sch.util.ModelColors
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open
 import dagger.hilt.android.AndroidEntryPoint
@@ -132,17 +131,12 @@ class ProgramTableDetailsFragment : Fragment() {
         binding.tvTitle.text = programTable.title
         binding.tvDescription.text = "${getString(R.string.description)}: ${programTable.description}"
 
-        val color = programTable.color
+        val containerColor = programTable.color.getInt()
+        val textColor = programTable.color.getOnMainTextColor()
 
-        val customContainerColorAttr = ModelColors.getThemeAttrForCustomContainerColor(color)
-        val themeAwareCustomContainerColor = MaterialColors.getColor(requireContext(), customContainerColorAttr, Color.BLACK)
-
-        val onCustomContainerColorAttr = ModelColors.getThemeAttrForOnCustomContainerColor(color)
-        val themeAwareOnCustomContainerColor = MaterialColors.getColor(requireContext(), onCustomContainerColorAttr, Color.BLACK)
-
-        binding.llProgramTableContainer.setBackgroundColor(themeAwareCustomContainerColor)
-        binding.tvTitle.setTextColor(themeAwareOnCustomContainerColor)
-        binding.tvDescription.setTextColor(themeAwareOnCustomContainerColor)
+        binding.llProgramTableContainer.setBackgroundColor(containerColor)
+        binding.tvTitle.setTextColor(textColor)
+        binding.tvDescription.setTextColor(textColor)
     }
 
     private fun setupAdapters(){

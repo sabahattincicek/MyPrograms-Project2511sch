@@ -55,7 +55,7 @@
                         android:id="@+id/iv_character_vibe"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="?attr/colorCustomColor1" />
+                        android:background="?attr/colorPrimary" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
@@ -102,86 +102,209 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- FULL NAME -->
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:boxBackgroundMode="none"
-                app:hintEnabled="true">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_full_name"
-                    android:layout_width="match_parent"
+                android:gravity="right">
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Full Name"
-                    android:padding="0dp"
-                    android:maxLines="1"
-                    android:background="@null" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <!-- ROLE -->
-            <com.google.android.material.textfield.TextInputLayout
+                    app:cardCornerRadius="30dp">
+                    <ImageView
+                        android:id="@+id/iv_edit_user"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="8dp"
+                        android:visibility="visible"
+                        android:src="@drawable/baseline_edit_24"
+                        app:tint="?attr/colorOnSurface" />
+                    <ImageView
+                        android:id="@+id/iv_save_user"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="8dp"
+                        android:visibility="gone"
+                        android:src="@drawable/baseline_check_24"
+                        app:tint="?attr/colorOnSurface" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:boxBackgroundMode="none"
-                app:hintEnabled="true">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_role"
-                    android:layout_width="match_parent"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Role"
-                    android:padding="0dp"
-                    android:maxLines="1"
-                    android:background="@null" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <!-- ACADEMIC LEVEL -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:boxBackgroundMode="none"
-                app:hintEnabled="true">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_academic_level"
-                    android:layout_width="match_parent"
+                    android:layout_marginEnd="4dp"
+                    android:orientation="vertical">
+                    <!-- FULL NAME -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="18sp"
+                        android:hint="Full Name:"/>
+                    <!-- ROLE -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="18sp"
+                        android:hint="Role:"/>
+                    <!-- ACADEMIC LEVEL -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="18sp"
+                        android:hint="Academic Level:"/>
+                    <!-- ORGANISATION -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="18sp"
+                        android:hint="Organisation:"/>
+                    <!-- ABOUT ME -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="18sp"
+                        android:hint="About Me:"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_text_view_container"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:hint="Academic level"
-                    android:padding="0dp"
-                    android:maxLines="1"
-                    android:background="@null" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <!-- ORGANISATION -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:boxBackgroundMode="none"
-                app:hintEnabled="true">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_organisation"
-                    android:layout_width="match_parent"
+                    android:visibility="visible"
+                    android:orientation="vertical">
+                    <!-- FULL NAME -->
+                    <TextView
+                        android:id="@+id/tv_full_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="18sp"
+                        android:maxLines="1"
+                        android:hint="Full Name"/>
+                    <!-- ROLE -->
+                    <TextView
+                        android:id="@+id/tv_role"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="18sp"
+                        android:maxLines="1"
+                        android:hint="Role"/>
+                    <!-- ACADEMIC LEVEL -->
+                    <TextView
+                        android:id="@+id/tv_academic_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="18sp"
+                        android:maxLines="1"
+                        android:hint="Academic Level"/>
+                    <!-- ORGANISATION -->
+                    <TextView
+                        android:id="@+id/tv_organisation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="18sp"
+                        android:maxLines="1"
+                        android:hint="Organisation"/>
+                    <!-- ABOUT ME -->
+                    <TextView
+                        android:id="@+id/tv_about_me"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="18sp"
+                        android:maxLines="4"
+                        android:hint="About Me"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_edit_text_container"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:hint="Organisation"
-                    android:padding="0dp"
-                    android:maxLines="1"
-                    android:background="@null" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <!-- ABOUT ME -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:boxBackgroundMode="none"
-                app:hintEnabled="true">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_about_me"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="About Me"
-                    android:padding="0dp"
-                    android:maxLines="4"
-                    android:background="@null" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:visibility="gone"
+                    android:orientation="vertical">
+                    <!-- FULL NAME -->
+                    <EditText
+                        android:id="@+id/et_full_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="?attr/colorSurfaceVariant"
+                        android:maxLines="1"
+                        android:text="sabo"
+                        android:hint="Full Name"/>
+                    <!-- ROLE -->
+                    <EditText
+                        android:id="@+id/et_role"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="?attr/colorSurfaceVariant"
+                        android:maxLines="1"
+                        android:hint="Role"/>
+                    <!-- ACADEMIC LEVEL -->
+                    <EditText
+                        android:id="@+id/et_academic_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="?attr/colorSurfaceVariant"
+                        android:maxLines="1"
+                        android:hint="Academic Level"/>
+                    <!-- ORGANISATION -->
+                    <EditText
+                        android:id="@+id/et_organisation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="?attr/colorSurfaceVariant"
+                        android:maxLines="1"
+                        android:hint="Organisation"/>
+                    <!-- ABOUT ME -->
+                    <EditText
+                        android:id="@+id/et_about_me"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="?attr/colorSurfaceVariant"
+                        android:maxLines="4"
+                        android:hint="About Me"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
 
             <!-- A divider to separate header from options -->
             <com.google.android.material.divider.MaterialDivider

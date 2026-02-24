@@ -2,6 +2,7 @@ package com.saboon.project_2511sch.data.local.mapper
 
 import com.saboon.project_2511sch.data.local.entity.CourseEntity
 import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.util.ModelColor
 
 fun CourseEntity.toDomain(): Course {
     return Course(
@@ -21,7 +22,7 @@ fun CourseEntity.toDomain(): Course {
         title = title,
         description = description,
         people = people,
-        color = color,
+        color = ModelColor(color),
         absence = absence
     )
 }
@@ -44,7 +45,7 @@ fun Course.toEntity(): CourseEntity {
         title = title,
         description = description,
         people = people,
-        color = color,
+        color = color.colorHex,
         absence = absence
     )
 }

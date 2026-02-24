@@ -1,6 +1,7 @@
 package com.saboon.project_2511sch.presentation.profile
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -43,7 +44,6 @@ class ProfileFragment : Fragment() {
     private lateinit var currentUser: User
     private var isInitialDataLoaded = false
 
-
     //select folder to save export file
     private val exportFileToDeviceLauncher = registerForActivityResult(
         ActivityResultContracts.CreateDocument("application/zip")
@@ -79,35 +79,26 @@ class ProfileFragment : Fragment() {
 
         setupObservers()
 
-        binding.etFullName.doAfterTextChanged {
-            val text = it.toString().trim()
-            if (text != currentUser.fullName) {
-                viewModelUser.update(currentUser.copy(fullName = text))
-            }
+        binding.ivEditUser.setOnClickListener {
+            binding.ivEditUser.visibility = View.GONE
+            binding.llTextViewContainer.visibility = View.GONE
+            binding.ivSaveUser.visibility = View.VISIBLE
+            binding.llEditTextContainer.visibility = View.VISIBLE
         }
-        binding.etRole.doAfterTextChanged {
-            val text = it.toString().trim()
-            if (text != currentUser.role) {
-                viewModelUser.update(currentUser.copy(role = text))
-            }
-        }
-        binding.etAcademicLevel.doAfterTextChanged {
-            val text = it.toString().trim()
-            if (text != currentUser.academicLevel) {
-                viewModelUser.update(currentUser.copy(academicLevel = text))
-            }
-        }
-        binding.etOrganisation.doAfterTextChanged {
-            val text = it.toString().trim()
-            if (text != currentUser.organisation) {
-                viewModelUser.update(currentUser.copy(organisation = text))
-            }
-        }
-        binding.etAboutMe.doAfterTextChanged {
-            val text = it.toString().trim()
-            if (text != currentUser.aboutMe) {
-                viewModelUser.update(currentUser.copy(aboutMe = text))
-            }
+        binding.ivSaveUser.setOnClickListener {
+            val updatedUser = currentUser.copy(
+                fullName = binding.etFullName.text.toString(),
+                role = binding.etRole.text.toString(),
+                academicLevel = binding.etAcademicLevel.text.toString(),
+                organisation = binding.etOrganisation.text.toString(),
+                aboutMe = binding.etAboutMe.text.toString()
+            )
+            viewModelUser.update(updatedUser)
+
+            binding.ivEditUser.visibility = View.VISIBLE
+            binding.llTextViewContainer.visibility = View.VISIBLE
+            binding.ivSaveUser.visibility = View.GONE
+            binding.llEditTextContainer.visibility = View.GONE
         }
         binding.tvSettings.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToSettingsFragment()
@@ -130,14 +121,17 @@ class ProfileFragment : Fragment() {
         binding.ivProfilePicture.load(File(currentUser.photoUrl)){
             crossfade(true)
         }
-        if (!isInitialDataLoaded) {
-            binding.etFullName.setText(currentUser.fullName)
-            binding.etRole.setText(currentUser.role)
-            binding.etAcademicLevel.setText(currentUser.academicLevel)
-            binding.etOrganisation.setText(currentUser.organisation)
-            binding.etAboutMe.setText(currentUser.aboutMe)
-            isInitialDataLoaded = true
-        }
+        binding.tvFullName.text = currentUser.fullName
+        binding.tvRole.text = currentUser.role
+        binding.tvAcademicLevel.text = currentUser.academicLevel
+        binding.tvOrganisation.text = currentUser.organisation
+        binding.tvAboutMe.text = currentUser.aboutMe
+
+        binding.etFullName.setText(currentUser.fullName)
+        binding.etRole.setText(currentUser.role)
+        binding.etAcademicLevel.setText(currentUser.academicLevel)
+        binding.etOrganisation.setText(currentUser.organisation)
+        binding.etAboutMe.setText(currentUser.aboutMe)
     }
     private fun setupObservers(){
         //USER STATE
@@ -164,7 +158,9 @@ class ProfileFragment : Fragment() {
                         is Resource.Error -> {}
                         is Resource.Idle -> {}
                         is Resource.Loading -> {}
-                        is Resource.Success -> {}
+                        is Resource.Success -> {
+                            applyDataToView()
+                        }
                     }
                 }
             }

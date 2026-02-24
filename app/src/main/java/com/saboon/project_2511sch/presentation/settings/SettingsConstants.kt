@@ -2,10 +2,13 @@ package com.saboon.project_2511sch.presentation.settings
 
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants.HomeListItemColorSource.FROM_COURSE
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants.HomeListItemColorSource.FROM_PROGRAM_TABLE
+import com.saboon.project_2511sch.presentation.settings.SettingsConstants.HomeViewRange.MONTH
+import com.saboon.project_2511sch.presentation.settings.SettingsConstants.HomeViewRange.WEEK
 
 object SettingsConstants {
     //KEYS
     const val PREF_KEY_DARK_MODE = "pref_key_dark_mode"
+    const val PREF_KEY_APP_THEME = "pref_key_app_theme"
     const val PREF_KEY_HOME_VIEW_RANGE = "pref_key_home_view_range"
     const val PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED = "pref_key_home_list_item_color_enabled"
     const val PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE = "pref_key_home_list_item_color"
@@ -22,6 +25,17 @@ object SettingsConstants {
          */
         fun getValuesAsArray(): Array<String> {
             return arrayOf(OPEN, CLOSE, SYSTEM) // same order with pref_dark_mode in arrays.xml
+        }
+    }
+    object AppTheme {
+        const val COFFEE = "coffee"
+        const val FOREST = "forest"
+        const val OCEAN = "ocean"
+        const val PONY = "pony"
+        const val VOLCANO = "volcano"
+        const val DEFAULT = COFFEE
+        fun getValuesAsArray(): Array<String> {
+            return arrayOf(COFFEE, FOREST, OCEAN, PONY, VOLCANO) //same order with pref_app_theme in arrays.xml
         }
     }
 

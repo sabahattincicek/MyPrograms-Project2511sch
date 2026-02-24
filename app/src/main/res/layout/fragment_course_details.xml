@@ -56,7 +56,6 @@
                     android:id="@+id/ll_course_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorCustomColor1Container"
                     android:orientation="vertical"
                     android:padding="8dp">
 
@@ -68,7 +67,6 @@
                         android:layout_margin="8dp"
                         android:maxLines="1"
                         android:text="Robot Kinematigi"
-                        android:textColor="?attr/colorOnCustomColor1Container"
                         android:textSize="24sp" />
 
                     <TextView
@@ -80,7 +78,6 @@
                         android:layout_marginEnd="8dp"
                         android:maxLines="1"
                         android:text="Zafer Bingul"
-                        android:textColor="?attr/colorOnCustomColor1Container"
                         android:textSize="18sp"
                         android:visibility="visible" />
 
@@ -93,7 +90,6 @@
                         android:layout_marginEnd="8dp"
                         android:maxLines="1"
                         android:text="Cenk karaman, Emre ulusan"
-                        android:textColor="?attr/colorOnCustomColor1Container"
                         android:visibility="visible" />
 
                     <LinearLayout
@@ -111,8 +107,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:maxLines="2"
-                            android:text="description jflakjdfl kasfjdlaskf j;als kdfj sadf dsfafd"
-                            android:textColor="?attr/colorOnCustomColor1Container" />
+                            android:text="description jflakjdfl kasfjdlaskf j;al"/>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -125,8 +120,7 @@
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:text="Absence"
-                                android:textAlignment="center"
-                                android:textColor="?attr/colorOnCustomColor1Container" />
+                                android:textAlignment="center" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -137,8 +131,7 @@
                                     android:id="@+id/btn_absence_decrease"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/baseline_horizontal_rule_24"
-                                    app:tint="?attr/colorOnCustomColor1Container" />
+                                    android:src="@drawable/baseline_horizontal_rule_24" />
 
                                 <TextView
                                     android:id="@+id/tv_absence_count"
@@ -146,15 +139,13 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="2"
-                                    android:textAlignment="center"
-                                    android:textColor="?attr/colorOnCustomColor1Container" />
+                                    android:textAlignment="center" />
 
                                 <ImageView
                                     android:id="@+id/btn_absence_increase"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/baseline_add_24"
-                                    app:tint="?attr/colorOnCustomColor1Container" />
+                                    android:src="@drawable/baseline_add_24" />
                             </LinearLayout>
                         </LinearLayout>
 
