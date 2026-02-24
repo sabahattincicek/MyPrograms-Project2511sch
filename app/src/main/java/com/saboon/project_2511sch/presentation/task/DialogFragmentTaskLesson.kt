@@ -57,7 +57,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
     private var selectedRecurrenceRule: RecurrenceRule = RecurrenceRule(freq = RecurrenceRule.Frequency.WEEKLY)
     private var selectedTimeStartMillis: Long = System.currentTimeMillis()
     private var selectedTimeEndMillis: Long = System.currentTimeMillis()
-    private var selectedRemindBeforeMinutes: Int = -1
+    private var selectedRemindBeforeMinutes: Int = -1 // no reminder
 
     private var uri: Uri? = null
 

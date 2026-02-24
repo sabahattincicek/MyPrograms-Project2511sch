@@ -57,7 +57,7 @@ class DialogFragmentTaskExam: DialogFragment() {
     private var selectedDateMillis: Long = System.currentTimeMillis()
     private var selectedTimeStartMillis: Long = System.currentTimeMillis()
     private var selectedTimeEndMillis: Long = System.currentTimeMillis()
-    private var selectedRemindBeforeMinutes: Int = 0
+    private var selectedRemindBeforeMinutes: Int = -1 // no reminder
 
     private var uri: Uri? = null
 
@@ -121,7 +121,7 @@ class DialogFragmentTaskExam: DialogFragment() {
             binding.etDate.setText(exam!!.date.toFormattedString("dd MMMM yyyy EEEE"))
             binding.etTimeStart.setText(exam!!.timeStart.toFormattedString("HH:mm"))
             binding.etTimeEnd.setText(exam!!.timeEnd.toFormattedString("HH:mm"))
-            binding.actvReminder.setText(mapMinutesToDisplayString(exam!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
+            binding.actvReminder.setText(mapReminderToDisplayString(exam!!.remindBefore), false)
             binding.etPlace.setText(exam!!.place)
 
             selectedDateMillis = exam!!.date
@@ -133,7 +133,9 @@ class DialogFragmentTaskExam: DialogFragment() {
             viewModelSFile.updateCourse(course, false)
             viewModelSFile.updateTask(task)
 //            binding.llFilesSection.visibility = View.VISIBLE  ------- suanlik database seviyesinde cascade ile otomatik silme islemi yapilamadigi icin tasklara file ekleme islemi engellendi
+            binding.llFilesSection.visibility = View.GONE
         }else{
+            binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
             binding.llFilesSection.visibility = View.GONE
         }
 
@@ -293,14 +295,15 @@ class DialogFragmentTaskExam: DialogFragment() {
         }
     }
 
-    private fun mapMinutesToDisplayString(minutes: Int, options: Array<String>): String{
+    private fun mapReminderToDisplayString(minutes: Int): String{
+        val options = resources.getStringArray(R.array.reminder_options)
         return when(minutes){
-            0 -> options[1]
-            10 -> options[2]
-            30 -> options[3]
-            60 -> options[4]
-            1440 -> options[5]
-            else -> options[0]
+            0 -> options[1] // "On Time"
+            10 -> options[2] // "10 minutes before"
+            30 -> options[3] // "30 minutes before"
+            60 -> options[4] // "1 hour before"
+            1440 -> options[5] // "1 day before"
+            else -> options[0] // "No reminder"
         }
     }
 
