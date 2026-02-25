@@ -200,7 +200,14 @@ class HomeFragment : Fragment() {
                         }
                         is Resource.Success<*> -> {
                             val homeDisplayItemList = result.data
-                            recyclerAdapterHome.submitList(homeDisplayItemList)
+                            if (homeDisplayItemList.isNullOrEmpty()){
+                                binding.llEmptyList.visibility = View.VISIBLE
+                                binding.osaOverScroll.visibility = View.GONE
+                            }else{
+                                binding.llEmptyList.visibility = View.GONE
+                                binding.osaOverScroll.visibility = View.VISIBLE
+                                recyclerAdapterHome.submitList(homeDisplayItemList)
+                            }
                         }
                     }
                 }

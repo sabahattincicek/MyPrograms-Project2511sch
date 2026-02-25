@@ -191,6 +191,10 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
             }
         }
 
+        if (finalEvents.isEmpty()) {
+            Log.d("GetHomeDisplayItemsUC", "generate: No tasks found in range, returning empty list.")
+            return emptyList()
+        }
 
         finalEvents
             .sortWith(compareBy<DisplayItemHome.ContentItemHome> {

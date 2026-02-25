@@ -87,10 +87,35 @@
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
+            <LinearLayout
+                android:id="@+id/ll_emptyList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="visible"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:src="@drawable/empty_list"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:text="No tasks or lessons found.\n\nStart by creating your first program table to organize your schedule!" />
+
+
+            </LinearLayout>
+
             <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout
                 android:id="@+id/osa_over_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
