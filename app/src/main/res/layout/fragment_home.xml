@@ -106,9 +106,8 @@
                     android:layout_marginEnd="32dp"
                     android:textAlignment="center"
                     android:textSize="18sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:text="No tasks or lessons found.\n\nStart by creating your first program table to organize your schedule!" />
-
-
             </LinearLayout>
 
             <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout

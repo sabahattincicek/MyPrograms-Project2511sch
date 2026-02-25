@@ -22,11 +22,39 @@
             app:title="@string/appBarTitle_programTables" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_emptyList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:src="@drawable/empty_list" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:text="No program tables found.\n\nStart by creating your first program table to organize your schedule!"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="18sp" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_program_table"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         tools:itemCount="4"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/row_general_item"
         app:layout_constraintEnd_toEndOf="parent"

@@ -34,6 +34,10 @@ class GetTaskDisplayItemUseCase @Inject constructor(
                     else -> allTasks
                 }
 
+                if (filteredTasks.isEmpty()) {
+                    return@combine Resource.Success(emptyList())
+                }
+
                 val tableMap = allProgramTables.associateBy { it.id }
                 val courseMap = allCourses.associateBy { it.id }
 

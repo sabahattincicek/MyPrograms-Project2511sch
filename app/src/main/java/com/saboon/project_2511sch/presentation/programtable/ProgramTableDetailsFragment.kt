@@ -233,8 +233,16 @@ class ProgramTableDetailsFragment : Fragment() {
                         is Resource.Loading -> {}
                         is Resource.Success -> {
                             val courseDisplayItemList = resource.data
-                            val filteredList = courseDisplayItemList?.filter { it !is DisplayItemCourse.HeaderCourse } // not want header to show
-                            recyclerAdapterCourse.submitList(filteredList)
+                            if (courseDisplayItemList.isNullOrEmpty()){
+                                binding.llEmptyList.visibility = View.VISIBLE
+                                binding.rvCourses.visibility = View.GONE
+                            }else{
+                                binding.llEmptyList.visibility = View.GONE
+                                binding.rvCourses.visibility = View.VISIBLE
+
+                                val filteredList = courseDisplayItemList?.filter { it !is DisplayItemCourse.HeaderCourse } // not want header to show
+                                recyclerAdapterCourse.submitList(filteredList)
+                            }
                         }
                     }
                 }

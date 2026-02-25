@@ -203,11 +203,35 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/ll_emptyList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/empty_list" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="No tasks found."
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_tasks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:visibility="gone"
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
                 android:clipToPadding="false"

@@ -4,7 +4,6 @@ import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
 import com.saboon.project_2511sch.presentation.common.FilterGeneric
 import com.saboon.project_2511sch.presentation.course.DisplayItemCourse
-import com.saboon.project_2511sch.presentation.task.DisplayItemTask
 import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -25,15 +24,19 @@ class GetCourseDisplayItemListUseCase @Inject constructor(
                 val allProgramTables = programTableRes.data ?: emptyList()
                 val allCourses = courseRes.data ?: emptyList()
 
-                val filteredCourse = when {
+                val filteredCourses = when {
                     filter.programTable != null -> allCourses.filter { it.programTableId == filter.programTable.id } //get courses by program table
                     else -> allCourses //get all course
+                }
+
+                if (filteredCourses.isEmpty()) {
+                    return@combine Resource.Success(emptyList())
                 }
 
                 val programTableMap = allProgramTables.associateBy { it.id }
 
                 val displayList = mutableListOf<DisplayItemCourse>()
-                val groupedCourse = filteredCourse.groupBy { it.programTableId }
+                val groupedCourse = filteredCourses.groupBy { it.programTableId }
                 groupedCourse.forEach { (programTableId, courseInGroup) ->
                     val programTable = programTableMap[programTableId]
                     if (programTable != null){
@@ -46,7 +49,7 @@ class GetCourseDisplayItemListUseCase @Inject constructor(
                         ))
                     }
                 }
-                displayList.add(DisplayItemCourse.FooterCourse(filteredCourse.size))
+                displayList.add(DisplayItemCourse.FooterCourse(filteredCourses.size))
                 Resource.Success(displayList)
             }
             else if (programTableRes is Resource.Error || courseRes is Resource.Error){
