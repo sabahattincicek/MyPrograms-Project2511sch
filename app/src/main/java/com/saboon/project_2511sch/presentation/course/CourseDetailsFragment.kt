@@ -126,27 +126,26 @@ class CourseDetailsFragment : Fragment() {
             val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToFileFragment(programTable, course)
             findNavController().navigate(action)
         }
-        binding.btnAbsenceDecrease.setOnClickListener {
-            if (course.absence > 0){
-                val decrementedCourse = course.copy(
-                    absence = course.absence - 1
-                )
-                viewModelCourse.update(decrementedCourse)
-            }
-        }
-        binding.btnAbsenceIncrease.setOnClickListener {
-            val incrementedCourse = course.copy(
-                absence = course.absence + 1
-            )
-            viewModelCourse.update(incrementedCourse)
-        }
+//        binding.btnAbsenceDecrease.setOnClickListener {
+//            if (course.absence > 0){
+//                val decrementedCourse = course.copy(
+//                    absence = course.absence - 1
+//                )
+//                viewModelCourse.update(decrementedCourse)
+//            }
+//        }
+//        binding.btnAbsenceIncrease.setOnClickListener {
+//            val incrementedCourse = course.copy(
+//                absence = course.absence + 1
+//            )
+//            viewModelCourse.update(incrementedCourse)
+//        }
     }
     private fun applyDataToView(){
         binding.tvTitleCourse.text = course.title
         binding.tvPersonPrimary.text = course.people.split(",").firstOrNull()?.trim()
         binding.tvPersonSecondary.text = course.people.split(",").drop(1).joinToString(", ") { it.trim() }
         binding.tvDescription.text = course.description
-        binding.tvAbsenceCount.text = course.absence.toString()
 
         val containerColor = course.color.getInt()
         val textColor = course.color.getOnMainTextColor()

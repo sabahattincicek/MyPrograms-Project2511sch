@@ -37,5 +37,4 @@ data class CourseEntity(
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "people") val people: String,
     @ColumnInfo(name = "color") val color: String,
-    @ColumnInfo(name = "absence") val absence: Int,
 )

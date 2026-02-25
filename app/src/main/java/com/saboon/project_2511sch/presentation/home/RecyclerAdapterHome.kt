@@ -30,6 +30,8 @@ class RecyclerAdapterHome :
 
     var onContentItemClickListener:((ProgramTable, Course) -> Unit)? = null
 
+    var onAbsenceButtonClickListener: ((Task.Lesson) -> Unit)? = null
+
     private var openedLayout: SwipeRevealLayout? = null
 
     var isColorEnabled: Boolean = true
@@ -140,7 +142,7 @@ class RecyclerAdapterHome :
                             binding.tvContent1Sub.text = course.people
                         }
                         binding.tvContent2.text = task.place
-                        binding.tvContent2Sub.text = "Absence: ${course.absence}"
+                        binding.tvContent2Sub.text = "Absence: ${task.absence.size.toString()}"
 
                         val dividerColor = ModelColorConstats.LESSON.toColorInt()
                         binding.viewDivider.setBackgroundColor(dividerColor)
@@ -152,6 +154,23 @@ class RecyclerAdapterHome :
                             )
                         }
                         binding.slSwipe.isSwipeable = true
+                        binding.tvAbsenceCount.text = task.absence.size.toString()
+                        binding.btnAbsenceDecrease.setOnClickListener {
+                            val absenceDateList = item.task.absence.toMutableList()
+                            absenceDateList.remove(item.task.date)
+                            val updatedTask = item.task.copy(
+                                absence = absenceDateList
+                            )
+                            onAbsenceButtonClickListener?.invoke(updatedTask)
+                        }
+                        binding.btnAbsenceIncrease.setOnClickListener {
+                            val absenceDateList = item.task.absence.toMutableList()
+                            absenceDateList.add(item.task.date)
+                            val updatedTask = item.task.copy(
+                                absence = absenceDateList
+                            )
+                            onAbsenceButtonClickListener?.invoke(updatedTask)
+                        }
                     }
 
                     is Task.Exam -> {

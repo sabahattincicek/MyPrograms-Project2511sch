@@ -26,6 +26,9 @@ fun TaskLessonEntity.toDomain(): Task.Lesson {
         recurrenceRule = RecurrenceRule.fromRuleString(recurrenceRuleString),
         timeStart = timeStart,
         timeEnd = timeEnd,
+        absence = absence.split(",")
+            .filter { it.isNotBlank() }
+            .map { it.toLong() },
         remindBefore = remindBefore,
         place = place
     )
@@ -53,6 +56,7 @@ fun Task.Lesson.toEntity(): TaskLessonEntity{
         recurrenceRuleString = recurrenceRule.toRuleString(),
         timeStart = timeStart,
         timeEnd = timeEnd,
+        absence = absence.joinToString(","),
         remindBefore = remindBefore,
         place = place
     )

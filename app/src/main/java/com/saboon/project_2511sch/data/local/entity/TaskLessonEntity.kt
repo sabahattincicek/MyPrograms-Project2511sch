@@ -45,6 +45,7 @@ data class TaskLessonEntity(
     @ColumnInfo(name = "recurrence_rule_string") val recurrenceRuleString: String,
     @ColumnInfo(name = "time_start") val timeStart: Long,
     @ColumnInfo(name = "time_end") val timeEnd: Long,
+    @ColumnInfo(name = "absence") val absence: String, // "1234123,21313421,1431234,324432" seklinde database e kaydedilecek
     @ColumnInfo(name = "remind_before") val remindBefore: Int,
     @ColumnInfo(name = "place") val place: String,
 )
