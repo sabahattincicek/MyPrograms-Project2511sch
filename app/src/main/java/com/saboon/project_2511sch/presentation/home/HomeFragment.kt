@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.BundleCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -34,7 +35,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModelHome: ViewModelHome by viewModels()
+    private val viewModelHome: ViewModelHome by activityViewModels()
     private val viewModelTask: ViewModelTask by viewModels()
     private val viewModelSettings: ViewModelSettings by viewModels()
 
