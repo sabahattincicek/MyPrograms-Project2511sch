@@ -124,20 +124,6 @@ class CourseDetailsFragment : Fragment() {
             val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToFileFragment(programTable, course)
             findNavController().navigate(action)
         }
-//        binding.btnAbsenceDecrease.setOnClickListener {
-//            if (course.absence > 0){
-//                val decrementedCourse = course.copy(
-//                    absence = course.absence - 1
-//                )
-//                viewModelCourse.update(decrementedCourse)
-//            }
-//        }
-//        binding.btnAbsenceIncrease.setOnClickListener {
-//            val incrementedCourse = course.copy(
-//                absence = course.absence + 1
-//            )
-//            viewModelCourse.update(incrementedCourse)
-//        }
     }
     private fun applyDataToView(){
         binding.tvTitleCourse.text = course.title
@@ -154,10 +140,6 @@ class CourseDetailsFragment : Fragment() {
         binding.tvPersonPrimary.setTextColor(textColor)
         binding.tvPersonSecondary.setTextColor(textColor)
         binding.tvDescription.setTextColor(textColor)
-        binding.tvAbsenceLabel.setTextColor(textColor)
-        binding.tvAbsenceCount.setTextColor(textColor)
-        binding.btnAbsenceDecrease.setColorFilter(textColor)
-        binding.btnAbsenceIncrease.setColorFilter(textColor)
     }
     private fun setupAdapters(){
         recyclerAdapterTask = RecyclerAdapterTask()
