@@ -18,6 +18,11 @@ class GetProgramTableDisplayItemListUseCase @Inject constructor(
                 is Resource.Loading -> {Resource.Loading()}
                 is Resource.Success -> {
                     val programTables = resource.data ?: emptyList()
+
+                    if (programTables.isEmpty()) {
+                        return@map Resource.Success(emptyList())
+                    }
+
                     val displayList = mutableListOf<DisplayItemProgramTable>()
                     displayList.addAll(programTables.map {
                         DisplayItemProgramTable.ContentProgramTable(it)

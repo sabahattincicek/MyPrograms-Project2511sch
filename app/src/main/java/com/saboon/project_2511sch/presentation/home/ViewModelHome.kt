@@ -71,6 +71,10 @@ class ViewModelHome @Inject constructor(
 
     // Mevcut haftayı yükle (Pazartesi - Pazar)
     fun loadData() {
+        if (displayItemsState.value is Resource.Success &&
+            (displayItemsState.value as Resource.Success).data?.isNotEmpty() == true){
+            return
+        }
         _dateRange.value = getInitialRange()
     }
 

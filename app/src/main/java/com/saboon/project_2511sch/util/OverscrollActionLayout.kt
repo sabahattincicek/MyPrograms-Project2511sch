@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.home
+package com.saboon.project_2511sch.util
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -10,9 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import androidx.core.view.NestedScrollingParent3
 import androidx.core.view.ViewCompat
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 /**
  * OverscrollActionLayout

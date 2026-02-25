@@ -117,6 +117,10 @@ class CourseDetailsFragment : Fragment() {
                 }
             }
         }
+        binding.llCourseInfo.setOnClickListener {
+            val dialog = DialogFragmentCourse.newInstanceForUpdate(currentUser, programTable, course)
+            dialog.show(childFragmentManager, "Edit Course")
+        }
         binding.fabAdd.setOnClickListener { view ->
             showAddTaskMenu(view)
         }
@@ -251,7 +255,16 @@ class CourseDetailsFragment : Fragment() {
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            recyclerAdapterTask.submitList(resource.data)
+                            val taskDisplayItemList = resource.data
+                            if (taskDisplayItemList.isNullOrEmpty()){
+                                binding.llEmptyList.visibility = View.VISIBLE
+                                binding.rvTasks.visibility = View.GONE
+                            }else{
+                                binding.llEmptyList.visibility = View.GONE
+                                binding.rvTasks.visibility = View.VISIBLE
+
+                                recyclerAdapterTask.submitList(resource.data)
+                            }
                         }
                     }
                 }

@@ -91,7 +91,16 @@ class ProgramTableListFragment : Fragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading -> {}
                         is Resource.Success -> {
-                            recyclerAdapterProgramTables.submitList(resource.data)
+                            val displayItemProgramTableList = resource.data
+                            if (displayItemProgramTableList.isNullOrEmpty()){
+                                binding.llEmptyList.visibility = View.VISIBLE
+                                binding.rvProgramTable.visibility = View.GONE
+                            }else{
+                                binding.llEmptyList.visibility = View.GONE
+                                binding.rvProgramTable.visibility = View.VISIBLE
+
+                                recyclerAdapterProgramTables.submitList(resource.data)
+                            }
                         }
                     }
                 }

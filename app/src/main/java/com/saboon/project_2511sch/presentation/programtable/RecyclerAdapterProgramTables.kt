@@ -1,6 +1,7 @@
 package com.saboon.project_2511sch.presentation.programtable
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.saboon.project_2511sch.databinding.RowGeneralItemBinding
@@ -56,8 +57,16 @@ class RecyclerAdapterProgramTables :
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item) //for click logic
             if (item is DisplayItemProgramTable.ContentProgramTable){
-                binding.tvMainContent.text = item.programTable.title
-                binding.tvSubContent.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
+                binding.tvContent1.text = item.programTable.title
+                if (item.programTable.description != ""){
+                    binding.tvContent1Sub.text = item.programTable.description
+                    binding.tvContent2Sub.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
+                    binding.tvContent2.visibility = View.GONE
+                }else{
+                    binding.tvContent1Sub.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
+                    binding.tvContent2.visibility = View.GONE
+                    binding.tvContent2Sub.visibility = View.GONE
+                }
                 if (!item.programTable.isActive) binding.llContainer.alpha = 0.3f
                 else binding.llContainer.alpha = 1.0f
             }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.BundleCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -34,7 +35,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModelHome: ViewModelHome by viewModels()
+    private val viewModelHome: ViewModelHome by activityViewModels()
     private val viewModelTask: ViewModelTask by viewModels()
     private val viewModelSettings: ViewModelSettings by viewModels()
 
@@ -91,8 +92,9 @@ class HomeFragment : Fragment() {
                 val dialog = DialogFragmentFilter.newInstanceFilterCourse(filteredProgramTable!!)
                 dialog.show(childFragmentManager, "DialogFragmentFileFilter")
             }else{
-//                val shake = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
-//                binding.cpProgramTable.startAnimation(shake)
+                val shake = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
+                binding.cpProgramTable.startAnimation(shake)
+                binding.cpCourse.isChecked = false
             }
         }
         binding.cpCourse.setOnCloseIconClickListener {
@@ -191,16 +193,34 @@ class HomeFragment : Fragment() {
                     when (result) {
                         is Resource.Error<*> -> {
                             Log.e(tag, "displayItemsState: Error - ${result.message}")
+                            binding.shimmerViewContainer.visibility = View.GONE
+                            binding.shimmerViewContainer.stopShimmer()
                         }
                         is Resource.Idle<*> -> {
                             Log.d(tag, "displayItemsState: Idle.")
                         }
                         is Resource.Loading<*> -> {
                             Log.d(tag, "displayItemsState: Loading.")
+                            binding.shimmerViewContainer.visibility = View.VISIBLE
+                            binding.shimmerViewContainer.startShimmer()
+                            binding.llEmptyList.visibility = View.GONE
+                            binding.osaOverScroll.visibility = View.GONE
+
                         }
                         is Resource.Success<*> -> {
+                            binding.shimmerViewContainer.visibility = View.GONE
+                            binding.shimmerViewContainer.stopShimmer()
+
                             val homeDisplayItemList = result.data
-                            recyclerAdapterHome.submitList(homeDisplayItemList)
+                            if (homeDisplayItemList.isNullOrEmpty()){
+                                binding.llEmptyList.visibility = View.VISIBLE
+                                binding.shimmerViewContainer.visibility = View.GONE
+                                binding.osaOverScroll.visibility = View.GONE
+                            }else{
+                                binding.llEmptyList.visibility = View.GONE
+                                binding.osaOverScroll.visibility = View.VISIBLE
+                                recyclerAdapterHome.submitList(homeDisplayItemList)
+                            }
                         }
                     }
                 }
