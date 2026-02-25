@@ -323,7 +323,16 @@ class FileFragment : Fragment() {
                         is Resource.Loading -> {}
                         is Resource.Success -> {
                             val sFileDisplayItemList = resource.data
-                            recyclerAdapterSFile.submitList(sFileDisplayItemList)
+                            if (sFileDisplayItemList.isNullOrEmpty()){
+                                binding.llEmptyList.visibility = View.VISIBLE
+                                binding.rvFile.visibility = View.GONE
+                            }else{
+                                binding.llEmptyList.visibility = View.GONE
+                                binding.rvFile.visibility = View.VISIBLE
+
+                                recyclerAdapterSFile.submitList(sFileDisplayItemList)
+                            }
+
                         }
                     }
                 }

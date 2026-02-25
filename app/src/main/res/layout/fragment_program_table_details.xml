@@ -132,10 +132,7 @@
                         android:orientation="horizontal"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:itemCount="2"
-                        tools:listitem="@layout/row_file_mini" />
-
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
                 </LinearLayout>
 
 
@@ -180,7 +177,7 @@
                 android:gravity="center"
                 android:layout_marginTop="24dp"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="gone">
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
@@ -203,9 +200,7 @@
                 android:layout_marginTop="10dp"
                 android:visibility="gone"
                 android:nestedScrollingEnabled="false"
-                android:orientation="vertical"
-                tools:itemCount="7"
-                tools:listitem="@layout/row_general_item" />
+                android:orientation="vertical"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -193,23 +193,23 @@ class HomeFragment : Fragment() {
                     when (result) {
                         is Resource.Error<*> -> {
                             Log.e(tag, "displayItemsState: Error - ${result.message}")
-                            binding.shimmerViewContainer.stopShimmer()
                             binding.shimmerViewContainer.visibility = View.GONE
+                            binding.shimmerViewContainer.stopShimmer()
                         }
                         is Resource.Idle<*> -> {
                             Log.d(tag, "displayItemsState: Idle.")
                         }
                         is Resource.Loading<*> -> {
                             Log.d(tag, "displayItemsState: Loading.")
-                            binding.shimmerViewContainer.startShimmer()
                             binding.shimmerViewContainer.visibility = View.VISIBLE
+                            binding.shimmerViewContainer.startShimmer()
                             binding.llEmptyList.visibility = View.GONE
                             binding.osaOverScroll.visibility = View.GONE
 
                         }
                         is Resource.Success<*> -> {
-                            binding.shimmerViewContainer.stopShimmer()
                             binding.shimmerViewContainer.visibility = View.GONE
+                            binding.shimmerViewContainer.stopShimmer()
 
                             val homeDisplayItemList = result.data
                             if (homeDisplayItemList.isNullOrEmpty()){

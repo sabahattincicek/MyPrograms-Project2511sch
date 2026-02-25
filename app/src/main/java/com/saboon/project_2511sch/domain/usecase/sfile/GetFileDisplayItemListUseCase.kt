@@ -37,6 +37,11 @@ class GetFileDisplayItemListUseCase @Inject constructor(
                             else -> true
                         }
                     }
+
+                    if (filteredSFiles.isEmpty()) {
+                        return@map Resource.Success(emptyList())
+                    }
+
                     val displayList = mutableListOf<DisplayItemSFile>()
                     displayList.addAll(filteredSFiles.map { sFile ->
                         DisplayItemSFile.ContentSFile(
