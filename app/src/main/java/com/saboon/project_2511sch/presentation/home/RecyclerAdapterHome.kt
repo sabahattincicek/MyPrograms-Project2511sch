@@ -138,19 +138,22 @@ class RecyclerAdapterHome :
                         binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
                         binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
                         binding.tvContent1.text = "${course.title}, ${task.title}"
-                        binding.tvContent1Sub.text = task.description
-                        binding.tvContent2.text = task.date.toFormattedString("EEEE")
-                        binding.tvContent2Sub.text = task.place
+                        if (task.description != ""){
+                            binding.tvContent1Sub.text = task.description
+                        }else{
+                            binding.tvContent1Sub.text = course.people
+                        }
+                        binding.tvContent2.text = task.place
+                        binding.tvContent2Sub.text = "Absence: ${course.absence}"
 
+                        val dividerColor = ModelColorConstats.LESSON.toColorInt()
+                        binding.viewDivider.setBackgroundColor(dividerColor)
                         if (isColorEnabled){
                             val containerColor = color.getContainerColor(binding.root.context)
-                            val dividerColor = ModelColorConstats.LESSON.toColorInt()
-
                             binding.llContainer.background = GradientDrawable(
                                 GradientDrawable.Orientation.LEFT_RIGHT,
                                 intArrayOf(Color.TRANSPARENT, containerColor)
                             )
-                            binding.viewDivider.setBackgroundColor(dividerColor)
                         }
                     }
 
@@ -158,19 +161,26 @@ class RecyclerAdapterHome :
                         binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
                         binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
                         binding.tvContent1.text = "${course.title}, ${task.title}"
-                        binding.tvContent1Sub.text = "${getString(binding.root.context, R.string.target_score)}: ${task.targetScore}"
+                        if (task.achievedScore != null){
+                            binding.tvContent1Sub.text = "${getString(binding.root.context, R.string.achieved_score)}: ${task.achievedScore}"
+                        }else{
+                            if (task.description != ""){
+                                binding.tvContent1Sub.text = task.description
+                            }else{
+                                binding.tvContent1Sub.text = "${getString(binding.root.context, R.string.target_score)}: ${task.targetScore}"
+                            }
+                        }
                         binding.tvContent2.text = task.date.toFormattedString("dd.MM.yyyy")
                         binding.tvContent2Sub.text = task.place
 
+                        val dividerColor = ModelColorConstats.EXAM.toColorInt()
+                        binding.viewDivider.setBackgroundColor(dividerColor)
                         if (isColorEnabled){
                             val containerColor = color.getContainerColor(binding.root.context)
-                            val dividerColor = ModelColorConstats.EXAM.toColorInt()
-
                             binding.llContainer.background = GradientDrawable(
                                 GradientDrawable.Orientation.LEFT_RIGHT,
                                 intArrayOf(Color.TRANSPARENT, containerColor)
                             )
-                            binding.viewDivider.setBackgroundColor(dividerColor)
                         }
                     }
 
@@ -182,15 +192,14 @@ class RecyclerAdapterHome :
                         binding.tvContent2.text = ""
                         binding.tvContent2Sub.text = ""
 
+                        val dividerColor = ModelColorConstats.HOMEWORK.toColorInt()
+                        binding.viewDivider.setBackgroundColor(dividerColor)
                         if (isColorEnabled){
                             val containerColor = color.getContainerColor(binding.root.context)
-                            val dividerColor = ModelColorConstats.HOMEWORK.toColorInt()
-
                             binding.llContainer.background = GradientDrawable(
                                 GradientDrawable.Orientation.LEFT_RIGHT,
                                 intArrayOf(Color.TRANSPARENT, containerColor)
                             )
-                            binding.viewDivider.setBackgroundColor(dividerColor)
                         }
                     }
                 }

@@ -90,7 +90,7 @@ class RecyclerAdapterTask:
                         binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
                         binding.tvContent1.text = task.title
                         binding.tvContent1Sub.text = "${getString(binding.root.context,R.string.target_score)}: ${task.targetScore}"
-                        binding.tvContent2.text = task.date.toFormattedString("dd MMMM yyyy EEEE")
+                        binding.tvContent2.text = task.date.toFormattedString("dd MMMM yyyy")
                         binding.tvContent2Sub.text = task.place
 
                         binding.viewDivider.setBackgroundColor(ModelColorConstats.EXAM.toColorInt())
@@ -100,7 +100,7 @@ class RecyclerAdapterTask:
                         binding.tvDate2.text = ""
                         binding.tvContent1.text = task.title
                         binding.tvContent1Sub.text = task.description
-                        binding.tvContent2.text = task.dueDate.toFormattedString("dd MMMM yyyy EEEE")
+                        binding.tvContent2.text = task.dueDate.toFormattedString("dd MMMM yyyy")
                         binding.tvContent2Sub.text = ""
 
                         binding.viewDivider.setBackgroundColor(ModelColorConstats.HOMEWORK.toColorInt())

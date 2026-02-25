@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -25,10 +24,8 @@ import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
-import com.saboon.project_2511sch.presentation.course.DialogFragmentCourse
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
 import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
-import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
 import com.saboon.project_2511sch.util.RecurrenceRule
@@ -57,10 +54,10 @@ class DialogFragmentTaskLesson: DialogFragment() {
     private lateinit var recyclerAdapterSFileMini: RecyclerAdapterSFileMini
 
     private var selectedDateMillis: Long = System.currentTimeMillis()
-    private var selectedRecurrenceRule: RecurrenceRule = RecurrenceRule()
+    private var selectedRecurrenceRule: RecurrenceRule = RecurrenceRule(freq = RecurrenceRule.Frequency.WEEKLY)
     private var selectedTimeStartMillis: Long = System.currentTimeMillis()
     private var selectedTimeEndMillis: Long = System.currentTimeMillis()
-    private var selectedRemindBeforeMinutes: Int = 0
+    private var selectedRemindBeforeMinutes: Int = -1 // no reminder
 
     private var uri: Uri? = null
 
@@ -112,19 +109,20 @@ class DialogFragmentTaskLesson: DialogFragment() {
         setupListeners()
         setupObservers()
 
+        binding.toolbar.title = getString(R.string.edit_task)
+        binding.toolbar.subtitle = course.title
+
         val isEditMode = task != null
         if (isEditMode){
-            binding.toolbar.title = getString(R.string.edit_task)
-            binding.toolbar.subtitle = course.title
             binding.etTitle.setText(lesson!!.title)
             binding.etDescription.setText(lesson!!.description)
             binding.etDate.setText(lesson!!.date.toFormattedString("dd MMMM yyyy EEEE"))
-            binding.actvRepeat.setText(mapRuleToDisplayString(lesson!!.recurrenceRule, resources.getStringArray(R.array.recurrence_options)), false)
+            binding.actvRepeat.setText(mapRuleToDisplayString(lesson!!.recurrenceRule), false)
             binding.etDateRangeStart.setText(lesson!!.recurrenceRule.dtStart.toFormattedString("dd.MM.yyyy"))
             binding.etDateRangeEnd.setText(lesson!!.recurrenceRule.until.toFormattedString("dd.MM.yyyy"))
             binding.etTimeStart.setText(lesson!!.timeStart.toFormattedString("HH:mm"))
             binding.etTimeEnd.setText(lesson!!.timeEnd.toFormattedString("HH:mm"))
-            binding.actvReminder.setText(mapMinutesToDisplayString(lesson!!.remindBefore, resources.getStringArray(R.array.reminder_options)), false)
+            binding.actvReminder.setText(mapReminderToDisplayString(lesson!!.remindBefore), false)
             binding.etPlace.setText(lesson!!.place)
 
             //apply files section
@@ -140,10 +138,15 @@ class DialogFragmentTaskLesson: DialogFragment() {
             viewModelSFile.updateCourse(course, false)
             viewModelSFile.updateTask(task)
 //            binding.llFilesSection.visibility = View.VISIBLE  ------- suanlik database seviyesinde cascade ile otomatik silme islemi yapilamadigi icin tasklara file ekleme islemi engellendi
-        }else{
-//            viewModelSFile.updateProgramTable(programTable)
-//            viewModelSFile.updateCourse(course, false)
             binding.llFilesSection.visibility = View.GONE
+        }else{
+            binding.actvRepeat.setText(mapRuleToDisplayString(selectedRecurrenceRule), false)
+            binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
+            binding.llFilesSection.visibility = View.GONE
+
+            binding.etTitle.requestFocus()
+
+            binding.toolbar.menu.clear()
         }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -206,11 +209,11 @@ class DialogFragmentTaskLesson: DialogFragment() {
         }
         binding.actvReminder.setOnItemClickListener { parentFragment, view, position, id ->
             selectedRemindBeforeMinutes = when(position){
-                1 -> 0
-                2 -> 10
-                3 -> 30
-                4 -> 60
-                5 -> 1440
+                0 -> 0
+                1 -> 10
+                2 -> 30
+                3 -> 60
+                4 -> 1440
                 else -> -1
             }
         }
@@ -351,24 +354,26 @@ class DialogFragmentTaskLesson: DialogFragment() {
             }
         }
     }
-    private fun mapRuleToDisplayString(rule: RecurrenceRule, options: Array<String>): String{
+    private fun mapRuleToDisplayString(rule: RecurrenceRule): String{
+        val options = resources.getStringArray(R.array.recurrence_options)
         return when(rule.freq){
-            RecurrenceRule.Frequency.ONCE -> options[0]
-            RecurrenceRule.Frequency.DAILY -> options[1]
-            RecurrenceRule.Frequency.WEEKLY -> options[2]
-            RecurrenceRule.Frequency.MONTHLY -> options[3]
-            RecurrenceRule.Frequency.YEARLY -> options[4]
+            RecurrenceRule.Frequency.ONCE -> options[0] // "Does not repeat/ONCE"
+            RecurrenceRule.Frequency.DAILY -> options[1] // "Repeats daily"
+            RecurrenceRule.Frequency.WEEKLY -> options[2] // "Repeats weekly"
+            RecurrenceRule.Frequency.MONTHLY -> options[3] // "Repeats monthly"
+            RecurrenceRule.Frequency.YEARLY -> options[4] // "Repeats yearly"
             else -> options[0] // "Does not repeat/ONCE"
         }
     }
-    private fun mapMinutesToDisplayString(minutes: Int, options: Array<String>): String{
+    private fun mapReminderToDisplayString(minutes: Int): String{
+        val options = resources.getStringArray(R.array.reminder_options)
         return when(minutes){
-            0 -> options[1]
-            10 -> options[2]
-            30 -> options[3]
-            60 -> options[4]
-            1440 -> options[5]
-            else -> options[0]
+            0 -> options[1] // "On Time"
+            10 -> options[2] // "10 minutes before"
+            30 -> options[3] // "30 minutes before"
+            60 -> options[4] // "1 hour before"
+            1440 -> options[5] // "1 day before"
+            else -> options[0] // "No reminder"
         }
     }
 
