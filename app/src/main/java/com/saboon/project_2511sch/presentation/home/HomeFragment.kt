@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.R
@@ -24,6 +25,7 @@ import com.saboon.project_2511sch.presentation.common.FilterTask
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
 import com.saboon.project_2511sch.util.Resource
+import com.saboon.project_2511sch.util.SwipeRevealHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -42,6 +44,12 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
 
     private var overscrollDaysCount = SettingsConstants.OverscrollDaysCount.DEFAULT
+
+    private val swipeRevealHelper by lazy {
+        ItemTouchHelper(SwipeRevealHelper(requireContext()) { position ->
+            // Swipe işlemi sonrası yapılacaklar (boş kalabilir)
+        })
+    }
 
     private val tag = "HomeFragment"
 
@@ -242,6 +250,7 @@ class HomeFragment : Fragment() {
             val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(programTable, course)
             findNavController().navigate(action)
         }
+        swipeRevealHelper.attachToRecyclerView(binding.rvHome)
     }
 
     private fun setupListeners(){
