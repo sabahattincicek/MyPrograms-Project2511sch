@@ -201,17 +201,18 @@
                         android:layout_margin="5dp"
                         android:background="?attr/colorOnSurface" />
                 </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_tasks"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="vertical"
-                    tools:itemCount="4"
-                    tools:listitem="@layout/row_main_content" />
             </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_tasks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                android:clipToPadding="false"
+                tools:itemCount="4"
+                tools:listitem="@layout/row_main_content" />
 
         </LinearLayout>
 

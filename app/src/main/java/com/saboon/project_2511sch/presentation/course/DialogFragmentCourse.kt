@@ -80,7 +80,7 @@ class DialogFragmentCourse: DialogFragment() {
                 ModelColorConstats.COLOR_8 -> {clearAllChecks(); binding.ivColorCk8.visibility = View.VISIBLE}
             }
         }else{
-
+            binding.etTitle.requestFocus()
         }
 
         binding.btnSave.setOnClickListener {

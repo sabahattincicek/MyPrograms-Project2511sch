@@ -126,7 +126,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
             binding.etPlace.setText(lesson!!.place)
 
             //apply files section
-            binding.llFilesSection.visibility = View.VISIBLE
+            binding.llFilesSection.visibility = View.GONE //suanlik database seviyesinde cascade ile otomatik silme islemi yapilamadigi icin tasklara file ekleme islemi engellendi
 
             selectedDateMillis = lesson!!.date
             selectedRecurrenceRule = lesson!!.recurrenceRule
@@ -137,8 +137,6 @@ class DialogFragmentTaskLesson: DialogFragment() {
             viewModelSFile.updateProgramTable(programTable)
             viewModelSFile.updateCourse(course, false)
             viewModelSFile.updateTask(task)
-//            binding.llFilesSection.visibility = View.VISIBLE  ------- suanlik database seviyesinde cascade ile otomatik silme islemi yapilamadigi icin tasklara file ekleme islemi engellendi
-            binding.llFilesSection.visibility = View.GONE
         }else{
             binding.actvRepeat.setText(mapRuleToDisplayString(selectedRecurrenceRule), false)
             binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
