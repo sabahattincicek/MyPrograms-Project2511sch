@@ -58,15 +58,9 @@ class RecyclerAdapterProgramTables :
             super.bind(item) //for click logic
             if (item is DisplayItemProgramTable.ContentProgramTable){
                 binding.tvContent1.text = item.programTable.title
-                if (item.programTable.description != ""){
-                    binding.tvContent1Sub.text = item.programTable.description
-                    binding.tvContent2Sub.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
-                    binding.tvContent2.visibility = View.GONE
-                }else{
-                    binding.tvContent1Sub.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
-                    binding.tvContent2.visibility = View.GONE
-                    binding.tvContent2Sub.visibility = View.GONE
-                }
+                binding.tvContent1Sub.text = item.programTable.description
+                binding.tvContent2.visibility = View.GONE
+                binding.tvContent2Sub.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
                 if (!item.programTable.isActive) binding.llContainer.alpha = 0.3f
                 else binding.llContainer.alpha = 1.0f
             }
@@ -76,7 +70,8 @@ class RecyclerAdapterProgramTables :
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemProgramTable.FooterProgramTable){
-                binding.tvContent.text = "Count: ${item.count}"
+//                binding.tvContent.text = "Count: ${item.count}"
+                binding.tvContent.text = ""
             }
         }
     }

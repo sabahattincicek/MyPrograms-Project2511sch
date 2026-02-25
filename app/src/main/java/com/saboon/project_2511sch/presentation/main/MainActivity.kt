@@ -2,6 +2,7 @@ package com.saboon.project_2511sch.presentation.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -44,6 +45,24 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentDestinationId = navController.currentDestination?.id
+                when {
+                    // 1. Eğer Splash ekranındaysak veya Home ekranındaysak uygulamayı kapat
+                    currentDestinationId == R.id.splashFragment || currentDestinationId == R.id.homeFragment -> {
+                        finish()
+                    }
+                    // 2. Eğer başka bir alt sekmedeysek (ProgramTable, Course, Task vb.) direkt Home'a git
+                    // ve aradaki tüm geçmişi temizle
+                    else -> {
+//                        navController.popBackStack(R.id.homeFragment, false)
+                        navController.popBackStack()
+                    }
+                }
+            }
+        })
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id in bottomNavHiddenDestination) {

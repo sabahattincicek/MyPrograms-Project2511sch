@@ -204,4 +204,6 @@
     <string name="set_active">Set Active</string>
     <string name="synchronization">Synchronization</string>
     <string name="about_you">About You</string>
+    <string name="course_details">Course Details</string>
+    <string name="program_table_details">Program Table Details</string>
 </resources>

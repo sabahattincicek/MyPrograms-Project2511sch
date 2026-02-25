@@ -1,6 +1,7 @@
 package com.saboon.project_2511sch.presentation.common
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.saboon.project_2511sch.databinding.RowGeneralItemBinding
@@ -15,7 +16,7 @@ import com.saboon.project_2511sch.util.BaseDisplayListItem
 import com.saboon.project_2511sch.util.BaseViewHolder
 import com.saboon.project_2511sch.util.toFormattedString
 
-class RecyclerAdapterFileFilter: ListAdapter<BaseDisplayListItem, BaseViewHolder>(BaseDiffCallback()) {
+class RecyclerAdapterFilter: ListAdapter<BaseDisplayListItem, BaseViewHolder>(BaseDiffCallback()) {
     var onClickItemListener: ((BaseModel) -> Unit)? = null
 
     override fun onCreateViewHolder(
@@ -84,22 +85,27 @@ class RecyclerAdapterFileFilter: ListAdapter<BaseDisplayListItem, BaseViewHolder
             when(item){
                 is DisplayItemProgramTable.ContentProgramTable -> {
                     binding.tvContent1.text = item.programTable.title
-                    binding.tvContent1Sub.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
+                    binding.tvContent1Sub.text = item.programTable.description
+                    binding.tvContent2.visibility = View.GONE
+                    binding.tvContent2Sub.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
                     if (!item.programTable.isActive) binding.llContainer.alpha = 0.3f
                     else binding.llContainer.alpha = 1.0f
                 }
                 is DisplayItemCourse.ContentCourse -> {
                     binding.tvContent1.text = item.course.title
-                    binding.tvContent1Sub.text = item.course.createdAt.toFormattedString("MMM yyyy")
+                    binding.tvContent1Sub.text = item.course.description
+                    binding.tvContent2.visibility = View.GONE
+                    binding.tvContent2Sub.text = item.course.createdAt.toFormattedString("MMM yyyy")
                     if (!item.course.isActive) binding.llContainer.alpha = 0.3f
                     else binding.llContainer.alpha = 1.0f
                 }
                 is DisplayItemTask.ContentTask -> {
                     binding.tvContent1.text = item.task.title
-                    binding.tvContent1Sub.text = item.task.createdAt.toFormattedString("MMM yyyy")
+                    binding.tvContent1Sub.text = item.task.description
+                    binding.tvContent2.visibility = View.GONE
+                    binding.tvContent2Sub.text = item.task.createdAt.toFormattedString("MMM yyyy")
                     if (!item.task.isActive) binding.llContainer.alpha = 0.3f
                     else binding.llContainer.alpha = 1.0f
-
                 }
             }
         }
@@ -107,17 +113,18 @@ class RecyclerAdapterFileFilter: ListAdapter<BaseDisplayListItem, BaseViewHolder
     inner class FooterFilterViewHolder(private val binding: RowSingleTextViewBinding): BaseViewHolder(binding.root){
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
-            when(item){
-                is DisplayItemProgramTable.FooterProgramTable -> {
-                    binding.tvContent.text = "Count: ${item.count}"
-                }
-                is DisplayItemCourse.FooterCourse -> {
-                    binding.tvContent.text = "Count: ${item.count}"
-                }
-                is DisplayItemTask.FooterTask -> {
-                    binding.tvContent.text = "Count: ${item.count}"
-                }
-            }
+            binding.tvContent.text = ""
+//            when(item){
+//                is DisplayItemProgramTable.FooterProgramTable -> {
+//                    binding.tvContent.text = "Count: ${item.count}"
+//                }
+//                is DisplayItemCourse.FooterCourse -> {
+//                    binding.tvContent.text = "Count: ${item.count}"
+//                }
+//                is DisplayItemTask.FooterTask -> {
+//                    binding.tvContent.text = "Count: ${item.count}"
+//                }
+//            }
         }
     }
 }

@@ -140,7 +140,8 @@ class RecyclerAdapterSFile :
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemSFile.FooterSFile) {
-                binding.tvContent.text = "Count: ${item.count}"
+//                binding.tvContent.text = "Count: ${item.count}"
+                binding.tvContent.text = ""
             }
         }
     }
