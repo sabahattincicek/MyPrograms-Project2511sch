@@ -12,7 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.R
@@ -238,7 +237,7 @@ class HomeFragment : Fragment() {
             adapter = recyclerAdapterHome
             layoutManager = LinearLayoutManager(context)
         }
-        recyclerAdapterHome.onItemClickListener = { programTable, course ->
+        recyclerAdapterHome.onContentItemClickListener = { programTable, course ->
             Log.d(tag, "Recycler item clicked. Course: ${course.title}")
             val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(programTable, course)
             findNavController().navigate(action)

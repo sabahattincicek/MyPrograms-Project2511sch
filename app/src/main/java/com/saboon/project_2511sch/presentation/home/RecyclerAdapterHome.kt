@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit
 class RecyclerAdapterHome :
     ListAdapter<DisplayItemHome, BaseViewHolder>(BaseDiffCallback()) {
 
-    var onItemClickListener:((ProgramTable, Course) -> Unit)? = null
+    var onContentItemClickListener:((ProgramTable, Course) -> Unit)? = null
 
     private var openedLayout: SwipeRevealLayout? = null
 
@@ -72,11 +72,6 @@ class RecyclerAdapterHome :
         position: Int
     ) {
         val item = getItem(position)
-        holder.onItemClickListener = { baseItem ->
-            if (baseItem is DisplayItemHome.ContentItemHome){
-                onItemClickListener?.invoke(baseItem.programTable, baseItem.course)
-            }
-        }
         holder.bind(item)
     }
     override fun getItemViewType(position: Int): Int {
@@ -156,6 +151,7 @@ class RecyclerAdapterHome :
                                 intArrayOf(Color.TRANSPARENT, containerColor)
                             )
                         }
+                        binding.slSwipe.isSwipeable = true
                     }
 
                     is Task.Exam -> {
@@ -183,6 +179,7 @@ class RecyclerAdapterHome :
                                 intArrayOf(Color.TRANSPARENT, containerColor)
                             )
                         }
+                        binding.slSwipe.isSwipeable = false
                     }
 
                     is Task.Homework -> {
@@ -202,6 +199,7 @@ class RecyclerAdapterHome :
                                 intArrayOf(Color.TRANSPARENT, containerColor)
                             )
                         }
+                        binding.slSwipe.isSwipeable = false
                     }
                 }
 
@@ -216,15 +214,16 @@ class RecyclerAdapterHome :
                 } else {
                     binding.llContainer.alpha = 1.0f
                 }
-            }
 
+                binding.mcvForeground.setOnClickListener {
+                    onContentItemClickListener?.invoke(item.programTable, item.course)
+                }
+            }
             binding.slSwipe.close()
             binding.slSwipe.onOpened = {
-
                 if (openedLayout != null && openedLayout != binding.slSwipe) {
                     openedLayout?.close()
                 }
-
                 openedLayout = binding.slSwipe
             }
         }

@@ -23,40 +23,73 @@ class SwipeRevealLayout @JvmOverloads constructor(
     private var isHorizontalSwipe = false
 
     var onOpened: (() -> Unit)? = null
+    var isSwipeable: Boolean = true
 
     init {
         clipChildren = false
         clipToPadding = false
     }
 
+//    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+//
+//        when (ev.actionMasked) {
+//
+//            MotionEvent.ACTION_DOWN -> {
+//                downX = ev.x
+//                downY = ev.y
+//                isHorizontalSwipe = false
+//            }
+//
+//            MotionEvent.ACTION_MOVE -> {
+//                val dx = ev.x - downX
+//                val dy = ev.y - downY
+//
+//                if (abs(dx) > touchSlop && abs(dx) > abs(dy)) {
+//                    // Horizontal swipe başladı
+//                    isHorizontalSwipe = true
+//                    parent.requestDisallowInterceptTouchEvent(true)
+//                    return true
+//                }
+//            }
+//        }
+//
+//        return super.onInterceptTouchEvent(ev)
+//    }
+
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
 
-        when (ev.actionMasked) {
+        if (!isSwipeable) return false
 
+        when (ev.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 downX = ev.x
                 downY = ev.y
                 isHorizontalSwipe = false
+                // Dokunma anındaki mevcut pozisyonu kaydet
+                val foreground = getChildAt(1)
+                translationXOnDown = foreground?.translationX ?: 0f
             }
 
             MotionEvent.ACTION_MOVE -> {
                 val dx = ev.x - downX
                 val dy = ev.y - downY
 
+                // Eğer parmak yatayda dikeyden daha fazla hareket etmişse
+                // ve bu hareket touchSlop'tan büyükse olaya EL KOY (Intercept)
                 if (abs(dx) > touchSlop && abs(dx) > abs(dy)) {
-                    // Horizontal swipe başladı
                     isHorizontalSwipe = true
+                    // Parent'a (RecyclerView) "sen karışma ben kaydırıyorum" de
                     parent.requestDisallowInterceptTouchEvent(true)
-                    return true
+                    return true // True dönerek dokunma olayını alt View'lardan (mcvForeground) çal!
                 }
             }
         }
-
         return super.onInterceptTouchEvent(ev)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
+        if (!isSwipeable) return false
         if (maxSwipe == 0f) return true
 
         val foreground = getChildAt(1)
