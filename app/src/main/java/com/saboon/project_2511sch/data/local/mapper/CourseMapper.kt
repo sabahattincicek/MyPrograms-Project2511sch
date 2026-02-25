@@ -23,7 +23,6 @@ fun CourseEntity.toDomain(): Course {
         description = description,
         people = people,
         color = ModelColor(color),
-        absence = absence
     )
 }
 
@@ -46,6 +45,5 @@ fun Course.toEntity(): CourseEntity {
         description = description,
         people = people,
         color = color.colorHex,
-        absence = absence
     )
 }

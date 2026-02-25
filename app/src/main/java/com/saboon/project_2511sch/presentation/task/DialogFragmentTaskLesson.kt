@@ -188,6 +188,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     recurrenceRule = selectedRecurrenceRule,
                     timeStart = selectedTimeStartMillis,
                     timeEnd = selectedTimeEndMillis,
+                    absence = listOf<Long>(),
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString(),
                 )

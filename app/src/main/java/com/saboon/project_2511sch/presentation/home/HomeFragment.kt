@@ -23,6 +23,7 @@ import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
 import com.saboon.project_2511sch.presentation.common.FilterTask
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
+import com.saboon.project_2511sch.presentation.task.ViewModelTask
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModelHome: ViewModelHome by viewModels()
+    private val viewModelTask: ViewModelTask by viewModels()
     private val viewModelSettings: ViewModelSettings by viewModels()
 
     private var filteredProgramTable: ProgramTable? = null
@@ -204,6 +206,19 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+        // TASK LESSON UPDATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelTask.operationEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error<*> -> {}
+                        is Resource.Idle<*> -> {}
+                        is Resource.Loading<*> -> {}
+                        is Resource.Success<*> -> {}
+                    }
+                }
+            }
+        }
         //OVERSCROLL DAYS COUNT
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -237,10 +252,13 @@ class HomeFragment : Fragment() {
             adapter = recyclerAdapterHome
             layoutManager = LinearLayoutManager(context)
         }
-        recyclerAdapterHome.onItemClickListener = { programTable, course ->
+        recyclerAdapterHome.onContentItemClickListener = { programTable, course ->
             Log.d(tag, "Recycler item clicked. Course: ${course.title}")
             val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(programTable, course)
             findNavController().navigate(action)
+        }
+        recyclerAdapterHome.onAbsenceButtonClickListener = { taskLesson ->
+            viewModelTask.update(taskLesson)
         }
     }
 

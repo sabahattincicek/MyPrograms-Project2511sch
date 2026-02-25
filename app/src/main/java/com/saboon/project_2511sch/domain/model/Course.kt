@@ -27,5 +27,4 @@ data class Course(
     val description: String,
     val people: String,
     val color: ModelColor,
-    val absence: Int = 0,
 ) : Parcelable, BaseModel

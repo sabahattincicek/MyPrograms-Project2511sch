@@ -42,9 +42,10 @@ sealed class Task: BaseModel, Parcelable {
         val recurrenceRule: RecurrenceRule,
         val timeStart: Long,
         val timeEnd: Long,
+        val absence: List<Long>, // devamsizligin yapildigi tarihleri tutacak.
         val place: String,
 
-    ): Parcelable, Task()
+        ): Parcelable, Task()
 
     @Parcelize
     @Serializable

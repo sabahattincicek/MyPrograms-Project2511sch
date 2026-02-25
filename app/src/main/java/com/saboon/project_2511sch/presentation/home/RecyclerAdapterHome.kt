@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat.getString
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.ListAdapter
 import com.saboon.project_2511sch.util.toFormattedString
-import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.RowHomeFooterBinding
 import com.saboon.project_2511sch.databinding.RowHomeHeaderBinding
@@ -21,15 +20,19 @@ import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.util.BaseDiffCallback
 import com.saboon.project_2511sch.util.BaseDisplayListItem
 import com.saboon.project_2511sch.util.BaseViewHolder
-import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
+import com.saboon.project_2511sch.util.SwipeRevealLayout
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class RecyclerAdapterHome :
     ListAdapter<DisplayItemHome, BaseViewHolder>(BaseDiffCallback()) {
 
-    var onItemClickListener:((ProgramTable, Course) -> Unit)? = null
+    var onContentItemClickListener:((ProgramTable, Course) -> Unit)? = null
+
+    var onAbsenceButtonClickListener: ((Task.Lesson) -> Unit)? = null
+
+    private var openedLayout: SwipeRevealLayout? = null
 
     var isColorEnabled: Boolean = true
         @SuppressLint("NotifyDataSetChanged")
@@ -71,11 +74,6 @@ class RecyclerAdapterHome :
         position: Int
     ) {
         val item = getItem(position)
-        holder.onItemClickListener = { baseItem ->
-            if (baseItem is DisplayItemHome.ContentItemHome){
-                onItemClickListener?.invoke(baseItem.programTable, baseItem.course)
-            }
-        }
         holder.bind(item)
     }
     override fun getItemViewType(position: Int): Int {
@@ -144,16 +142,35 @@ class RecyclerAdapterHome :
                             binding.tvContent1Sub.text = course.people
                         }
                         binding.tvContent2.text = task.place
-                        binding.tvContent2Sub.text = "Absence: ${course.absence}"
+                        binding.tvContent2Sub.text = "Absence: ${task.absence.size.toString()}"
 
-                        val dividerColor = ModelColorConstats.LESSON.toColorInt()
-                        binding.viewDivider.setBackgroundColor(dividerColor)
                         if (isColorEnabled){
                             val containerColor = color.getContainerColor(binding.root.context)
                             binding.llContainer.background = GradientDrawable(
                                 GradientDrawable.Orientation.LEFT_RIGHT,
                                 intArrayOf(Color.TRANSPARENT, containerColor)
                             )
+                        }
+                        val dividerColor = ModelColorConstats.LESSON.toColorInt()
+                        binding.viewDivider.setBackgroundColor(dividerColor)
+
+                        binding.slSwipe.isSwipeable = true
+                        binding.tvAbsenceCount.text = task.absence.size.toString()
+                        binding.btnAbsenceDecrease.setOnClickListener {
+                            val absenceDateList = item.task.absence.toMutableList()
+                            absenceDateList.remove(item.task.date)
+                            val updatedTask = item.task.copy(
+                                absence = absenceDateList
+                            )
+                            onAbsenceButtonClickListener?.invoke(updatedTask)
+                        }
+                        binding.btnAbsenceIncrease.setOnClickListener {
+                            val absenceDateList = item.task.absence.toMutableList()
+                            absenceDateList.add(item.task.date)
+                            val updatedTask = item.task.copy(
+                                absence = absenceDateList
+                            )
+                            onAbsenceButtonClickListener?.invoke(updatedTask)
                         }
                     }
 
@@ -182,6 +199,7 @@ class RecyclerAdapterHome :
                                 intArrayOf(Color.TRANSPARENT, containerColor)
                             )
                         }
+                        binding.slSwipe.isSwipeable = false
                     }
 
                     is Task.Homework -> {
@@ -201,6 +219,7 @@ class RecyclerAdapterHome :
                                 intArrayOf(Color.TRANSPARENT, containerColor)
                             )
                         }
+                        binding.slSwipe.isSwipeable = false
                     }
                 }
 
@@ -215,6 +234,17 @@ class RecyclerAdapterHome :
                 } else {
                     binding.llContainer.alpha = 1.0f
                 }
+
+                binding.mcvForeground.setOnClickListener {
+                    onContentItemClickListener?.invoke(item.programTable, item.course)
+                }
+            }
+            binding.slSwipe.close()
+            binding.slSwipe.onOpened = {
+                if (openedLayout != null && openedLayout != binding.slSwipe) {
+                    openedLayout?.close()
+                }
+                openedLayout = binding.slSwipe
             }
         }
     }
