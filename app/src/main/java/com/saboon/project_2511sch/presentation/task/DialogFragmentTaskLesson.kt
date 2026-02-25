@@ -109,10 +109,11 @@ class DialogFragmentTaskLesson: DialogFragment() {
         setupListeners()
         setupObservers()
 
+        binding.toolbar.title = getString(R.string.edit_task)
+        binding.toolbar.subtitle = course.title
+
         val isEditMode = task != null
         if (isEditMode){
-            binding.toolbar.title = getString(R.string.edit_task)
-            binding.toolbar.subtitle = course.title
             binding.etTitle.setText(lesson!!.title)
             binding.etDescription.setText(lesson!!.description)
             binding.etDate.setText(lesson!!.date.toFormattedString("dd MMMM yyyy EEEE"))
@@ -142,6 +143,10 @@ class DialogFragmentTaskLesson: DialogFragment() {
             binding.actvRepeat.setText(mapRuleToDisplayString(selectedRecurrenceRule), false)
             binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
             binding.llFilesSection.visibility = View.GONE
+
+            binding.etTitle.requestFocus()
+
+            binding.toolbar.menu.clear()
         }
 
         binding.toolbar.setNavigationOnClickListener {

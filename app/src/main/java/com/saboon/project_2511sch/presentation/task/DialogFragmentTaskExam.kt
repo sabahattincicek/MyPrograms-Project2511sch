@@ -110,10 +110,11 @@ class DialogFragmentTaskExam: DialogFragment() {
         setupListeners()
         setupObservers()
 
+        binding.toolbar.title = getString(R.string.edit_task)
+        binding.toolbar.subtitle = course.title
+
         val isEditMode = task != null
         if (isEditMode){
-            binding.toolbar.title = getString(R.string.edit_task)
-            binding.toolbar.subtitle = course.title
             binding.etTitle.setText(exam!!.title)
             binding.etDescription.setText(exam!!.description)
             binding.etTargetScore.setText(exam!!.targetScore.toString())
@@ -137,6 +138,10 @@ class DialogFragmentTaskExam: DialogFragment() {
         }else{
             binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
             binding.llFilesSection.visibility = View.GONE
+
+            binding.etTitle.requestFocus()
+
+            binding.toolbar.menu.clear()
         }
 
         binding.toolbar.setNavigationOnClickListener {
