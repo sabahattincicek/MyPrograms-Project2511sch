@@ -137,7 +137,7 @@
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout
+            <com.saboon.project_2511sch.util.OverscrollActionLayout
                 android:id="@+id/osa_over_scroll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -195,7 +195,7 @@
                     android:clipToPadding="false"
                     tools:itemCount="4"
                     tools:listitem="@layout/row_main_content" />
-            </com.saboon.project_2511sch.presentation.home.OverscrollActionLayout>
+            </com.saboon.project_2511sch.util.OverscrollActionLayout>
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
