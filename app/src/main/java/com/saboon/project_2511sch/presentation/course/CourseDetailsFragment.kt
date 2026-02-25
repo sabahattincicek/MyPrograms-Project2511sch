@@ -117,6 +117,10 @@ class CourseDetailsFragment : Fragment() {
                 }
             }
         }
+        binding.llCourseInfo.setOnClickListener {
+            val dialog = DialogFragmentCourse.newInstanceForUpdate(currentUser, programTable, course)
+            dialog.show(childFragmentManager, "Edit Course")
+        }
         binding.fabAdd.setOnClickListener { view ->
             showAddTaskMenu(view)
         }

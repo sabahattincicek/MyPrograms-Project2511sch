@@ -1,6 +1,7 @@
 package com.saboon.project_2511sch.presentation.course
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.saboon.project_2511sch.databinding.RowGeneralItemBinding
@@ -66,8 +67,16 @@ class RecyclerAdapterCourse: ListAdapter<DisplayItemCourse, BaseViewHolder>(Base
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item) //for click logic
             if (item is DisplayItemCourse.ContentCourse){
-                binding.tvMainContent.text = item.course.title
-                binding.tvSubContent.text = item.course.createdAt.toFormattedString("MMM yyyy")
+                binding.tvContent1.text = item.course.title
+                if (item.course.description != ""){
+                    binding.tvContent1Sub.text = item.course.description
+                    binding.tvContent2Sub.text = item.course.createdAt.toFormattedString("MMM yyyy")
+                    binding.tvContent2.visibility = View.GONE
+                }else{
+                    binding.tvContent1Sub.text = item.course.createdAt.toFormattedString("MMM yyyy")
+                    binding.tvContent2.visibility = View.GONE
+                    binding.tvContent2Sub.visibility = View.GONE
+                }
                 if (!item.course.isActive) binding.llContainer.alpha = 0.3f
                 else binding.llContainer.alpha = 1.0f
             }

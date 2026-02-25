@@ -117,6 +117,10 @@ class ProgramTableDetailsFragment : Fragment() {
                 }
             }
         }
+        binding.llProgramTableContainer.setOnClickListener {
+            val dialog = DialogFragmentProgramTable.newInstanceForUpdate(currentUser, programTable)
+            dialog.show(childFragmentManager, "Edit Program Table")
+        }
         binding.fabAdd.setOnClickListener {
             val dialogCourse = DialogFragmentCourse.newInstanceForCreate(currentUser, programTable)
             dialogCourse.show(childFragmentManager, "Create Course")

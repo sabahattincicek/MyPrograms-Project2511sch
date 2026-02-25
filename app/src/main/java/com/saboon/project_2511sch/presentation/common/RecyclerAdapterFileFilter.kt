@@ -83,20 +83,20 @@ class RecyclerAdapterFileFilter: ListAdapter<BaseDisplayListItem, BaseViewHolder
             super.bind(item)
             when(item){
                 is DisplayItemProgramTable.ContentProgramTable -> {
-                    binding.tvMainContent.text = item.programTable.title
-                    binding.tvSubContent.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
+                    binding.tvContent1.text = item.programTable.title
+                    binding.tvContent1Sub.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
                     if (!item.programTable.isActive) binding.llContainer.alpha = 0.3f
                     else binding.llContainer.alpha = 1.0f
                 }
                 is DisplayItemCourse.ContentCourse -> {
-                    binding.tvMainContent.text = item.course.title
-                    binding.tvSubContent.text = item.course.createdAt.toFormattedString("MMM yyyy")
+                    binding.tvContent1.text = item.course.title
+                    binding.tvContent1Sub.text = item.course.createdAt.toFormattedString("MMM yyyy")
                     if (!item.course.isActive) binding.llContainer.alpha = 0.3f
                     else binding.llContainer.alpha = 1.0f
                 }
                 is DisplayItemTask.ContentTask -> {
-                    binding.tvMainContent.text = item.task.title
-                    binding.tvSubContent.text = item.task.createdAt.toFormattedString("MMM yyyy")
+                    binding.tvContent1.text = item.task.title
+                    binding.tvContent1Sub.text = item.task.createdAt.toFormattedString("MMM yyyy")
                     if (!item.task.isActive) binding.llContainer.alpha = 0.3f
                     else binding.llContainer.alpha = 1.0f
 
