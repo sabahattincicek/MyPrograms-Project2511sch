@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat.getString
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.ListAdapter
 import com.saboon.project_2511sch.util.toFormattedString
-import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.RowHomeFooterBinding
 import com.saboon.project_2511sch.databinding.RowHomeHeaderBinding
@@ -21,8 +20,8 @@ import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.util.BaseDiffCallback
 import com.saboon.project_2511sch.util.BaseDisplayListItem
 import com.saboon.project_2511sch.util.BaseViewHolder
-import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
+import com.saboon.project_2511sch.util.SwipeRevealLayout
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -30,6 +29,8 @@ class RecyclerAdapterHome :
     ListAdapter<DisplayItemHome, BaseViewHolder>(BaseDiffCallback()) {
 
     var onItemClickListener:((ProgramTable, Course) -> Unit)? = null
+
+    private var openedLayout: SwipeRevealLayout? = null
 
     var isColorEnabled: Boolean = true
         @SuppressLint("NotifyDataSetChanged")
@@ -215,6 +216,16 @@ class RecyclerAdapterHome :
                 } else {
                     binding.llContainer.alpha = 1.0f
                 }
+            }
+
+            binding.slSwipe.close()
+            binding.slSwipe.onOpened = {
+
+                if (openedLayout != null && openedLayout != binding.slSwipe) {
+                    openedLayout?.close()
+                }
+
+                openedLayout = binding.slSwipe
             }
         }
     }

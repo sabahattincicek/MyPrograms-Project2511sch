@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.saboon.project_2511sch.util.SwipeRevealLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sl_swipe"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp">
 
-    <!--        ABSENCE CONTAINER-->
+<!--    BACKGROUND-->
     <LinearLayout
+        android:id="@+id/ll_background"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:orientation="horizontal">
-
         <ImageView
             android:id="@+id/btn_absence_decrease"
             android:layout_width="70dp"
@@ -53,11 +55,12 @@
             app:tint="?attr/colorOnSurface" />
     </LinearLayout>
 
-    <!-- MAIN CONTAINER-->
+    <!-- FOREGROUND-->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcv_foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="1000dp">
 
         <LinearLayout
@@ -173,5 +176,6 @@
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-</FrameLayout>
+
+</com.saboon.project_2511sch.util.SwipeRevealLayout>
 
