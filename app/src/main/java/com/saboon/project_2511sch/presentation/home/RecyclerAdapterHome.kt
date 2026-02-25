@@ -144,8 +144,6 @@ class RecyclerAdapterHome :
                         binding.tvContent2.text = task.place
                         binding.tvContent2Sub.text = "Absence: ${task.absence.size.toString()}"
 
-                        val dividerColor = ModelColorConstats.LESSON.toColorInt()
-                        binding.viewDivider.setBackgroundColor(dividerColor)
                         if (isColorEnabled){
                             val containerColor = color.getContainerColor(binding.root.context)
                             binding.llContainer.background = GradientDrawable(
@@ -153,6 +151,9 @@ class RecyclerAdapterHome :
                                 intArrayOf(Color.TRANSPARENT, containerColor)
                             )
                         }
+                        val dividerColor = ModelColorConstats.LESSON.toColorInt()
+                        binding.viewDivider.setBackgroundColor(dividerColor)
+
                         binding.slSwipe.isSwipeable = true
                         binding.tvAbsenceCount.text = task.absence.size.toString()
                         binding.btnAbsenceDecrease.setOnClickListener {

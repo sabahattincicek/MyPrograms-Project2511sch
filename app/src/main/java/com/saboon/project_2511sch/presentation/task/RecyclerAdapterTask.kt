@@ -13,14 +13,18 @@ import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.BaseDiffCallback
 import com.saboon.project_2511sch.util.BaseDisplayListItem
 import com.saboon.project_2511sch.util.BaseViewHolder
-import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
+import com.saboon.project_2511sch.util.SwipeRevealLayout
 import com.saboon.project_2511sch.util.toFormattedString
 
 class RecyclerAdapterTask:
     ListAdapter<DisplayItemTask, BaseViewHolder>(BaseDiffCallback<DisplayItemTask>()) {
 
-    var onItemClickListener:((Task) -> Unit)? = null
+    var onContentItemClickListener:((Task) -> Unit)? = null
+
+    var onAbsenceButtonClickListener: ((Task.Lesson) -> Unit)? = null
+
+    private var openedLayout: SwipeRevealLayout? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -51,7 +55,7 @@ class RecyclerAdapterTask:
         val item = getItem(position)
         holder.onItemClickListener = { baseItem ->
             if (baseItem is DisplayItemTask.ContentTask){
-                onItemClickListener?.invoke(baseItem.task)
+                onContentItemClickListener?.invoke(baseItem.task)
             }
         }
         holder.bind(item)
@@ -84,6 +88,25 @@ class RecyclerAdapterTask:
                         binding.tvContent2Sub.text = task.place
 
                         binding.viewDivider.setBackgroundColor(ModelColorConstats.LESSON.toColorInt())
+
+                        binding.slSwipe.isSwipeable = true
+                        binding.tvAbsenceCount.text = task.absence.size.toString()
+                        binding.btnAbsenceDecrease.setOnClickListener {
+                            val absenceDateList = item.task.absence.toMutableList()
+                            absenceDateList.remove(item.task.date)
+                            val updatedTask = item.task.copy(
+                                absence = absenceDateList
+                            )
+                            onAbsenceButtonClickListener?.invoke(updatedTask)
+                        }
+                        binding.btnAbsenceIncrease.setOnClickListener {
+                            val absenceDateList = item.task.absence.toMutableList()
+                            absenceDateList.add(item.task.date)
+                            val updatedTask = item.task.copy(
+                                absence = absenceDateList
+                            )
+                            onAbsenceButtonClickListener?.invoke(updatedTask)
+                        }
                     }
                     is Task.Exam -> {
                         binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
@@ -94,6 +117,8 @@ class RecyclerAdapterTask:
                         binding.tvContent2Sub.text = task.place
 
                         binding.viewDivider.setBackgroundColor(ModelColorConstats.EXAM.toColorInt())
+
+                        binding.slSwipe.isSwipeable = false
                     }
                     is Task.Homework -> {
                         binding.tvDate1.text = task.dueTime.toFormattedString("HH:mm")
@@ -104,7 +129,19 @@ class RecyclerAdapterTask:
                         binding.tvContent2Sub.text = ""
 
                         binding.viewDivider.setBackgroundColor(ModelColorConstats.HOMEWORK.toColorInt())
+
+                        binding.slSwipe.isSwipeable = false
                     }
+                }
+                binding.mcvForeground.setOnClickListener {
+                    onContentItemClickListener?.invoke(task)
+                }
+                binding.slSwipe.close()
+                binding.slSwipe.onOpened = {
+                    if (openedLayout != null && openedLayout != binding.slSwipe) {
+                        openedLayout?.close()
+                    }
+                    openedLayout = binding.slSwipe
                 }
             }
         }

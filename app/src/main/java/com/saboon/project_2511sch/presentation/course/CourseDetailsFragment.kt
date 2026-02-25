@@ -1,6 +1,5 @@
 package com.saboon.project_2511sch.presentation.course
 
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentCourseDetailsBinding
 import com.saboon.project_2511sch.domain.model.Task
@@ -163,7 +161,7 @@ class CourseDetailsFragment : Fragment() {
     }
     private fun setupAdapters(){
         recyclerAdapterTask = RecyclerAdapterTask()
-        recyclerAdapterTask.onItemClickListener = { task ->
+        recyclerAdapterTask.onContentItemClickListener = { task ->
             when(task) {
                 is Task.Lesson -> {
                     val dialog = DialogFragmentTaskLesson.newInstanceForEdit(currentUser, programTable, course, task)
@@ -178,6 +176,9 @@ class CourseDetailsFragment : Fragment() {
                     dialog.show(childFragmentManager, "UpdateTaskDialog")
                 }
             }
+        }
+        recyclerAdapterTask.onAbsenceButtonClickListener = { taskLesson ->
+            viewModelTask.update(taskLesson)
         }
         binding.rvTasks.apply{
             adapter = recyclerAdapterTask
@@ -301,6 +302,19 @@ class CourseDetailsFragment : Fragment() {
                         is Resource.Success -> {
                             findNavController().popBackStack()
                         }
+                    }
+                }
+            }
+        }
+        // TASK LESSON EVENT: UPDATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelTask.operationEvent.collect { resource ->
+                    when(resource) {
+                        is Resource.Error<*> -> {}
+                        is Resource.Idle<*> -> {}
+                        is Resource.Loading<*> -> {}
+                        is Resource.Success<*> -> {}
                     }
                 }
             }
