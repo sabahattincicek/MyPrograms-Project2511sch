@@ -92,8 +92,9 @@ class HomeFragment : Fragment() {
                 val dialog = DialogFragmentFilter.newInstanceFilterCourse(filteredProgramTable!!)
                 dialog.show(childFragmentManager, "DialogFragmentFileFilter")
             }else{
-//                val shake = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
-//                binding.cpProgramTable.startAnimation(shake)
+                val shake = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
+                binding.cpProgramTable.startAnimation(shake)
+                binding.cpCourse.isChecked = false
             }
         }
         binding.cpCourse.setOnCloseIconClickListener {
