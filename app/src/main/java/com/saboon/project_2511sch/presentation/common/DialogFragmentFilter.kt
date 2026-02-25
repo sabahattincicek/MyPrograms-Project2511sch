@@ -1,7 +1,6 @@
 package com.saboon.project_2511sch.presentation.common
 
 import android.os.Bundle
-import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentFilterBinding
@@ -30,7 +30,7 @@ class DialogFragmentFilter: DialogFragment() {
 
     private var _binding: DialogFragmentFilterBinding?=null
     private val binding get() = _binding!!
-    private lateinit var recyclerAdapter: RecyclerAdapterFileFilter
+    private lateinit var recyclerAdapter: RecyclerAdapterFilter
     private val viewModelProgramTable: ViewModelProgramTable by viewModels()
     private val viewModelCourse: ViewModelCourse by viewModels()
     private val viewModelTask: ViewModelTask by viewModels()
@@ -75,7 +75,7 @@ class DialogFragmentFilter: DialogFragment() {
         _binding = null
     }
     private fun setupRecyclerAdapter(){
-        recyclerAdapter = RecyclerAdapterFileFilter()
+        recyclerAdapter = RecyclerAdapterFilter()
         recyclerAdapter.onClickItemListener = { baseModel ->
             setFragmentResult(REQUEST_KEY_BASE_MODEL, bundleOf(RESULT_KEY_BASE_MODEL to baseModel))
             dismiss()

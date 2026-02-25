@@ -139,7 +139,11 @@ class RecyclerAdapterHome :
                         if (task.description != ""){
                             binding.tvContent1Sub.text = task.description
                         }else{
-                            binding.tvContent1Sub.text = course.people
+                            if(course.description != ""){
+                                binding.tvContent1Sub.text = course.description
+                            }else{
+                                binding.tvContent1Sub.text = course.people
+                            }
                         }
                         binding.tvContent2.text = task.place
                         binding.tvContent2Sub.text = "Absence: ${task.absence.size.toString()}"

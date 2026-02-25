@@ -158,6 +158,9 @@ class FileFragment : Fragment() {
                 dialog.show(childFragmentManager, "DialogFragmentFileFilter")
             }else{
                 Log.w(tag, "cpCourse: Cannot open Course filter because programTable is null.")
+                val shake = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
+                binding.cpProgramTable.startAnimation(shake)
+                binding.cpCourse.isChecked = false
             }
         }
         binding.cpCourse.setOnCloseIconClickListener {

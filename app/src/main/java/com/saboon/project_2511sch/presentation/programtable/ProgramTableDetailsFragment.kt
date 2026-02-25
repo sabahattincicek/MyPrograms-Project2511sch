@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.color.MaterialColors
 import com.saboon.project_2511sch.R
@@ -117,7 +118,7 @@ class ProgramTableDetailsFragment : Fragment() {
                 }
             }
         }
-        binding.llProgramTableContainer.setOnClickListener {
+        binding.llProgramTableInfo.setOnClickListener {
             val dialog = DialogFragmentProgramTable.newInstanceForUpdate(currentUser, programTable)
             dialog.show(childFragmentManager, "Edit Program Table")
         }
@@ -133,12 +134,12 @@ class ProgramTableDetailsFragment : Fragment() {
 
     private fun applyDataToView(){
         binding.tvTitle.text = programTable.title
-        binding.tvDescription.text = "${getString(R.string.description)}: ${programTable.description}"
+        binding.tvDescription.text = programTable.description
 
         val containerColor = programTable.color.getInt()
         val textColor = programTable.color.getOnMainTextColor()
 
-        binding.llProgramTableContainer.setBackgroundColor(containerColor)
+        binding.llProgramTableInfo.setBackgroundColor(containerColor)
         binding.tvTitle.setTextColor(textColor)
         binding.tvDescription.setTextColor(textColor)
     }
