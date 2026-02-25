@@ -95,7 +95,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:${lifecycle_version}")
     implementation("androidx.fragment:fragment-ktx:1.8.9")
 
-    //rich text
+    //rich text for notes
     implementation("jp.wasabeef:richeditor-android:2.0.0")
 
     //coil
@@ -107,4 +107,7 @@ dependencies {
 
     //preference for settings
     implementation("androidx.preference:preference-ktx:1.2.1")
+
+    //shimmer for loading
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 }

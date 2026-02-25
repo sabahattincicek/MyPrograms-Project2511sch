@@ -92,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:orientation="vertical">
                 <ImageView
                     android:layout_width="250dp"
@@ -109,6 +109,33 @@
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:text="No tasks or lessons found.\n\nStart by creating your first program table to organize your schedule!" />
             </LinearLayout>
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_view_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                app:shimmer_auto_start="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Ekranda kaç tane iskelet görünsün istiyorsan o kadar ekle -->
+                    <include layout="@layout/row_main_content_skeleton" />
+                    <include layout="@layout/row_main_content_skeleton" />
+                    <include layout="@layout/row_main_content_skeleton" />
+                    <include layout="@layout/row_main_content_skeleton" />
+                    <include layout="@layout/row_main_content_skeleton" />
+                    <include layout="@layout/row_main_content_skeleton" />
+                    <include layout="@layout/row_main_content_skeleton" />
+                    <include layout="@layout/row_main_content_skeleton" />
+                    <include layout="@layout/row_main_content_skeleton" />
+                    <include layout="@layout/row_main_content_skeleton" />
+                    <include layout="@layout/row_main_content_skeleton" />
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <com.saboon.project_2511sch.presentation.home.OverscrollActionLayout
                 android:id="@+id/osa_over_scroll"
