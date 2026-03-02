@@ -5,14 +5,55 @@
     "tr": "Ben Refik. Bana bir görev verildi mi, olay benim için biter. En iyisini yapmadan içim rahat etmez. Detaylara fazla takıldığımı söylüyorlar ama kusura bakmasınlar, yarım iş yapamam. Bazen sırf daha mükemmel olsun diye saatlerce uğraşıyorum ve evet… çoğu zaman geç teslim ediyorum. Ama ortaya çıkan iş? Değdiğini düşünüyorum.",
     "en": "I'm Refik. When I’m given a task, that’s it — I’m all in. I can’t feel satisfied unless I’ve done it in the best possible way. People say I overthink the details, but I just can’t do things halfway. Sometimes I spend hours trying to make it perfect and yeah… I usually submit late. But the result? Totally worth it, if you ask me."
   },
-  "image": "file:///android_asset/characters/av1/images/av1_portrait.webp",
+  "portrait": "file:///android_asset/characters/av1/images/av1_portrait.webp",
+  "cover": "file:///android_asset/characters/av1/images/av1_cover.webp",
   "activities": [
     {
       "id": "actv1",
       "image": "file:///android_asset/characters/av1/images/av1_actv1.webp",
       "content": {
-        "tr": "Sıkı çalışıyorsun, verimliliğin artıyor!",
-        "en": "You're working hard, your productivity is increasing!"
+        "tr": "Bazen öyle bir odaklanıyorum ki, zaman bana kahve molası veriyor gibi geliyor.",
+        "en": "Sometimes I focus so hard, it feels like time itself is taking a coffee break for me."
+      }
+    },
+    {
+      "id": "actv2",
+      "image": "file:///android_asset/characters/av1/images/av1_actv2.webp",
+      "content": {
+        "tr": "Elim ayağıma dolaşmış olabilir ama bir şekilde bu işi bitireceğim, belki de ayaklarımla!",
+        "en": "My hands and feet might be tangled, but somehow I'll finish this, maybe even with my feet!"
+      }
+    },
+    {
+      "id": "actv3",
+      "image": "file:///android_asset/characters/av1/images/av1_actv3.webp",
+      "content": {
+        "tr": "Ahh arkadaşlar, biraz mütevazı olabilsem keşke… ama zekami insanliktan saklamak büyük bir kötülük olurdu.",
+        "en": "Ah friends, I wish I could be a bit modest… but hiding my genius from humanity would be a great evil."
+      }
+    },
+    {
+      "id": "actv4",
+      "image": "file:///android_asset/characters/av1/images/av1_actv4.webp",
+      "content": {
+        "tr": "Sanırım bu sefer işleri fazla abarttım… ve sonuç pek istediğim gibi olmadı.",
+        "en": "I guess I overdid it this time… and the result wasn’t quite what I wanted."
+      }
+    },
+    {
+      "id": "actv5",
+      "image": "file:///android_asset/characters/av1/images/av1_actv5.webp",
+      "content": {
+        "tr": "Bir kez daha kanıtladım: zekâ seviyem tartışılmaz!",
+        "en": "Once again, I’ve proven: my genius level is indisputable!"
+      }
+    },
+    {
+      "id": "actv6",
+      "image": "file:///android_asset/characters/av1/images/av1_actv6.webp",
+      "content": {
+        "tr": "Hedeflerim biraz yüksekmiş… ve düşmek de acı veriyor.",
+        "en": "My goals were a bit too high… and falling does hurt."
       }
     }
   ]

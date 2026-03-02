@@ -12,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import coil3.load
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentCharacterBinding
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
@@ -70,6 +71,7 @@ class DialogFragmentCharacter: DialogFragment() {
     }
     private fun updateCharacterUI(character: Character) {
         selectedCharacter = character
+        binding.ivCharacterCover.load(character.cover)
         binding.tvCharName.text = character.name
         binding.tvPersonality.text = character.personality["tr"]
     }

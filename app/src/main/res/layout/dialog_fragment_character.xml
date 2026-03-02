@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <ImageView
-            android:id="@+id/iv_character_vibe"
+            android:id="@+id/iv_character_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/colorPrimary" />

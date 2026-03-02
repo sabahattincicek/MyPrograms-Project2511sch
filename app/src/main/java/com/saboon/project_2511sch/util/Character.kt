@@ -8,7 +8,8 @@ data class Character (
     val id: String,
     val name: String,
     val personality: Map<String, String>,
-    val image: String,
+    val portrait: String,
+    val cover: String,
     val activities: List<Activity>,
 )
 

@@ -5,7 +5,8 @@
     "tr": "Ben Ezgi. İnsanlara güvenmek benim için çok kolay; biri bir şey söylüyorsa genelde doğru kabul ederim. İyi niyetli olduğumu söylerler, hatta bazen fazla iyi niyetli. Yeni fikirlere, yeni insanlara hemen açılırım. Belki bu yüzden bazen kolay kandırıldığım olur. Ama yine de kalbimi kapatmayı pek beceremem. Kötülük düşünmek bana göre değil.",
     "en": "I'm Ezgi. Trusting people comes naturally to me; if someone tells me something, I usually believe it. People say I’m kind — sometimes too kind. I open up quickly to new ideas and new people. Maybe that’s why I can be a little gullible at times. Still, I’m not very good at closing my heart. Thinking badly of others just isn’t who I am."
   },
-  "image": "file:///android_asset/characters/av4/images/av4_portrait.webp",
+  "portrait": "file:///android_asset/characters/av4/images/av4_portrait.webp",
+  "cover": "file:///android_asset/characters/av4/images/av4_actv1.webp",
   "activities": [
     {
       "id": "actv1",

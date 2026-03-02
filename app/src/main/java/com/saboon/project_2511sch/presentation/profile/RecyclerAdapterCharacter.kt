@@ -7,13 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil3.load
 import com.saboon.project_2511sch.databinding.RowCircularImageViewBinding
-import com.saboon.project_2511sch.util.BaseDiffCallback
 import com.saboon.project_2511sch.util.Character
 
 class RecyclerAdapterCharacter: ListAdapter<Character, RecyclerAdapterCharacter.CharacterViewHolder>(CharacterDiffCallback()) {
 
     var onItemClickListener: ((Character) -> Unit)?=null
-    var onItemScrollListener: ((Character) -> Unit)?=null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -40,7 +38,7 @@ class RecyclerAdapterCharacter: ListAdapter<Character, RecyclerAdapterCharacter.
 
     inner class CharacterViewHolder(private val binding: RowCircularImageViewBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Character){
-            binding.ivPortrait.load(item.image)
+            binding.ivPortrait.load(item.portrait)
         }
     }
 

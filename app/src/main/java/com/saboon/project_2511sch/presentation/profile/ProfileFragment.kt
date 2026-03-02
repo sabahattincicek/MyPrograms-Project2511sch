@@ -169,10 +169,10 @@ class ProfileFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModelSettings.selectedCharacterState.collect { characterId ->
                     selectedCharacter = characterManager.getCharacter(characterId)!!
-                    binding.ivProfilePicture.load(selectedCharacter.image)
+                    binding.ivProfilePicture.load(selectedCharacter.portrait)
+                    binding.ivCharacterVibe.load(selectedCharacter.cover)
                     binding.tvCharName.text = selectedCharacter.name
                     binding.tvCharVibe.text = selectedCharacter.activities[0].content["tr"]
-                    binding.ivCharacterVibe.load(selectedCharacter.activities[0].image)
                 }
             }
         }
