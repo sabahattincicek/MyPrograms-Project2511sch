@@ -53,6 +53,12 @@ class ViewModelSettings @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = SettingsConstants.HomeListItemColorSource.DEFAULT
         )
+    val selectedCharacterState: StateFlow<String> = settingsRepository.getSelectedCharacter()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = SettingsConstants.SelectedCharacter.DEFAULT
+        )
 
     //ACTIONS
     fun onDarkModeSelected(darkModeValue: String){
@@ -83,6 +89,11 @@ class ViewModelSettings @Inject constructor(
     fun onHomeListItemColorSourceSelected(source: String) {
         viewModelScope.launch {
             settingsRepository.setHomeListItemColorSource(source)
+        }
+    }
+    fun onCharacterSelected(id: String){
+        viewModelScope.launch {
+            settingsRepository.setSelectedCharacter(id)
         }
     }
 }

@@ -1,0 +1,19 @@
+{
+  "id": "av1",
+  "name": "Refik",
+  "personality": {
+    "tr": "Ben Refik. Bana bir görev verildi mi, olay benim için biter. En iyisini yapmadan içim rahat etmez. Detaylara fazla takıldığımı söylüyorlar ama kusura bakmasınlar, yarım iş yapamam. Bazen sırf daha mükemmel olsun diye saatlerce uğraşıyorum ve evet… çoğu zaman geç teslim ediyorum. Ama ortaya çıkan iş? Değdiğini düşünüyorum.",
+    "en": "I'm Refik. When I’m given a task, that’s it — I’m all in. I can’t feel satisfied unless I’ve done it in the best possible way. People say I overthink the details, but I just can’t do things halfway. Sometimes I spend hours trying to make it perfect and yeah… I usually submit late. But the result? Totally worth it, if you ask me."
+  },
+  "image": "file:///android_asset/characters/av1/images/av1_portrait.webp",
+  "activities": [
+    {
+      "id": "actv1",
+      "image": "file:///android_asset/characters/av1/images/av1_actv1.webp",
+      "content": {
+        "tr": "Sıkı çalışıyorsun, verimliliğin artıyor!",
+        "en": "You're working hard, your productivity is increasing!"
+      }
+    }
+  ]
+}

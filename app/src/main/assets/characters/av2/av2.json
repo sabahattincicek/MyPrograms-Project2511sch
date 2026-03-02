@@ -1,0 +1,19 @@
+{
+  "id": "av2",
+  "name": "Zeynep",
+  "personality": {
+    "tr": "Ben Zeynep. Bir şeyi yarım yamalak öğrenmek bana göre değil; konuyu en ince detayına kadar araştırmadan rahat edemem. Notlarım genelde yüksektir çünkü çalışırken gerçekten derine inerim. Arkadaşlarım bazen bana 'yürüyen ansiklopedi' diyor. Ama kabul ediyorum, bazen fazla detaya takılıyorum ve biri yanlış bir bilgi söyleyince düzeltmeden duramıyorum. Kusursuz olmaya çalışırken kendime biraz fazla yüklenebiliyorum.",
+    "en": "I'm Zeynep. Learning something halfway is just not my style; I can’t relax until I’ve researched a topic in depth. My grades are usually high because I truly dive deep when I study. My friends sometimes call me a ‘walking encyclopedia.’ But I admit, I can get stuck on details, and I can’t help correcting wrong information. In trying to be perfect, I sometimes put too much pressure on myself."
+  },
+  "image": "file:///android_asset/characters/av2/images/av2_portrait.webp",
+  "activities": [
+    {
+      "id": "actv1",
+      "image": "file:///android_asset/characters/av2/activities/av1_actv1.webp",
+      "content": {
+        "tr": "Sıkı çalışıyorsun, verimliliğin artıyor!",
+        "en": "You're working hard, your productivity is increasing!"
+      }
+    }
+  ]
+}

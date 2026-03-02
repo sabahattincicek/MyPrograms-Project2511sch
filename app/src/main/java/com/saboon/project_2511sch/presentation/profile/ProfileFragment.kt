@@ -1,7 +1,7 @@
 package com.saboon.project_2511sch.presentation.profile
 
+import android.animation.ValueAnimator
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +9,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.OvershootInterpolator
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -23,7 +24,10 @@ import coil3.request.crossfade
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.databinding.FragmentProfileBinding
 import com.saboon.project_2511sch.domain.model.User
+import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
+import com.saboon.project_2511sch.util.Character
+import com.saboon.project_2511sch.util.CharacterManager
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -38,11 +42,14 @@ class ProfileFragment : Fragment() {
 
     private val viewModelUser: ViewModelUser by activityViewModels()
     private val viewModelProfile: ViewModelProfile by viewModels()
+    private val viewModelSettings: ViewModelSettings by viewModels()
 
     private var exportFile: File? = null
 
     private lateinit var currentUser: User
-    private var isInitialDataLoaded = false
+
+    private lateinit var characterManager: CharacterManager
+    private lateinit var selectedCharacter: Character
 
     //select folder to save export file
     private val exportFileToDeviceLauncher = registerForActivityResult(
@@ -79,6 +86,13 @@ class ProfileFragment : Fragment() {
 
         setupObservers()
 
+        characterManager = CharacterManager(requireContext())
+        selectedCharacter = characterManager.getCharacter("av1")!!
+
+        binding.ivProfilePicture.setOnClickListener {
+            val dialog = DialogFragmentCharacter()
+            dialog.show(childFragmentManager, "dialogFragmentCharacter")
+        }
         binding.ivEditUser.setOnClickListener {
             binding.ivEditUser.visibility = View.GONE
             binding.llTextViewContainer.visibility = View.GONE
@@ -147,6 +161,18 @@ class ProfileFragment : Fragment() {
                             applyDataToView()
                         }
                     }
+                }
+            }
+        }
+        //CHARACTER STATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelSettings.selectedCharacterState.collect { characterId ->
+                    selectedCharacter = characterManager.getCharacter(characterId)!!
+                    binding.ivProfilePicture.load(selectedCharacter.image)
+                    binding.tvCharName.text = selectedCharacter.name
+                    binding.tvCharVibe.text = selectedCharacter.activities[0].content["tr"]
+                    binding.ivCharacterVibe.load(selectedCharacter.activities[0].image)
                 }
             }
         }
@@ -238,4 +264,63 @@ class ProfileFragment : Fragment() {
             exportFile = null
         }
     }
+
+//    private fun animateCharacterSelection(show: Boolean){
+//        val selectionContent = binding.clCharacterSelectionContent
+//        val centerImage = binding.ivSelectedCharacterCenter //char1
+//        val petals = listOf(binding.char2, binding.char3, binding.char4, binding.char5, binding.char6)
+//
+//        if (show){
+//            // 1. Önce içeriği görünür yap ve arka planı yavaşça karart
+//            selectionContent.visibility = View.VISIBLE
+//            selectionContent.alpha = 0f
+//            selectionContent.animate().alpha(1f).setDuration(300).start()
+//
+//            // 2. Merkezdeki resmi "zıplayarak" konumuna getir (Opsiyonel: Eğer ana resimden buraya kaymasını istiyorsan)
+//            centerImage.scaleX = 0f
+//            centerImage.scaleY = 0f
+//            centerImage.animate()
+//                .scaleX(1f).scaleY(1f)
+//                .setDuration(500)
+//                .setInterpolator(OvershootInterpolator())
+//                .start()
+//
+//            // 3. Papatya yapraklarını (Karakterleri) tek tek aç
+//            petals.forEachIndexed { index, view ->
+//                view.alpha = 0f
+//                view.scaleX = 0f
+//                view.scaleY = 0f
+//
+//                // Circular Radius Animasyonu (Merkezden dışarı fırlama efekti)
+//                val params = view.layoutParams as ConstraintLayout.LayoutParams
+//                val finalRadius = params.circleRadius // XML'deki 150dp değeri
+//
+//                val radiusAnimator = ValueAnimator.ofInt(0, finalRadius)
+//                radiusAnimator.addUpdateListener { animator ->
+//                    params.circleRadius = animator.animatedValue as Int
+//                    view.layoutParams = params
+//                }
+//
+//                view.animate()
+//                    .alpha(1f)
+//                    .scaleX(1f)
+//                    .scaleY(1f)
+//                    .setStartDelay(index * 50L) // Sırayla açılma hissi verir
+//                    .setDuration(600)
+//                    .setInterpolator(OvershootInterpolator())
+//                    .start()
+//
+//                radiusAnimator.duration = 600
+//                radiusAnimator.startDelay = index * 50L
+//                radiusAnimator.start()
+//            }
+//        }else{
+//            // Kapatma animasyonu (Geriye toplama)
+//            selectionContent.animate()
+//                .alpha(0f)
+//                .setDuration(300)
+//                .withEndAction { selectionContent.visibility = View.GONE }
+//                .start()
+//        }
+//    }
 }
