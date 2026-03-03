@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Monday - 04 October 2025"
+            android:text="Pazartesi - 04 Ağustos 2025"
             android:textSize="18sp"
             android:textAlignment="textStart"/>
 
@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="3 Days Left"
+            android:text="3 Gün Sonra"
             android:textSize="18sp"
             android:textAlignment="textEnd"/>
     </LinearLayout>

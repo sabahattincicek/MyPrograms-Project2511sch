@@ -28,7 +28,7 @@
                     android:layout_height="?attr/actionBarSize"
                     app:navigationIcon="@drawable/baseline_close_24"
                     app:navigationIconTint="?attr/colorOnSurface"
-                    app:title="@string/program_table" />
+                    app:title="@string/program_tablosu" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -56,7 +56,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/program_table"
+                            android:text="@string/program_tablosu"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -72,7 +72,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:hint="@string/hint_title"
+                        android:hint="@string/baslik"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_height="wrap_content">
 
@@ -86,7 +86,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:hint="@string/hint_description"
+                        android:hint="@string/aciklama"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_height="wrap_content">
 
@@ -116,7 +116,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/color"
+                            android:text="@string/renk"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -352,7 +352,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:text="@android:string/cancel" />
+            android:text="@string/iptal" />
 
         <Button
             android:id="@+id/btn_save"
@@ -360,7 +360,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="@string/save" />
+            android:text="@string/kaydet" />
 
     </LinearLayout>
 

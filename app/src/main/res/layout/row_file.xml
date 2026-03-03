@@ -59,7 +59,7 @@
                 android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:textSize="18sp"
-                android:text="File Title"/>
+                android:text="Dosya Başlığı"/>
 
             <TextView
                 android:id="@+id/tv_date"
@@ -73,7 +73,6 @@
             android:background="@drawable/bg_basic_pressed_list_item"
             android:id="@+id/ivFileMoreMenu"
             android:layout_width="wrap_content"
-            android:contentDescription="@string/more"
             android:padding="5dp"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_more_vert_24"

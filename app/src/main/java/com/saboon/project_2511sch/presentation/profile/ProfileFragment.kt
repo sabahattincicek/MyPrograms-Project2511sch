@@ -89,10 +89,10 @@ class ProfileFragment : Fragment() {
         characterManager = CharacterManager(requireContext())
         selectedCharacter = characterManager.getCharacter("av1")!!
 
-        binding.ivProfilePicture.setOnClickListener {
-            val dialog = DialogFragmentCharacter()
-            dialog.show(childFragmentManager, "dialogFragmentCharacter")
-        }
+//        binding.ivProfilePicture.setOnClickListener {
+//            val dialog = DialogFragmentCharacter()
+//            dialog.show(childFragmentManager, "dialogFragmentCharacter")
+//        }
 
         binding.ivEditUser.setOnClickListener {
             binding.ivEditUser.visibility = View.GONE
@@ -173,7 +173,7 @@ class ProfileFragment : Fragment() {
                     binding.ivProfilePicture.load(selectedCharacter.portrait)
                     binding.ivCharacterVibe.load(selectedCharacter.cover)
                     binding.tvCharName.text = selectedCharacter.name
-                    binding.tvCharVibe.text = selectedCharacter.activities[0].content["tr"]
+                    binding.tvCharVibe.text = selectedCharacter.activities[2].content["tr"]
                 }
             }
         }

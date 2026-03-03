@@ -54,7 +54,7 @@
                         style="@style/Widget.Material3.Chip.Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/program_table" />
+                        android:text="@string/programlar" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cp_course"
@@ -62,28 +62,28 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:text="@string/course"/>
+                        android:text="@string/dersler"/>
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cp_lesson"
                         style="@style/Widget.Material3.Chip.Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lesson" />
+                        android:text="@string/ders_oturumlari" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cp_exam"
                         style="@style/Widget.Material3.Chip.Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/exam" />
+                        android:text="@string/sinavlar" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cp_homework"
                         style="@style/Widget.Material3.Chip.Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/homework" />
+                        android:text="@string/ödevler" />
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
@@ -107,7 +107,7 @@
                     android:textAlignment="center"
                     android:textSize="18sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:text="No tasks or lessons found.\n\nStart by creating your first program table to organize your schedule!" />
+                    android:text="@string/ders_veya_gorev_bulunamadi" />
             </LinearLayout>
 
             <com.facebook.shimmer.ShimmerFrameLayout
@@ -161,7 +161,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Swipe to get previous days" />
+                        android:text="@string/onceki_gunleri_getirmek_icin_cek" />
 
                 </LinearLayout>
 
@@ -183,7 +183,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Swipe to get next days" />
+                        android:text="@string/sonraki_gunleri_getirmek_icin_cek" />
 
                 </LinearLayout>
 
@@ -203,7 +203,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/scroll_to_today"
+            android:text="@string/bu_gune_kaydir"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

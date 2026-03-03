@@ -21,7 +21,7 @@
             app:menu="@menu/menu_action_activate_edit_delete"
             app:navigationIcon="@drawable/baseline_arrow_back_24"
             app:navigationIconTint="?attr/colorOnSurface"
-            app:title="@string/program_table_details" />
+            app:title="@string/program_tablosu_detaylari" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -61,7 +61,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:maxLines="1"
-                        android:text="Mekatronik 3. sinif"
+                        android:text="Program Tablosu başlığı"
                         android:textSize="24sp" />
 
                     <TextView
@@ -71,7 +71,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:maxLines="2"
-                        android:text="description jflakjdfl kasfjdlaskf j;al"/>
+                        android:text="Açıklama"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -94,7 +94,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/files"
+                        android:text="@string/dosyalar"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -129,9 +129,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:clipToPadding="false"
-                        android:orientation="horizontal"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
+                        android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
                 </LinearLayout>
 
@@ -156,7 +156,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/courses"
+                        android:text="@string/dersler"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -187,7 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
-                    android:text="No courses found."
+                    android:text="@string/ders_bulunamadi"
                     android:textAlignment="center"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="18sp" />
@@ -204,6 +204,7 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
         style="?attr/extendedFloatingActionButtonSmallStyle"

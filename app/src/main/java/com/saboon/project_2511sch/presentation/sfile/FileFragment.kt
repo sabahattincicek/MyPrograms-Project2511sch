@@ -147,7 +147,7 @@ class FileFragment : Fragment() {
 
             binding.cpProgramTable.isChecked = false
             binding.cpProgramTable.isCloseIconVisible = false
-            binding.cpProgramTable.text = getString(R.string.program_table)
+            binding.cpProgramTable.text = getString(R.string.program_tablosu)
         }
         binding.cpCourse.setOnClickListener {
             Log.d(tag, "cpCourse: Chip clicked.")
@@ -170,7 +170,7 @@ class FileFragment : Fragment() {
 
             binding.cpCourse.isChecked = false
             binding.cpCourse.isCloseIconVisible = false
-            binding.cpCourse.text = getString(R.string.course)
+            binding.cpCourse.text = getString(R.string.ders)
         }
         binding.cpTask.setOnClickListener {
             binding.cpTask.isChecked = !binding.cpTask.isChecked
@@ -188,7 +188,7 @@ class FileFragment : Fragment() {
 
             binding.cpTask.isChecked = false
             binding.cpTask.isCloseIconVisible = false
-            binding.cpTask.text = getString(R.string.task)
+            binding.cpTask.text = getString(R.string.gorev)
         }
     }
 
@@ -263,11 +263,11 @@ class FileFragment : Fragment() {
 
                     binding.cpCourse.isChecked = false
                     binding.cpCourse.isCloseIconVisible = false
-                    binding.cpCourse.text = getString(R.string.course)
+                    binding.cpCourse.text = getString(R.string.ders)
 
                     binding.cpTask.isChecked = false
                     binding.cpTask.isCloseIconVisible = false
-                    binding.cpTask.text = getString(R.string.task)
+                    binding.cpTask.text = getString(R.string.gorev)
 
                     Log.d(tag, "FragmentResultListener: Updating filter with selected ProgramTable.")
                     viewModelSFile.updateProgramTable(programTable)
@@ -280,7 +280,7 @@ class FileFragment : Fragment() {
 
                     binding.cpTask.isChecked = false
                     binding.cpTask.isCloseIconVisible = false
-                    binding.cpTask.text = getString(R.string.task)
+                    binding.cpTask.text = getString(R.string.gorev)
 
                     Log.d(tag, "FragmentResultListener: Updating filter with selected Course.")
                     viewModelSFile.updateCourse(course)

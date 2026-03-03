@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/files"/>
+            app:title="@string/dosyalar"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -39,7 +39,7 @@
                 android:id="@+id/et_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/search_in_files"
+                android:hint="@string/dosyalar_icinde_ara"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:maxLines="1" />
@@ -68,14 +68,14 @@
                 style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/program_table"/>
+                android:text="@string/program_tablolari"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/cp_course"
                 style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/course"/>
+                android:text="@string/dersler"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/cp_task"
@@ -83,7 +83,7 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/task"/>
+                android:text="@string/gorevler"/>
 
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
@@ -113,7 +113,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                android:text="No files found."
+                android:text="@string/dosya_bulunamadi"
                 android:textAlignment="center"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="18sp" />

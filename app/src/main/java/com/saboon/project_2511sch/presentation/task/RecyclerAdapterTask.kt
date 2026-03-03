@@ -112,7 +112,7 @@ class RecyclerAdapterTask:
                         binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
                         binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
                         binding.tvContent1.text = task.title
-                        binding.tvContent1Sub.text = "${getString(binding.root.context,R.string.target_score)}: ${task.targetScore}"
+                        binding.tvContent1Sub.text = "${getString(binding.root.context,R.string.hedeflenen_puan)}: ${task.targetScore}"
                         binding.tvContent2.text = task.date.toFormattedString("dd MMMM yyyy")
                         binding.tvContent2Sub.text = task.place
 

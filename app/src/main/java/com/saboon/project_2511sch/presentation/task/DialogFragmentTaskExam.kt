@@ -110,7 +110,7 @@ class DialogFragmentTaskExam: DialogFragment() {
         setupListeners()
         setupObservers()
 
-        binding.toolbar.title = getString(R.string.edit_task)
+        binding.toolbar.title = getString(R.string.duzenle)
         binding.toolbar.subtitle = course.title
 
         val isEditMode = task != null
