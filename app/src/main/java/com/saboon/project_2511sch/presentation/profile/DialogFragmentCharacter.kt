@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import coil3.load
 import com.saboon.project_2511sch.R
@@ -83,18 +84,14 @@ class DialogFragmentCharacter: DialogFragment() {
             adapter = recyclerAdapterCharacter
             layoutManager =  LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-            val snapHelper = LinearSnapHelper()
+            val snapHelper = PagerSnapHelper()
             snapHelper.attachToRecyclerView(this)
 
             post {
                 val screenWidth = resources.displayMetrics.widthPixels
-                // Item genişliğini alıyoruz (XML'de item'a verdiğin genişlik, örn: 120dp'nin px karşılığı)
-                // Eğer ViewHolder henüz oluşmadıysa güvenli bir varsayılan değer (örn: 120dp px) kullanabilirsin
-//                val itemWidth = if (childCount > 0) getChildAt(0).width else (96 * resources.displayMetrics.density).toInt()
                 val itemWidth = (96 * resources.displayMetrics.density).toInt()
                 val padding = (screenWidth / 2) - (itemWidth / 2)
                 setPadding(padding, 0, padding, 0)
-                // Padding set edildikten sonra SnapHelper'ın düzgün çalışması için invalidate ediyoruz
                 invalidateItemDecorations()
             }
             // 2. Scroll Dinleyici: Durduğunda ortadaki öğeyi yakala

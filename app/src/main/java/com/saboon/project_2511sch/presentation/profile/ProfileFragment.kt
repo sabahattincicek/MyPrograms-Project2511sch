@@ -93,6 +93,7 @@ class ProfileFragment : Fragment() {
             val dialog = DialogFragmentCharacter()
             dialog.show(childFragmentManager, "dialogFragmentCharacter")
         }
+
         binding.ivEditUser.setOnClickListener {
             binding.ivEditUser.visibility = View.GONE
             binding.llTextViewContainer.visibility = View.GONE
@@ -132,9 +133,9 @@ class ProfileFragment : Fragment() {
     }
 
     private fun applyDataToView(){
-        binding.ivProfilePicture.load(File(currentUser.photoUrl)){
-            crossfade(true)
-        }
+//        binding.ivProfilePicture.load(File(currentUser.photoUrl)){
+//            crossfade(true)
+//        }
         binding.tvFullName.text = currentUser.fullName
         binding.tvRole.text = currentUser.role
         binding.tvAcademicLevel.text = currentUser.academicLevel
