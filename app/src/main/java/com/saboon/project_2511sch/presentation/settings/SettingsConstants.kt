@@ -10,9 +10,10 @@ object SettingsConstants {
     const val PREF_KEY_DARK_MODE = "pref_key_dark_mode"
     const val PREF_KEY_APP_THEME = "pref_key_app_theme"
     const val PREF_KEY_HOME_VIEW_RANGE = "pref_key_home_view_range"
+    const val PREF_KEY_OVERSCROLL_DAYS_COUNT = "pref_key_overscroll_days_count"
     const val PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED = "pref_key_home_list_item_color_enabled"
     const val PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE = "pref_key_home_list_item_color"
-    const val PREF_KEY_OVERSCROLL_DAYS_COUNT = "pref_key_overscroll_days_count"
+    const val PREF_KEY_CHARACTER = "pref_key_character"
 
     //APPEARANCE
     object DarkMode {
@@ -68,6 +69,9 @@ object SettingsConstants {
         fun getValuesAsArray(): Array<String>{
             return arrayOf(FROM_COURSE, FROM_PROGRAM_TABLE) // same order with pref_home_list_item_color_source in arrays.xml
         }
+    }
+    object SelectedCharacter {
+        const val DEFAULT = "av1"
     }
 
 }

@@ -18,4 +18,8 @@ interface ISettingsRepository {
     suspend fun setHomeListItemColorEnabled(enabled: Boolean)
     fun getHomeListItemColorSource(): Flow<String>
     suspend fun setHomeListItemColorSource(source: String)
+    fun getSelectedCharacter(): Flow<String>
+
+    //OTHER
+    suspend fun setSelectedCharacter(id: String)
 }

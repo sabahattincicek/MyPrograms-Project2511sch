@@ -105,4 +105,14 @@ class SettingsRepositoryImp @Inject constructor(
             }
         }
     }
+
+    //CHARACTER
+    override fun getSelectedCharacter() = getStringFlow(SettingsConstants.PREF_KEY_CHARACTER, SettingsConstants.SelectedCharacter.DEFAULT)
+    override suspend fun setSelectedCharacter(id: String) {
+        withContext(Dispatchers.IO){
+            sharedPreferences.edit{
+                putString(SettingsConstants.PREF_KEY_CHARACTER, id)
+            }
+        }
+    }
 }

@@ -1,0 +1,20 @@
+{
+  "id": "av3",
+  "name": "Arif",
+  "personality": {
+    "tr": "Ben Arif. Okulda genelde dış görünüşümle tanınırım ama beni ben yapan şey aslında insanlarla kurduğum bağ. Yardım istemen yeterli, elimden geleni yaparım. Yeni insanlarla tanışmak, sohbet etmek bana enerji verir. İlgi görmek hoşuma gidiyor, kabul ediyorum. Ama bazen herkese yetişmeye çalışırken kendi işlerimi aksattığım oluyor. ‘Hayır’ demeyi pek beceremem, çünkü kimseyi kırmak istemem.",
+    "en": "I'm Arif. At school, I’m mostly known for my looks, but what really defines me is how I connect with people. If you need help, I’m there. Meeting new people and having conversations gives me energy. I admit, I enjoy the attention. But sometimes, while trying to be there for everyone, I end up neglecting my own responsibilities. I’m not very good at saying no, because I don’t like disappointing people."
+  },
+  "portrait": "file:///android_asset/characters/av3/images/av3_portrait.webp",
+  "cover": "file:///android_asset/characters/av3/images/av3_actv1.webp",
+  "activities": [
+    {
+      "id": "actv1",
+      "image": "file:///android_asset/characters/av1/activities/av1_actv1.webp",
+      "content": {
+        "tr": "Sıkı çalışıyorsun, verimliliğin artıyor!",
+        "en": "You're working hard, your productivity is increasing!"
+      }
+    }
+  ]
+}

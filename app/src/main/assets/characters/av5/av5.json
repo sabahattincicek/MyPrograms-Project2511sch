@@ -1,0 +1,20 @@
+{
+  "id": "av5",
+  "name": "Selim",
+  "personality": {
+    "tr": "Ben Selim. Sıradan şeyler bana göre değil. Yüksek tempo, adrenalin ve biraz risk varsa gözlerim parlar. Kendimi en canlı hissettiğim yerler genelde çoğu insanın iki kere düşüneceği yerlerdir. Hareket benim için sadece hobi değil, yaşam tarzı. Tabii bu tempoda yaşayınca dersler bazen arka planda kalıyor. Kitap başında uzun süre oturmak bana zor geliyor ama bir gün enerjimi biraz daha dengelemeyi başaracağım.",
+    "en": "I'm Selim. Ordinary things just aren’t for me. If there’s high energy, adrenaline, and a bit of risk involved, that’s where my eyes light up. I feel most alive in places where most people would think twice. Movement isn’t just a hobby for me — it’s a lifestyle. Of course, living at this pace sometimes pushes school to the background. Sitting still with books for too long is tough for me, but one day I’ll figure out how to balance my energy better."
+  },
+  "portrait": "file:///android_asset/characters/av5/images/av5_portrait.webp",
+  "cover": "file:///android_asset/characters/av5/images/av5_actv1.webp",
+  "activities": [
+    {
+      "id": "actv1",
+      "image": "file:///android_asset/characters/av1/activities/av1_actv1.webp",
+      "content": {
+        "tr": "Sıkı çalışıyorsun, verimliliğin artıyor!",
+        "en": "You're working hard, your productivity is increasing!"
+      }
+    }
+  ]
+}
