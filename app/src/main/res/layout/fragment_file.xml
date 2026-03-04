@@ -68,14 +68,14 @@
                 style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/program_table"/>
+                android:text="@string/program_tables"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/cp_course"
                 style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/course"/>
+                android:text="@string/courses"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/cp_task"
@@ -83,7 +83,7 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/task"/>
+                android:text="@string/tasks"/>
 
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
@@ -113,7 +113,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                android:text="No files found."
+                android:text="@string/no_file_found"
                 android:textAlignment="center"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="18sp" />

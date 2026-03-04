@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:title="@string/appBarTitle_programTables" />
+            app:title="@string/program_tables" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
@@ -42,7 +42,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
-            android:text="No program tables found.\n\nStart by creating your first program table to organize your schedule!"
+            android:text="@string/no_program_table_found"
             android:textAlignment="center"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="18sp" />

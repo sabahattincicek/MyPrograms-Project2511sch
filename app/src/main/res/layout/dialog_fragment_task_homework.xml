@@ -18,8 +18,8 @@
             app:menu="@menu/menu_action_delete"
             app:navigationIcon="@drawable/baseline_close_24"
             app:navigationIconTint="?attr/colorOnSurface"
-            app:subtitle="@string/course"
-            app:title="@string/task"/>
+            app:title="@string/homework"
+            app:subtitle="@string/course"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:hint="@string/hint_title">
+                android:hint="@string/title">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_title"
                     android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                 app:counterEnabled="true"
                 app:counterMaxLength="100"
                 android:textAlignment="textStart"
-                android:hint="@string/hint_description">
+                android:hint="@string/description">
 
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -142,9 +142,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                app:helperText="@string/reminderInfo"
+                app:helperText="@string/you_will_receive_notification"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:hint="@string/hint_reminder">
+                android:hint="@string/reminder">
                 <AutoCompleteTextView
                     android:id="@+id/actv_reminder"
                     android:layout_width="match_parent"
@@ -212,7 +212,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:text="@android:string/cancel" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/btn_save"

@@ -16,7 +16,7 @@
             app:navigationIcon="@drawable/baseline_close_24"
             app:navigationIconTint="?attr/colorOnSurface"
             app:menu="@menu/menu_action_delete"
-            app:title="@string/add_new_note"/>
+            app:title="add new note"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -161,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:text="@android:string/cancel" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/btn_save"

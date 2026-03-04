@@ -18,8 +18,8 @@
             app:menu="@menu/menu_action_delete"
             app:navigationIcon="@drawable/baseline_close_24"
             app:navigationIconTint="?attr/colorOnSurface"
-            app:subtitle="@string/course"
-            app:title="@string/task"/>
+            app:title="@string/exam"
+            app:subtitle="@string/course"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:hint="@string/hint_title">
+                android:hint="@string/title">
 
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -78,7 +78,7 @@
                 app:counterEnabled="true"
                 app:counterMaxLength="100"
                 android:textAlignment="textStart"
-                android:hint="@string/hint_description">
+                android:hint="@string/description">
 
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -152,7 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:hint="@string/hint_date">
+                android:hint="@string/date">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_date"
                     android:focusableInTouchMode="false"
@@ -195,7 +195,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="@string/hint_start">
+                    android:hint="@string/start_time">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_time_start"
                         android:focusableInTouchMode="false"
@@ -210,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="5dp"
-                    android:hint="@string/hint_end">
+                    android:hint="@string/end_time">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_time_end"
                         android:focusableInTouchMode="false"
@@ -224,9 +224,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                app:helperText="@string/reminderInfo"
+                app:helperText="@string/you_will_receive_notification"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:hint="@string/hint_reminder">
+                android:hint="@string/reminder">
                 <AutoCompleteTextView
                     android:id="@+id/actv_reminder"
                     android:layout_width="match_parent"
@@ -244,7 +244,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/place"
+                    android:text="@string/location"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -262,7 +262,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:hint="@string/hint_place">
+                android:hint="@string/location">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_place"
                     android:layout_width="match_parent"
@@ -329,7 +329,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:text="@android:string/cancel" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/btn_save"
