@@ -1,115 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">My Programs</string>
     <string name="app_version">1.0.0</string>
-
-<!--    HOME-->
-    <string name="program_tablosu">Program Tablosu</string>
-    <string name="ders">Ders</string>
-    <string name="programlar">Programlar</string>
-    <string name="dersler">Dersler</string>
-    <string name="ders_oturumlari">Ders Oturumları</string>
-    <string name="sinavlar">Sınavlar</string>
-    <string name="ödevler">Ödevler</string>
-    <string name="bu_gune_kaydir">Bu Güne Kaydır</string>
-    <string name="sonraki_gunleri_getirmek_icin_cek">Sonraki günleri getirmek için çek</string>
-    <string name="onceki_gunleri_getirmek_icin_cek">Önceki günleri getirmek için çek</string>
-    <string name="ders_veya_gorev_bulunamadi">Ders veya görev bulunamadı. \n\nBaşlamak için Program Tablosu oluşturup dersler ve görevler ekleyebilirsiniz.</string>
-
-<!--    PROGRAM TABLE LIST-->
-    <string name="program_tablolari">Program Tabloları</string>
-    <string name="program_tablosu_bulunamadi">Program tablosu bulunamadı. \n\nDerslerinizi ve görevlerinizi organize etmek için bir tane oluşturun.</string>
-
-<!--    PROGRAM TABLE DETAILS-->
-    <string name="program_tablosu_detaylari">Program Tablosu Detayları</string>
-    <string name="dosyalar">Dosyalar</string>
-    <string name="ders_bulunamadi">Ders bulunamadı.</string>
-
-<!--    COURSE DETAILS-->
-    <string name="ders_detaylari">Ders Detayları</string>
-    <string name="gorev_bulunamadi">Görev bulunamadı.</string>
-
-<!--    FILES-->
-    <string name="dosyalar_icinde_ara">Dosyalar içinde ara</string>
-    <string name="gorevler">Görevler</string>
-    <string name="dosya_bulunamadi">Dosya bulunamadı</string>
-
-<!--    PROFILE-->
-    <string name="profil">Profil</string>
-    <string name="tam_adi">Tam Adı:</string>
-    <string name="unvani">Ünvanı:</string>
-    <string name="sinifi">Sınıfı:</string>
-    <string name="kurumu">Kurumu:</string>
-    <string name="hakkimda">Hakkımda:</string>
-    <string name="ayarlar">Ayarlar</string>
-    <string name="disari_aktar">Dışarı Aktar</string>
-    <string name="iceri_aktar">İçeri Aktar</string>
-    <string name="destek_iletisim">Destek ve İletişim</string>
-    <string name="gizlilik_politikasi">Gizlilik Politikası</string>
-    <string name="kullanim_kosullari">Kullanım Koşulları</string>
-    <string name="butun_verileri_sil">Bütün Verileri Sil</string>
-
-<!--    DIALOG FRAGMENT PROGRAM TABLE-->
-    <string name="baslik">Başlık</string>
-    <string name="aciklama">Açıklama</string>
-    <string name="renk">Renk</string>
-    <string name="iptal">İptal</string>
-    <string name="kaydet">Kaydet</string>
-
-<!--    DIALOG FRAGMENT COURSE-->
-    <string name="kisiler">Kişiler</string>
-    <string name="ogretmen_veya_asistan_adi_yazabilirsiniz">Kişi olarak öğretmen veya asistan adları yazabilirsiniz.</string>
-    <string name="birden_fazla_kişiyi_virgul_ile_ayirin">Birden fazla kişi için virgün (,) ile ayırın.</string>
-
-<!--    DIALOG FRAGMENT TASK LESSON-->
-    <string name="gorev">Görev</string>
-    <string name="ders_oturumu">Ders Oturumu</string>
-    <string name="tarih">Tarih</string>
-    <string name="tekrarlama">Tekrarlama</string>
-    <string name="baslama_tarihi">Başlama Tarihi</string>
-    <string name="bitis_tarihi">Bitiş Tarihi</string>
-    <string name="tekrarlama_tarih_aralığı">Tekrarlamanın hangi tarih aralıklarında olacağını belirleyin.</string>
-    <string name="saat">Saat</string>
-    <string name="baslama_saati">Başlama Saati</string>
-    <string name="bitis_saati">Bitiş Saati</string>
-    <string name="bildirim_alacaksiniz">Bildirim alacaksınız.</string>
-    <string name="hatirlatici">Hatırlatıcı</string>
-    <string name="yer">Yer</string>
-
-<!--    DIALOG FRAGMENT TASK EXAM-->
-    <string name="sinav">Sınav</string>
-    <string name="hedeflenen_puan">Hedeflenen Puan</string>
-    <string name="alinan_puan">Alınan Puan</string>
-
-<!--    DIALOG FRAGMENT TASK HOMEWORK-->
-    <string name="odev">Ödev</string>
-    <string name="son_teslim_tarihi">Son Teslim Tarihi</string>
-    <string name="son_teslim_saati">Son Teslim Saati</string>
-
-<!--    DIALOG FRAGMENT CHARACTER-->
-    <string name="karakterler">Karakterler</string>
-<!--    DIALOG FRAGMENT FILTER-->
-    <string name="filtre">Filtre</string>
-    <string name="devamsizlik">Devamsılık</string>
-
-<!--    SETTINGS ROW ACTION-->
-    <string name="ozet">Özet</string>
-    <string name="deger">Değer</string>
-
-<!--    MENUS-->
-    <string name="ana_sayfa">Ana Sayfa</string>
-    <string name="duzenle">Düzenle</string>
-    <string name="aktif_et">Aktif Et</string>
-    <string name="sil">Sil</string>
-    <string name="ekle">Ekle</string>
-
-<!--    DELETE CONFIRMATION DIALOG-->
-    <string name="no">Hayır</string>
-    <string name="yes">Evet</string>
-
-<!--    RECYCLER ADAPTERS-->
-    <string name="bugun">Bugün</string>
-    <string name="yarin">Yarın</string>
-    <string name="dun">Dün</string>
-
+    <string name="program_table">Program Table</string>
+    <string name="course">Course</string>
+    <string name="programs">Programs</string>
+    <string name="courses">Courses</string>
+    <string name="exams">Exams</string>
+    <string name="homeworks">Homework</string>
+    <string name="scroll_to_today">Scroll to Today</string>
+    <string name="swipe_to_load_next_days">Swipe to load upcoming days</string>
+    <string name="swipe_to_load_previous_days">Swipe to load previous days</string>
+    <string name="no_course_or_task_found">No course or task found. \n\nTo get started, create a Program Table and add courses and tasks.</string>
+    <string name="program_tables">Program Tables</string>
+    <string name="no_program_table_found">No program table found. \n\nCreate one to organize your courses and tasks.</string>
+    <string name="program_table_details">Program Table Details</string>
+    <string name="files">Files</string>
+    <string name="no_course_found">No course found.</string>
+    <string name="course_details">Course Details</string>
+    <string name="no_task_found">No task found.</string>
+    <string name="search_in_files">Search in files</string>
+    <string name="tasks">Tasks</string>
+    <string name="no_file_found">No file found</string>
+    <string name="profile">Profile</string>
+    <string name="full_name">Full Name:</string>
+    <string name="role">Title:</string>
+    <string name="academic_level">Class:</string>
+    <string name="institution">Institution:</string>
+    <string name="about_me">About Me:</string>
+    <string name="settings">Settings</string>
+    <string name="export_data">Export</string>
+    <string name="import_data">Import</string>
+    <string name="support_contact">Support &amp; Contact</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="delete_all_data">Delete All Data</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="color">Color</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="people">People</string>
+    <string name="enter_teacher_or_assistant_names">You can enter teacher or assistant names.</string>
+    <string name="separate_multiple_people_with_comma">Separate multiple people with a comma (,).</string>
+    <string name="task">Task</string>
+    <string name="lesson">Lesson</string>
+    <string name="date">Date</string>
+    <string name="repeat">Repeat</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="repeat_date_range">Specify the date range for repetition.</string>
+    <string name="time">Time</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="you_will_receive_notification">You will receive a notification.</string>
+    <string name="reminder">Reminder</string>
+    <string name="location">Location</string>
+    <string name="exam">Exam</string>
+    <string name="target_score">Target Score</string>
+    <string name="achieved_score">Achieved Score</string>
+    <string name="homework">Homework</string>
+    <string name="due_date">Due Date</string>
+    <string name="due_time">Due Time</string>
+    <string name="characters">Characters</string>
+    <string name="filter">Filter</string>
+    <string name="absence">Absence</string>
+    <string name="summary">Summary</string>
+    <string name="value">Value</string>
+    <string name="home">Home</string>
+    <string name="edit">Edit</string>
+    <string name="activate">Activate</string>
+    <string name="delete">Delete</string>
+    <string name="add">Add</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="yesterday">Yesterday</string>
 
 </resources>

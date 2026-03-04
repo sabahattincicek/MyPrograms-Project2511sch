@@ -15,8 +15,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -81,7 +79,7 @@ class SettingsFragment : Fragment() {
                             viewModelSettings.onDarkModeSelected(selectedValue)
                             dialog.dismiss()
                         }
-                        .setNegativeButton(getString(R.string.iptal), null)
+                        .setNegativeButton(getString(R.string.cancel), null)
                         .show()
                 }
                 SettingsConstants.PREF_KEY_APP_THEME -> {
@@ -97,7 +95,7 @@ class SettingsFragment : Fragment() {
                             viewModelSettings.onAppThemeSelected(selectedValue)
                             dialog.dismiss()
                         }
-                        .setNegativeButton(getString(R.string.iptal), null)
+                        .setNegativeButton(getString(R.string.cancel), null)
                         .show()
                 }
                 SettingsConstants.PREF_KEY_HOME_VIEW_RANGE -> {
@@ -113,7 +111,7 @@ class SettingsFragment : Fragment() {
                             viewModelSettings.onHomeViewRangeSelected(selectedValue)
                             dialog.dismiss()
                         }
-                        .setNegativeButton(getString(R.string.iptal), null)
+                        .setNegativeButton(getString(R.string.cancel), null)
                         .show()
                 }
                 SettingsConstants.PREF_KEY_OVERSCROLL_DAYS_COUNT -> {
@@ -129,7 +127,7 @@ class SettingsFragment : Fragment() {
                             viewModelSettings.onOversrollDaysCountChanged(selectedValue)
                             dialog.dismiss()
                         }
-                        .setNegativeButton(getString(R.string.iptal), null)
+                        .setNegativeButton(getString(R.string.cancel), null)
                         .show()
                 }
                 SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE -> {
@@ -145,7 +143,7 @@ class SettingsFragment : Fragment() {
                             viewModelSettings.onHomeListItemColorSourceSelected(selectedValue)
                             dialog.dismiss()
                         }
-                        .setNegativeButton(getString(R.string.iptal), null)
+                        .setNegativeButton(getString(R.string.cancel), null)
                         .show()
                 }
             }

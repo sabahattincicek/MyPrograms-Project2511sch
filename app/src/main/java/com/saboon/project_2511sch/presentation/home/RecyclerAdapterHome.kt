@@ -97,9 +97,9 @@ class RecyclerAdapterHome :
                 val diffDays = TimeUnit.MILLISECONDS.toDays(diffMillis)
 
                 binding.tvContent2.text = when {
-                    diffDays == 0L -> getString(binding.root.context, R.string.bugun)
-                    diffDays == 1L -> getString(binding.root.context, R.string.yarin)
-                    diffDays == -1L -> getString(binding.root.context, R.string.dun)
+                    diffDays == 0L -> getString(binding.root.context, R.string.today)
+                    diffDays == 1L -> getString(binding.root.context, R.string.tomorrow)
+                    diffDays == -1L -> getString(binding.root.context, R.string.yesterday)
                     diffDays > 0 -> "In $diffDays days"
                     else -> "${kotlin.math.abs(diffDays)} days ago"
                 }
@@ -183,12 +183,12 @@ class RecyclerAdapterHome :
                         binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
                         binding.tvContent1.text = "${course.title}, ${task.title}"
                         if (task.achievedScore != null){
-                            binding.tvContent1Sub.text = "${getString(binding.root.context, R.string.alinan_puan)}: ${task.achievedScore}"
+                            binding.tvContent1Sub.text = "${getString(binding.root.context, R.string.achieved_score)}: ${task.achievedScore}"
                         }else{
                             if (task.description != ""){
                                 binding.tvContent1Sub.text = task.description
                             }else{
-                                binding.tvContent1Sub.text = "${getString(binding.root.context, R.string.hedeflenen_puan)}: ${task.targetScore}"
+                                binding.tvContent1Sub.text = "${getString(binding.root.context, R.string.target_score)}: ${task.targetScore}"
                             }
                         }
                         binding.tvContent2.text = task.date.toFormattedString("dd.MM.yyyy")

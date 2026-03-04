@@ -84,7 +84,7 @@ class HomeFragment : Fragment() {
 
             binding.cpProgramTable.isChecked = false
             binding.cpProgramTable.isCloseIconVisible = false
-            binding.cpProgramTable.text = getString(R.string.program_tablosu)
+            binding.cpProgramTable.text = getString(R.string.program_table)
         }
         binding.cpCourse.setOnClickListener {
             binding.cpCourse.isChecked = !binding.cpCourse.isChecked
@@ -103,7 +103,7 @@ class HomeFragment : Fragment() {
 
             binding.cpCourse.isChecked = false
             binding.cpCourse.isCloseIconVisible = false
-            binding.cpCourse.text = getString(R.string.ders)
+            binding.cpCourse.text = getString(R.string.course)
         }
         ////////////////////////////////////////////////
         binding.cpLesson.setOnCheckedChangeListener { _, isChecked ->
@@ -297,7 +297,7 @@ class HomeFragment : Fragment() {
 
                     binding.cpCourse.isChecked = false
                     binding.cpCourse.isCloseIconVisible = false
-                    binding.cpCourse.text = getString(R.string.ders)
+                    binding.cpCourse.text = getString(R.string.course)
                 }
                 is Course -> {
                     filteredCourse = baseModel

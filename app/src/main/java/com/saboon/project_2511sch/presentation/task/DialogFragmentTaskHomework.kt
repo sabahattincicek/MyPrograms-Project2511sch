@@ -25,7 +25,6 @@ import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
 import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
-import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskExam.Companion.ARG_PROGRAM_USER
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
 import com.saboon.project_2511sch.util.Resource
@@ -106,7 +105,7 @@ class DialogFragmentTaskHomework: DialogFragment() {
         setupListeners()
         setupObservers()
 
-        binding.toolbar.title = getString(R.string.duzenle)
+        binding.toolbar.title = getString(R.string.edit)
         binding.toolbar.subtitle = course.title
 
         val isEditMode = task != null

@@ -3,25 +3,25 @@
 
     <item
         android:id="@+id/homeFragment"
-        android:title="@string/ana_sayfa"
+        android:title="@string/home"
         android:icon="@drawable/baseline_home_24"
         android:enabled="true"/>
 
     <item
         android:id="@+id/programTableFragment"
         android:icon="@drawable/baseline_menu_book_24"
-        android:title="@string/program_tablolari"
+        android:title="@string/program_tables"
         android:enabled="true"/>
 
     <item
         android:id="@+id/fileFragment"
-        android:title="@string/dosyalar"
+        android:title="@string/files"
         android:icon="@drawable/baseline_note_alt_24"
         android:enabled="true"/>
 
     <item
         android:id="@+id/profileFragment"
-        android:title="@string/profil"
+        android:title="@string/profile"
         android:icon="@drawable/baseline_person_24"
         android:enabled="true"/>
 </menu>

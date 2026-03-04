@@ -26,8 +26,8 @@
                     android:layout_height="?attr/actionBarSize"
                     app:navigationIcon="@drawable/baseline_close_24"
                     app:navigationIconTint="?attr/colorOnSurface"
-                    app:title="@string/ders"
-                    app:subtitle="@string/program_tablosu"/>
+                    app:title="@string/course"
+                    app:subtitle="@string/program_table"/>
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -48,7 +48,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/ders"
+                        android:text="@string/course"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -64,7 +64,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:hint="@string/baslik"
+                    android:hint="@string/title"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_height="wrap_content">
 
@@ -78,7 +78,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:hint="@string/aciklama"
+                    android:hint="@string/description"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_height="wrap_content">
 
@@ -101,7 +101,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/kisiler"
+                        android:text="@string/people"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -120,15 +120,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="?attr/colorOnSurface"
-                    android:text="@string/ogretmen_veya_asistan_adi_yazabilirsiniz"
+                    android:text="@string/enter_teacher_or_assistant_names"
                     android:layout_gravity="end"
                     android:gravity="end"
                     android:textSize="11sp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:hint="@string/kisiler"
-                    app:helperText="@string/birden_fazla_kişiyi_virgul_ile_ayirin"
+                    android:hint="@string/people"
+                    app:helperText="@string/separate_multiple_people_with_comma"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_height="wrap_content">
 
@@ -150,7 +150,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/renk"
+                        android:text="@string/color"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -384,7 +384,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:text="@string/iptal" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/btn_save"
@@ -392,7 +392,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="@string/kaydet" />
+            android:text="@string/save" />
 
     </LinearLayout>
 
