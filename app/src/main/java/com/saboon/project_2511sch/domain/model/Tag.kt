@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
-data class ProgramTable(
+data class Tag(
     override val id: String,
     override val createdAt: Long = System.currentTimeMillis(),
     override val createdBy: String,

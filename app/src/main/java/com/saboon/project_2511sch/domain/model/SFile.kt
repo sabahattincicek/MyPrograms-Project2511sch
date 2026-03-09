@@ -20,9 +20,7 @@ data class SFile(
     override val contentHash: String = "",
     override val serverVersion: Int = 1,
 
-    val programTableId: String?,
-    val courseId: String?,
-    val taskId: String?,
+    val courseId: String,
 
     val title: String,
     val description: String,

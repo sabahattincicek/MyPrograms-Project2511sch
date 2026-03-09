@@ -105,7 +105,7 @@ class ProfileFragment : Fragment() {
                 fullName = binding.etFullName.text.toString(),
                 role = binding.etRole.text.toString(),
                 academicLevel = binding.etAcademicLevel.text.toString(),
-                organisation = binding.etOrganisation.text.toString(),
+                institution = binding.etOrganisation.text.toString(),
                 aboutMe = binding.etAboutMe.text.toString()
             )
             viewModelUser.update(updatedUser)
@@ -139,13 +139,13 @@ class ProfileFragment : Fragment() {
         binding.tvFullName.text = currentUser.fullName
         binding.tvRole.text = currentUser.role
         binding.tvAcademicLevel.text = currentUser.academicLevel
-        binding.tvOrganisation.text = currentUser.organisation
+        binding.tvOrganisation.text = currentUser.institution
         binding.tvAboutMe.text = currentUser.aboutMe
 
         binding.etFullName.setText(currentUser.fullName)
         binding.etRole.setText(currentUser.role)
         binding.etAcademicLevel.setText(currentUser.academicLevel)
-        binding.etOrganisation.setText(currentUser.organisation)
+        binding.etOrganisation.setText(currentUser.institution)
         binding.etAboutMe.setText(currentUser.aboutMe)
     }
     private fun setupObservers(){

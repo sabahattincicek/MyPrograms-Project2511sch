@@ -9,7 +9,7 @@ import com.saboon.project_2511sch.databinding.RowSingleTextViewBinding
 import com.saboon.project_2511sch.databinding.RowSingleTextViewLeftBinding
 import com.saboon.project_2511sch.domain.model.BaseModel
 import com.saboon.project_2511sch.presentation.course.DisplayItemCourse
-import com.saboon.project_2511sch.presentation.programtable.DisplayItemProgramTable
+import com.saboon.project_2511sch.presentation.tag.DisplayItemTag
 import com.saboon.project_2511sch.presentation.task.DisplayItemTask
 import com.saboon.project_2511sch.util.BaseDiffCallback
 import com.saboon.project_2511sch.util.BaseDisplayListItem
@@ -49,8 +49,8 @@ class RecyclerAdapterFilter: ListAdapter<BaseDisplayListItem, BaseViewHolder>(Ba
         val item = getItem(position)
         holder.onItemClickListener = { baseItem ->
             when(baseItem){
-                is DisplayItemProgramTable.ContentProgramTable -> {
-                    if (baseItem.programTable.isActive) onClickItemListener?.invoke(baseItem.programTable)
+                is DisplayItemTag.ContentTag -> {
+                    if (baseItem.tag.isActive) onClickItemListener?.invoke(baseItem.tag)
                 }
                 is DisplayItemCourse.ContentCourse -> {
                     if (baseItem.course.isActive) onClickItemListener?.invoke(baseItem.course)
@@ -83,12 +83,12 @@ class RecyclerAdapterFilter: ListAdapter<BaseDisplayListItem, BaseViewHolder>(Ba
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             when(item){
-                is DisplayItemProgramTable.ContentProgramTable -> {
-                    binding.tvContent1.text = item.programTable.title
-                    binding.tvContent1Sub.text = item.programTable.description
+                is DisplayItemTag.ContentTag -> {
+                    binding.tvContent1.text = item.tag.title
+                    binding.tvContent1Sub.text = item.tag.description
                     binding.tvContent2.visibility = View.GONE
-                    binding.tvContent2Sub.text = item.programTable.createdAt.toFormattedString("MMM yyyy")
-                    if (!item.programTable.isActive) binding.llContainer.alpha = 0.3f
+                    binding.tvContent2Sub.text = item.tag.createdAt.toFormattedString("MMM yyyy")
+                    if (!item.tag.isActive) binding.llContainer.alpha = 0.3f
                     else binding.llContainer.alpha = 1.0f
                 }
                 is DisplayItemCourse.ContentCourse -> {
@@ -115,7 +115,7 @@ class RecyclerAdapterFilter: ListAdapter<BaseDisplayListItem, BaseViewHolder>(Ba
             super.bind(item)
             binding.tvContent.text = ""
 //            when(item){
-//                is DisplayItemProgramTable.FooterProgramTable -> {
+//                is DisplayItemTag.FooterTag -> {
 //                    binding.tvContent.text = "Count: ${item.count}"
 //                }
 //                is DisplayItemCourse.FooterCourse -> {

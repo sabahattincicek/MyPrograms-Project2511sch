@@ -51,10 +51,10 @@ class MainActivity : AppCompatActivity() {
                 val currentDestinationId = navController.currentDestination?.id
                 when {
                     // 1. Eğer Splash ekranındaysak veya Home ekranındaysak uygulamayı kapat
-                    currentDestinationId == R.id.splashFragment || currentDestinationId == R.id.homeFragment -> {
+                    currentDestinationId == R.id.splashFragment || currentDestinationId == R.id.fragmentHome -> {
                         finish()
                     }
-                    // 2. Eğer başka bir alt sekmedeysek (ProgramTable, Course, Task vb.) direkt Home'a git
+                    // 2. Eğer başka bir alt sekmedeysek (Tag, Course, Task vb.) direkt Home'a git
                     // ve aradaki tüm geçmişi temizle
                     else -> {
 //                        navController.popBackStack(R.id.homeFragment, false)

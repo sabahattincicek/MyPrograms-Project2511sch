@@ -1,11 +1,11 @@
-package com.saboon.project_2511sch.presentation.programtable
+package com.saboon.project_2511sch.presentation.tag
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saboon.project_2511sch.domain.model.ProgramTable
-import com.saboon.project_2511sch.domain.usecase.programtable.GetProgramTableDisplayItemListUseCase
-import com.saboon.project_2511sch.domain.usecase.programtable.ProgramTableReadUseCase
-import com.saboon.project_2511sch.domain.usecase.programtable.ProgramTableWriteUseCase
+import com.saboon.project_2511sch.domain.model.Tag
+import com.saboon.project_2511sch.domain.usecase.tag.GetTagDisplayItemListUseCase
+import com.saboon.project_2511sch.domain.usecase.tag.TagReadUseCase
+import com.saboon.project_2511sch.domain.usecase.tag.TagWriteUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,13 +21,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewModelProgramTable @Inject constructor(
-    private val programTableWriteUseCase: ProgramTableWriteUseCase,
-    private val programTableReadUseCase: ProgramTableReadUseCase,
-    private val getProgramTableDisplayItemListUseCase: GetProgramTableDisplayItemListUseCase,
+class ViewModelTag @Inject constructor(
+    private val tagWriteUseCase: TagWriteUseCase,
+    private val tagReadUseCase: TagReadUseCase,
+    private val getTagDisplayItemListUseCase: GetTagDisplayItemListUseCase,
 ): ViewModel() {
 
-    private val _operationEvent = Channel<Resource<ProgramTable>>()
+    private val _operationEvent = Channel<Resource<Tag>>()
     val operationEvent = _operationEvent.receiveAsFlow()
 
     private val _selectedId = MutableStateFlow<String?>(null)
@@ -35,17 +35,17 @@ class ViewModelProgramTable @Inject constructor(
 
     //STATE
     @OptIn(ExperimentalCoroutinesApi::class)
-    val programTableState: StateFlow<Resource<ProgramTable>> = _selectedId
+    val tagState: StateFlow<Resource<Tag>> = _selectedId
         .filterNotNull()
-        .flatMapLatest { id -> programTableReadUseCase.getById(id) }
+        .flatMapLatest { id -> tagReadUseCase.getById(id) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = Resource.Idle()
         )
 
-    val programTablesState: StateFlow<Resource<List<DisplayItemProgramTable>>> =
-        getProgramTableDisplayItemListUseCase.invoke()
+    val tagsState: StateFlow<Resource<List<DisplayItemTag>>> =
+        getTagDisplayItemListUseCase.invoke()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
@@ -57,26 +57,25 @@ class ViewModelProgramTable @Inject constructor(
     fun  getById(id: String){
         _selectedId.value = id
     }
-    fun insert(programTable: ProgramTable) = executeWriteAction{
-        programTableWriteUseCase.insert(programTable)
+    fun insert(tag: Tag) = executeWriteAction{
+        tagWriteUseCase.insert(tag)
     }
-    fun update(programTable: ProgramTable) = executeWriteAction{
-        programTableWriteUseCase.update(programTable)
+    fun update(tag: Tag) = executeWriteAction{
+        tagWriteUseCase.update(tag)
     }
-    fun delete(programTable: ProgramTable) = executeWriteAction{
-        programTableWriteUseCase.delete(programTable)
+    fun delete(tag: Tag) = executeWriteAction{
+        tagWriteUseCase.delete(tag)
     }
     fun activationById(id: String, isActive: Boolean){
         viewModelScope.launch {
             try {
-                programTableWriteUseCase.activationById(id, isActive)
+                tagWriteUseCase.activationById(id, isActive)
             }catch (e: Exception){
 
             }
         }
     }
-
-    private fun executeWriteAction(action: suspend () -> Resource<ProgramTable>) {
+    private fun executeWriteAction(action: suspend () -> Resource<Tag>) {
         viewModelScope.launch {
             try {
                 _operationEvent.send(Resource.Loading())

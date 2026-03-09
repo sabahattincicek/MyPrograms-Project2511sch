@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "program_tables")
-data class ProgramTableEntity(
+@Entity(tableName = "tags")
+data class TagEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "created_at") val createdAt: Long,
     @ColumnInfo(name = "created_by") val createdBy: String,

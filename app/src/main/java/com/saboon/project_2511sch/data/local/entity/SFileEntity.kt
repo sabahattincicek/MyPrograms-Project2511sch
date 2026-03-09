@@ -9,12 +9,6 @@ import androidx.room.PrimaryKey
     tableName = "s_files",
     foreignKeys = [
         ForeignKey(
-            entity = ProgramTableEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["program_table_id"],
-            onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
             entity = CourseEntity::class,
             parentColumns = ["id"],
             childColumns = ["course_id"],
@@ -36,9 +30,7 @@ data class SFileEntity(
     @ColumnInfo(name = "content_hash") val contentHash: String,
     @ColumnInfo(name = "server_version") val serverVersion: Int,
 
-    @ColumnInfo(name = "program_table_id") val programTableId: String?,
-    @ColumnInfo(name = "course_id") val courseId: String?,
-    @ColumnInfo(name = "task_id") val taskId: String?,
+    @ColumnInfo(name = "course_id") val courseId: String,
 
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,

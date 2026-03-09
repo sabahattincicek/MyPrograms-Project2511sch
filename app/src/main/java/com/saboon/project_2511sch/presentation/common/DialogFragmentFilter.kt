@@ -12,14 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentFilterBinding
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.presentation.course.ViewModelCourse
-import com.saboon.project_2511sch.presentation.programtable.ViewModelProgramTable
+import com.saboon.project_2511sch.presentation.tag.ViewModelTag
 import com.saboon.project_2511sch.presentation.task.ViewModelTask
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +30,7 @@ class DialogFragmentFilter: DialogFragment() {
     private var _binding: DialogFragmentFilterBinding?=null
     private val binding get() = _binding!!
     private lateinit var recyclerAdapter: RecyclerAdapterFilter
-    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
+    private val viewModelTag: ViewModelTag by viewModels()
     private val viewModelCourse: ViewModelCourse by viewModels()
     private val viewModelTask: ViewModelTask by viewModels()
 
@@ -53,15 +52,16 @@ class DialogFragmentFilter: DialogFragment() {
         setupRecyclerAdapter()
 
         arguments.let { bundle ->
-            val programTable = bundle?.let { BundleCompat.getParcelable(it, ARG_PROGRAM_TABLE, ProgramTable::class.java) }
+            val tag = bundle?.let { BundleCompat.getParcelable(it, ARG_PROGRAM_TABLE, Tag::class.java) }
             val course = bundle?.let { BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java) }
 
-            if (course != null){
-                observeTaskState()
-                viewModelTask.updateFilter(programTable, course)
-            }else if (programTable != null){
+//            if (course != null){
+//                observeTaskState()
+//                viewModelTask.updateFilter(tag, course)
+//            }
+            if (tag != null){
                 observeCourseState()
-                viewModelCourse.updateFilter(programTable)
+//                viewModelCourse.updateFilter(tag)
             }else{
                 observeProgramTableState()
             }
@@ -96,15 +96,15 @@ class DialogFragmentFilter: DialogFragment() {
                 arguments = bundleOf()
             }
         }
-        fun newInstanceFilterCourse(programTable: ProgramTable): DialogFragmentFilter{
+        fun newInstanceFilterCourse(tag: Tag): DialogFragmentFilter{
             return DialogFragmentFilter().apply {
-                arguments = bundleOf(ARG_PROGRAM_TABLE to programTable)
+                arguments = bundleOf(ARG_PROGRAM_TABLE to tag)
             }
         }
-        fun newInstanceFilterTask(programTable: ProgramTable, course: Course): DialogFragmentFilter{
+        fun newInstanceFilterTask(tag: Tag, course: Course): DialogFragmentFilter{
             return DialogFragmentFilter().apply {
                 arguments = bundleOf(
-                    ARG_PROGRAM_TABLE to programTable,
+                    ARG_PROGRAM_TABLE to tag,
                     ARG_COURSE to course)
             }
         }
@@ -146,7 +146,7 @@ class DialogFragmentFilter: DialogFragment() {
     private fun observeProgramTableState(){
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.programTablesState.collect { resource ->
+                viewModelTag.tagsState.collect { resource ->
                     when(resource) {
                         is Resource.Error<*> -> {}
                         is Resource.Idle<*> -> {}

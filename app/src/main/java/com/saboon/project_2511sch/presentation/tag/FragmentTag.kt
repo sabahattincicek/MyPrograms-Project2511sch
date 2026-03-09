@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.programtable
+package com.saboon.project_2511sch.presentation.tag
 
 import android.os.Bundle
 import android.util.Log
@@ -12,9 +12,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.saboon.project_2511sch.databinding.FragmentProgramTableListBinding
+import com.saboon.project_2511sch.databinding.FragmentTagBinding
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
@@ -23,13 +22,13 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
-class ProgramTableListFragment : Fragment() {
+class FragmentTag : Fragment() {
 
-    private var _binding: FragmentProgramTableListBinding?= null
+    private var _binding: FragmentTagBinding?= null
     private val binding get() = _binding!!
 
     private val viewModelUser: ViewModelUser by activityViewModels()
-    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
+    private val viewModelTag: ViewModelTag by viewModels()
 
     private lateinit var currentUser: User
 
@@ -37,7 +36,7 @@ class ProgramTableListFragment : Fragment() {
         private const val TAG = "ProgramTableFragment"
     }
 
-    private lateinit var recyclerAdapterProgramTables: RecyclerAdapterProgramTables
+    private lateinit var recyclerAdapterTag: RecyclerAdapterTag
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +49,7 @@ class ProgramTableListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         Log.d(TAG, "onCreateView: Inflating layout")
-        _binding = FragmentProgramTableListBinding.inflate(inflater, container, false)
+        _binding = FragmentTagBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -62,8 +61,11 @@ class ProgramTableListFragment : Fragment() {
         setupObservers()
 
         binding.fabAdd.setOnClickListener {
-            val dialog = DialogFragmentProgramTable.newInstanceForCreate(currentUser)
+            val dialog = DialogFragmentTag.newInstanceForCreate(currentUser)
             dialog.show(childFragmentManager, "CreateProgramTableDialog")
+        }
+        binding.topAppBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -86,7 +88,7 @@ class ProgramTableListFragment : Fragment() {
         //PROGRAM TABLE STATES
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.programTablesState.collect { resource ->
+                viewModelTag.tagsState.collect { resource ->
                     when(resource) {
                         is Resource.Error -> {}
                         is Resource.Idle -> {}
@@ -100,7 +102,7 @@ class ProgramTableListFragment : Fragment() {
                                 binding.llEmptyList.visibility = View.GONE
                                 binding.rvProgramTable.visibility = View.VISIBLE
 
-                                recyclerAdapterProgramTables.submitList(resource.data)
+                                recyclerAdapterTag.submitList(resource.data)
                             }
                         }
                     }
@@ -111,13 +113,13 @@ class ProgramTableListFragment : Fragment() {
 
     private fun setupAdapters(){
         Log.d(TAG, "setupRecyclerView: Setting up RecyclerView and its adapter.")
-        recyclerAdapterProgramTables = RecyclerAdapterProgramTables()
-        recyclerAdapterProgramTables.onItemClickListener = { programTable ->
-            val action = ProgramTableListFragmentDirections.actionProgramTableFragmentToProgramTableDetailsFragment(programTable)
-            findNavController().navigate(action)
+        recyclerAdapterTag = RecyclerAdapterTag()
+        recyclerAdapterTag.onItemClickListener = { tag ->
+            val dialog = DialogFragmentTag.newInstanceForUpdate(currentUser, tag)
+            dialog.show(childFragmentManager, "DialogFragmentTag")
         }
         binding.rvProgramTable.apply {
-            adapter = recyclerAdapterProgramTables
+            adapter = recyclerAdapterTag
             layoutManager = LinearLayoutManager(context)
         }
     }

@@ -22,15 +22,13 @@ interface CourseDao {
     suspend fun activationById(id: String, isActive: Boolean)
     @Query("SELECT * FROM courses WHERE id = :id")
     fun getById(id: String): Flow<CourseEntity>
-    @Query("DELETE FROM courses WHERE program_table_id = :id")
-    suspend fun deleteByProgramTableId(id: String)
     @Query("SELECT * FROM courses")
     fun getAll(): Flow<List<CourseEntity>>
-    @Query("SELECT * FROM courses WHERE program_table_id = :id")
+    @Query("SELECT * FROM courses WHERE tag_id = :id")
     fun getAllByProgramTableId(id: String): Flow<List<CourseEntity>>
-    @Query("SELECT * FROM courses WHERE program_table_id IN (:ids)")
+    @Query("SELECT * FROM courses WHERE tag_id IN (:ids)")
     fun getAllByProgramTableIds(ids: List<String>): Flow<List<CourseEntity>>
-    @Query("SELECT * FROM courses WHERE is_active = 1 AND program_table_id IN (:ids)")
+    @Query("SELECT * FROM courses WHERE is_active = 1 AND tag_id IN (:ids)")
     fun getAllActivesByProgramTableIds(ids: List<String>): Flow<List<CourseEntity>>
     @Query("SELECT COUNT(*) FROM courses")
     suspend fun getAllCount(): Int

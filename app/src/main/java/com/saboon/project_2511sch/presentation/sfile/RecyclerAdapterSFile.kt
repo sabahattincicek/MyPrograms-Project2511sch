@@ -70,7 +70,7 @@ class RecyclerAdapterSFile :
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemSFile.HeaderSFile){
-                binding.tvContent.text = item.header
+                binding.tvContent.text = item.title
             }
         }
     }

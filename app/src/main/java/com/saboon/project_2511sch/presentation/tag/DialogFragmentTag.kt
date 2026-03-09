@@ -1,4 +1,4 @@
-package com.saboon.project_2511sch.presentation.programtable
+package com.saboon.project_2511sch.presentation.tag
 
 import android.os.Bundle
 import android.util.Log
@@ -10,14 +10,17 @@ import androidx.core.graphics.toColorInt
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.saboon.project_2511sch.R
-import com.saboon.project_2511sch.databinding.DialogFragmentProgramTableBinding
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.databinding.DialogFragmentTagBinding
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.User
+import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
+import com.saboon.project_2511sch.presentation.course.DialogFragmentCourse
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
@@ -27,16 +30,17 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
-class DialogFragmentProgramTable: DialogFragment() {
+class DialogFragmentTag: DialogFragment() {
 
     private val TAG = "CreateProgramTableDialog"
 
-    private var _binding: DialogFragmentProgramTableBinding? = null
+    private var _binding: DialogFragmentTagBinding? = null
     private val binding get() = _binding!!
-    private val viewModelProgramTable: ViewModelProgramTable by viewModels()
+    private val viewModelTag: ViewModelTag by viewModels()
     private lateinit var currentUser: User
-    private var programTable: ProgramTable? = null
+    private var tag: Tag? = null
     private var selectedColor =  ModelColor()
+    private var isActive = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,28 +53,27 @@ class DialogFragmentProgramTable: DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         Log.d(TAG, "onCreateView: called")
-        _binding = DialogFragmentProgramTableBinding.inflate(inflater, container, false)
+        _binding = DialogFragmentTagBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-
         arguments?.let {
-            currentUser = BundleCompat.getParcelable(it, ARG_PROGRAM_USER, User::class.java)!!
-            programTable = BundleCompat.getParcelable(it,ARG_PROGRAM_TABLE, ProgramTable::class.java)
+            currentUser = BundleCompat.getParcelable(it, ARG_USER, User::class.java)!!
+            tag = BundleCompat.getParcelable(it,ARG_TAG, Tag::class.java)
         }
 
         setupColorCheckers()
+        setupListeners()
         setupObservers()
 
-        val isEditMode = programTable != null
+        val isEditMode = tag != null
         if (isEditMode){
-            binding.etTitle.setText(programTable!!.title)
-            binding.etDescription.setText(programTable!!.description)
-            selectedColor = programTable!!.color
+            binding.etTitle.setText(tag!!.title)
+            binding.etDescription.setText(tag!!.description)
+            selectedColor = tag!!.color
             when(selectedColor.colorHex){
                 ModelColorConstats.COLOR_1 -> {clearAllChecks(); binding.ivColorCk1.visibility = View.VISIBLE}
                 ModelColorConstats.COLOR_2 -> {clearAllChecks(); binding.ivColorCk2.visibility = View.VISIBLE}
@@ -81,21 +84,24 @@ class DialogFragmentProgramTable: DialogFragment() {
                 ModelColorConstats.COLOR_7 -> {clearAllChecks(); binding.ivColorCk7.visibility = View.VISIBLE}
                 ModelColorConstats.COLOR_8 -> {clearAllChecks(); binding.ivColorCk8.visibility = View.VISIBLE}
             }
+            isActive = tag!!.isActive
+            binding.msActivation.isChecked = isActive
         }else{
             binding.etTitle.requestFocus()
+            binding.toolbar.menu.clear()
         }
 
         binding.btnSave.setOnClickListener {
             if(isEditMode){
-                val updatedProgramTable = programTable!!.copy(
+                val updatedProgramTable = tag!!.copy(
+                    isActive = isActive,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
                     color = selectedColor
                 )
-
-                viewModelProgramTable.update(updatedProgramTable)
+                viewModelTag.update(updatedProgramTable)
             }else{
-                val newProgramTable = ProgramTable(
+                val newTag = Tag(
                     id = IdGenerator.generateId(binding.etTitle.text.toString()),
                     createdBy = currentUser.id,
                     appVersionAtCreation = getString(R.string.app_version),
@@ -103,7 +109,7 @@ class DialogFragmentProgramTable: DialogFragment() {
                     description = binding.etDescription.text.toString(),
                     color = selectedColor,
                 )
-                viewModelProgramTable.insert(newProgramTable)
+                viewModelTag.insert(newTag)
             }
         }
         binding.mcvColor1.setOnClickListener {
@@ -147,6 +153,21 @@ class DialogFragmentProgramTable: DialogFragment() {
             binding.ivColorCk8.visibility = View.VISIBLE
         }
 
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.action_delete -> {
+                    val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete", "Are you sure?")
+                    dialog.show(childFragmentManager, "Delete Course")
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+        binding.msActivation.setOnCheckedChangeListener { buttonView, isChecked ->
+            isActive = isChecked
+        }
         binding.toolbar.setNavigationOnClickListener {
             dismiss()
         }
@@ -170,11 +191,19 @@ class DialogFragmentProgramTable: DialogFragment() {
         binding.ivColorBg7.setBackgroundColor(ModelColorConstats.COLOR_7.toColorInt())
         binding.ivColorBg8.setBackgroundColor(ModelColorConstats.COLOR_8.toColorInt())
     }
+    private fun setupListeners(){
+        childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, this) { requestKey, result ->
+            val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
+            if (isYes) {
+                viewModelTag.delete(tag!!)
+            }
+        }
+    }
     private fun setupObservers(){
-        //PROFRAM TABLE EVENT: INSERT, UPDATE
+        //TAG EVENT: INSERT, UPDATE, DELETE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelProgramTable.operationEvent.collect { event ->
+                viewModelTag.operationEvent.collect { event ->
                     when(event){
                         is Resource.Error -> {}
                         is Resource.Idle -> {}
@@ -200,21 +229,23 @@ class DialogFragmentProgramTable: DialogFragment() {
     }
 
     companion object {
-        const val ARG_PROGRAM_USER = "program_table_dialog_fragment_arg_user"
-        const val ARG_PROGRAM_TABLE = "program_table_dialog_fragment_arg_program_table"
+        const val ARG_USER = "tag_dialog_fragment_arg_user"
+        const val ARG_TAG = "tag_dialog_fragment_arg_tag"
+        const val REQUEST_TAG = "tag_dialog_fragment_request_tag"
+        const val RESULT_TAG = "tag_dialog_fragment_result_tag"
 
-        fun newInstanceForCreate(user: User):DialogFragmentProgramTable{
-            val fragment = DialogFragmentProgramTable()
+        fun newInstanceForCreate(user: User):DialogFragmentTag{
+            val fragment = DialogFragmentTag()
             fragment.arguments = bundleOf(
-                ARG_PROGRAM_USER to user
+                ARG_USER to user
             )
             return fragment
         }
-        fun newInstanceForUpdate(user: User, programTable: ProgramTable): DialogFragmentProgramTable {
-            val fragment = DialogFragmentProgramTable()
+        fun newInstanceForUpdate(user: User, tag: Tag): DialogFragmentTag {
+            val fragment = DialogFragmentTag()
             fragment.arguments = bundleOf(
-                ARG_PROGRAM_USER to user,
-                ARG_PROGRAM_TABLE to programTable
+                ARG_USER to user,
+                ARG_TAG to tag
             )
             return fragment
         }

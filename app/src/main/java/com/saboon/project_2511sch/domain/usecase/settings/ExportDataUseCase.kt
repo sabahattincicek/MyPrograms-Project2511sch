@@ -3,7 +3,7 @@ package com.saboon.project_2511sch.domain.usecase.settings
 import android.content.Context
 import com.saboon.project_2511sch.presentation.profile.DataTransferPackage
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
-import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
+import com.saboon.project_2511sch.domain.repository.ITagRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.util.Resource
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 class ExportDataUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val programTableRepository: IProgramTableRepository,
+    private val programTableRepository: ITagRepository,
     private val courseRepository: ICourseRepository,
     private val taskRepository: ITaskRepository,
     private val sFileRepository: ISFileRepository,

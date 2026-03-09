@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.DialogFragmentTaskLessonBinding
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.model.User
@@ -46,7 +46,6 @@ class DialogFragmentTaskLesson: DialogFragment() {
     private lateinit var dateTimePicker: Picker
 
     private lateinit var currentUser: User
-    private lateinit var programTable: ProgramTable
     private lateinit var course: Course
     private var task: Task? = null
     private var lesson: Task.Lesson? = null
@@ -70,9 +69,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
                 appVersionAtCreation = getString(R.string.app_version),
                 title = "generate in repository",
                 description = "",
-                programTableId = programTable.id,
                 courseId = course.id,
-                taskId = task!!.id,
                 filePath = "generate in repository"
             )
             viewModelSFile.insert(sFile, uri)
@@ -97,8 +94,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            currentUser = BundleCompat.getParcelable(it,ARG_PROGRAM_USER, User::class.java)!!
-            programTable = BundleCompat.getParcelable(it, ARG_PROGRAM_TABLE, ProgramTable::class.java)!!
+            currentUser = BundleCompat.getParcelable(it,ARG_USER, User::class.java)!!
             course = BundleCompat.getParcelable(it, ARG_COURSE, Course::class.java)!!
             task = BundleCompat.getParcelable(it, ARG_TASK, Task.Lesson::class.java)
             if (task != null) lesson = task as Task.Lesson
@@ -125,18 +121,11 @@ class DialogFragmentTaskLesson: DialogFragment() {
             binding.actvReminder.setText(mapReminderToDisplayString(lesson!!.remindBefore), false)
             binding.etPlace.setText(lesson!!.place)
 
-            //apply files section
-            binding.llFilesSection.visibility = View.GONE //suanlik database seviyesinde cascade ile otomatik silme islemi yapilamadigi icin tasklara file ekleme islemi engellendi
-
             selectedDateMillis = lesson!!.date
             selectedRecurrenceRule = lesson!!.recurrenceRule
             selectedTimeStartMillis = lesson!!.timeStart
             selectedTimeEndMillis = lesson!!.timeEnd
             selectedRemindBeforeMinutes = lesson!!.remindBefore
-
-            viewModelSFile.updateProgramTable(programTable)
-            viewModelSFile.updateCourse(course, false)
-            viewModelSFile.updateTask(task)
         }else{
             binding.actvRepeat.setText(mapRuleToDisplayString(selectedRecurrenceRule), false)
             binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
@@ -178,7 +167,6 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     id = IdGenerator.generateId(binding.etTitle.text.toString()),
                     createdBy = currentUser.id,
                     appVersionAtCreation = getString(R.string.app_version),
-                    programTableId = course.programTableId,
                     courseId = course.id,
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
@@ -377,26 +365,24 @@ class DialogFragmentTaskLesson: DialogFragment() {
     }
 
     companion object{
-        const val ARG_PROGRAM_USER = "dialog_task_lesson_arg_user"
-        const val ARG_PROGRAM_TABLE = "dialog_task_lesson_arg_program_table"
+        const val ARG_USER = "dialog_task_lesson_arg_user"
+        const val ARG_TAG = "dialog_task_lesson_arg_tag"
         const val ARG_COURSE = "dialog_task_lesson_arg_course"
         const val ARG_TASK = "dialog_task_lesson_arg_task"
 
-        fun newInstanceForCreate(user: User, programTable: ProgramTable, course: Course): DialogFragmentTaskLesson{
+        fun newInstanceForCreate(user: User, course: Course): DialogFragmentTaskLesson{
             return DialogFragmentTaskLesson().apply {
                 arguments = bundleOf(
-                    ARG_PROGRAM_USER to user,
-                    ARG_PROGRAM_TABLE to programTable,
+                    ARG_USER to user,
                     ARG_COURSE to course
                 )
             }
         }
 
-        fun newInstanceForEdit(user: User, programTable: ProgramTable, course: Course, task: Task): DialogFragmentTaskLesson{
+        fun newInstanceForEdit(user: User, course: Course, task: Task): DialogFragmentTaskLesson{
             return DialogFragmentTaskLesson().apply {
                 arguments = bundleOf(
-                    ARG_PROGRAM_USER to user,
-                    ARG_PROGRAM_TABLE to programTable,
+                    ARG_USER to user,
                     ARG_COURSE to course,
                     ARG_TASK to task
                 )
