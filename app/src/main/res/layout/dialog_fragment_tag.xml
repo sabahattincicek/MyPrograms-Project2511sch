@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <com.google.android.material.appbar.AppBarLayout
@@ -26,9 +26,10 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    app:menu="@menu/menu_action_delete"
                     app:navigationIcon="@drawable/baseline_close_24"
                     app:navigationIconTint="?attr/colorOnSurface"
-                    app:title="@string/program_table" />
+                    app:title="@string/tag" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -56,7 +57,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/program_table"
+                            android:text="@string/tag"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -73,6 +74,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:hint="@string/title"
+                        android:layout_marginTop="5dp"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_height="wrap_content">
 
@@ -87,6 +89,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:hint="@string/description"
+                        android:layout_marginTop="5dp"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_height="wrap_content">
 
@@ -328,6 +331,44 @@
 
                     </LinearLayout>
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/SECTION_ACTIVATION"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activation"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_gravity="bottom"
+                            android:layout_margin="5dp"
+                            android:background="?attr/colorOnSurface" />
+
+                    </LinearLayout>
+
+                   <com.google.android.material.materialswitch.MaterialSwitch
+                       android:id="@+id/ms_activation"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:checked="true"
+                       android:text="@string/if_deactivated_courses_that_own_the_tag_will_hide"/>
                 </LinearLayout>
 
             </LinearLayout>

@@ -24,7 +24,7 @@ fun UserEntity.toDomain(): User{
         fullName = fullName,
         role = role,
         academicLevel = academicLevel,
-        organisation = organisation,
+        institution = institution,
         aboutMe = aboutMe
     )
 }
@@ -49,7 +49,7 @@ fun User.toEntity(): UserEntity{
         fullName = fullName,
         role = role,
         academicLevel = academicLevel,
-        organisation = organisation,
+        institution = institution,
         aboutMe = aboutMe
     )
 }

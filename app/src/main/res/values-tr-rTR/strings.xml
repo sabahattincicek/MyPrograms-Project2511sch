@@ -77,4 +77,11 @@
     <string name="today">Bugün</string>
     <string name="tomorrow">Yarın</string>
     <string name="yesterday">Dün</string>
+    <string name="manage_tags">Etiketleri Yönet</string>
+    <string name="tag">Etıket</string>
+    <string name="tags">Etıketler</string>
+    <string name="activation">Aktivasyon</string>
+    <string name="set_active">Aktıve Et</string>
+    <string name="if_deactivated_courses_that_own_the_tag_will_hide">Devre dışı bırakılırsa, bu etiketle ilişkilendirilmiş dersler Ana ekranda görüntülenmeyecektir.</string>
+    <string name="if_deactivated_this_course_and_task_will_hide">Devre dışı bırakılırsa, bu ders ve görevleri Ana ekranda görüntülenmeyecektir.</string>
 </resources>

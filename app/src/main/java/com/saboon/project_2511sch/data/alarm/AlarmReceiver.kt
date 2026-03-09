@@ -1,22 +1,14 @@
 package com.saboon.project_2511sch.data.alarm
 
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import androidx.core.app.NotificationCompat
-import androidx.core.os.BundleCompat
-import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.util.toFormattedString
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 
 class AlarmReceiver: BroadcastReceiver() {
@@ -37,10 +29,10 @@ class AlarmReceiver: BroadcastReceiver() {
 //            return
 //        }
 //        val alarmAction = intent.action
-//        val programTable = BundleCompat.getParcelable(extras, "EXTRA_PROGRAM_TABLE", ProgramTable::class.java)
+//        val tag = BundleCompat.getParcelable(extras, "EXTRA_PROGRAM_TABLE", Tag::class.java)
 //        val course = BundleCompat.getParcelable(extras, "EXTRA_COURSE", Course::class.java)
 //        val task = BundleCompat.getParcelable(extras, "EXTRA_SCHEDULE", Task::class.java)
-//        if (programTable == null || course == null || task == null) {
+//        if (tag == null || course == null || task == null) {
 //            Log.e(tag, "One or more of the parcelable objects were null. Aborting.")
 //            return
 //        }
@@ -53,13 +45,13 @@ class AlarmReceiver: BroadcastReceiver() {
 //        when(alarmAction){
 //            AlarmSchedulerImp.ACTION_REMINDER -> {
 //                Log.d(tag, "Handling a REMINDER alarm.")
-//                showReminderNotification(context, programTable, course, task)
-//                alarmScheduler.rescheduleReminder(programTable, course, task)
+//                showReminderNotification(context, tag, course, task)
+//                alarmScheduler.rescheduleReminder(tag, course, task)
 //            }
 //            AlarmSchedulerImp.ACTION_ABSENCE_CHECK -> {
 //                Log.d(tag, "Handling an ABSENCE_CHECK alarm.")
-//                showAbsenceCheckNotification(context, programTable, course, task)
-//                alarmScheduler.rescheduleAbsenceReminder(programTable, course, task)
+//                showAbsenceCheckNotification(context, tag, course, task)
+//                alarmScheduler.rescheduleAbsenceReminder(tag, course, task)
 //            }
 //            else -> {
 //                Log.w(tag, "Unknown or missing alarm action: $alarmAction")
@@ -67,7 +59,7 @@ class AlarmReceiver: BroadcastReceiver() {
 //        }
     }
 
-    private fun showReminderNotification(context: Context, programTable: ProgramTable, course: Course, task: Task){
+    private fun showReminderNotification(context: Context, tag: Tag, course: Course, task: Task){
 //        val notificationId = task.id.hashCode()
 //        val notificationManager = context.getSystemService(NotificationManager::class.java)
 //        val notification = NotificationCompat.Builder(context, "schedule_reminders")
@@ -86,7 +78,7 @@ class AlarmReceiver: BroadcastReceiver() {
 //        Log.i(tag, "Reminder notification posted with ID: $notificationId")
     }
 
-    private fun showAbsenceCheckNotification(context: Context, programTable: ProgramTable, course: Course, task: Task) {
+    private fun showAbsenceCheckNotification(context: Context, tag: Tag, course: Course, task: Task) {
 //        val notificationId = task.id.hashCode() + 2 // Use a different ID for this notification type if needed
 //
 //        // "Yes" action

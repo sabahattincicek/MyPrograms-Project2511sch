@@ -1,10 +1,9 @@
 package com.saboon.project_2511sch.presentation.home
 
-import androidx.fragment.app.add
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.repository.ISettingsRepository
 import com.saboon.project_2511sch.domain.usecase.home.GetHomeDisplayItemsUseCase
 import com.saboon.project_2511sch.presentation.common.FilterGeneric
@@ -33,20 +32,17 @@ class ViewModelHome @Inject constructor(
     private val tag = "ViewModelHome"
 
     private val _dateRange = MutableStateFlow(getInitialRange())
-
-    private val _filterGenericState = MutableStateFlow(FilterGeneric())
     private val _filterTaskState = MutableStateFlow(FilterTask())
 
     //STATE
     @OptIn(ExperimentalCoroutinesApi::class)
     val displayItemsState = combine(
-        _filterGenericState,
         _filterTaskState,
         _dateRange
-    ) { filterGeneric, filterTask, range ->
-        Triple(filterGeneric, filterTask, range)
-    }.flatMapLatest { (filterGeneric, filterTask, range) ->
-        getHomeDisplayItemsUseCase.invoke(filterGeneric, filterTask, range.start, range.end)
+    ) { filterTask, range ->
+        Pair(filterTask, range)
+    }.flatMapLatest { (filterTask, range) ->
+        getHomeDisplayItemsUseCase.invoke(filterTask, range.start, range.end)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -54,17 +50,6 @@ class ViewModelHome @Inject constructor(
     )
 
     //FILTER
-    fun updateFilterProgramTable(programTable: ProgramTable?){
-        _filterGenericState.update { current ->
-            if (programTable == null) FilterGeneric()
-            else current.copy(programTable = programTable)
-        }
-    }
-    fun updateFilterCourse(course: Course?){
-        _filterGenericState.update { current ->
-            current.copy(course = course)
-        }
-    }
     fun updateFilterTask(filter: FilterTask) {
         _filterTaskState.value = filter
     }

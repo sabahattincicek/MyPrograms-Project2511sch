@@ -64,15 +64,6 @@ class CourseRepositoryImp @Inject constructor(
             }
     }
 
-    override suspend fun deleteByProgramTableId(id: String): Resource<Unit> {
-        try {
-            courseDao.deleteByProgramTableId(id)
-            return Resource.Success(Unit)
-        }catch (e: Exception){
-            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
-        }
-    }
-
     override fun getAll(): Flow<Resource<List<Course>>> {
         return courseDao.getAll()
             .map<List<CourseEntity>, Resource<List<Course>>> { courseEntity ->
@@ -103,7 +94,7 @@ class CourseRepositoryImp @Inject constructor(
             }
     }
 
-    override fun getAllActivesByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>> {
+    override fun getAllActivesByTagIds(ids: List<String>): Flow<Resource<List<Course>>> {
         return courseDao.getAllActivesByProgramTableIds(ids)
             .map<List<CourseEntity>, Resource<List<Course>>> { courseEntities ->
                 Resource.Success(courseEntities.map { it.toDomain() })

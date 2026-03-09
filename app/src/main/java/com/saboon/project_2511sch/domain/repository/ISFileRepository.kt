@@ -11,5 +11,7 @@ interface ISFileRepository {
     suspend fun update(sFile: SFile): Resource<SFile>
     suspend fun delete(sFile: SFile): Resource<SFile>
     fun getAll(): Flow<Resource<List<SFile>>>
+    fun getAllByCourseId(id: String): Flow<Resource<List<SFile>>>
+    fun getAllByCourseIds(ids: List<String>): Flow<Resource<List<SFile>>>
 
 }

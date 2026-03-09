@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/homeFragment"
+        android:id="@+id/fragmentHome"
         android:title="@string/home"
         android:icon="@drawable/baseline_home_24"
         android:enabled="true"/>
 
     <item
-        android:id="@+id/programTableFragment"
+        android:id="@+id/fragmentCourseList"
         android:icon="@drawable/baseline_menu_book_24"
-        android:title="@string/program_tables"
+        android:title="@string/courses"
         android:enabled="true"/>
 
     <item

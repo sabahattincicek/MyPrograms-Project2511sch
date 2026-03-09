@@ -9,12 +9,6 @@ import androidx.room.PrimaryKey
     tableName = "task_exams",
     foreignKeys = [
         ForeignKey(
-            entity = ProgramTableEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["program_table_id"],
-            onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
             entity = CourseEntity::class,
             parentColumns = ["id"],
             childColumns = ["course_id"],
@@ -36,7 +30,6 @@ data class TaskExamEntity(
     @ColumnInfo(name = "content_hash") val contentHash: String,
     @ColumnInfo(name = "server_version") val serverVersion: Int,
 
-    @ColumnInfo(name = "program_table_id") val programTableId: String,
     @ColumnInfo(name = "course_id") val courseId: String,
 
     @ColumnInfo(name = "title") val title: String,
@@ -46,6 +39,6 @@ data class TaskExamEntity(
     @ColumnInfo(name = "time_end") val timeEnd: Long,
     @ColumnInfo(name = "remind_before") val remindBefore: Int,
     @ColumnInfo(name = "place") val place: String,
-    @ColumnInfo(name = "target_score") val targetScore: Int?,
-    @ColumnInfo(name = "achieved_score") val achievedScore: Int?,
+    @ColumnInfo(name = "target_score") val targetScore: Int,
+    @ColumnInfo(name = "achieved_score") val achievedScore: Int,
 )

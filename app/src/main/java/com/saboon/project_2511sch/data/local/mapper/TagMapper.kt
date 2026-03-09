@@ -1,11 +1,11 @@
 package com.saboon.project_2511sch.data.local.mapper
 
-import com.saboon.project_2511sch.data.local.entity.ProgramTableEntity
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.data.local.entity.TagEntity
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.util.ModelColor
 
-fun ProgramTableEntity.toDomain(): ProgramTable {
-    return ProgramTable(
+fun TagEntity.toDomain(): Tag {
+    return Tag(
         id = id,
         createdAt = createdAt,
         createdBy = createdBy,
@@ -24,8 +24,8 @@ fun ProgramTableEntity.toDomain(): ProgramTable {
     )
 }
 
-fun ProgramTable.toEntity(): ProgramTableEntity {
-    return ProgramTableEntity(
+fun Tag.toEntity(): TagEntity {
+    return TagEntity(
         id = id,
         createdAt = createdAt,
         createdBy = createdBy,

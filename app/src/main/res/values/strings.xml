@@ -77,5 +77,12 @@
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="yesterday">Yesterday</string>
+    <string name="manage_tags">Manage Tags</string>
+    <string name="tag">Tag</string>
+    <string name="tags">Tags</string>
+    <string name="activation">Activation</string>
+    <string name="set_active">Set Active</string>
+    <string name="if_deactivated_courses_that_own_the_tag_will_hide">If deactivated, courses associated with this tag will not be displayed on the Home screen.</string>
+    <string name="if_deactivated_this_course_and_task_will_hide">If deactivated, this course and its tasks will not be displayed on the Home screen.</string>
 
 </resources>

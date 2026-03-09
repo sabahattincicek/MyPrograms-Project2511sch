@@ -19,7 +19,7 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
 import com.saboon.project_2511sch.domain.model.BaseModel
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
 import com.saboon.project_2511sch.presentation.common.FilterTask
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
@@ -30,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class FragmentHome : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -38,15 +38,10 @@ class HomeFragment : Fragment() {
     private val viewModelHome: ViewModelHome by activityViewModels()
     private val viewModelTask: ViewModelTask by viewModels()
     private val viewModelSettings: ViewModelSettings by viewModels()
-
-    private var filteredProgramTable: ProgramTable? = null
-    private var filteredCourse: Course? = null
-
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
-
     private var overscrollDaysCount = SettingsConstants.OverscrollDaysCount.DEFAULT
 
-    private val tag = "HomeFragment"
+    private val tag = "FragmentHome"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,38 +68,38 @@ class HomeFragment : Fragment() {
         viewModelHome.loadData()
 
         ////////////////////////////////////////////////
-        binding.cpProgramTable.setOnClickListener {
-            binding.cpProgramTable.isChecked = !binding.cpProgramTable.isChecked
-            val dialog = DialogFragmentFilter.newInstanceFilterProgramTable()
-            dialog.show(childFragmentManager, "DialogFragmentFileFilter")
-        }
-        binding.cpProgramTable.setOnCloseIconClickListener {
-            filteredProgramTable = null
-           viewModelHome.updateFilterProgramTable(filteredProgramTable)
-
-            binding.cpProgramTable.isChecked = false
-            binding.cpProgramTable.isCloseIconVisible = false
-            binding.cpProgramTable.text = getString(R.string.program_table)
-        }
-        binding.cpCourse.setOnClickListener {
-            binding.cpCourse.isChecked = !binding.cpCourse.isChecked
-            if(filteredProgramTable != null){
-                val dialog = DialogFragmentFilter.newInstanceFilterCourse(filteredProgramTable!!)
-                dialog.show(childFragmentManager, "DialogFragmentFileFilter")
-            }else{
-                val shake = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
-                binding.cpProgramTable.startAnimation(shake)
-                binding.cpCourse.isChecked = false
-            }
-        }
-        binding.cpCourse.setOnCloseIconClickListener {
-            filteredCourse = null
-            viewModelHome.updateFilterCourse(filteredCourse)
-
-            binding.cpCourse.isChecked = false
-            binding.cpCourse.isCloseIconVisible = false
-            binding.cpCourse.text = getString(R.string.course)
-        }
+//        binding.cpProgramTable.setOnClickListener {
+//            binding.cpProgramTable.isChecked = !binding.cpProgramTable.isChecked
+//            val dialog = DialogFragmentFilter.newInstanceFilterProgramTable()
+//            dialog.show(childFragmentManager, "DialogFragmentFileFilter")
+//        }
+//        binding.cpProgramTable.setOnCloseIconClickListener {
+//            filteredTag = null
+//           viewModelHome.updateFilterProgramTable(filteredTag)
+//
+//            binding.cpProgramTable.isChecked = false
+//            binding.cpProgramTable.isCloseIconVisible = false
+//            binding.cpProgramTable.text = getString(R.string.program_table)
+//        }
+//        binding.cpCourse.setOnClickListener {
+//            binding.cpCourse.isChecked = !binding.cpCourse.isChecked
+//            if(filteredTag != null){
+//                val dialog = DialogFragmentFilter.newInstanceFilterCourse(filteredTag!!)
+//                dialog.show(childFragmentManager, "DialogFragmentFileFilter")
+//            }else{
+//                val shake = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
+//                binding.cpProgramTable.startAnimation(shake)
+//                binding.cpCourse.isChecked = false
+//            }
+//        }
+//        binding.cpCourse.setOnCloseIconClickListener {
+//            filteredCourse = null
+//            viewModelHome.updateFilterCourse(filteredCourse)
+//
+//            binding.cpCourse.isChecked = false
+//            binding.cpCourse.isCloseIconVisible = false
+//            binding.cpCourse.text = getString(R.string.course)
+//        }
         ////////////////////////////////////////////////
         binding.cpLesson.setOnCheckedChangeListener { _, isChecked ->
             Log.d(tag, "cpLesson checked state changed: $isChecked")
@@ -274,7 +269,7 @@ class HomeFragment : Fragment() {
         }
         recyclerAdapterHome.onContentItemClickListener = { programTable, course ->
             Log.d(tag, "Recycler item clicked. Course: ${course.title}")
-            val action = HomeFragmentDirections.actionHomeFragmentToCourseDetailsFragment(programTable, course)
+            val action = FragmentHomeDirections.actionHomeFragmentToCourseDetailsFragment(course)
             findNavController().navigate(action)
         }
         recyclerAdapterHome.onAbsenceButtonClickListener = { taskLesson ->
@@ -283,31 +278,31 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupListeners(){
-        childFragmentManager.setFragmentResultListener(DialogFragmentFilter.REQUEST_KEY_BASE_MODEL, viewLifecycleOwner){ requestKey, result ->
-            val baseModel = BundleCompat.getParcelable(result, DialogFragmentFilter.RESULT_KEY_BASE_MODEL,BaseModel::class.java)
-            Log.d(tag, "FragmentResultListener: Filter result received - Type: ${baseModel?.javaClass?.simpleName}")
-            when(baseModel){
-                is ProgramTable -> {
-                    filteredProgramTable = baseModel
-                    viewModelHome.updateFilterProgramTable(filteredProgramTable)
-
-                    binding.cpProgramTable.isChecked = true
-                    binding.cpProgramTable.isCloseIconVisible = true
-                    binding.cpProgramTable.text = filteredProgramTable!!.title
-
-                    binding.cpCourse.isChecked = false
-                    binding.cpCourse.isCloseIconVisible = false
-                    binding.cpCourse.text = getString(R.string.course)
-                }
-                is Course -> {
-                    filteredCourse = baseModel
-                    viewModelHome.updateFilterCourse(filteredCourse)
-
-                    binding.cpCourse.isChecked = true
-                    binding.cpCourse.isCloseIconVisible = true
-                    binding.cpCourse.text = filteredCourse!!.title
-                }
-            }
-        }
+//        childFragmentManager.setFragmentResultListener(DialogFragmentFilter.REQUEST_KEY_BASE_MODEL, viewLifecycleOwner){ requestKey, result ->
+//            val baseModel = BundleCompat.getParcelable(result, DialogFragmentFilter.RESULT_KEY_BASE_MODEL,BaseModel::class.java)
+//            Log.d(tag, "FragmentResultListener: Filter result received - Type: ${baseModel?.javaClass?.simpleName}")
+//            when(baseModel){
+//                is Tag -> {
+//                    filteredTag = baseModel
+//                    viewModelHome.updateFilterProgramTable(filteredTag)
+//
+//                    binding.cpProgramTable.isChecked = true
+//                    binding.cpProgramTable.isCloseIconVisible = true
+//                    binding.cpProgramTable.text = filteredTag!!.title
+//
+//                    binding.cpCourse.isChecked = false
+//                    binding.cpCourse.isCloseIconVisible = false
+//                    binding.cpCourse.text = getString(R.string.course)
+//                }
+//                is Course -> {
+//                    filteredCourse = baseModel
+//                    viewModelHome.updateFilterCourse(filteredCourse)
+//
+//                    binding.cpCourse.isChecked = true
+//                    binding.cpCourse.isCloseIconVisible = true
+//                    binding.cpCourse.text = filteredCourse!!.title
+//                }
+//            }
+//        }
     }
 }

@@ -26,8 +26,7 @@
                     android:layout_height="?attr/actionBarSize"
                     app:navigationIcon="@drawable/baseline_close_24"
                     app:navigationIconTint="?attr/colorOnSurface"
-                    app:title="@string/course"
-                    app:subtitle="@string/program_table"/>
+                    app:title="@string/course"/>
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -137,6 +136,46 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tag"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="5dp"
+                        android:background="?attr/colorOnSurface" />
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_tag"
+                    android:layout_width="match_parent"
+                    android:hint="@string/tag"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_tag"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:focusable="false"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -360,6 +399,44 @@
                     </com.google.android.material.card.MaterialCardView>
 
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/SECTION_ACTIVATION"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activation"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_gravity="bottom"
+                            android:layout_margin="5dp"
+                            android:background="?attr/colorOnSurface" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/ms_activation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/if_deactivated_this_course_and_task_will_hide"/>
                 </LinearLayout>
 
             </LinearLayout>

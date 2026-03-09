@@ -25,6 +25,6 @@ data class User(
     val fullName: String,
     val role: String,
     val academicLevel: String,
-    val organisation: String,
+    val institution: String,
     val aboutMe: String,
 ): BaseModel, Parcelable

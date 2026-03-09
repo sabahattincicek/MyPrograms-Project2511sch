@@ -19,9 +19,7 @@ fun SFileEntity.toDomain(): SFile {
         serverVersion = serverVersion,
         title = title,
         description = description,
-        programTableId = programTableId,
         courseId = courseId,
-        taskId = taskId,
         filePath = filePath
     )
 }
@@ -42,9 +40,7 @@ fun SFile.toEntity(): SFileEntity {
         serverVersion = serverVersion,
         title = title,
         description = description,
-        programTableId = programTableId,
         courseId = courseId,
-        taskId = taskId,
         filePath = filePath
     )
 }

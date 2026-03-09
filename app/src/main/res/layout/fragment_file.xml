@@ -48,45 +48,45 @@
 
     </LinearLayout>
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:clipToPadding="false"
-        android:scrollbars="none">
+<!--    <HorizontalScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fillViewport="true"-->
+<!--        android:paddingStart="8dp"-->
+<!--        android:paddingEnd="8dp"-->
+<!--        android:clipToPadding="false"-->
+<!--        android:scrollbars="none">-->
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cpg_chip_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleLine="true">
+<!--        <com.google.android.material.chip.ChipGroup-->
+<!--            android:id="@+id/cpg_chip_group"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:singleLine="true">-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/cp_program_table"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/program_tables"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/cp_program_table"-->
+<!--                style="@style/Widget.Material3.Chip.Filter"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/program_tables"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/cp_course"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/courses"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/cp_course"-->
+<!--                style="@style/Widget.Material3.Chip.Filter"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/courses"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/cp_task"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tasks"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/cp_task"-->
+<!--                style="@style/Widget.Material3.Chip.Filter"-->
+<!--                android:visibility="gone"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/tasks"/>-->
 
-        </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
+<!--        </com.google.android.material.chip.ChipGroup>-->
+<!--    </HorizontalScrollView>-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

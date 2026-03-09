@@ -6,10 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import androidx.core.net.toUri
 import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
 import java.util.Calendar
 
@@ -25,13 +24,13 @@ class AlarmSchedulerImp(
         const val ACTION_ABSENCE_CHECK = "com.saboon.project_2511sch.ACTION_ABSENCE_CHECK"
     }
 
-    override fun scheduleReminder(programTable: ProgramTable, course: Course, task: Task) {
+    override fun scheduleReminder(tag: Tag, course: Course, task: Task) {
 //        Log.d(tag, "[Initial Task] Setting REMINDER for '${task.title}'")
 //
 //        val triggerAtMillis = calculateCombinedTime(task.date, task.startTime) - (task.remindBefore * 60 * 1000)
 //
 //        if (task.remindBefore > -1 && triggerAtMillis > System.currentTimeMillis()) {
-//            val reminderIntent = createIntent(programTable, course, task).apply {
+//            val reminderIntent = createIntent(tag, course, task).apply {
 //                action = ACTION_REMINDER
 //                data = "task://${task.id}#reminder".toUri()
 //            }
@@ -41,12 +40,12 @@ class AlarmSchedulerImp(
 //        }
     }
 
-    override fun scheduleAbsenceReminder(programTable: ProgramTable, course: Course, task: Task) {
+    override fun scheduleAbsenceReminder(tag: Tag, course: Course, task: Task) {
 //        Log.d(tag, "[Initial Task] Setting ABSENCE CHECK for '${task.title}'")
 //        val triggerAtMillis = calculateCombinedTime(task.date, task.endTime)
 //
 //        if (triggerAtMillis > System.currentTimeMillis()) {
-//            val absenceIntent = createIntent(programTable, course, task).apply {
+//            val absenceIntent = createIntent(tag, course, task).apply {
 //                action = ACTION_ABSENCE_CHECK
 //                data = "task://${task.id}#absence".toUri()
 //            }
@@ -56,22 +55,22 @@ class AlarmSchedulerImp(
 //        }
     }
 
-    override fun rescheduleReminder(programTable: ProgramTable, course: Course, currentTask: Task) {
+    override fun rescheduleReminder(tag: Tag, course: Course, currentTask: Task) {
 //        val nextTriggerDate = calculateNextTriggerDate(currentTask) ?: return
 //        val nextSchedule = currentTask.copy(date = nextTriggerDate)
 //
 //        Log.d(tag, "[Reschedule] Setting next REMINDER for '${nextSchedule.title}'")
 //
-//        scheduleReminder(programTable, course, nextSchedule)
+//        scheduleReminder(tag, course, nextSchedule)
     }
 
-    override fun rescheduleAbsenceReminder(programTable: ProgramTable, course: Course, currentTask: Task) {
+    override fun rescheduleAbsenceReminder(tag: Tag, course: Course, currentTask: Task) {
 //        val nextTriggerDate = calculateNextTriggerDate(currentTask) ?: return
 //        val nextSchedule = currentTask.copy(date = nextTriggerDate)
 //
 //        Log.d(tag, "[Reschedule] Setting next ABSENCE CHECK for '${nextSchedule.title}'")
 //
-//        scheduleAbsenceReminder(programTable, course, nextSchedule)
+//        scheduleAbsenceReminder(tag, course, nextSchedule)
     }
 
     override fun cancel(task: Task) {
@@ -91,9 +90,9 @@ class AlarmSchedulerImp(
 //        alarmManager.cancel(createPendingIntent(task.id.hashCode() + 1, absenceIntent))
     }
 
-    private fun createIntent(programTable: ProgramTable?, course: Course?, task: Task?): Intent {
+    private fun createIntent(tag: Tag?, course: Course?, task: Task?): Intent {
         return Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("EXTRA_PROGRAM_TABLE", programTable)
+            putExtra("EXTRA_PROGRAM_TABLE", tag)
             putExtra("EXTRA_COURSE", course)
             putExtra("EXTRA_SCHEDULE", task)
         }

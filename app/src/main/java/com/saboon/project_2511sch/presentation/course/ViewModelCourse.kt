@@ -3,7 +3,7 @@ package com.saboon.project_2511sch.presentation.course
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.usecase.course.CourseReadUseCase
 import com.saboon.project_2511sch.domain.usecase.course.CourseWriteUseCase
 import com.saboon.project_2511sch.domain.usecase.course.GetCourseDisplayItemListUseCase
@@ -34,8 +34,6 @@ class ViewModelCourse @Inject constructor(
 
     private val _selectedId = MutableStateFlow<String?>(null)
 
-    private val _filterState = MutableStateFlow(FilterGeneric())
-
     //STATE
     @OptIn(ExperimentalCoroutinesApi::class)
     val courseState: StateFlow<Resource<Course>> = _selectedId
@@ -47,21 +45,12 @@ class ViewModelCourse @Inject constructor(
             initialValue = Resource.Idle()
         )
     @OptIn(ExperimentalCoroutinesApi::class)
-    val coursesState = _filterState.flatMapLatest { filter ->
-        getCourseDisplayItemListUseCase.invoke(filter)
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Companion.WhileSubscribed(5000),
-        initialValue = Resource.Idle()
-    )
-
-    //FILTER
-    fun updateFilter(programTable: ProgramTable?){
-        _filterState.update { current ->
-            if (programTable == null) FilterGeneric()
-            else current.copy(programTable = programTable, course = null, task = null)
-        }
-    }
+    val coursesState = getCourseDisplayItemListUseCase.invoke()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Companion.WhileSubscribed(5000),
+            initialValue = Resource.Idle()
+        )
 
     //ACTIONS
     fun getById(id: String){

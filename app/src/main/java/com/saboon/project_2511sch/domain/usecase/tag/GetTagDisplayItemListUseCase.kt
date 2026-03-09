@@ -1,17 +1,17 @@
-package com.saboon.project_2511sch.domain.usecase.programtable
+package com.saboon.project_2511sch.domain.usecase.tag
 
-import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
-import com.saboon.project_2511sch.presentation.programtable.DisplayItemProgramTable
+import com.saboon.project_2511sch.domain.repository.ITagRepository
+import com.saboon.project_2511sch.presentation.tag.DisplayItemTag
 import javax.inject.Inject
 import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class GetProgramTableDisplayItemListUseCase @Inject constructor(
-    private val programTableRepository: IProgramTableRepository
+class GetTagDisplayItemListUseCase @Inject constructor(
+    private val tagRepository: ITagRepository
 ) {
-    operator fun invoke(): Flow<Resource<List<DisplayItemProgramTable>>> {
-        return programTableRepository.getAll().map { resource ->
+    operator fun invoke(): Flow<Resource<List<DisplayItemTag>>> {
+        return tagRepository.getAll().map { resource ->
             when(resource) {
                 is Resource.Error -> {Resource.Error(resource.message ?: "An Unknown error occurred")}
                 is Resource.Idle -> {Resource.Idle()}
@@ -23,11 +23,11 @@ class GetProgramTableDisplayItemListUseCase @Inject constructor(
                         return@map Resource.Success(emptyList())
                     }
 
-                    val displayList = mutableListOf<DisplayItemProgramTable>()
+                    val displayList = mutableListOf<DisplayItemTag>()
                     displayList.addAll(programTables.map {
-                        DisplayItemProgramTable.ContentProgramTable(it)
+                        DisplayItemTag.ContentTag(it)
                     })
-                    displayList.add(DisplayItemProgramTable.FooterProgramTable(programTables.size))
+                    displayList.add(DisplayItemTag.FooterTag(programTables.size))
                     Resource.Success(displayList)
                 }
             }

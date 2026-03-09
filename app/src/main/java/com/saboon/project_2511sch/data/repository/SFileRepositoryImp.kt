@@ -4,9 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import com.saboon.project_2511sch.data.local.dao.SFileDao
+import com.saboon.project_2511sch.data.local.entity.CourseEntity
 import com.saboon.project_2511sch.data.local.entity.SFileEntity
 import com.saboon.project_2511sch.data.local.mapper.toDomain
 import com.saboon.project_2511sch.data.local.mapper.toEntity
+import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.util.IdGenerator
@@ -18,6 +20,7 @@ import kotlinx.coroutines.flow.map
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
+import kotlin.collections.map
 
 class SFileRepositoryImp @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -91,6 +94,26 @@ class SFileRepositoryImp @Inject constructor(
     }
     override fun getAll(): Flow<Resource<List<SFile>>>{
         return sFileDao.getAll()
+            .map<List<SFileEntity>, Resource<List<SFile>>> { sFileEntities ->
+                Resource.Success(sFileEntities.map { it.toDomain() })
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
+            }
+    }
+
+    override fun getAllByCourseId(id: String): Flow<Resource<List<SFile>>> {
+        return sFileDao.getAllByCourseId(id)
+            .map<List<SFileEntity>, Resource<List<SFile>>> { sFileEntities ->
+                Resource.Success(sFileEntities.map { it.toDomain() })
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
+            }
+    }
+
+    override fun getAllByCourseIds(ids: List<String>): Flow<Resource<List<SFile>>> {
+        return sFileDao.getAllByCourseIds(ids)
             .map<List<SFileEntity>, Resource<List<SFile>>> { sFileEntities ->
                 Resource.Success(sFileEntities.map { it.toDomain() })
             }

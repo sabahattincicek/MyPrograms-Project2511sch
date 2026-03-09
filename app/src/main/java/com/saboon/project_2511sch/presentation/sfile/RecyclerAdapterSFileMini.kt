@@ -1,15 +1,9 @@
 package com.saboon.project_2511sch.presentation.sfile
 
-import android.graphics.Bitmap
-import android.graphics.pdf.PdfRenderer
-import android.os.ParcelFileDescriptor
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.lifecycle.findViewTreeLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import coil3.load
 import coil3.request.crossfade
@@ -21,11 +15,7 @@ import com.saboon.project_2511sch.util.BaseDiffCallback
 import com.saboon.project_2511sch.util.BaseDisplayListItem
 import com.saboon.project_2511sch.util.BaseViewHolder
 import com.saboon.project_2511sch.util.toFormattedString
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.withContext
 import java.io.File
-import kotlinx.coroutines.launch
 
 class RecyclerAdapterSFileMini :
     ListAdapter<DisplayItemSFile, BaseViewHolder>(BaseDiffCallback<DisplayItemSFile>()) {
@@ -77,7 +67,7 @@ class RecyclerAdapterSFileMini :
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item) //for click logic
             if (item is DisplayItemSFile.HeaderSFile){
-                binding.tvContent.text = item.header
+                binding.tvContent.text = item.title
             }
         }
     }

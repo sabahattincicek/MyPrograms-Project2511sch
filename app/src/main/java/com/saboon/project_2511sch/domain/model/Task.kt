@@ -8,8 +8,6 @@ import kotlinx.serialization.Serializable
 @Parcelize
 @Serializable
 sealed class Task: BaseModel, Parcelable {
-
-    abstract val programTableId: String
     abstract val courseId: String
     abstract val remindBefore: Int
     abstract val title: String
@@ -31,7 +29,6 @@ sealed class Task: BaseModel, Parcelable {
         override val contentHash: String = "",
         override val serverVersion: Int = 1,
 
-        override val programTableId: String,
         override val courseId: String,
 
         override val remindBefore: Int,
@@ -63,7 +60,6 @@ sealed class Task: BaseModel, Parcelable {
         override val contentHash: String = "",
         override val serverVersion: Int = 1,
 
-        override val programTableId: String,
         override val courseId: String,
 
         override val remindBefore: Int,
@@ -74,8 +70,8 @@ sealed class Task: BaseModel, Parcelable {
         val timeStart: Long,
         val timeEnd: Long,
         val place: String,
-        val targetScore: Int?,
-        val achievedScore: Int?,
+        val targetScore: Int = 0,
+        val achievedScore: Int = 0,
 
     ): Parcelable, Task()
 
@@ -95,7 +91,6 @@ sealed class Task: BaseModel, Parcelable {
         override val contentHash: String = "",
         override val serverVersion: Int = 1,
 
-        override val programTableId: String,
         override val courseId: String,
 
         override val remindBefore: Int,

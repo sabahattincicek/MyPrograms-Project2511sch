@@ -1,20 +1,22 @@
 package com.saboon.project_2511sch.presentation.home
 
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.BaseDisplayListItem
 
 sealed class DisplayItemHome: BaseDisplayListItem {
 
 
-    data class HeaderItemHome(val date: Long) : DisplayItemHome(){
+    data class HeaderItemHome(
+        val date: Long
+    ) : DisplayItemHome(){
         override val id: String = date.toString()
         override val viewType: Int = BaseDisplayListItem.VIEW_TYPE_HEADER
         override val isClickable: Boolean = false
     }
     data class ContentItemHome(
-        val programTable: ProgramTable,
+        val tag: Tag,
         val course: Course,
         val task: Task,
         val occurrenceId:String

@@ -2,20 +2,10 @@ package com.saboon.project_2511sch.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.saboon.project_2511sch.domain.model.Course
 
 @Entity(
-    tableName = "courses",
-    foreignKeys = [
-        ForeignKey(
-            entity = ProgramTableEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["program_table_id"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+    tableName = "courses"
 )
 data class CourseEntity(
     @PrimaryKey val id: String,
@@ -31,10 +21,10 @@ data class CourseEntity(
     @ColumnInfo(name = "content_hash") val contentHash: String,
     @ColumnInfo(name = "server_version") val serverVersion: Int,
 
-    @ColumnInfo(name = "program_table_id") val programTableId: String,
+    @ColumnInfo(name = "tag_id") val tagId: String?,
 
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "people") val people: String,
-    @ColumnInfo(name = "color") val color: String,
+    @ColumnInfo(name = "color_hex") val color: String,
 )

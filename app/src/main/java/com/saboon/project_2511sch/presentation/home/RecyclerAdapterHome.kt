@@ -14,7 +14,7 @@ import com.saboon.project_2511sch.databinding.RowHomeFooterBinding
 import com.saboon.project_2511sch.databinding.RowHomeHeaderBinding
 import com.saboon.project_2511sch.databinding.RowMainContentBinding
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.ProgramTable
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.util.BaseDiffCallback
@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit
 class RecyclerAdapterHome :
     ListAdapter<DisplayItemHome, BaseViewHolder>(BaseDiffCallback()) {
 
-    var onContentItemClickListener:((ProgramTable, Course) -> Unit)? = null
+    var onContentItemClickListener:((Tag, Course) -> Unit)? = null
 
     var onAbsenceButtonClickListener: ((Task.Lesson) -> Unit)? = null
 
@@ -115,7 +115,7 @@ class RecyclerAdapterHome :
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemHome.ContentItemHome) {
-                val programTable = item.programTable
+                val programTable = item.tag
                 val course = item.course
                 val task = item.task
                 val today = Calendar.getInstance().apply {
@@ -240,7 +240,7 @@ class RecyclerAdapterHome :
                 }
 
                 binding.mcvForeground.setOnClickListener {
-                    onContentItemClickListener?.invoke(item.programTable, item.course)
+                    onContentItemClickListener?.invoke(item.tag, item.course)
                 }
             }
             binding.slSwipe.close()

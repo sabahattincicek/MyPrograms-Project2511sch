@@ -26,6 +26,6 @@ data class UserEntity(
     @ColumnInfo(name = "full_name") val fullName: String,
     @ColumnInfo(name = "role") val role: String,
     @ColumnInfo(name = "academic_level") val academicLevel: String,
-    @ColumnInfo(name = "organisation") val organisation: String,
+    @ColumnInfo(name = "institution") val institution: String,
     @ColumnInfo(name = "about_me") val aboutMe: String,
 )

@@ -12,15 +12,20 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentSplashBinding
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.User
+import com.saboon.project_2511sch.presentation.tag.ViewModelTag
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.IdGenerator
+import com.saboon.project_2511sch.util.ModelColor
+import com.saboon.project_2511sch.util.ModelColorConstats
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -34,7 +39,6 @@ class SplashFragment : Fragment() {
     private val tag = "SplashFragment"
 
     private val viewModelUser : ViewModelUser by activityViewModels()
-
     private var isPermissionProcessDone = false
     private var isUserReady = false
 
@@ -96,7 +100,7 @@ class SplashFragment : Fragment() {
         Log.d(tag, "tryFinalNavigation: isPermissionProcessDone=$isPermissionProcessDone, isUserReady=$isUserReady")
         if (isPermissionProcessDone && isUserReady) {
             if (findNavController().currentDestination?.id == R.id.splashFragment) {
-                Log.d(tag, "Navigating to HomeFragment")
+                Log.d(tag, "Navigating to FragmentHome")
                 val action = SplashFragmentDirections.actionSplashFragmentToHomeFragment()
                 findNavController().navigate(action)
             } else {
@@ -139,7 +143,7 @@ class SplashFragment : Fragment() {
                                     fullName = "",
                                     role = "",
                                     academicLevel = "",
-                                    organisation = "",
+                                    institution = "",
                                     aboutMe = ""
                                 )
                                 viewModelUser.insert(newUser)

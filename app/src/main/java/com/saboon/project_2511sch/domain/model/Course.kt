@@ -21,7 +21,7 @@ data class Course(
     override val contentHash: String = "",
     override val serverVersion: Int = 1,
 
-    val programTableId: String,
+    val tagId: String?,
 
     val title: String,
     val description: String,

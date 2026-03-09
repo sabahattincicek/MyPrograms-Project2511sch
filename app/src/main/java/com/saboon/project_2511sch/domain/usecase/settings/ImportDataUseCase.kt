@@ -3,7 +3,7 @@ package com.saboon.project_2511sch.domain.usecase.settings
 import android.content.Context
 import android.net.Uri
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
-import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
+import com.saboon.project_2511sch.domain.repository.ITagRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.presentation.profile.DataTransferPackage
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 class ImportDataUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val programTableRepository: IProgramTableRepository,
+    private val programTableRepository: ITagRepository,
     private val courseRepository: ICourseRepository,
     private val taskRepository: ITaskRepository,
     private val sFileRepository: ISFileRepository,
@@ -66,7 +66,7 @@ class ImportDataUseCase @Inject constructor(
             }
             // 4. Veritabanına kaydet (Sıralama Önemlidir: Foreign Key kısıtlamaları için)
             // Önce tablolar, sonra kurslar, sonra tasklar ve dosyalar
-            dataTransferPackage.programTables.forEach { programTableRepository.insert(it) }
+            dataTransferPackage.tags.forEach { programTableRepository.insert(it) }
             dataTransferPackage.courses.forEach { courseRepository.insert(it) }
             dataTransferPackage.tasks.forEach { taskRepository.insert(it) }
             updatedSFiles.forEach { sFileRepository.insert(it) }

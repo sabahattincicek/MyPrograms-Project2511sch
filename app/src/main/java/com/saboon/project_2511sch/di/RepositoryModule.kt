@@ -5,19 +5,19 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.saboon.project_2511sch.data.alarm.AlarmSchedulerImp
 import com.saboon.project_2511sch.data.local.dao.CourseDao
-import com.saboon.project_2511sch.data.local.dao.ProgramTableDao
+import com.saboon.project_2511sch.data.local.dao.TagDao
 import com.saboon.project_2511sch.data.local.dao.SFileDao
 import com.saboon.project_2511sch.data.local.dao.TaskDao
 import com.saboon.project_2511sch.data.local.dao.UserDao
 import com.saboon.project_2511sch.data.repository.CourseRepositoryImp
-import com.saboon.project_2511sch.data.repository.ProgramTableRepositoryImp
+import com.saboon.project_2511sch.data.repository.TagRepositoryImp
 import com.saboon.project_2511sch.data.repository.SFileRepositoryImp
 import com.saboon.project_2511sch.data.repository.SettingsRepositoryImp
 import com.saboon.project_2511sch.data.repository.TaskRepositoryImp
 import com.saboon.project_2511sch.data.repository.UserRepositoryImp
 import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
-import com.saboon.project_2511sch.domain.repository.IProgramTableRepository
+import com.saboon.project_2511sch.domain.repository.ITagRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.domain.repository.ISettingsRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
@@ -40,8 +40,8 @@ object RepositoryModule {
     }
     @Singleton
     @Provides
-    fun provideProgramTableRepositoryImp(programTableDao: ProgramTableDao): IProgramTableRepository {
-        return ProgramTableRepositoryImp(programTableDao)
+    fun provideTagRepositoryImp(tagDao: TagDao): ITagRepository {
+        return TagRepositoryImp(tagDao)
     }
     @Singleton
     @Provides
