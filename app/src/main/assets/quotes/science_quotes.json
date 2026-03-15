@@ -1,0 +1,202 @@
+[
+  {
+    "id": "q1",
+    "author": "Albert Einstein",
+    "years": "1879-1955",
+    "image": "file:///android_asset/quotes/images/q1_portrait.webp",
+    "content": {
+      "tr": "Hayal gücü bilgiden daha önemlidir.",
+      "en": "Imagination is more important than knowledge."
+    }
+  },
+  {
+    "id": "q2",
+    "author": "Isaac Newton",
+    "years": "1643-1727",
+    "image": "file:///android_asset/quotes/images/q2_portrait.webp",
+    "content": {
+      "tr": "Daha ileriyi görebildiysem, devlerin omuzlarında durduğum içindir.",
+      "en": "If I have seen further it is by standing on the shoulders of giants."
+    }
+  },
+  {
+    "id": "q3",
+    "author": "Socrates",
+    "years": "MÖ 470-399",
+    "image": "file:///android_asset/quotes/images/q3_portrait.webp",
+    "content": {
+      "tr": "Bildiğim tek şey hiçbir şey bilmediğimdir.",
+      "en": "The only true wisdom is in knowing you know nothing."
+    }
+  },
+  {
+    "id": "q4",
+    "author": "Aristotle",
+    "years": "MÖ 384-322",
+    "image": "file:///android_asset/quotes/images/q4_portrait.webp",
+    "content": {
+      "tr": "Eğitimin kökleri acıdır ama meyvesi tatlıdır.",
+      "en": "The roots of education are bitter, but the fruit is sweet."
+    }
+  },
+  {
+    "id": "q5",
+    "author": "Galileo Galilei",
+    "years": "1564-1642",
+    "image": "file:///android_asset/quotes/images/q5_portrait.webp",
+    "content": {
+      "tr": "Yine de dönüyor.",
+      "en": "And yet it moves."
+    }
+  },
+  {
+    "id": "q6",
+    "author": "René Descartes",
+    "years": "1596-1650",
+    "image": "file:///android_asset/quotes/images/q6_portrait.webp",
+    "content": {
+      "tr": "Düşünüyorum, öyleyse varım.",
+      "en": "I think, therefore I am."
+    }
+  },
+  {
+    "id": "q7",
+    "author": "Charles Darwin",
+    "years": "1809-1882",
+    "image": "file:///android_asset/quotes/images/q7_portrait.webp",
+    "content": {
+      "tr": "Hayatta kalan en güçlü tür değildir, değişime en iyi uyum sağlayandır.",
+      "en": "It is not the strongest of the species that survives, but the one most responsive to change."
+    }
+  },
+  {
+    "id": "q8",
+    "author": "Marie Curie",
+    "years": "1867-1934",
+    "image": "file:///android_asset/quotes/images/q8_portrait.webp",
+    "content": {
+      "tr": "Hayatta hiçbir şeyden korkmayın, sadece anlamaya çalışın.",
+      "en": "Nothing in life is to be feared, it is only to be understood."
+    }
+  },
+  {
+    "id": "q9",
+    "author": "Nikola Tesla",
+    "years": "1856-1943",
+    "image": "file:///android_asset/quotes/images/q9_portrait.webp",
+    "content": {
+      "tr": "Bugün onların, gelecek ise benimdir.",
+      "en": "The present is theirs; the future, for which I really worked, is mine."
+    }
+  },
+  {
+    "id": "q10",
+    "author": "Stephen Hawking",
+    "years": "1942-2018",
+    "image": "file:///android_asset/quotes/images/q10_portrait.webp",
+    "content": {
+      "tr": "Zeka, değişime uyum sağlayabilme yeteneğidir.",
+      "en": "Intelligence is the ability to adapt to change."
+    }
+  },
+  {
+    "id": "q11",
+    "author": "Francis Bacon",
+    "years": "1561-1626",
+    "image": "file:///android_asset/quotes/images/q11_portrait.webp",
+    "content": {
+      "tr": "Bilgi güçtür.",
+      "en": "Knowledge is power."
+    }
+  },
+  {
+    "id": "q12",
+    "author": "Blaise Pascal",
+    "years": "1623-1662",
+    "image": "file:///android_asset/quotes/images/q12_portrait.webp",
+    "content": {
+      "tr": "İnsan düşünen bir kamıştır.",
+      "en": "Man is but a reed, the most feeble thing in nature, but he is a thinking reed."
+    }
+  },
+  {
+    "id": "q13",
+    "author": "Confucius",
+    "years": "MÖ 551-479",
+    "image": "file:///android_asset/quotes/images/q13_portrait.webp",
+    "content": {
+      "tr": "Ne kadar yavaş gittiğin önemli değil, yeter ki durma.",
+      "en": "It does not matter how slowly you go as long as you do not stop."
+    }
+  },
+  {
+    "id": "q14",
+    "author": "Leonardo da Vinci",
+    "years": "1452-1519",
+    "image": "file:///android_asset/quotes/images/q14_portrait.webp",
+    "content": {
+      "tr": "Sadelik en yüksek gelişmişlik düzeyidir.",
+      "en": "Simplicity is the ultimate sophistication."
+    }
+  },
+  {
+    "id": "q15",
+    "author": "Bertrand Russell",
+    "years": "1872-1970",
+    "image": "file:///android_asset/quotes/images/q15_portrait.webp",
+    "content": {
+      "tr": "Dünyanın sorunu, aptalların kendinden emin, akıllıların ise şüphe içinde olmasıdır.",
+      "en": "The trouble with the world is that the stupid are cocksure and the intelligent are full of doubt."
+    }
+  },
+  {
+    "id": "q16",
+    "author": "Carl Sagan",
+    "years": "1934-1996",
+    "image": "file:///android_asset/quotes/images/q16_portrait.webp",
+    "content": {
+      "tr": "Olağanüstü iddialar olağanüstü kanıtlar gerektirir.",
+      "en": "Extraordinary claims require extraordinary evidence."
+    }
+  },
+  {
+    "id": "q17",
+    "author": "Richard Feynman",
+    "years": "1918-1988",
+    "image": "file:///android_asset/quotes/images/q17_portrait.webp",
+    "content": {
+      "tr": "Anlamadığın şeyi yaratamazsın.",
+      "en": "What I cannot create, I do not understand."
+    }
+  },
+  {
+    "id": "q18",
+    "author": "Immanuel Kant",
+    "years": "1724-1804",
+    "image": "file:///android_asset/quotes/images/q18_portrait.webp",
+    "content": {
+      "tr": "Aklını kullanma cesaretini göster.",
+      "en": "Have the courage to use your own understanding."
+    }
+  },
+  {
+    "id": "q19",
+    "author": "Plato",
+    "years": "MÖ 427-347",
+    "image": "file:///android_asset/quotes/images/q19_portrait.webp",
+    "content": {
+      "tr": "Bilge insan söyleyecek bir şeyi olduğu için konuşur.",
+      "en": "Wise men speak because they have something to say."
+    }
+  },
+  {
+    "id": "q20",
+    "author": "Aristotle",
+    "years": "MÖ 384-322",
+    "image": "file:///android_asset/quotes/images/q20_portrait.webp",
+    "content": {
+      "tr": "Kalbin eğitimi olmadan zihnin eğitimi eğitim değildir.",
+      "en": "Educating the mind without educating the heart is no education at all."
+    }
+  }
+]

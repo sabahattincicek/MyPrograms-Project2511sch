@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_marginTop="16dp">
 
                     <com.google.android.material.card.MaterialCardView
@@ -117,35 +117,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:gravity="end">
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="30dp">
-                        <ImageView
-                            android:id="@+id/iv_edit_user"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_margin="8dp"
-                            android:visibility="visible"
-                            android:src="@drawable/baseline_edit_24"
-                            app:tint="?attr/colorOnSurface" />
-                        <ImageView
-                            android:id="@+id/iv_save_user"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_margin="8dp"
-                            android:visibility="gone"
-                            android:src="@drawable/baseline_check_24"
-                            app:tint="?attr/colorOnSurface" />
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="16dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -210,8 +182,7 @@
                             android:padding="4dp"
                             android:layout_marginBottom="8dp"
                             android:textSize="18sp"
-                            android:maxLines="1"
-                            android:hint="@string/full_name"/>
+                            android:maxLines="1"/>
                         <!-- ROLE -->
                         <TextView
                             android:id="@+id/tv_role"
@@ -220,8 +191,7 @@
                             android:padding="4dp"
                             android:layout_marginBottom="8dp"
                             android:textSize="18sp"
-                            android:maxLines="1"
-                            android:hint="@string/role"/>
+                            android:maxLines="1"/>
                         <!-- ACADEMIC LEVEL -->
                         <TextView
                             android:id="@+id/tv_academic_level"
@@ -230,8 +200,7 @@
                             android:padding="4dp"
                             android:layout_marginBottom="8dp"
                             android:textSize="18sp"
-                            android:maxLines="1"
-                            android:hint="@string/academic_level"/>
+                            android:maxLines="1"/>
                         <!-- ORGANISATION -->
                         <TextView
                             android:id="@+id/tv_organisation"
@@ -240,8 +209,7 @@
                             android:padding="4dp"
                             android:layout_marginBottom="8dp"
                             android:textSize="18sp"
-                            android:maxLines="1"
-                            android:hint="@string/institution"/>
+                            android:maxLines="1"/>
                         <!-- ABOUT ME -->
                         <TextView
                             android:id="@+id/tv_about_me"
@@ -250,8 +218,7 @@
                             android:padding="4dp"
                             android:layout_marginBottom="8dp"
                             android:textSize="18sp"
-                            android:maxLines="4"
-                            android:hint="@string/about_me"/>
+                            android:maxLines="4"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -316,6 +283,33 @@
                 </LinearLayout>
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="end">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="30dp">
+                        <ImageView
+                            android:id="@+id/iv_edit_user"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="8dp"
+                            android:visibility="visible"
+                            android:src="@drawable/baseline_edit_24"
+                            app:tint="?attr/colorOnSurface" />
+                        <ImageView
+                            android:id="@+id/iv_save_user"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="8dp"
+                            android:visibility="gone"
+                            android:src="@drawable/baseline_check_24"
+                            app:tint="?attr/colorOnSurface" />
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
 
                 <!-- A divider to separate header from options -->
                 <com.google.android.material.divider.MaterialDivider
