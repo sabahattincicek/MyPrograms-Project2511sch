@@ -84,4 +84,5 @@
     <string name="set_active">Aktive Et</string>
     <string name="if_deactivated_courses_that_own_the_tag_will_hide">Devre dışı bırakılırsa, bu etiketle ilişkilendirilmiş dersler Ana ekranda görüntülenmeyecektir.</string>
     <string name="if_deactivated_this_course_and_task_will_hide">Devre dışı bırakılırsa, bu ders ve görevleri Ana ekranda görüntülenmeyecektir.</string>
+    <string name="lessons">Dersler</string>
 </resources>

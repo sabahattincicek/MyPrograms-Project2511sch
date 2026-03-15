@@ -84,5 +84,6 @@
     <string name="set_active">Set Active</string>
     <string name="if_deactivated_courses_that_own_the_tag_will_hide">If deactivated, courses associated with this tag will not be displayed on the Home screen.</string>
     <string name="if_deactivated_this_course_and_task_will_hide">If deactivated, this course and its tasks will not be displayed on the Home screen.</string>
+    <string name="lessons">Lessons</string>
 
 </resources>
