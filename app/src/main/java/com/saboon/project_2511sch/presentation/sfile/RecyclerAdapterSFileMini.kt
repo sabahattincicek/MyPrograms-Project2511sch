@@ -83,14 +83,16 @@ class RecyclerAdapterSFileMini :
 
                 // Varsayılan olarak her şeyi temizle
                 binding.ivFilePreview.setImageDrawable(null)
+
+                val extension = sFile.filePath.substringAfterLast(".", "").lowercase()
+                val imageExtensions = listOf("jpg", "jpeg", "png", "webp", "heic", "heif", "bmp", "gif")
                 when {
 //                    "SNote" -> {
 //                        binding.tvFileType.visibility = View.VISIBLE
 //                        binding.ivFilePreview.visibility = View.GONE
 //                        binding.tvFileType.text = "NOTE"
 //                    }
-                    sFile.title.endsWith(".jpeg", ignoreCase = true) ||
-                            sFile.title.endsWith(".jpg", ignoreCase = true) -> {
+                    extension in imageExtensions -> {
                         try {
                             binding.tvFileType.visibility = View.GONE
                             binding.ivFilePreview.visibility = View.VISIBLE
@@ -102,7 +104,7 @@ class RecyclerAdapterSFileMini :
                             showFileExtension(sFile.filePath)
                         }
                     }
-                    sFile.title.endsWith(".pdf", ignoreCase = true) -> {
+                    extension == "pdf" -> {
                         try {
                             binding.tvFileType.visibility = View.GONE
                             binding.ivFilePreview.visibility = View.VISIBLE

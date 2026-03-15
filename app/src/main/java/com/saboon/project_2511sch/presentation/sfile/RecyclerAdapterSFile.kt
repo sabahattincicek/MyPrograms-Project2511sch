@@ -90,13 +90,15 @@ class RecyclerAdapterSFile :
                     }
                     popupMenu.show()
                 }
+                val extension = sFile.filePath.substringAfterLast(".", "").lowercase()
+                val imageExtensions = listOf("jpg", "jpeg", "png", "webp", "heic", "heif", "bmp", "gif")
                 when {
 //                    "SNote" -> {
 //                        binding.tvFileType.visibility = View.VISIBLE
 //                        binding.ivFilePreview.visibility = View.GONE
 //                        binding.tvFileType.text = "NOTE"
 //                    }
-                    sFile.title.endsWith(".jpeg") -> {
+                    extension in imageExtensions -> {
                         try {
                             binding.tvFileType.visibility = View.GONE
                             binding.ivFilePreview.visibility = View.VISIBLE
@@ -108,7 +110,7 @@ class RecyclerAdapterSFile :
                             showFileExtension(sFile.filePath)
                         }
                     }
-                    sFile.title.endsWith(".pdf") -> {
+                    extension == "pdf" -> {
                         try {
                             binding.tvFileType.visibility = View.GONE
                             binding.ivFilePreview.visibility = View.VISIBLE

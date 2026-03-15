@@ -33,11 +33,11 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
-class FileFragment : Fragment() {
+class FragmentFile : Fragment() {
 
     private var _binding: FragmentFileBinding?=null
     private val binding get() = _binding!!
-    private val args : FileFragmentArgs by navArgs()
+    private val args : FragmentFileArgs by navArgs()
     private val viewModelUser: ViewModelUser by activityViewModels()
     private val viewModelSFile: ViewModelSFile by viewModels()
     private lateinit var recyclerAdapterSFile: RecyclerAdapterSFile
@@ -66,7 +66,7 @@ class FileFragment : Fragment() {
     }
 
 
-    private val tag = "FileFragment"
+    private val tag = "FragmentFile"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +106,7 @@ class FileFragment : Fragment() {
                         if (item is DisplayItemSFile.ContentSFile){
                             val sFile = item.sFile
                             val titleMatches = sFile.title.contains(query, ignoreCase = true)
-                            val courseTitleMatches = (sFile.courseId ?: "").contains(query, ignoreCase = true)
+                            val courseTitleMatches = sFile.courseId.contains(query, ignoreCase = true)
                             titleMatches || courseTitleMatches
                         }else{
                             false
