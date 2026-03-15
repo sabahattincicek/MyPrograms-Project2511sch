@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit
 class RecyclerAdapterHome :
     ListAdapter<DisplayItemHome, BaseViewHolder>(BaseDiffCallback()) {
 
-    var onContentItemClickListener:((Tag, Course) -> Unit)? = null
+    var onContentItemClickListener:((Course) -> Unit)? = null
 
     var onAbsenceButtonClickListener: ((Task.Lesson) -> Unit)? = null
 
@@ -115,7 +115,7 @@ class RecyclerAdapterHome :
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemHome.ContentItemHome) {
-                val programTable = item.tag
+                val tag = item.tag
                 val course = item.course
                 val task = item.task
                 val today = Calendar.getInstance().apply {
@@ -125,11 +125,12 @@ class RecyclerAdapterHome :
                     set(Calendar.MILLISECOND, 0)
                 }.timeInMillis
 
-                val color = if (colorSource == SettingsConstants.HomeListItemColorSource.FROM_PROGRAM_TABLE) {
-                    programTable.color
+                val color = if (colorSource == SettingsConstants.HomeListItemColorSource.FROM_TAG) {
+                    tag?.color
                 } else {
                     course.color
                 }
+                val containerColor = if (color != null) color.getContainerColor(binding.root.context) else Color.TRANSPARENT
 
                 when (task) {
                     is Task.Lesson -> {
@@ -149,7 +150,6 @@ class RecyclerAdapterHome :
                         binding.tvContent2Sub.text = "Absence: ${task.absence.size.toString()}"
 
                         if (isColorEnabled){
-                            val containerColor = color.getContainerColor(binding.root.context)
                             binding.llContainer.background = GradientDrawable(
                                 GradientDrawable.Orientation.LEFT_RIGHT,
                                 intArrayOf(Color.TRANSPARENT, containerColor)
@@ -197,7 +197,6 @@ class RecyclerAdapterHome :
                         val dividerColor = ModelColorConstats.EXAM.toColorInt()
                         binding.viewDivider.setBackgroundColor(dividerColor)
                         if (isColorEnabled){
-                            val containerColor = color.getContainerColor(binding.root.context)
                             binding.llContainer.background = GradientDrawable(
                                 GradientDrawable.Orientation.LEFT_RIGHT,
                                 intArrayOf(Color.TRANSPARENT, containerColor)
@@ -217,7 +216,6 @@ class RecyclerAdapterHome :
                         val dividerColor = ModelColorConstats.HOMEWORK.toColorInt()
                         binding.viewDivider.setBackgroundColor(dividerColor)
                         if (isColorEnabled){
-                            val containerColor = color.getContainerColor(binding.root.context)
                             binding.llContainer.background = GradientDrawable(
                                 GradientDrawable.Orientation.LEFT_RIGHT,
                                 intArrayOf(Color.TRANSPARENT, containerColor)
@@ -240,7 +238,7 @@ class RecyclerAdapterHome :
                 }
 
                 binding.mcvForeground.setOnClickListener {
-                    onContentItemClickListener?.invoke(item.tag, item.course)
+                    onContentItemClickListener?.invoke(item.course)
                 }
             }
             binding.slSwipe.close()

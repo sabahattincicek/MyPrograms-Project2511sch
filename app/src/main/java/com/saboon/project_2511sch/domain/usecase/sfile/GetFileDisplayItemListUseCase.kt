@@ -39,7 +39,7 @@ class GetFileDisplayItemListUseCase @Inject constructor(
                         val allSFiles = fileResource.data ?: emptyList()
 
                         // Return empty success immediately if no files exist to trigger Empty State UI
-                        if (allSFiles.isEmpty()) return@map Resource.Success(emptyList())
+//                        if (allSFiles.isEmpty()) return@map Resource.Success(emptyList())
 
                         val displayList = allSFiles.map { sFile ->
                             DisplayItemSFile.ContentSFile(

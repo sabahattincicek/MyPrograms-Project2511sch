@@ -16,7 +16,7 @@ sealed class DisplayItemHome: BaseDisplayListItem {
         override val isClickable: Boolean = false
     }
     data class ContentItemHome(
-        val tag: Tag,
+        val tag: Tag?,
         val course: Course,
         val task: Task,
         val occurrenceId:String
