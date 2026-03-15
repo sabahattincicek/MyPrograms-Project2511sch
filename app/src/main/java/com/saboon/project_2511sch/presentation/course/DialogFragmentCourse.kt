@@ -83,6 +83,7 @@ class DialogFragmentCourse: DialogFragment() {
                 binding.etPeople.setText(course.people)
                 selectedColor = course.color
                 if (course.tagId != null) viewModelTag.getById(course.tagId)
+                else binding.tilTag.isEndIconVisible = false
                 when(selectedColor.colorHex){
                     ModelColorConstats.COLOR_1 -> {clearAllChecks(); binding.ivColorCk1.visibility = View.VISIBLE}
                     ModelColorConstats.COLOR_2 -> {clearAllChecks(); binding.ivColorCk2.visibility = View.VISIBLE}
@@ -98,6 +99,7 @@ class DialogFragmentCourse: DialogFragment() {
             }
         }else{
             binding.etTitle.requestFocus()
+            binding.tilTag.isEndIconVisible = false
         }
 
         binding.btnSave.setOnClickListener {
