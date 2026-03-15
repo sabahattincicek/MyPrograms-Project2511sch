@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="50dp"
@@ -44,14 +44,44 @@
 
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcv_isNotEmpty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="160dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="-28dp"
                 android:layout_marginEnd="16dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialCardView3">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorError">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="4dp"
+                        android:paddingStart="16dp"
+                        android:text="This course is not active"
+                        android:textColor="?attr/colorOnError" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
                 android:elevation="20dp"
-                app:cardCornerRadius="20dp">
+                android:minHeight="160dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:id="@+id/ll_course_info"
@@ -100,30 +130,34 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
-                        android:maxLines="2"
-                        android:text="Açıklamasleam"/>
+                        android:maxLines="4"
+                        android:text="Açıklamasleam" />
 
                     <TextView
                         android:id="@+id/tv_tag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="end"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:maxLines="1"
-                        android:layout_gravity="end"
                         android:gravity="center_vertical"
+                        android:maxLines="1"
                         android:text="Tag"
                         app:drawableStartCompat="@drawable/baseline_label_24" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+
             <LinearLayout
                 android:id="@+id/SECTION_FILES"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mcv_isNotEmpty">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -187,9 +221,12 @@
                 android:id="@+id/SECTION_TASKS"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:orientation="vertical">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/SECTION_FILES">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -220,13 +257,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="24dp"
+                android:visibility="gone"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/SECTION_TASKS">
+
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:src="@drawable/empty_list" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -241,14 +283,15 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_tasks"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="0dp"
                 android:visibility="gone"
+                android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
-                android:clipToPadding="false" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/SECTION_TASKS" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.core.widget.NestedScrollView>

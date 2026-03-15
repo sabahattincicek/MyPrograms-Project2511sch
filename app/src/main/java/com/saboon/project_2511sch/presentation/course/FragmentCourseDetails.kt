@@ -137,6 +137,8 @@ class FragmentCourseDetails : Fragment() {
         val textColor = course.color.getOnMainTextColor()
 
         binding.llCourseInfo.setBackgroundColor(containerColor)
+        if (course.isActive) binding.mcvIsNotEmpty.visibility = View.GONE
+        else binding.mcvIsNotEmpty.visibility = View.VISIBLE
 
         binding.tvTitleCourse.setTextColor(textColor)
         binding.tvPersonPrimary.setTextColor(textColor)
