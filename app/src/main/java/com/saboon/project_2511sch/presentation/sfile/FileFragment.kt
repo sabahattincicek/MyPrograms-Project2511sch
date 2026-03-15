@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.BundleCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -20,14 +19,12 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentFileBinding
-import com.saboon.project_2511sch.domain.model.BaseModel
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
-import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open

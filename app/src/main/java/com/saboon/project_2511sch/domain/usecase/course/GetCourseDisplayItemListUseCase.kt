@@ -33,12 +33,8 @@ class GetCourseDisplayItemListUseCase @Inject constructor(
 
                 groupedCourse.forEach { (tagId, courseInGroup) ->
                     val tag = tagMap[tagId]
-                    if (tag != null){
-                        displayList.add(DisplayItemCourse.HeaderCourse(tag.title))
-                    }else {
-                        //if tag is null set header title untagged
-                        displayList.add(DisplayItemCourse.HeaderCourse("Untagged"))
-                    }
+                    displayList.add(DisplayItemCourse.HeaderCourse(tag))
+
                     courseInGroup.forEach { course ->
                         displayList.add(DisplayItemCourse.ContentCourse(
                             tag = tag,

@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.BundleCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,13 +14,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
-import com.saboon.project_2511sch.domain.model.BaseModel
-import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.Tag
-import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
-import com.saboon.project_2511sch.presentation.common.FilterTask
+import com.saboon.project_2511sch.presentation.task.FilterTask
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
 import com.saboon.project_2511sch.presentation.task.ViewModelTask

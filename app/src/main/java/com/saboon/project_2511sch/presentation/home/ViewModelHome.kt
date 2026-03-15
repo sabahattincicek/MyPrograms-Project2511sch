@@ -2,12 +2,9 @@ package com.saboon.project_2511sch.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.repository.ISettingsRepository
 import com.saboon.project_2511sch.domain.usecase.home.GetHomeDisplayItemsUseCase
-import com.saboon.project_2511sch.presentation.common.FilterGeneric
-import com.saboon.project_2511sch.presentation.common.FilterTask
+import com.saboon.project_2511sch.presentation.task.FilterTask
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -59,7 +59,12 @@ class RecyclerAdapterCourse: ListAdapter<DisplayItemCourse, BaseViewHolder>(Base
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemCourse.HeaderCourse){
-                binding.tvContent.text = item.title
+                item.tag?.let {
+                    binding.tvContent.text = item.tag.title
+                    if (!item.tag.isActive) binding.tvContent.alpha = 0.3f
+                    else binding.tvContent.alpha = 1.0f
+                }
+                if (item.tag == null) binding.tvContent.text = "Untagged"
             }
         }
     }
@@ -72,6 +77,7 @@ class RecyclerAdapterCourse: ListAdapter<DisplayItemCourse, BaseViewHolder>(Base
                 binding.tvContent2.visibility = View.GONE
                 binding.tvContent2Sub.text = item.course.createdAt.toFormattedString("MMM yyyy")
                 if (!item.course.isActive) binding.llContainer.alpha = 0.3f
+                else if (item.tag != null && !item.tag.isActive) binding.llContainer.alpha = 0.3f
                 else binding.llContainer.alpha = 1.0f
             }
         }
