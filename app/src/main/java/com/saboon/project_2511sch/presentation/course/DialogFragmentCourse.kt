@@ -14,6 +14,7 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.util.IdGenerator
 import androidx.core.os.BundleCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -199,6 +200,9 @@ class DialogFragmentCourse: DialogFragment() {
             Log.d(TAG, "onCreateView: Cancel button clicked. Dismissing dialog.")
             dismiss()
         }
+        binding.etTag.doOnTextChanged { text, start, before, count ->
+            binding.tilTag.isEndIconVisible = !text.isNullOrEmpty()
+        }
         return binding.root
     }
     override fun onDestroy() {
@@ -226,6 +230,10 @@ class DialogFragmentCourse: DialogFragment() {
                 selectedTag = tag
                 binding.etTag.setText(tag.title)
             }
+        }
+        binding.tilTag.setEndIconOnClickListener {
+            binding.etTag.text = null
+            selectedTag = null
         }
 
         //TAG LIST LISTENER

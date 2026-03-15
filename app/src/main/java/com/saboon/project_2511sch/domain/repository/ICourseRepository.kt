@@ -16,7 +16,7 @@ interface ICourseRepository {
     fun getById(id: String): Flow<Resource<Course>>
 
     fun getAll(): Flow<Resource<List<Course>>>
-
+    fun getAllActive(): Flow<Resource<List<Course>>>
     fun getAllByProgramTableId(id: String): Flow<Resource<List<Course>>>
     fun getAllByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>>
     fun getAllActivesByTagIds(ids: List<String>): Flow<Resource<List<Course>>>

@@ -24,8 +24,10 @@ interface CourseDao {
     fun getById(id: String): Flow<CourseEntity>
     @Query("SELECT * FROM courses")
     fun getAll(): Flow<List<CourseEntity>>
+    @Query("SELECT * FROM courses WHERE is_active = 1")
+    fun getAllActive(): Flow<List<CourseEntity>>
     @Query("SELECT * FROM courses WHERE tag_id = :id")
-    fun getAllByProgramTableId(id: String): Flow<List<CourseEntity>>
+    fun getAllByTagId(id: String): Flow<List<CourseEntity>>
     @Query("SELECT * FROM courses WHERE tag_id IN (:ids)")
     fun getAllByProgramTableIds(ids: List<String>): Flow<List<CourseEntity>>
     @Query("SELECT * FROM courses WHERE is_active = 1 AND tag_id IN (:ids)")

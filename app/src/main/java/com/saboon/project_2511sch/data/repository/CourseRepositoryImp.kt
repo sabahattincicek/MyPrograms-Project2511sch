@@ -74,8 +74,18 @@ class CourseRepositoryImp @Inject constructor(
             }
     }
 
+    override fun getAllActive(): Flow<Resource<List<Course>>> {
+        return courseDao.getAllActive()
+            .map<List<CourseEntity>, Resource<List<Course>>> { courseEntity ->
+                Resource.Success(courseEntity.map { it.toDomain() })
+            }
+            .catch { e ->
+                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
+            }
+    }
+
     override fun getAllByProgramTableId(id: String): Flow<Resource<List<Course>>> {
-        return courseDao.getAllByProgramTableId(id)
+        return courseDao.getAllByTagId(id)
             .map<List<CourseEntity>, Resource<List<Course>>> { courseEntities ->
                 Resource.Success(courseEntities.map { it.toDomain() })
             }

@@ -168,6 +168,8 @@
                     android:layout_width="match_parent"
                     android:hint="@string/tag"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_close_24"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText

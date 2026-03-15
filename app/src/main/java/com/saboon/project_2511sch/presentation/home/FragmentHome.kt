@@ -267,7 +267,7 @@ class FragmentHome : Fragment() {
             adapter = recyclerAdapterHome
             layoutManager = LinearLayoutManager(context)
         }
-        recyclerAdapterHome.onContentItemClickListener = { programTable, course ->
+        recyclerAdapterHome.onContentItemClickListener = { course ->
             Log.d(tag, "Recycler item clicked. Course: ${course.title}")
             val action = FragmentHomeDirections.actionHomeFragmentToCourseDetailsFragment(course)
             findNavController().navigate(action)

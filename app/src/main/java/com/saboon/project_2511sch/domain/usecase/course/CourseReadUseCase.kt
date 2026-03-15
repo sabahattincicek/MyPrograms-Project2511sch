@@ -12,19 +12,7 @@ class CourseReadUseCase @Inject constructor(
     fun getById(id: String): Flow<Resource<Course>>{
         return courseRepository.getById(id)
     }
-    fun getAllByProgramTableId(id: String): Flow<Resource<List<Course>>>{
-        return courseRepository.getAllByProgramTableId(id)
-    }
-    fun getAllByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>>{
-        return courseRepository.getAllByProgramTableIds(ids)
-    }
     fun getAll(): Flow<Resource<List<Course>>> {
         return courseRepository.getAll()
-    }
-    suspend fun getAllCount(): Resource<Int>{
-        return courseRepository.getAllCount()
-    }
-    suspend fun getAllActiveCount(): Resource<Int>{
-        return courseRepository.getAllActiveCount()
     }
 }

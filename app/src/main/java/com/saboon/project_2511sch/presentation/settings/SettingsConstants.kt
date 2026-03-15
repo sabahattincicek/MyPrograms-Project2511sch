@@ -1,10 +1,5 @@
 package com.saboon.project_2511sch.presentation.settings
 
-import com.saboon.project_2511sch.presentation.settings.SettingsConstants.HomeListItemColorSource.FROM_COURSE
-import com.saboon.project_2511sch.presentation.settings.SettingsConstants.HomeListItemColorSource.FROM_PROGRAM_TABLE
-import com.saboon.project_2511sch.presentation.settings.SettingsConstants.HomeViewRange.MONTH
-import com.saboon.project_2511sch.presentation.settings.SettingsConstants.HomeViewRange.WEEK
-
 object SettingsConstants {
     //KEYS
     const val PREF_KEY_DARK_MODE = "pref_key_dark_mode"
@@ -64,10 +59,10 @@ object SettingsConstants {
     }
     object HomeListItemColorSource {
         const val FROM_COURSE = "course"
-        const val FROM_PROGRAM_TABLE = "table"
+        const val FROM_TAG = "table"
         const val DEFAULT = FROM_COURSE
         fun getValuesAsArray(): Array<String>{
-            return arrayOf(FROM_COURSE, FROM_PROGRAM_TABLE) // same order with pref_home_list_item_color_source in arrays.xml
+            return arrayOf(FROM_COURSE, FROM_TAG) // same order with pref_home_list_item_color_source in arrays.xml
         }
     }
     object SelectedCharacter {
