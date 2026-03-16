@@ -1,5 +1,8 @@
 package com.saboon.project_2511sch.presentation.sfile
 
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.pdf.PdfRenderer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +19,7 @@ import com.saboon.project_2511sch.util.BaseDisplayListItem
 import com.saboon.project_2511sch.util.BaseViewHolder
 import com.saboon.project_2511sch.util.toFormattedString
 import java.io.File
+import androidx.core.graphics.createBitmap
 
 class RecyclerAdapterSFileMini :
     ListAdapter<DisplayItemSFile, BaseViewHolder>(BaseDiffCallback<DisplayItemSFile>()) {
@@ -83,14 +87,16 @@ class RecyclerAdapterSFileMini :
 
                 // Varsayılan olarak her şeyi temizle
                 binding.ivFilePreview.setImageDrawable(null)
+
+                val extension = sFile.filePath.substringAfterLast(".", "").lowercase()
+                val imageExtensions = listOf("jpg", "jpeg", "png", "webp", "heic", "heif", "bmp", "gif")
                 when {
 //                    "SNote" -> {
 //                        binding.tvFileType.visibility = View.VISIBLE
 //                        binding.ivFilePreview.visibility = View.GONE
 //                        binding.tvFileType.text = "NOTE"
 //                    }
-                    sFile.title.endsWith(".jpeg", ignoreCase = true) ||
-                            sFile.title.endsWith(".jpg", ignoreCase = true) -> {
+                    extension in imageExtensions -> {
                         try {
                             binding.tvFileType.visibility = View.GONE
                             binding.ivFilePreview.visibility = View.VISIBLE
@@ -102,11 +108,41 @@ class RecyclerAdapterSFileMini :
                             showFileExtension(sFile.filePath)
                         }
                     }
-                    sFile.title.endsWith(".pdf", ignoreCase = true) -> {
+                    extension == "pdf" -> {
                         try {
                             binding.tvFileType.visibility = View.GONE
                             binding.ivFilePreview.visibility = View.VISIBLE
-                            showFileExtension(sFile.filePath)
+                            // 1. PDF dosyasını salt okunur olarak aç
+                            val file = File(sFile.filePath)
+                            val parcelFileDescriptor = android.os.ParcelFileDescriptor.open(
+                                file, android.os.ParcelFileDescriptor.MODE_READ_ONLY
+                            )
+
+                            if (parcelFileDescriptor != null) {
+                                // 2. PdfRenderer ile dosyayı işle
+                                val renderer = android.graphics.pdf.PdfRenderer(parcelFileDescriptor)
+
+                                if (renderer.pageCount > 0) {
+                                    // 3. İlk sayfayı (0) aç
+                                    val page = renderer.openPage(0)
+
+                                    // 4. Sayfa boyutunda bir bitmap oluştur
+                                    val bitmap = createBitmap(page.width, page.height)
+                                    bitmap.eraseColor(Color.WHITE)
+
+                                    // 5. PDF sayfasını bitmap'e çiz (render et)
+                                    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+
+                                    // 6. Sonucu ImageView'a bas
+                                    binding.ivFilePreview.setImageBitmap(bitmap)
+                                    binding.ivFilePreview.scaleType = ImageView.ScaleType.CENTER_CROP
+
+                                    // 7. Kaynakları serbest bırak (Memory leak önlemek için kritik!)
+                                    page.close()
+                                }
+                                renderer.close()
+                                parcelFileDescriptor.close()
+                            }
                         }catch (e: Exception){
                             showFileExtension(sFile.filePath)
                         }

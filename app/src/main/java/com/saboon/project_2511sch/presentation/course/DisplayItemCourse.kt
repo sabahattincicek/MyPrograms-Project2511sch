@@ -6,9 +6,9 @@ import com.saboon.project_2511sch.util.BaseDisplayListItem
 
 sealed class DisplayItemCourse: BaseDisplayListItem {
     data class HeaderCourse(
-        val title: String
+        val tag: Tag?
     ): DisplayItemCourse(){
-        override val id: String = title
+        override val id: String = tag?.title ?: "Untagged"
         override val viewType: Int = BaseDisplayListItem.VIEW_TYPE_HEADER
         override val isClickable: Boolean = false
     }

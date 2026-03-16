@@ -4,7 +4,6 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.domain.repository.ITagRepository
-import com.saboon.project_2511sch.presentation.common.FilterGeneric
 import com.saboon.project_2511sch.presentation.sfile.DisplayItemSFile
 import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi

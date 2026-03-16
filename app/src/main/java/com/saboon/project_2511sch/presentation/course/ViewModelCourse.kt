@@ -3,11 +3,9 @@ package com.saboon.project_2511sch.presentation.course
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.usecase.course.CourseReadUseCase
 import com.saboon.project_2511sch.domain.usecase.course.CourseWriteUseCase
 import com.saboon.project_2511sch.domain.usecase.course.GetCourseDisplayItemListUseCase
-import com.saboon.project_2511sch.presentation.common.FilterGeneric
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

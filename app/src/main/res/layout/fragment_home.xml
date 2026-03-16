@@ -49,27 +49,12 @@
                     android:layout_height="wrap_content"
                     app:singleLine="true">
 
-<!--                    <com.google.android.material.chip.Chip-->
-<!--                        android:id="@+id/cp_program_table"-->
-<!--                        style="@style/Widget.Material3.Chip.Filter"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="@string/programs" />-->
-
-<!--                    <com.google.android.material.chip.Chip-->
-<!--                        android:id="@+id/cp_course"-->
-<!--                        style="@style/Widget.Material3.Chip.Filter"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginEnd="8dp"-->
-<!--                        android:text="@string/courses"/>-->
-
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cp_lesson"
                         style="@style/Widget.Material3.Chip.Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lesson" />
+                        android:text="@string/lessons" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/cp_exam"
@@ -114,7 +99,6 @@
                 android:id="@+id/shimmer_view_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
                 app:shimmer_auto_start="true">
 
                 <LinearLayout

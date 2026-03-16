@@ -7,7 +7,7 @@ import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.ITagRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
-import com.saboon.project_2511sch.presentation.common.FilterTask
+import com.saboon.project_2511sch.presentation.task.FilterTask
 import com.saboon.project_2511sch.presentation.home.DisplayItemHome
 import com.saboon.project_2511sch.util.RecurrenceRule
 import com.saboon.project_2511sch.util.Resource

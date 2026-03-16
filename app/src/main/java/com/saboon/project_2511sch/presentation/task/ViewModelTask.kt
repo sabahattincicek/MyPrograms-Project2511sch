@@ -7,9 +7,7 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemUseCase
-import com.saboon.project_2511sch.domain.usecase.task.TaskReadUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
-import com.saboon.project_2511sch.presentation.common.FilterGeneric
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

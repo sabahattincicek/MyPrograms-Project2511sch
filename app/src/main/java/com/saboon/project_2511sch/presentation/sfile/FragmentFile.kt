@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.BundleCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -20,14 +19,12 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentFileBinding
-import com.saboon.project_2511sch.domain.model.BaseModel
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
-import com.saboon.project_2511sch.presentation.common.DialogFragmentFilter
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open
@@ -36,11 +33,11 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
-class FileFragment : Fragment() {
+class FragmentFile : Fragment() {
 
     private var _binding: FragmentFileBinding?=null
     private val binding get() = _binding!!
-    private val args : FileFragmentArgs by navArgs()
+    private val args : FragmentFileArgs by navArgs()
     private val viewModelUser: ViewModelUser by activityViewModels()
     private val viewModelSFile: ViewModelSFile by viewModels()
     private lateinit var recyclerAdapterSFile: RecyclerAdapterSFile
@@ -69,7 +66,7 @@ class FileFragment : Fragment() {
     }
 
 
-    private val tag = "FileFragment"
+    private val tag = "FragmentFile"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,7 +106,7 @@ class FileFragment : Fragment() {
                         if (item is DisplayItemSFile.ContentSFile){
                             val sFile = item.sFile
                             val titleMatches = sFile.title.contains(query, ignoreCase = true)
-                            val courseTitleMatches = (sFile.courseId ?: "").contains(query, ignoreCase = true)
+                            val courseTitleMatches = sFile.courseId.contains(query, ignoreCase = true)
                             titleMatches || courseTitleMatches
                         }else{
                             false
