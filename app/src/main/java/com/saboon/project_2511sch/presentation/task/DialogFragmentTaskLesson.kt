@@ -10,6 +10,9 @@ import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -92,6 +95,21 @@ class DialogFragmentTaskLesson: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Sistemin çubuklarının (StatusBar ve NavBar) yüksekliğini al ve layout'a padding olarak ekle
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            // v (yani senin root view'ın) sistem çubukları kadar içeri itilir
+            v.updatePadding(
+                left = systemBars.left,
+                top = systemBars.top,    // Üstteki bildirim çubuğunu kurtarır
+                right = systemBars.right,
+                bottom = systemBars.bottom // Alttaki navigasyon çubuğunu kurtarır
+            )
+
+            insets
+        }
 
         arguments?.let {
             currentUser = BundleCompat.getParcelable(it,ARG_USER, User::class.java)!!

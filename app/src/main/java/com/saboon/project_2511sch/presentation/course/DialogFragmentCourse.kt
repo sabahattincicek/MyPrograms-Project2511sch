@@ -14,6 +14,9 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.util.IdGenerator
 import androidx.core.os.BundleCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -59,7 +62,25 @@ class DialogFragmentCourse: DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = DialogFragmentCourseBinding.inflate(inflater, container, false)
-        Log.d(TAG, "onCreateView: View created.")
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Sistemin çubuklarının (StatusBar ve NavBar) yüksekliğini al ve layout'a padding olarak ekle
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            // v (yani senin root view'ın) sistem çubukları kadar içeri itilir
+            v.updatePadding(
+                left = systemBars.left,
+                top = systemBars.top,    // Üstteki bildirim çubuğunu kurtarır
+                right = systemBars.right,
+                bottom = systemBars.bottom // Alttaki navigasyon çubuğunu kurtarır
+            )
+
+            insets
+        }
 
         arguments?.let {
             currentUser = BundleCompat.getParcelable(it, ARG_USER, User::class.java)!!
@@ -205,8 +226,9 @@ class DialogFragmentCourse: DialogFragment() {
         binding.etTag.doOnTextChanged { text, start, before, count ->
             binding.tilTag.isEndIconVisible = !text.isNullOrEmpty()
         }
-        return binding.root
+
     }
+
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy: Dialog destroyed.")
