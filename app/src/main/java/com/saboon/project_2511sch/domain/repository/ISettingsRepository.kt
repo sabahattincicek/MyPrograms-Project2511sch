@@ -18,8 +18,12 @@ interface ISettingsRepository {
     suspend fun setHomeListItemColorEnabled(enabled: Boolean)
     fun getHomeListItemColorSource(): Flow<String>
     suspend fun setHomeListItemColorSource(source: String)
-    fun getSelectedCharacter(): Flow<String>
 
-    //OTHER
+    //REMINDER
+    fun getAbsenceReminderEnabled(): Flow<Boolean>
+    suspend fun setAbsenceReminderEnabled(enabled: Boolean)
+
+    //CHARACTER
+    fun getSelectedCharacter(): Flow<String>
     suspend fun setSelectedCharacter(id: String)
 }

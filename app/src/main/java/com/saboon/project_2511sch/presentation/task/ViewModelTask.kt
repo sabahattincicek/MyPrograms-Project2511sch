@@ -6,6 +6,7 @@ import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.domain.repository.ISettingsRepository
 import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
 import com.saboon.project_2511sch.util.Resource
@@ -14,6 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -26,7 +28,8 @@ import javax.inject.Inject
 class ViewModelTask @Inject constructor(
     private val taskWriteUseCase: TaskWriteUseCase,
     private val getTaskDisplayItemUseCase: GetTaskDisplayItemUseCase,
-    private val alarmScheduler: IAlarmScheduler
+    private val alarmScheduler: IAlarmScheduler,
+    private val settingsRepository: ISettingsRepository
 ): ViewModel() {
     private val _operationEvent = Channel<Resource<Task>>()
     val operationEvent = _operationEvent.receiveAsFlow()
@@ -64,8 +67,9 @@ class ViewModelTask @Inject constructor(
             val result = taskWriteUseCase.insert(task)
 
             if (result is Resource.Success){
-                alarmScheduler.schedule(course, task)
-                if (task is Task.Lesson) alarmScheduler.scheduleAbsenceCheck(course, task)
+                if (task.remindBefore >= 0) alarmScheduler.schedule(course, task) //-1: no reminder
+                val isAbsenceReminderEnabled = settingsRepository.getAbsenceReminderEnabled().first()
+                if (task is Task.Lesson && isAbsenceReminderEnabled) alarmScheduler.scheduleAbsenceCheck(course, task)
             }
             _operationEvent.send(result)
         }
@@ -77,8 +81,9 @@ class ViewModelTask @Inject constructor(
 
             if (result is Resource.Success){
                 alarmScheduler.cancel(course, task)
-                alarmScheduler.schedule(course, task)
-                if (task is Task.Lesson) alarmScheduler.scheduleAbsenceCheck(course, task)
+                if (task.remindBefore >= 0) alarmScheduler.schedule(course, task) //-1: no reminder
+                val isAbsenceReminderEnabled = settingsRepository.getAbsenceReminderEnabled().first()
+                if (task is Task.Lesson && isAbsenceReminderEnabled) alarmScheduler.scheduleAbsenceCheck(course, task)
             }
             _operationEvent.send(result)
         }

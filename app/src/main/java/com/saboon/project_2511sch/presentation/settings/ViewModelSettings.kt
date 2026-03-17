@@ -59,6 +59,12 @@ class ViewModelSettings @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = SettingsConstants.SelectedCharacter.DEFAULT
         )
+    val absenceReminderEnabledState: StateFlow<Boolean> = settingsRepository.getAbsenceReminderEnabled()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = SettingsConstants.AbsenceReminderEnabled.DEFAULT
+        )
 
     //ACTIONS
     fun onDarkModeSelected(darkModeValue: String){
@@ -94,6 +100,11 @@ class ViewModelSettings @Inject constructor(
     fun onCharacterSelected(id: String){
         viewModelScope.launch {
             settingsRepository.setSelectedCharacter(id)
+        }
+    }
+    fun onAbsenceReminderEnabledChanged(enabled: Boolean){
+        viewModelScope.launch {
+            settingsRepository.setAbsenceReminderEnabled(enabled)
         }
     }
 }

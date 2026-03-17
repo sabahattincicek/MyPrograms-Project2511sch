@@ -106,6 +106,27 @@ class SettingsRepositoryImp @Inject constructor(
         }
     }
 
+    override fun getAbsenceReminderEnabled(): Flow<Boolean> = callbackFlow {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            if (key == SettingsConstants.PREF_KEY_ABSENCE_REMINDER_ENABLED) {
+                trySend(prefs.getBoolean(SettingsConstants.PREF_KEY_ABSENCE_REMINDER_ENABLED,
+                    SettingsConstants.AbsenceReminderEnabled.DEFAULT))
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+        trySend(sharedPreferences.getBoolean(SettingsConstants.PREF_KEY_ABSENCE_REMINDER_ENABLED,
+            SettingsConstants.AbsenceReminderEnabled.DEFAULT))
+        awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
+    }
+
+    override suspend fun setAbsenceReminderEnabled(enabled: Boolean) {
+        withContext(Dispatchers.IO) {
+            sharedPreferences.edit {
+                putBoolean( SettingsConstants.PREF_KEY_ABSENCE_REMINDER_ENABLED, enabled)
+            }
+        }
+    }
+
     //CHARACTER
     override fun getSelectedCharacter() = getStringFlow(SettingsConstants.PREF_KEY_CHARACTER, SettingsConstants.SelectedCharacter.DEFAULT)
     override suspend fun setSelectedCharacter(id: String) {
