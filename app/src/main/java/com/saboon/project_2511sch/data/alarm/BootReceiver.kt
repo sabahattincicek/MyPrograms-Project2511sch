@@ -86,7 +86,6 @@ class BootReceiver: BroadcastReceiver() {
                 val course = courseMap[task.courseId]
                 if (course != null){
                     alarmScheduler.schedule(course, task)
-                    alarmScheduler.scheduleAbsenceCheck(course, task)
                 } else {
                     Log.w(TAG, "Course not found for task id: ${task.id}")
                 }

@@ -67,7 +67,6 @@ class ViewModelTask @Inject constructor(
 
             if (result is Resource.Success){
                 alarmScheduler.schedule(course, task)
-                alarmScheduler.scheduleAbsenceCheck(course, task)
             }
             _operationEvent.send(result)
         }
@@ -80,7 +79,6 @@ class ViewModelTask @Inject constructor(
             if (result is Resource.Success){
                 alarmScheduler.cancel(course, task)
                 alarmScheduler.schedule(course, task)
-                alarmScheduler.scheduleAbsenceCheck(course, task)
             }
             _operationEvent.send(result)
         }

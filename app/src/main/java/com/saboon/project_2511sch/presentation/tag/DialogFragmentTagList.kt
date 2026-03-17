@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -44,6 +47,21 @@ class DialogFragmentTagList: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Sistemin çubuklarının (StatusBar ve NavBar) yüksekliğini al ve layout'a padding olarak ekle
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            // v (yani senin root view'ın) sistem çubukları kadar içeri itilir
+            v.updatePadding(
+                left = systemBars.left,
+                top = systemBars.top,    // Üstteki bildirim çubuğunu kurtarır
+                right = systemBars.right,
+                bottom = systemBars.bottom // Alttaki navigasyon çubuğunu kurtarır
+            )
+
+            insets
+        }
 
         setupAdapters()
         setupObservers()

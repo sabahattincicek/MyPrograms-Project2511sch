@@ -83,7 +83,6 @@ class ImportDataUseCase @Inject constructor(
                 val course = courseMap[task.courseId]
                 if (course != null){
                     alarmScheduler.schedule(course, task)
-                    alarmScheduler.scheduleAbsenceCheck(course, task)
                 }
             }
 
