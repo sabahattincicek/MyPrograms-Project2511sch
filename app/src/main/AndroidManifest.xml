@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <!-- Telefon açıldığında alarmları tekrar kurmak için -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".Project2511schApplication"
@@ -23,15 +25,28 @@
             android:exported="false"
             tools:node="remove" />
 
+        <!-- bildirim zamani geldiginde tetiklenecek -->
         <receiver
             android:name=".data.alarm.AlarmReceiver"
             android:enabled="true"
             android:exported="false"/>
 
+        <!-- bildirimdeki tuslara basildiginda tetiklenecek -->
         <receiver
             android:name=".data.alarm.NotificationActionReceiver"
             android:enabled="true"
             android:exported="false"/>
+
+        <!-- Telefon yeniden başlatıldığında tetiklenecek Receiver -->
+        <receiver
+            android:name=".data.alarm.BootReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".presentation.main.MainActivity"

@@ -179,7 +179,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString()
                 )
-                viewModelTask.update(updatedLesson)
+                viewModelTask.update(course,updatedLesson)
             }else{
                 val newLesson = Task.Lesson(
                     id = IdGenerator.generateId(binding.etTitle.text.toString()),
@@ -196,7 +196,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString(),
                 )
-                viewModelTask.insert(newLesson)
+                viewModelTask.insert(course, newLesson)
             }
         }
         binding.btnCancel.setOnClickListener {
@@ -214,11 +214,12 @@ class DialogFragmentTaskLesson: DialogFragment() {
         }
         binding.actvReminder.setOnItemClickListener { parentFragment, view, position, id ->
             selectedRemindBeforeMinutes = when(position){
-                0 -> 0
-                1 -> 10
-                2 -> 30
-                3 -> 60
-                4 -> 1440
+                0 -> -1    // "No reminder" -> Index 0
+                1 -> 0     // "On Time" -> Index 1
+                2 -> 10    // "10 minutes before" -> Index 2
+                3 -> 30    // "30 minutes before" -> Index 3
+                4 -> 60    // "1 hour before" -> Index 4
+                5 -> 1440  // "1 day before" -> Index 5
                 else -> -1
             }
         }
@@ -307,7 +308,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
         childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, viewLifecycleOwner){ requestKey, result ->
             val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
             if (isYes){
-                viewModelTask.delete(task!!)
+                viewModelTask.delete(course, task!!)
             }
         }
     }
@@ -373,6 +374,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
     private fun mapReminderToDisplayString(minutes: Int): String{
         val options = resources.getStringArray(R.array.reminder_options)
         return when(minutes){
+            -1 -> options[0] // "No reminder"
             0 -> options[1] // "On Time"
             10 -> options[2] // "10 minutes before"
             30 -> options[3] // "30 minutes before"

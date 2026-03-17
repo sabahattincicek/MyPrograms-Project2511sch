@@ -5,7 +5,10 @@ import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.usecase.course.CourseReadUseCase
+import com.saboon.project_2511sch.domain.usecase.task.TaskReadUseCase
+import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -15,35 +18,52 @@ import kotlinx.coroutines.flow.first
 class IncrementAbsenceWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val courseReadUseCase: CourseReadUseCase,
+    private val taskReadUseCase: TaskReadUseCase,
+    private val taskWriteUseCase: TaskWriteUseCase
 ): CoroutineWorker(appContext, workerParams) {
 
-    private val tag = "IncrementAbsenceWorker"
+    private val TAG = "IncrementAbsenceWorker"
 
     override suspend fun doWork(): Result {
-        val courseId = inputData.getString("KEY_COURSE_ID")
-        Log.d(tag, "Worker started for course ID: $courseId")
-
-        if (courseId == null) {
-            Log.e(tag, "Work failed: Course ID is null.")
+        Log.d(TAG, "doWork started")
+        val taskId = inputData.getString("KEY_TASK_ID")
+        if (taskId == null) {
+            Log.e(TAG, "taskId is null, returning failure")
             return Result.failure()
         }
+        Log.d(TAG, "Processing taskId: $taskId")
 
         return try {
-            Log.d(tag, "Fetching course from database...")
-            val resource = courseReadUseCase.getById(courseId).first()
+            val resource = taskReadUseCase.getById(taskId).first { it !is Resource.Loading }
+            Log.d(TAG, "Task fetched, resource: ${resource::class.java.simpleName}")
 
-            if (resource is Resource.Success && resource.data != null) {
-                Log.i(tag, "Course '${resource.data.title}' fetched successfully. Incrementing absence.")
-//                courseAbsenceUseCase.increment(resource.data)
-                Log.i(tag, "Work finished successfully for course ID: $courseId")
-                Result.success()
+            if (resource is Resource.Success && resource.data is Task.Lesson) {
+                val lesson = resource.data
+                Log.d(TAG, "Task is a Lesson. Current absences: ${lesson.absence.size}")
+
+                val absenceDateList = lesson.absence.toMutableList()
+                absenceDateList.add(lesson.date)
+                val updatedTask = lesson.copy(
+                    absence = absenceDateList
+                )
+                
+                Log.d(TAG, "Updating task with new absence date")
+                val updateResult = taskWriteUseCase.update(updatedTask)
+                Log.d(TAG, "Update result: ${updateResult::class.java.simpleName}")
+
+                if (updateResult is Resource.Success){
+                    Log.d(TAG, "Absence incremented successfully")
+                    Result.success()
+                }else {
+                    Log.w(TAG, "Update failed, retrying...")
+                    Result.retry()
+                }
             } else {
-                Log.e(tag, "Work failed: Could not fetch course. Reason: ${resource.message}")
+                Log.e(TAG, "Task not found or not a Lesson type. Resource: ${resource.message}")
                 Result.failure()
             }
         } catch (e: Exception) {
-            Log.e(tag, "An unexpected error occurred during work for course ID $courseId", e)
+            Log.e(TAG, "Exception in doWork: ${e.message}", e)
             Result.failure()
         }
     }

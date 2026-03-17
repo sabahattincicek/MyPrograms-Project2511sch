@@ -9,6 +9,9 @@ import javax.inject.Inject
 class TaskReadUseCase @Inject constructor(
     private val taskRepository: ITaskRepository
 ) {
+    fun getById(id: String): Flow<Resource<Task>>{
+        return taskRepository.getById(id)
+    }
     fun getAllByCourseId(id: String): Flow<Resource<List<Task>>>{
         return taskRepository.getAllByCourseId(id)
     }

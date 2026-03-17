@@ -3,6 +3,7 @@ package com.saboon.project_2511sch
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.os.Build
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
@@ -21,13 +22,18 @@ class Project2511schApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        val notificationManager = getSystemService(NotificationManager::class.java)
+        createNotificationChannel()
+    }
+
+    private fun createNotificationChannel() {
         val channel = NotificationChannel(
-            "schedule_reminders", // Bu ID, AlarmReceiver'da kullanilanla AYNI OLMALI
-            "Task Reminders",
+            "schedule_reminders",
+            "Ders Hatirlaticilari",
             NotificationManager.IMPORTANCE_HIGH
-        )
-        channel.description = "Shows notification for upcoming schedules."
+        ).apply {
+            description = "Ders baslamadan once bildirim gonderir."
+        }
+        val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
     }
 }

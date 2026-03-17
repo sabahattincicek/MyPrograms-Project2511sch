@@ -1,14 +1,20 @@
 package com.saboon.project_2511sch.data.alarm
 
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.core.app.NotificationCompat
+import androidx.core.os.BundleCompat
+import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 
 class AlarmReceiver: BroadcastReceiver() {
@@ -22,102 +28,85 @@ class AlarmReceiver: BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-//        Log.d(tag, "Alarm received by onReceive with action: ${intent.action}")
-//
-//        val extras = intent.extras ?: run {
-//            Log.e(tag, "Intent extras were null. Aborting.")
-//            return
-//        }
-//        val alarmAction = intent.action
-//        val tag = BundleCompat.getParcelable(extras, "EXTRA_PROGRAM_TABLE", Tag::class.java)
-//        val course = BundleCompat.getParcelable(extras, "EXTRA_COURSE", Course::class.java)
-//        val task = BundleCompat.getParcelable(extras, "EXTRA_SCHEDULE", Task::class.java)
-//        if (tag == null || course == null || task == null) {
-//            Log.e(tag, "One or more of the parcelable objects were null. Aborting.")
-//            return
-//        }
-//
-//        Log.i(tag, "Processing alarm for task: '${task.title}' (ID: ${task.id})")
-//
-//        val hiltEntryPoint = EntryPointAccessors.fromApplication(context.applicationContext, AlarmSchedulerEntryPoint::class.java)
-//        val alarmScheduler = hiltEntryPoint.alarmScheduler()
-//
-//        when(alarmAction){
-//            AlarmSchedulerImp.ACTION_REMINDER -> {
-//                Log.d(tag, "Handling a REMINDER alarm.")
-//                showReminderNotification(context, tag, course, task)
-//                alarmScheduler.rescheduleReminder(tag, course, task)
-//            }
-//            AlarmSchedulerImp.ACTION_ABSENCE_CHECK -> {
-//                Log.d(tag, "Handling an ABSENCE_CHECK alarm.")
-//                showAbsenceCheckNotification(context, tag, course, task)
-//                alarmScheduler.rescheduleAbsenceReminder(tag, course, task)
-//            }
-//            else -> {
-//                Log.w(tag, "Unknown or missing alarm action: $alarmAction")
-//            }
-//        }
+        val action = intent.action ?: return
+        val extras = intent.extras ?: return
+
+        val course = BundleCompat.getParcelable(extras, AlarmSchedulerImp.EXTRA_COURSE, Course::class.java)
+        val task = BundleCompat.getParcelable(extras, AlarmSchedulerImp.EXTRA_TASK, Task::class.java)
+
+        if (course == null || task == null) return
+
+        // Hilt EntryPoint ile Scheduler'a erişim (reschedule işlemi için)
+        val hiltEntryPoint = EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            AlarmSchedulerEntryPoint::class.java
+        )
+        val alarmScheduler = hiltEntryPoint.alarmScheduler()
+
+        when(action){
+            AlarmSchedulerImp.ACTION_REMINDER -> {
+                // 1. Ders başlamadan önceki bildirim
+                showReminderNotification(context, course, task)
+                // 2. Periyodik ders ise bir sonraki haftayı planla
+                alarmScheduler.reschedule(course, task)
+            }
+
+            AlarmSchedulerImp.ACTION_ABSENCE_CHECK -> {
+                // 3. Ders bittikten sonraki yoklama bildirimi
+                showAbsenceCheckNotification(context, course, task)
+            }
+        }
     }
 
-    private fun showReminderNotification(context: Context, tag: Tag, course: Course, task: Task){
-//        val notificationId = task.id.hashCode()
-//        val notificationManager = context.getSystemService(NotificationManager::class.java)
-//        val notification = NotificationCompat.Builder(context, "schedule_reminders")
-//            .setSmallIcon(R.drawable.baseline_add_24) // TODO: Change icon
-//            .setContentTitle("Upcoming: ${task.title ?: "Event"}")
-//            .setContentText("For course '${course.title ?: "your course"}' at ${task.startTime.toFormattedString("HH:mm")}.")
-//            .setStyle(
-//                NotificationCompat.BigTextStyle()
-//                    .bigText("Event: ${task.title}\nCourse: ${course.title}\nTime: ${task.startTime.toFormattedString("HH:mm")}\nDescription: ${task.description}")
-//            )
-//            .setPriority(NotificationCompat.PRIORITY_HIGH)
-//            .setAutoCancel(true)
-//            .build()
-//
-//        notificationManager.notify(notificationId, notification)
-//        Log.i(tag, "Reminder notification posted with ID: $notificationId")
+    private fun showReminderNotification(context: Context, course: Course, task: Task){
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val notification = NotificationCompat.Builder(context, "schedule_reminders")
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle(course.title)
+            .setContentText("${task.title} ${task.remindBefore} dk sonra baslayacak.")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .build()
+        notificationManager.notify(task.id.hashCode(), notification)
     }
 
-    private fun showAbsenceCheckNotification(context: Context, tag: Tag, course: Course, task: Task) {
-//        val notificationId = task.id.hashCode() + 2 // Use a different ID for this notification type if needed
-//
-//        // "Yes" action
-//        val yesIntent = Intent(context, NotificationActionReceiver::class.java).apply {
-//            action = "ACTION_YES"
-//            putExtra("KEY_NOTIFICATION_ID", notificationId)
-//        }
-//        val yesPendingIntent = PendingIntent.getBroadcast(
-//            context,
-//            notificationId, // Unique request code for this action
-//            yesIntent,
-//            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-//        )
-//
-//        // "No" action
-//        val noIntent = Intent(context, NotificationActionReceiver::class.java).apply {
-//            action = "ACTION_NO"
-//            putExtra("KEY_COURSE_ID", course.id)
-//            putExtra("KEY_NOTIFICATION_ID", notificationId)
-//        }
-//        val noPendingIntent = PendingIntent.getBroadcast(
-//            context,
-//            notificationId + 1, // CRITICAL: Must be a different request code!
-//            noIntent,
-//            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-//        )
-//
-//        val notification = NotificationCompat.Builder(context, "schedule_reminders")
-//            .setSmallIcon(R.drawable.baseline_add_24) // TODO: Change icon
-//            .setContentTitle("Attendance Check")
-//            .setContentText("Did you attend '${task.title}'?")
-//            .setPriority(NotificationCompat.PRIORITY_HIGH)
-//            .addAction(0, "Yes", yesPendingIntent)
-//            .addAction(0, "No", noPendingIntent)
-//            .setAutoCancel(true) // Dismiss the notification after a button is clicked
-//            .build()
-//
-//        val notificationManager = context.getSystemService(NotificationManager::class.java)
-//        notificationManager.notify(notificationId, notification)
-//        Log.i(tag, "Absence check notification posted with ID: $notificationId")
+    private fun showAbsenceCheckNotification(context: Context, course: Course, task: Task) {
+        if (task !is Task.Lesson) return
+
+        val notificationId = task.id.hashCode() + 1 // Reminder ID'si ile çakışmaması için +1
+
+        //evet derse katildim butonu icin intent
+        val yesIntent = Intent(context, NotificationActionReceiver::class.java).apply {
+            action = "ACTION_ATTENDED_YES"
+            putExtra("EXTRA_NOTIFICATION_ID", notificationId)
+            putExtra("EXTRA_TASK_ID", task.id)
+        }
+        val yesPendingIntent = PendingIntent.getBroadcast(
+            context, notificationId, yesIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        //hayir derse katilmadim butonu icin intent
+        val noIntent = Intent(context, NotificationActionReceiver::class.java).apply {
+            action = "ACTION_ATTENDED_NO"
+            putExtra("EXTRA_NOTIFICATION_ID", notificationId)
+            putExtra("EXTRA_TASK_ID", task.id)
+        }
+        val noPendingIntent = PendingIntent.getBroadcast(
+            context, notificationId + 1, noIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(context, "schedule_reminders")
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("Derse Katildin mi?")
+            .setContentText("'${course.title}' dersine katılabildin mi?")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .addAction(R.drawable.ic_launcher_foreground, "Evet", yesPendingIntent)
+            .addAction(R.drawable.ic_launcher_foreground, "Hayır", noPendingIntent)
+            .setAutoCancel(true)
+            .build()
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(notificationId, notification)
+
     }
 }

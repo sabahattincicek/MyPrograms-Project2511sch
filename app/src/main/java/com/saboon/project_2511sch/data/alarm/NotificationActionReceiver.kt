@@ -13,47 +13,48 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NotificationActionReceiver : BroadcastReceiver(){
-    private val tag = "NotificationActionReceiver"
+
+    private val TAG = "NotificationActionReceiver"
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(tag, "Action received by onReceive.")
-
         if (context == null || intent == null) {
-            Log.e(tag, "Context or Intent is null, cannot proceed.")
+            Log.w(TAG, "onReceive: context or intent is null")
             return
         }
 
-        val courseId = intent.getStringExtra("KEY_COURSE_ID")
-        val notificationId = intent.getIntExtra("KEY_NOTIFICATION_ID", 0)
+        // AlarmReceiver'dan gelen verileri alıyoruz
         val action = intent.action
+        val notificationId = intent.getIntExtra("EXTRA_NOTIFICATION_ID", 0)
+        val taskId = intent.getStringExtra("EXTRA_TASK_ID")
 
-        Log.d(tag, "Action: $action, Course ID: $courseId, Notification ID: $notificationId")
+        Log.d(TAG, "onReceive: action=$action, notificationId=$notificationId, taskId=$taskId")
 
         when(action){
-            "ACTION_YES" -> {
-                Log.i(tag, "'Yes' action selected. No further action needed.")
-            }
-            "ACTION_NO" -> {
-                if (courseId != null){
-                    Log.i(tag, "'No' action selected. Enqueuing worker to increment absence for course ID: $courseId")
+            "ACTION_ATTENDED_YES" -> {
+                Log.d(TAG, "Action: ACTION_ATTENDED_YES")
+            }//DO NOTHING
+            "ACTION_ATTENDED_NO" -> {
+                Log.d(TAG, "Action: ACTION_ATTENDED_NO")
+                // Kullanıcı derse katılmadığını beyan etti.
+                // Arka planda devamsızlık sayısını artıracak Worker'ı tetikliyoruz.
+                if (taskId != null){
+                    Log.d(TAG, "Enqueuing IncrementAbsenceWorker for taskId: $taskId")
                     val workRequest = OneTimeWorkRequestBuilder<IncrementAbsenceWorker>()
-                        .setInputData(workDataOf("KEY_COURSE_ID" to courseId))
+                        .setInputData(workDataOf("KEY_TASK_ID" to taskId))
                         .build()
+
                     WorkManager.getInstance(context).enqueue(workRequest)
-                } else {
-                    Log.w(tag, "'No' action selected, but courseId was null.")
+                }else{
+                    Log.e(TAG, "Missed lesson reported but taskId is null!")
                 }
-            }
-            else -> {
-                Log.w(tag, "Unknown or null action received: $action")
             }
         }
 
-        // Dismiss the notification
-        if (notificationId != 0) {
-            val notificationManager = context.getSystemService(NotificationManager::class.java)
+        // Hangi butona basılırsa basılsın bildirimi ekrandan kaldırıyoruz
+        if (notificationId != 0){
+            Log.d(TAG, "Cancelling notification: $notificationId")
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(notificationId)
-            Log.d(tag, "Notification with ID $notificationId has been cancelled.")
         }
     }
 }
