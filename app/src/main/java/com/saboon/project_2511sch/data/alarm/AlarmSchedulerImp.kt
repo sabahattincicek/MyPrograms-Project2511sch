@@ -9,16 +9,24 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.core.net.toUri
+import com.saboon.project_2511sch.data.repository.SettingsRepositoryImp
 import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.domain.repository.ISettingsRepository
+import com.saboon.project_2511sch.domain.repository.ITagRepository
 import com.saboon.project_2511sch.util.RecurrenceRule
+import com.saboon.project_2511sch.util.Resource
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import java.util.Calendar
 import javax.inject.Inject
 
 class AlarmSchedulerImp @Inject constructor (
-    private val context: Context
+    private val context: Context,
+    private val tagRepository: ITagRepository,
+    private val settingsRepository: ISettingsRepository
 ): IAlarmScheduler {
 
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
@@ -35,6 +43,17 @@ class AlarmSchedulerImp @Inject constructor (
         course: Course,
         task: Task
     ) {
+        // Ders aktif degilse veya task aktif degilse veya no reminder (-1) ise kurma
+        if (!course.isActive || !task.isActive || task.remindBefore < 0) return
+        // derse ait tag var ise ve aktif degilse kurma
+        if (course.tagId != null){
+            val isTagActive = runBlocking {
+                val tagResource = tagRepository.getById(course.tagId).first()
+                (tagResource as? Resource.Success)?.data?.isActive ?: true
+            }
+            if (!isTagActive) return
+        }
+
         val triggerTime = when(task){
             is Task.Lesson -> calculateCombinedTime(task.date, task.timeStart) - (task.remindBefore * 60 * 1000)
             is Task.Exam -> calculateCombinedTime(task.date, task.timeStart) - (task.remindBefore * 60 * 1000)
@@ -60,7 +79,19 @@ class AlarmSchedulerImp @Inject constructor (
         course: Course,
         task: Task
     ) {
-        if (task !is Task.Lesson) return
+        // Ders aktif degilse veya task aktif degilse veya task.Lesson degil ise kurma
+        if (!course.isActive || !task.isActive || task !is Task.Lesson) return
+        // derse ait tag var ise ve aktif degilse kurma
+        if (course.tagId != null){
+            val isTagActive = runBlocking {
+                val tagResource = tagRepository.getById(course.tagId).first()
+                (tagResource as? Resource.Success)?.data?.isActive ?: true
+            }
+            if (!isTagActive) return
+        }
+        // ayarlarda absence reminder aktif edilmemisse kurma
+        val isAbsenceEnabled = runBlocking {settingsRepository.getAbsenceReminderEnabled().first()}
+        if (!isAbsenceEnabled) return
 
         val triggerTime = calculateCombinedTime(task.date, task.timeEnd)
         if (triggerTime > System.currentTimeMillis()){

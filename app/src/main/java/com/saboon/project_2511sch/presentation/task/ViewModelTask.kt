@@ -28,8 +28,7 @@ import javax.inject.Inject
 class ViewModelTask @Inject constructor(
     private val taskWriteUseCase: TaskWriteUseCase,
     private val getTaskDisplayItemUseCase: GetTaskDisplayItemUseCase,
-    private val alarmScheduler: IAlarmScheduler,
-    private val settingsRepository: ISettingsRepository
+    private val alarmScheduler: IAlarmScheduler
 ): ViewModel() {
     private val _operationEvent = Channel<Resource<Task>>()
     val operationEvent = _operationEvent.receiveAsFlow()
@@ -67,9 +66,8 @@ class ViewModelTask @Inject constructor(
             val result = taskWriteUseCase.insert(task)
 
             if (result is Resource.Success){
-                if (task.remindBefore >= 0) alarmScheduler.schedule(course, task) //-1: no reminder
-                val isAbsenceReminderEnabled = settingsRepository.getAbsenceReminderEnabled().first()
-                if (task is Task.Lesson && isAbsenceReminderEnabled) alarmScheduler.scheduleAbsenceCheck(course, task)
+                alarmScheduler.schedule(course, task)
+                alarmScheduler.scheduleAbsenceCheck(course, task)
             }
             _operationEvent.send(result)
         }
@@ -81,9 +79,8 @@ class ViewModelTask @Inject constructor(
 
             if (result is Resource.Success){
                 alarmScheduler.cancel(course, task)
-                if (task.remindBefore >= 0) alarmScheduler.schedule(course, task) //-1: no reminder
-                val isAbsenceReminderEnabled = settingsRepository.getAbsenceReminderEnabled().first()
-                if (task is Task.Lesson && isAbsenceReminderEnabled) alarmScheduler.scheduleAbsenceCheck(course, task)
+                alarmScheduler.schedule(course, task)
+                alarmScheduler.scheduleAbsenceCheck(course, task)
             }
             _operationEvent.send(result)
         }

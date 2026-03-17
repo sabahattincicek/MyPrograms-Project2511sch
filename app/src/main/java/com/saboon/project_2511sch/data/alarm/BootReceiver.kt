@@ -85,14 +85,8 @@ class BootReceiver: BroadcastReceiver() {
             tasks.forEach { task ->
                 val course = courseMap[task.courseId]
                 if (course != null){
-                    if (task.remindBefore >= 0) {
-                        Log.d(TAG, "Scheduling alarm for task: ${task.title}")
-                        alarmScheduler.schedule(course, task)
-                    }
-                    if (task is Task.Lesson && isAbsenceReminderEnabled) {
-                        Log.d(TAG, "Scheduling absence check for lesson: ${task.title}")
-                        alarmScheduler.scheduleAbsenceCheck(course, task)
-                    }
+                    alarmScheduler.schedule(course, task)
+                    alarmScheduler.scheduleAbsenceCheck(course, task)
                 } else {
                     Log.w(TAG, "Course not found for task id: ${task.id}")
                 }
