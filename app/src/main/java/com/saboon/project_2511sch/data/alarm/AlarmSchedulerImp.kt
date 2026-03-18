@@ -66,7 +66,7 @@ class AlarmSchedulerImp @Inject constructor (
             
             // 1. REMINDER
             if (task.remindBefore >= 0){
-                val triggerTime = when(task){
+                var triggerTime = when(task){
                     is Task.Lesson -> calculateCombinedTime(task.date, task.timeStart) - (task.remindBefore * 60 * 1000)
                     is Task.Exam -> calculateCombinedTime(task.date, task.timeStart) - (task.remindBefore * 60 * 1000)
                     is Task.Homework -> calculateCombinedTime(task.dueDate, task.dueTime) - (task.remindBefore * 60 * 1000)
@@ -74,12 +74,23 @@ class AlarmSchedulerImp @Inject constructor (
                 
                 val currentTime = System.currentTimeMillis()
                 Log.d(TAG, "Reminder: Trigger=${triggerTime.toFormattedString("dd-MM-yyyy HH:mm:ss")}, Now=${currentTime.toFormattedString("dd-MM-yyyy HH:mm:ss")}")
-                
-                if (triggerTime > currentTime){
-                    val intent = createIntent(course, task, ACTION_REMINDER)
-                    setAlarm(triggerTime, intent, task.id.hashCode())
-                } else {
-                    Log.w(TAG, "Reminder NOT scheduled because trigger time is in the past.")
+
+                if (task is Task.Lesson){
+                    while (triggerTime < currentTime){
+                        triggerTime = task.recurrenceRule.getNextOccurrence(triggerTime)!!
+                        if (triggerTime > currentTime){
+                            val intent = createIntent(course, task, ACTION_REMINDER)
+                            setAlarm(triggerTime, intent, task.id.hashCode())
+                            break
+                        }
+                    }
+                }else{
+                    if (triggerTime > currentTime){
+                        val intent = createIntent(course, task, ACTION_REMINDER)
+                        setAlarm(triggerTime, intent, task.id.hashCode())
+                    } else {
+                        Log.w(TAG, "Reminder NOT scheduled because trigger time is in the past.")
+                    }
                 }
             } else {
                 Log.d(TAG, "Reminder skipped because remindBefore is negative (${task.remindBefore})")
@@ -90,15 +101,16 @@ class AlarmSchedulerImp @Inject constructor (
             Log.d(TAG, "Absence check enabled in settings: $isAbsenceEnabled")
             
             if (isAbsenceEnabled && task is Task.Lesson){
-                val triggerTime = calculateCombinedTime(task.date, task.timeEnd)
+                var triggerTime = calculateCombinedTime(task.date, task.timeEnd)
                 val currentTime = System.currentTimeMillis()
                 Log.d(TAG, "Absence Check: Trigger=${triggerTime.toFormattedString("dd-MM-yyyy HH:mm:ss")}, Now=${currentTime.toFormattedString("dd-MM-yyyy HH:mm:ss")}")
-                
-                if (triggerTime > currentTime){
-                    val intent = createIntent(course, task, ACTION_ABSENCE_CHECK)
-                    setAlarm(triggerTime, intent, task.id.hashCode() + 1)
-                } else {
-                    Log.w(TAG, "Absence Check NOT scheduled because trigger time is in the past.")
+
+                while (triggerTime < currentTime){
+                    triggerTime = task.recurrenceRule.getNextOccurrence(triggerTime)!!
+                    if (triggerTime > currentTime){
+                        val intent = createIntent(course, task, ACTION_ABSENCE_CHECK)
+                        setAlarm(triggerTime, intent, task.id.hashCode() + 1)
+                    }
                 }
             }
         } else {
