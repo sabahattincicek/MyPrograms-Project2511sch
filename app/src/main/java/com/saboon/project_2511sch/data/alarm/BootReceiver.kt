@@ -18,17 +18,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * Receiver responsible for restoring all alarms after a device reboot.
- * Without this, all scheduled notifications would be lost when the phone restarts.
+ * BootReceiver is responsible for restoring all scheduled alarms after a device reboot.
+ * In Android, scheduled alarms are cleared when the device is turned off.
+ * This receiver listens for the BOOT_COMPLETED broadcast to reschedule them.
  */
 @AndroidEntryPoint
 class BootReceiver: BroadcastReceiver() {
 
-    private val TAG = "SBootReceiver"
+    private val TAG = "BootReceiver"
 
-    // Android işletim sistemi BroadcastReceiver sınıflarını (BootReceiver gibi) kendisi
-    // oluşturur ve her zaman "boş bir constructor" (zero-argument constructor) bekler.
-    // O sebeple constructor injection yerine field injection islemi yapilir
+    /**
+     * Field injection is used here because BroadcastReceivers are instantiated by the 
+     * Android system using a zero-argument constructor.
+     */
     @Inject
     lateinit var taskRepository: ITaskRepository
     @Inject
@@ -38,60 +40,83 @@ class BootReceiver: BroadcastReceiver() {
     @Inject
     lateinit var settingsRepository: ISettingsRepository
 
+    /**
+     * Standard entry point for BroadcastReceivers.
+     * 
+     * @param context The Context in which the receiver is running.
+     * @param intent The Intent being received (should be BOOT_COMPLETED or similar).
+     */
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(TAG, "onReceive called with action: ${intent?.action}")
+        Log.i(TAG, "--- onReceive Triggered ---")
+        val action = intent?.action
+        Log.d(TAG, "Action received: $action")
+        
         // Check if the received broadcast is for the device booting up
-        if (intent?.action == Intent.ACTION_BOOT_COMPLETED ||
-            intent?.action == "android.intent.action.QUICKBOOT_POWERON") {
+        if (action == Intent.ACTION_BOOT_COMPLETED ||
+            action == "android.intent.action.QUICKBOOT_POWERON") {
 
-            Log.d(TAG, "Boot detected, starting reschedule process")
-            // Use goAsync() to keep the receiver alive while we do background DB work
+            Log.i(TAG, "Boot detected. Initiating alarm rescheduling process.")
+            
+            // goAsync() is used to prevent the receiver from being killed immediately
+            // while we perform asynchronous database operations.
             val pendingResult = goAsync()
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
+                    Log.d(TAG, "Executing rescheduleAlarms in background coroutine...")
                     rescheduleAlarms()
-                    Log.d(TAG, "rescheduleAlarms successfully executed")
-                }catch (e: Exception){
-                    Log.e(TAG, "Error in rescheduleAlarms: ${e.message}", e)
-                }finally {
-                    Log.d(TAG, "Finishing pendingResult")
+                    Log.i(TAG, "Alarm rescheduling successfully completed.")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Critical error during rescheduling: ${e.message}", e)
+                } finally {
+                    Log.v(TAG, "Finishing async broadcast pendingResult.")
                     pendingResult.finish()
+                    Log.i(TAG, "--- BootReceiver Process Finished ---")
                 }
             }
+        } else {
+            Log.w(TAG, "Received unexpected action: $action. Skipping.")
         }
     }
 
     /**
-     * Fetches all tasks and their respective courses to re-register them in the system.
+     * Fetches all active courses and tasks from the database and re-schedules them.
      */
-    private suspend fun rescheduleAlarms(){
-        Log.d(TAG, "rescheduleAlarms: Fetching active courses, tasks, and settings")
-        // Fetch current snapshots of data from repositories
+    private suspend fun rescheduleAlarms() {
+        Log.d(TAG, "Fetching data for rescheduling: Courses, Tasks, and Settings...")
+        
+        // Retrieve current data snapshots from repositories
         val coursesResource = courseRepository.getAllActive().first()
         val tasksResource = taskRepository.getAll().first()
         val isAbsenceReminderEnabled = settingsRepository.getAbsenceReminderEnabled().first()
 
-        Log.d(TAG, "rescheduleAlarms resources: courses=${coursesResource::class.java.simpleName}, tasks=${tasksResource::class.java.simpleName}")
+        Log.v(TAG, "Repository results - Courses: ${coursesResource::class.java.simpleName}, Tasks: ${tasksResource::class.java.simpleName}")
 
-        if (coursesResource is Resource.Success && tasksResource is Resource.Success){
+        if (coursesResource is Resource.Success && tasksResource is Resource.Success) {
             val courses = coursesResource.data ?: emptyList()
             val tasks = tasksResource.data ?: emptyList()
-            Log.d(TAG, "rescheduleAlarms: Success. Processing ${courses.size} courses and ${tasks.size} tasks. Absence reminder enabled: $isAbsenceReminderEnabled")
+            
+            Log.i(TAG, "Data loaded successfully. Processing ${courses.size} courses and ${tasks.size} tasks.")
+            Log.d(TAG, "Absence reminder feature status: $isAbsenceReminderEnabled")
 
-            // Map courses by ID for efficient lookup
+            // Create a map of courses for efficient lookup by ID
             val courseMap = courses.associateBy { it.id }
 
             tasks.forEach { task ->
                 val course = courseMap[task.courseId]
-                if (course != null){
+                if (course != null) {
+                    Log.d(TAG, "Re-scheduling alarm for Task: '${task.title}' (ID: ${task.id})")
+                    // The alarmScheduler.schedule handles internal activity checks
                     alarmScheduler.schedule(course, task)
                 } else {
-                    Log.w(TAG, "Course not found for task id: ${task.id}")
+                    Log.w(TAG, "Warning: Associated course not found for Task: '${task.title}' (TaskID: ${task.id})")
                 }
             }
         } else {
-            Log.e(TAG, "rescheduleAlarms: Failed to fetch data from repositories")
+            // Determine which resource failed for better logging
+            val courseError = (coursesResource as? Resource.Error)?.message ?: "Success/Loading"
+            val taskError = (tasksResource as? Resource.Error)?.message ?: "Success/Loading"
+            Log.e(TAG, "Failed to load necessary data for rescheduling. CourseError: $courseError, TaskError: $taskError")
         }
     }
 }

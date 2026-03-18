@@ -22,10 +22,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+/**
+ * BroadcastReceiver responsible for handling alarm events triggered by the AlarmManager.
+ * It manages both lesson reminders and absence check notifications.
+ */
 class AlarmReceiver: BroadcastReceiver() {
 
-    private val tag = "AlarmReceiver"
+    private val TAG = "AlarmReceiver"
     
+    /**
+     * Entry point interface for Hilt to provide dependencies within the BroadcastReceiver,
+     * as BroadcastReceivers are instantiated by the system, not Hilt.
+     */
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     interface AlarmSchedulerEntryPoint{
@@ -34,26 +42,35 @@ class AlarmReceiver: BroadcastReceiver() {
         fun taskRepository(): ITaskRepository
     }
 
+    /**
+     * Called when the BroadcastReceiver is receiving an Intent broadcast.
+     * 
+     * @param context The Context in which the receiver is running.
+     * @param intent The Intent being received.
+     */
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
-        Log.d(tag, "onReceive: action=$action")
+        Log.i(TAG, "--- onReceive Triggered ---")
+        Log.d(TAG, "Action received: $action")
 
         if (action == null) {
-            Log.w(tag, "Action is null, skipping")
+            Log.w(TAG, "Aborted: Action is null.")
             return
         }
 
+        // Extract IDs from the intent extras
         val courseId = intent.getStringExtra(AlarmSchedulerImp.EXTRA_COURSE_ID)
         val taskId = intent.getStringExtra(AlarmSchedulerImp.EXTRA_TASK_ID)
         
-        Log.d(tag, "Extras received - CourseID: $courseId, TaskID: $taskId")
+        Log.d(TAG, "Extras extracted: [CourseID: $courseId, TaskID: $taskId]")
 
         if (courseId == null || taskId == null) {
-            Log.e(tag, "Missing extras (courseId or taskId), aborting")
+            Log.e(TAG, "Aborted: Missing mandatory extras (CourseID or TaskID).")
             return
         }
 
-        // Hilt EntryPoint ile Repository'lere erişmek için
+        // Access Hilt dependencies via EntryPoint
+        Log.v(TAG, "Accessing Hilt EntryPoint dependencies...")
         val hiltEntryPoint = EntryPointAccessors.fromApplication(
             context.applicationContext,
             AlarmSchedulerEntryPoint::class.java
@@ -62,87 +79,108 @@ class AlarmReceiver: BroadcastReceiver() {
         val courseRepository = hiltEntryPoint.courseRepository()
         val taskRepository = hiltEntryPoint.taskRepository()
 
-        // Veritabanı işlemi için Coroutine başlat
-        val pendingResult = goAsync() // Receiver'ın hemen ölmemesi için
+        // Use goAsync to keep the receiver alive during background coroutine execution
+        val pendingResult = goAsync() 
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                Log.d(tag, "Fetching data from repositories...")
+                Log.d(TAG, "Fetching Course and Task details from database...")
                 val courseResource = courseRepository.getById(courseId).first()
                 val taskResource = taskRepository.getById(taskId).first()
                 
                 val course = courseResource.data
                 val task = taskResource.data
 
-                Log.d(tag, "Data fetch result - Course found: ${course != null}, Task found: ${task != null}")
+                Log.d(TAG, "Fetch result: Course found = ${course != null}, Task found = ${task != null}")
 
                 if (course != null && task != null) {
-                    Log.d(tag, "Checking activity status - Course active: ${course.isActive}, Task active: ${task.isActive}")
-                    // bildirim gostermeden once hala aktif mi kontrol et
+                    Log.d(TAG, "Validating activity status: CourseActive=${course.isActive}, TaskActive=${task.isActive}")
+                    
+                    // If either the course or the task is no longer active, we should not proceed
                     if (!course.isActive || !task.isActive) {
-                        Log.d(tag, "Target is inactive, cancelling alarms and skipping notification")
-                        alarmScheduler.cancel(course, task) // Artık gereksizse iptal et
+                        Log.i(TAG, "Target is inactive. Cancelling future alarms and skipping notification.")
+                        alarmScheduler.cancel(course, task) 
                         return@launch
                     }
 
+                    // Direct the flow based on the intent action
                     when(action){
                         AlarmSchedulerImp.ACTION_REMINDER -> {
-                            Log.d(tag, "Action matched: ACTION_REMINDER")
-                            // Ders başlamadan önceki bildirim
+                            Log.i(TAG, "Processing Reminder Action.")
                             showReminderNotification(context, course, task)
-                            // Periyodik ders ise bir sonraki haftayı planla
-                            Log.d(tag, "Attempting to reschedule for next occurrence")
+                            
+                            // For recurring tasks, attempt to schedule the next occurrence
+                            Log.d(TAG, "Triggering reschedule for the next occurrence if applicable.")
                             alarmScheduler.reschedule(course, task)
                         }
 
                         AlarmSchedulerImp.ACTION_ABSENCE_CHECK -> {
-                            Log.d(tag, "Action matched: ACTION_ABSENCE_CHECK")
-                            // Ders bittikten sonraki yoklama bildirimi
+                            Log.i(TAG, "Processing Absence Check Action.")
                             showAbsenceCheckNotification(context, course, task)
                         }
                         else -> {
-                            Log.w(tag, "Unknown action: $action")
+                            Log.w(TAG, "Received an unexpected action: $action")
                         }
                     }
                 } else {
-                    Log.e(tag, "Could not proceed: course or task is null in DB")
+                    Log.e(TAG, "Process failed: Course or Task not found in database for the provided IDs.")
                 }
-            }catch (e: Exception){
-                Log.e(tag, "Error in AlarmReceiver: ${e.message}", e)
-            }finally {
-                Log.d(tag, "Finishing async broadcast result")
+            } catch (e: Exception) {
+                Log.e(TAG, "Error encountered during alarm processing: ${e.message}", e)
+            } finally {
+                Log.d(TAG, "Completing async broadcast result.")
                 pendingResult.finish()
+                Log.i(TAG, "--- onReceive Process Finished ---")
             }
         }
     }
 
+    /**
+     * Constructs and displays a reminder notification for an upcoming task.
+     * 
+     * @param context The context for building the notification.
+     * @param course The associated course.
+     * @param task The task that is about to start.
+     */
     private fun showReminderNotification(context: Context, course: Course, task: Task){
-        Log.d(tag, "showReminderNotification for task: ${task.title}")
+        Log.d(TAG, "Preparing Reminder Notification for Task: '${task.title}'")
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        // Build the notification content
         val notification = NotificationCompat.Builder(context, "schedule_reminders")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(course.title)
-            .setContentText("${task.title} ${task.remindBefore} dk sonra baslayacak.")
+            .setContentText("${task.title} will start in ${task.remindBefore} minutes.")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .build()
         
         val notificationId = task.id.hashCode()
-        Log.d(tag, "Posting reminder notification with ID: $notificationId")
+        Log.i(TAG, "Displaying Reminder Notification (ID: $notificationId)")
         notificationManager.notify(notificationId, notification)
     }
 
+    /**
+     * Constructs and displays an absence check notification after a lesson.
+     * 
+     * @param context The context for building the notification.
+     * @param course The associated course.
+     * @param task The lesson task to check attendance for.
+     */
     private fun showAbsenceCheckNotification(context: Context, course: Course, task: Task) {
-        Log.d(tag, "showAbsenceCheckNotification for task: ${task.title}")
+        Log.d(TAG, "Preparing Absence Check Notification for Task: '${task.title}'")
+        
+        // Absence check is only relevant for Lesson types
         if (task !is Task.Lesson) {
-            Log.w(tag, "Task is not a Lesson, skipping absence check notification")
+            Log.w(TAG, "Aborted: Absence check requested for a non-lesson task.")
             return
         }
 
-        val notificationId = task.id.hashCode() + 1 // Reminder ID'si ile çakışmaması için +1
+        // Unique ID for the absence check notification
+        val notificationId = task.id.hashCode() + 1 
 
-        //evet derse katildim butonu icin intent
+        // Intent for the 'Yes' (Attended) action
+        Log.v(TAG, "Creating PendingIntent for 'ACTION_ATTENDED_YES'")
         val yesIntent = Intent(context, NotificationActionReceiver::class.java).apply {
             action = "ACTION_ATTENDED_YES"
             putExtra("EXTRA_NOTIFICATION_ID", notificationId)
@@ -152,7 +190,8 @@ class AlarmReceiver: BroadcastReceiver() {
             context, notificationId, yesIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        //hayir derse katilmadim butonu icin intent
+        // Intent for the 'No' (Missed) action
+        Log.v(TAG, "Creating PendingIntent for 'ACTION_ATTENDED_NO'")
         val noIntent = Intent(context, NotificationActionReceiver::class.java).apply {
             action = "ACTION_ATTENDED_NO"
             putExtra("EXTRA_NOTIFICATION_ID", notificationId)
@@ -162,17 +201,18 @@ class AlarmReceiver: BroadcastReceiver() {
             context, notificationId + 1, noIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        // Build the notification with actions
         val notification = NotificationCompat.Builder(context, "schedule_reminders")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Derse Katildin mi?")
-            .setContentText("'${course.title}' dersine katılabildin mi?")
+            .setContentTitle("Did you attend?")
+            .setContentText("Were you able to attend the '${course.title}' lesson?")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .addAction(R.drawable.ic_launcher_foreground, "Evet", yesPendingIntent)
-            .addAction(R.drawable.ic_launcher_foreground, "Hayır", noPendingIntent)
+            .addAction(R.drawable.ic_launcher_foreground, "Yes", yesPendingIntent)
+            .addAction(R.drawable.ic_launcher_foreground, "No", noPendingIntent)
             .setAutoCancel(true)
             .build()
         
-        Log.d(tag, "Posting absence check notification with ID: $notificationId")
+        Log.i(TAG, "Displaying Absence Check Notification (ID: $notificationId)")
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(notificationId, notification)
     }
