@@ -9,6 +9,8 @@ import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.domain.usecase.tag.GetTagDisplayItemListUseCase
 import com.saboon.project_2511sch.domain.usecase.tag.TagReadUseCase
 import com.saboon.project_2511sch.domain.usecase.tag.TagWriteUseCase
+import com.saboon.project_2511sch.util.BaseVMOperationResult
+import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,7 +36,7 @@ class ViewModelTag @Inject constructor(
     private val alarmScheduler: IAlarmScheduler
 ): ViewModel() {
 
-    private val _operationEvent = Channel<Resource<Tag>>()
+    private val _operationEvent = Channel<Resource<BaseVMOperationResult<Tag>>>()
     val operationEvent = _operationEvent.receiveAsFlow()
 
     private val _selectedId = MutableStateFlow<String?>(null)
@@ -64,13 +66,13 @@ class ViewModelTag @Inject constructor(
     fun  getById(id: String){
         _selectedId.value = id
     }
-    fun insert(tag: Tag) = executeWriteAction{
+    fun insert(tag: Tag) = executeWriteAction(OperationType.INSERT){
         tagWriteUseCase.insert(tag)
     }
-    fun update(tag: Tag) = executeWriteAction{
+    fun update(tag: Tag) = executeWriteAction(OperationType.UPDATE){
         tagWriteUseCase.update(tag)
     }
-    fun delete(tag: Tag) = executeWriteAction{
+    fun delete(tag: Tag) = executeWriteAction(OperationType.DELETE){
         tagWriteUseCase.delete(tag)
     }
     fun syncAlarms(tag: Tag, onComplete: () -> Unit){
@@ -81,11 +83,19 @@ class ViewModelTag @Inject constructor(
             onComplete()
         }
     }
-    private fun executeWriteAction(action: suspend () -> Resource<Tag>) {
+    private fun executeWriteAction(type: OperationType, action: suspend () -> Resource<Tag>) {
         viewModelScope.launch {
             try {
                 _operationEvent.send(Resource.Loading())
-                _operationEvent.send(action())
+                val result = action()
+                when(result){
+                    is Resource.Error -> {_operationEvent.send(Resource.Error(result.message ?: "Error"))}
+                    is Resource.Idle -> {_operationEvent.send(Resource.Idle())}
+                    is Resource.Loading -> {_operationEvent.send(Resource.Loading())}
+                    is Resource.Success -> {
+                        _operationEvent.send(Resource.Success(BaseVMOperationResult(result.data!!, type)))
+                    }
+                }
             } catch (e: Exception) {
                 _operationEvent.send(Resource.Error(e.localizedMessage ?: "Unexpected error"))
             }

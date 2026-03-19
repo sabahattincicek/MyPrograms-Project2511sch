@@ -29,6 +29,7 @@ import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
+import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -244,17 +245,30 @@ class DialogFragmentTag: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
                         is Resource.Success -> {
-                            // eger update islemi yapildiysa ve activation degisitirildiyse bu taga
-                            // bagli butun derslerin altindaki tasklarin alarmlarini sync et
-                            if (tag != null && event.data != null){
-                                if (tag!!.isActive != event.data.isActive){
-                                    viewModelTag.syncAlarms(event.data){
+                            val operationResult = event.data //BaseVMOperationResult<Tag>
+//                            tag = operationResult?.data
+                            val type = operationResult?.operationType
+
+                            when(type) {
+                                OperationType.INSERT -> {dismiss()}
+                                OperationType.UPDATE -> {
+                                    // eger update islemi yapildiysa ve activation degisitirildiyse bu taga
+                                    // bagli butun derslerin altindaki tasklarin alarmlarini sync et
+                                    if (tag != null){
+                                        if (tag!!.isActive != operationResult.data.isActive){
+                                            tag = operationResult.data
+                                            viewModelTag.syncAlarms(tag!!){
+                                                dismiss()
+                                            }
+                                        }else{
+                                            dismiss()
+                                        }
+                                    }else{
                                         dismiss()
                                     }
                                 }
-                                dismiss()
-                            }else{
-                                dismiss()
+                                OperationType.DELETE -> {dismiss()}
+                                null -> {dismiss()}
                             }
                         }
                     }

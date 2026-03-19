@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.domain.usecase.user.UserReadUseCase
 import com.saboon.project_2511sch.domain.usecase.user.UserWriteUseCase
+import com.saboon.project_2511sch.util.BaseVMOperationResult
+import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -20,7 +22,7 @@ class ViewModelUser @Inject constructor(
     private val userWriteUseCase: UserWriteUseCase,
     private val userReadUseCase: UserReadUseCase
 ): ViewModel() {
-    private val _operationEvent = Channel<Resource<User>>()
+    private val _operationEvent = Channel<Resource<BaseVMOperationResult<User>>>()
     val operationEvent = _operationEvent.receiveAsFlow()
 
     //STATE
@@ -33,21 +35,29 @@ class ViewModelUser @Inject constructor(
 
 
     // ACTIONS
-    fun insert(user: User) = executeWriteAction {
+    fun insert(user: User) = executeWriteAction(OperationType.INSERT) {
         userWriteUseCase.insert(user)
     }
-    fun update(user: User) = executeWriteAction {
+    fun update(user: User) = executeWriteAction(OperationType.UPDATE) {
         userWriteUseCase.update(user)
     }
-    fun delete(user: User) = executeWriteAction {
+    fun delete(user: User) = executeWriteAction(OperationType.DELETE) {
         userWriteUseCase.delete(user)
     }
 
-    private fun executeWriteAction(action: suspend () -> Resource<User>) {
+    private fun executeWriteAction(type: OperationType, action: suspend () -> Resource<User>) {
         viewModelScope.launch {
             try {
                 _operationEvent.send(Resource.Loading())
-                _operationEvent.send(action())
+                val result = action()
+                when(result){
+                    is Resource.Error -> {_operationEvent.send(Resource.Error(result.message ?: "Error"))}
+                    is Resource.Idle -> {_operationEvent.send(Resource.Idle())}
+                    is Resource.Loading -> {_operationEvent.send(Resource.Loading())}
+                    is Resource.Success -> {
+                        _operationEvent.send(Resource.Success(BaseVMOperationResult(result.data!!, type)))
+                    }
+                }
             } catch (e: Exception) {
                 _operationEvent.send(Resource.Error(e.localizedMessage ?: "Unexpected error"))
             }

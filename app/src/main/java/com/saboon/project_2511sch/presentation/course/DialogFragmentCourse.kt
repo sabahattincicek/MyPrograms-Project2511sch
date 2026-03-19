@@ -31,6 +31,7 @@ import com.saboon.project_2511sch.presentation.tag.DisplayItemTag
 import com.saboon.project_2511sch.presentation.tag.ViewModelTag
 import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
+import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -312,20 +313,29 @@ class DialogFragmentCourse: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
                         is Resource.Success -> {
-                            // eger update islemi yapildiysa ve activation degisitirildiyse bu derse
-                            // bagli butun tasklarin alarmlarini sync et
-                            val updatedCourse = event.data
-                            if (course != null && updatedCourse != null){
-                                if (course!!.isActive != updatedCourse.isActive){
-                                    Log.d(TAG, "Activation status changed: ${course?.isActive} -> ${updatedCourse.isActive}. Syncing alarms...")
-                                    viewModelCourse.syncAlarms(event.data){
+                            val operationResult = event.data //BaseVMOperationResult<Course>
+//                            course = operationResult?.data
+                            val type = operationResult?.operationType
+                            when(type) {
+                                OperationType.INSERT -> {dismiss()}
+                                OperationType.UPDATE -> {
+                                    // eger update islemi yapildiysa ve activation degisitirildiyse bu derse
+                                    // bagli butun tasklarin alarmlarini sync et
+                                    if (course != null){
+                                        if (course!!.isActive != operationResult.data.isActive){
+                                            course = operationResult.data
+                                            viewModelCourse.syncAlarms(course!!){
+                                                dismiss()
+                                            }
+                                        }else{
+                                            dismiss()
+                                        }
+                                    }else{
                                         dismiss()
                                     }
-                                }else{
-                                    dismiss()
                                 }
-                            }else{
-                                dismiss()
+                                OperationType.DELETE -> {dismiss()}
+                                null -> {dismiss()}
                             }
                         }
                     }
