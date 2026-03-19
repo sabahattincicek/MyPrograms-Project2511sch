@@ -255,6 +255,7 @@ class AlarmSchedulerImp @Inject constructor (
                     val absenceRC = getRequestCode(lesson.id, TYPE_ABSENCE)
                     val absenceIntent = createIntent(course, lesson, ACTION_ABSENCE_CHECK)
                     alarmManager.cancel(createPendingIntent(absenceRC, absenceIntent))
+                    Log.d(TAG_MAIN, "Explicitly cancelled absence check for Lesson ${lesson.id} during global sync.")
                     Log.d(TAG_DETAIL, "Explicitly cancelled absence check for Lesson ${lesson.id} during global sync.")
                 }
             }
