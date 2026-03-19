@@ -9,6 +9,7 @@ import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -84,7 +85,7 @@ class CourseRepositoryImp @Inject constructor(
             }
     }
 
-    override fun getAllByProgramTableId(id: String): Flow<Resource<List<Course>>> {
+    override fun getAllByTagId(id: String): Flow<Resource<List<Course>>> {
         return courseDao.getAllByTagId(id)
             .map<List<CourseEntity>, Resource<List<Course>>> { courseEntities ->
                 Resource.Success(courseEntities.map { it.toDomain() })
@@ -114,21 +115,23 @@ class CourseRepositoryImp @Inject constructor(
             }
     }
 
-    override suspend fun getAllCount(): Resource<Int> {
-        try {
-            val count = courseDao.getAllCount()
-            return Resource.Success(count)
+    override suspend fun removeTagFromCourses(tagId: String): Resource<Unit> {
+        return try {
+            val coursesResult = courseDao.getAllByTagId(tagId).first()
+            if (coursesResult.isNotEmpty()){
+                val currentTime = System.currentTimeMillis()
+                val updatedEntities = coursesResult.map { entity ->
+                    entity.copy(
+                        tagId = null,
+                        version = entity.version + 1,
+                        updatedAt = currentTime
+                    )
+                }
+                courseDao.updateAll(updatedEntities)
+            }
+            Resource.Success(Unit)
         }catch (e: Exception){
-            return Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
-        }
-    }
-
-    override suspend fun getAllActiveCount(): Resource<Int> {
-        try {
-            val count = courseDao.getAllActiveCount()
-            return Resource.Success(count)
-        }catch (e: Exception){
-            return Resource.Error(e.localizedMessage ?: "An unexpected error occurred")
+            Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
     }
 }
