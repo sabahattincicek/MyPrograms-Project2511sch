@@ -78,13 +78,5 @@
         <action
             android:id="@+id/action_fragmentCourseList_to_courseDetailsFragment"
             app:destination="@id/fragmentCourseDetails" />
-        <action
-            android:id="@+id/action_fragmentCourseList_to_programTableListFragment"
-            app:destination="@id/fragmentTag" />
     </fragment>
-    <fragment
-        android:id="@+id/fragmentTag"
-        android:name="com.saboon.project_2511sch.presentation.tag.FragmentTag"
-        android:label="fragment_program_table_list"
-        tools:layout="@layout/fragment_tag" />
 </navigation>

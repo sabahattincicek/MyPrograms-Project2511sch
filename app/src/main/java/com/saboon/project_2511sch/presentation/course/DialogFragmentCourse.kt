@@ -26,7 +26,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.tag.DialogFragmentTag
-import com.saboon.project_2511sch.presentation.tag.DialogFragmentTagList
+import com.saboon.project_2511sch.presentation.tag.DialogFragmentManageTag
 import com.saboon.project_2511sch.presentation.tag.DisplayItemTag
 import com.saboon.project_2511sch.presentation.tag.ViewModelTag
 import com.saboon.project_2511sch.util.ModelColor
@@ -152,22 +152,24 @@ class DialogFragmentCourse: DialogFragment() {
         }
 
         binding.etTag.setOnClickListener {
-            if (tagList.isEmpty()){
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("No Tags Found")
-                    .setMessage("There are no tags created yet. Would you like to create a new one now?")
-                    .setNegativeButton("Cancel"){ dialog, which ->
-                        dialog.dismiss()
-                    }
-                    .setPositiveButton("Create New Tag"){ dialog, which ->
-                        val dialogTag = DialogFragmentTag.newInstanceForCreate(currentUser)
-                        dialogTag.show(childFragmentManager, "Dialog Fragment Tag")
-                    }
-                    .show()
-            }else{
-                val dialog = DialogFragmentTagList()
-                dialog.show(childFragmentManager, "DialogFragmentList")
-            }
+            val dialog = DialogFragmentManageTag.newInstanceForSelect()
+            dialog.show(childFragmentManager, "DialogFragmentList")
+//            if (tagList.isEmpty()){
+//                MaterialAlertDialogBuilder(requireContext())
+//                    .setTitle("No Tags Found")
+//                    .setMessage("There are no tags created yet. Would you like to create a new one now?")
+//                    .setNegativeButton("Cancel"){ dialog, which ->
+//                        dialog.dismiss()
+//                    }
+//                    .setPositiveButton("Create New Tag"){ dialog, which ->
+//                        val dialogTag = DialogFragmentTag.newInstanceForCreate(currentUser)
+//                        dialogTag.show(childFragmentManager, "Dialog Fragment Tag")
+//                    }
+//                    .show()
+//            }else{
+//                val dialog = DialogFragmentManageTag.newInstanceForSelect()
+//                dialog.show(childFragmentManager, "DialogFragmentList")
+//            }
         }
 
         binding.mcvColor1.setOnClickListener {
@@ -247,22 +249,14 @@ class DialogFragmentCourse: DialogFragment() {
     }
 
     private fun setupListeners(){
-        //TAG CREATE LISTENER
-        setFragmentResultListener(DialogFragmentTag.REQUEST_TAG){ requestKey, bundle ->
-            val resultTag = BundleCompat.getParcelable(bundle, DialogFragmentTag.RESULT_TAG, Tag::class.java)
-            resultTag?.let { tag ->
-                selectedTag = tag
-                binding.etTag.setText(tag.title)
-            }
-        }
         binding.tilTag.setEndIconOnClickListener {
             binding.etTag.text = null
             selectedTag = null
         }
 
-        //TAG LIST LISTENER
-        childFragmentManager.setFragmentResultListener(DialogFragmentTagList.REQUEST_TAG, viewLifecycleOwner){ requestKey, bundle ->
-            val resultTag = BundleCompat.getParcelable(bundle, DialogFragmentTagList.RESULT_TAG,Tag::class.java)
+        //TAG SELECT LISTENER
+        childFragmentManager.setFragmentResultListener(DialogFragmentManageTag.REQUEST_TAG, viewLifecycleOwner){ requestKey, bundle ->
+            val resultTag = BundleCompat.getParcelable(bundle, DialogFragmentManageTag.RESULT_TAG,Tag::class.java)
             resultTag?.let { tag ->
                 selectedTag = tag
                 binding.etTag.setText(tag.title)

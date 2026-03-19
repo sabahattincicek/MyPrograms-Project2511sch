@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentCourseListBinding
 import com.saboon.project_2511sch.domain.model.User
+import com.saboon.project_2511sch.presentation.tag.DialogFragmentManageTag
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,8 +60,8 @@ class FragmentCourseList : Fragment() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.action_manage -> {
-                    val action = FragmentCourseListDirections.actionFragmentCourseListToProgramTableListFragment()
-                    findNavController().navigate(action)
+                    val dialog = DialogFragmentManageTag.newInstanceForManage()
+                    dialog.show(childFragmentManager, "DialogFragmentManageTag")
                     true
                 }
                 else -> false
