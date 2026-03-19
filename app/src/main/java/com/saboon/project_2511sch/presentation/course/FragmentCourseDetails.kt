@@ -122,7 +122,7 @@ class FragmentCourseDetails : Fragment() {
             showAddTaskMenu(view)
         }
         binding.ivFiles.setOnClickListener {
-            val action = FragmentCourseDetailsDirections.actionCourseDetailsFragmentToFileFragment(tag, course)
+            val action = FragmentCourseDetailsDirections.actionCourseDetailsFragmentToFileFragment(course,  course.title)
             findNavController().navigate(action)
         }
     }

@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.util.query
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
@@ -42,10 +43,9 @@ class FragmentFile : Fragment() {
     private val viewModelSFile: ViewModelSFile by viewModels()
     private lateinit var recyclerAdapterSFile: RecyclerAdapterSFile
     private lateinit var currentUser: User
-    private var programTable: Tag? = null
     private var course: Course? = null
-    private var task: Task? = null
     private var uri: Uri? = null
+    private var searchFilter: String? = null
 
     private val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         if (uri != null) {
@@ -89,8 +89,7 @@ class FragmentFile : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         course = args.course
-        task = args.task
-        Log.d(tag, "onViewCreated: Initial args received - PT: ${programTable?.title}, Course: ${course?.title}, Task: ${task?.title}")
+        searchFilter = args.searchFilter
 
         setupRecyclerAdapter()
         setupObservers()
@@ -197,6 +196,12 @@ class FragmentFile : Fragment() {
                                     binding.rvFile.visibility = View.VISIBLE
 
                                     recyclerAdapterSFile.submitList(sFileDisplayItemList)
+
+                                    searchFilter?.let { query ->
+                                        if (query.isNotEmpty() && binding.etSearch.text.isNullOrEmpty()){
+                                            binding.etSearch.setText(query)
+                                        }
+                                    }
                                 }
                             }
                         }
