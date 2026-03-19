@@ -14,7 +14,7 @@ sealed class DisplayItemSFile: BaseDisplayListItem {
         override val isClickable: Boolean = false
     }
     data class ContentSFile(
-        val course: Course?,
+        val course: Course,
         val sFile: SFile
     ): DisplayItemSFile(){
         override val id: String = sFile.id

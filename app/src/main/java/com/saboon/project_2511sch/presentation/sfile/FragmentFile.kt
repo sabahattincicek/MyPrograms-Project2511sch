@@ -17,13 +17,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.util.query
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentFileBinding
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.SFile
-import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
@@ -100,17 +97,26 @@ class FragmentFile : Fragment() {
             val sFileDisplayList = viewModelSFile.filesState.value.data
             if(sFileDisplayList != null){
                 if (query.isNotEmpty()){
-                    val filteredList = sFileDisplayList.filter { item ->
-                        if (item is DisplayItemSFile.ContentSFile){
-                            val sFile = item.sFile
-                            val titleMatches = sFile.title.contains(query, ignoreCase = true)
-                            val courseTitleMatches = sFile.courseId.contains(query, ignoreCase = true)
-                            titleMatches || courseTitleMatches
-                        }else{
-                            false
+                    val filteredContents = sFileDisplayList.filterIsInstance<DisplayItemSFile.ContentSFile>()
+                        .filter { displayItemSFileContentSFile ->
+                            val sFile = displayItemSFileContentSFile.sFile
+                            val course = displayItemSFileContentSFile.course
+                            val sFileTitleMatches = sFile.title.contains(query, ignoreCase = true)
+                            val courseTitleMatches = course.title.contains(query, ignoreCase = true)
+                            sFileTitleMatches || courseTitleMatches
                         }
+
+                    val newDisplayList = mutableListOf<DisplayItemSFile>()
+                    val groupedByCourse = filteredContents.groupBy { it.course.id }
+
+                    groupedByCourse.forEach {(key, contents) ->
+                        val firstContent = contents.first()
+                        newDisplayList.add(DisplayItemSFile.HeaderSFile(firstContent.course.title))
+                        newDisplayList.addAll(contents)
                     }
-                    recyclerAdapterSFile.submitList(filteredList)
+
+                    newDisplayList.add(DisplayItemSFile.FooterSFile(filteredContents.size))
+                    recyclerAdapterSFile.submitList(newDisplayList)
                 }else{
                     recyclerAdapterSFile.submitList(sFileDisplayList)
                 }
