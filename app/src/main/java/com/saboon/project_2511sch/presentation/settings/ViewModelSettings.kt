@@ -5,15 +5,22 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import androidx.lifecycle.viewModelScope
+import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
+import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.ISettingsRepository
+import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ViewModelSettings @Inject constructor(
-    private val settingsRepository: ISettingsRepository
+    private val settingsRepository: ISettingsRepository,
+    private val courseRepository: ICourseRepository,
+    private val taskRepository: ITaskRepository,
+    private val alarmScheduler: IAlarmScheduler
 ): ViewModel() {
 
     // STATES
@@ -105,6 +112,9 @@ class ViewModelSettings @Inject constructor(
     fun onAbsenceReminderEnabledChanged(enabled: Boolean){
         viewModelScope.launch {
             settingsRepository.setAbsenceReminderEnabled(enabled)
+            val courses = courseRepository.getAllActive().first().data ?: emptyList()
+            val tasks = taskRepository.getAll().first().data ?: emptyList()
+            alarmScheduler.syncAbsenceAlarms(enabled, courses, tasks)
         }
     }
 }

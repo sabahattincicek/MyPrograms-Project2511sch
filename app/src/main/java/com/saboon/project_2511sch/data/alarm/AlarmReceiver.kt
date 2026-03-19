@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 class AlarmReceiver: BroadcastReceiver() {
 
     private val TAG = "AlarmReceiver"
+    private val TAG_DETAIL = "AlarmReceiverDetail"
     
     /**
      * Entry point interface for Hilt to provide dependencies within the BroadcastReceiver,
@@ -51,10 +52,10 @@ class AlarmReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
         Log.i(TAG, "--- onReceive Triggered ---")
-        Log.d(TAG, "Action received: $action")
+        Log.d(TAG_DETAIL, "Action received: $action")
 
         if (action == null) {
-            Log.w(TAG, "Aborted: Action is null.")
+            Log.w(TAG_DETAIL, "Aborted: Action is null.")
             return
         }
 
@@ -62,15 +63,15 @@ class AlarmReceiver: BroadcastReceiver() {
         val courseId = intent.getStringExtra(AlarmSchedulerImp.EXTRA_COURSE_ID)
         val taskId = intent.getStringExtra(AlarmSchedulerImp.EXTRA_TASK_ID)
         
-        Log.d(TAG, "Extras extracted: [CourseID: $courseId, TaskID: $taskId]")
+        Log.d(TAG_DETAIL, "Extras extracted: [CourseID: $courseId, TaskID: $taskId]")
 
         if (courseId == null || taskId == null) {
-            Log.e(TAG, "Aborted: Missing mandatory extras (CourseID or TaskID).")
+            Log.e(TAG_DETAIL, "Aborted: Missing mandatory extras (CourseID or TaskID).")
             return
         }
 
         // Access Hilt dependencies via EntryPoint
-        Log.v(TAG, "Accessing Hilt EntryPoint dependencies...")
+        Log.v(TAG_DETAIL, "Accessing Hilt EntryPoint dependencies...")
         val hiltEntryPoint = EntryPointAccessors.fromApplication(
             context.applicationContext,
             AlarmSchedulerEntryPoint::class.java
@@ -84,17 +85,17 @@ class AlarmReceiver: BroadcastReceiver() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                Log.d(TAG, "Fetching Course and Task details from database...")
+                Log.d(TAG_DETAIL, "Fetching Course and Task details from database...")
                 val courseResource = courseRepository.getById(courseId).first()
                 val taskResource = taskRepository.getById(taskId).first()
                 
                 val course = courseResource.data
                 val task = taskResource.data
 
-                Log.d(TAG, "Fetch result: Course found = ${course != null}, Task found = ${task != null}")
+                Log.d(TAG_DETAIL, "Fetch result: Course found = ${course != null}, Task found = ${task != null}")
 
                 if (course != null && task != null) {
-                    Log.d(TAG, "Validating activity status: CourseActive=${course.isActive}, TaskActive=${task.isActive}")
+                    Log.d(TAG_DETAIL, "Validating activity status: CourseActive=${course.isActive}, TaskActive=${task.isActive}")
                     
                     // If either the course or the task is no longer active, we should not proceed
                     if (!course.isActive || !task.isActive) {
@@ -106,17 +107,20 @@ class AlarmReceiver: BroadcastReceiver() {
                     // Direct the flow based on the intent action
                     when(action){
                         AlarmSchedulerImp.ACTION_REMINDER -> {
-                            Log.i(TAG, "Processing Reminder Action.")
+                            Log.i(TAG, "Reminder shown for ${course.title} - ${task.title}")
                             showReminderNotification(context, course, task)
                             
                             // For recurring tasks, attempt to schedule the next occurrence
-                            Log.d(TAG, "Triggering reschedule for the next occurrence if applicable.")
-                            alarmScheduler.reschedule(course, task)
+                            Log.d(TAG_DETAIL, "Triggering reschedule for the next occurrence.")
+                            alarmScheduler.reschedule(course, task, action)
                         }
 
                         AlarmSchedulerImp.ACTION_ABSENCE_CHECK -> {
-                            Log.i(TAG, "Processing Absence Check Action.")
+                            Log.i(TAG, "Absence Check shown for ${course.title} - ${task.title}")
                             showAbsenceCheckNotification(context, course, task)
+                            
+                            Log.d(TAG_DETAIL, "Triggering reschedule for the next occurrence.")
+                            alarmScheduler.reschedule(course, task, action)
                         }
                         else -> {
                             Log.w(TAG, "Received an unexpected action: $action")
@@ -128,7 +132,7 @@ class AlarmReceiver: BroadcastReceiver() {
             } catch (e: Exception) {
                 Log.e(TAG, "Error encountered during alarm processing: ${e.message}", e)
             } finally {
-                Log.d(TAG, "Completing async broadcast result.")
+                Log.d(TAG_DETAIL, "Completing async broadcast result.")
                 pendingResult.finish()
                 Log.i(TAG, "--- onReceive Process Finished ---")
             }
@@ -143,7 +147,7 @@ class AlarmReceiver: BroadcastReceiver() {
      * @param task The task that is about to start.
      */
     private fun showReminderNotification(context: Context, course: Course, task: Task){
-        Log.d(TAG, "Preparing Reminder Notification for Task: '${task.title}'")
+        Log.d(TAG_DETAIL, "Preparing Reminder Notification for Task: '${task.title}'")
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Build the notification content
@@ -156,7 +160,7 @@ class AlarmReceiver: BroadcastReceiver() {
             .build()
         
         val notificationId = task.id.hashCode()
-        Log.i(TAG, "Displaying Reminder Notification (ID: $notificationId)")
+        Log.v(TAG_DETAIL, "Displaying Reminder Notification (ID: $notificationId)")
         notificationManager.notify(notificationId, notification)
     }
 
@@ -168,11 +172,11 @@ class AlarmReceiver: BroadcastReceiver() {
      * @param task The lesson task to check attendance for.
      */
     private fun showAbsenceCheckNotification(context: Context, course: Course, task: Task) {
-        Log.d(TAG, "Preparing Absence Check Notification for Task: '${task.title}'")
+        Log.d(TAG_DETAIL, "Preparing Absence Check Notification for Task: '${task.title}'")
         
         // Absence check is only relevant for Lesson types
         if (task !is Task.Lesson) {
-            Log.w(TAG, "Aborted: Absence check requested for a non-lesson task.")
+            Log.w(TAG_DETAIL, "Aborted: Absence check requested for a non-lesson task.")
             return
         }
 
@@ -180,7 +184,7 @@ class AlarmReceiver: BroadcastReceiver() {
         val notificationId = task.id.hashCode() + 1 
 
         // Intent for the 'Yes' (Attended) action
-        Log.v(TAG, "Creating PendingIntent for 'ACTION_ATTENDED_YES'")
+        Log.v(TAG_DETAIL, "Creating PendingIntent for 'ACTION_ATTENDED_YES'")
         val yesIntent = Intent(context, NotificationActionReceiver::class.java).apply {
             action = "ACTION_ATTENDED_YES"
             putExtra("EXTRA_NOTIFICATION_ID", notificationId)
@@ -191,7 +195,7 @@ class AlarmReceiver: BroadcastReceiver() {
         )
 
         // Intent for the 'No' (Missed) action
-        Log.v(TAG, "Creating PendingIntent for 'ACTION_ATTENDED_NO'")
+        Log.v(TAG_DETAIL, "Creating PendingIntent for 'ACTION_ATTENDED_NO'")
         val noIntent = Intent(context, NotificationActionReceiver::class.java).apply {
             action = "ACTION_ATTENDED_NO"
             putExtra("EXTRA_NOTIFICATION_ID", notificationId)
@@ -212,7 +216,7 @@ class AlarmReceiver: BroadcastReceiver() {
             .setAutoCancel(true)
             .build()
         
-        Log.i(TAG, "Displaying Absence Check Notification (ID: $notificationId)")
+        Log.v(TAG_DETAIL, "Displaying Absence Check Notification (ID: $notificationId)")
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(notificationId, notification)
     }

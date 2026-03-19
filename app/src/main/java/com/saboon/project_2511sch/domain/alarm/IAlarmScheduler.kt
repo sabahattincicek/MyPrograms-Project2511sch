@@ -25,7 +25,7 @@ interface IAlarmScheduler {
      * Called by the Receiver to set the next occurrence
      * if the task is a recurring lesson.
      */
-    fun reschedule(course: Course, task: Task)
+    fun reschedule(course: Course, task: Task, firedAction: String)
 
     /** Synchronizes all alarms for a specific course.
      * This is typically called when a course's active status changes,
@@ -39,4 +39,6 @@ interface IAlarmScheduler {
      * on all related course notifications in one operation.
      */
     fun checkAndSyncTagAlarms(tag: Tag, courses: List<Course>, tasks: List<Task>)
+
+    fun syncAbsenceAlarms(isEnabled: Boolean, courses: List<Course>, tasks: List<Task>)
 }
