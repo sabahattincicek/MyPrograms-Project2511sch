@@ -13,10 +13,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+
 /**
  * UseCase to fetch and format files.
  * If a Course is provided, it returns files for that specific course.
- * If Course is null, it returns all files belonging to all active courses under active tags.
+ * If Course is null, it returns all files belonging to all active courses (including untagged ones).
  */
 class GetFileDisplayItemListUseCase @Inject constructor(
     private val sFileRepository: ISFileRepository,
@@ -24,105 +25,86 @@ class GetFileDisplayItemListUseCase @Inject constructor(
     private val courseRepository: ICourseRepository
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(course: Course? = null): Flow<Resource<List<DisplayItemSFile>>>{
+    operator fun invoke(course: Course? = null): Flow<Resource<List<DisplayItemSFile>>> {
 
-        // --- CASE 1: SPECIFIC COURSE PROVIDED ---
-        // We fetch files directly for this course, ignoring "active" filters of parents.
+        // --- DURUM 1: SPESİFİK BİR DERS İÇİN DOSYALARI GETİR ---
         if (course != null) {
             return sFileRepository.getAllByCourseId(course.id).map { fileResource ->
                 when (fileResource) {
+                    is Resource.Success -> {
+                        val allSFiles = fileResource.data ?: emptyList()
+                        val displayList = allSFiles.map { sFile ->
+                            DisplayItemSFile.ContentSFile(course = course, sFile = sFile)
+                        }.toMutableList<DisplayItemSFile>()
+
+                        displayList.add(DisplayItemSFile.FooterSFile(displayList.size))
+                        Resource.Success(displayList)
+                    }
                     is Resource.Error -> Resource.Error(fileResource.message ?: "Files could not be loaded")
                     is Resource.Loading -> Resource.Loading()
                     is Resource.Idle -> Resource.Idle()
-                    is Resource.Success -> {
-                        val allSFiles = fileResource.data ?: emptyList()
-
-                        // Return empty success immediately if no files exist to trigger Empty State UI
-//                        if (allSFiles.isEmpty()) return@map Resource.Success(emptyList())
-
-                        val displayList = allSFiles.map { sFile ->
-                            DisplayItemSFile.ContentSFile(
-                                course = course,
-                                sFile = sFile
-                            )
-                        }
-
-                        val finalList = displayList.toMutableList<DisplayItemSFile>()
-                        // Add footer with total count
-                        finalList.add(DisplayItemSFile.FooterSFile(displayList.size))
-                        Resource.Success(finalList)
-                    }
                 }
             }
         }
-        // --- CASE 2: NO COURSE PROVIDED (GLOBAL ACTIVE LIST) ---
-        // 1. Fetch all active Tags first
-        return tagRepository.getAllActive().flatMapLatest { tagResource ->
-            when(tagResource){
-                is Resource.Error -> flowOf(Resource.Error(tagResource.message ?: "Tags could not be loaded"))
-                is Resource.Loading -> flowOf(Resource.Loading())
-                is Resource.Idle -> flowOf(Resource.Idle())
-                is Resource.Success -> {
-                    val activeTags = tagResource.data ?: emptyList()
 
-                    if (activeTags.isEmpty()) return@flatMapLatest flowOf(Resource.Success(emptyList()))
+        // --- DURUM 2: GENEL LİSTE (HOME MANTIĞI İLE) ---
+        return combine(
+            tagRepository.getAllActive(),
+            courseRepository.getAllActive()
+        ) { tagResource, courseResource ->
+            Pair(tagResource, courseResource)
+        }.flatMapLatest { (tagRes, courseRes) ->
+            if (tagRes is Resource.Success && courseRes is Resource.Success) {
+                val activeTags = tagRes.data ?: emptyList()
+                val activeCourses = courseRes.data ?: emptyList()
 
-                    val tagIds = activeTags.map { it.id }
-                    // 2. Fetch all active Courses belonging to these Tags
-                    courseRepository.getAllActivesByTagIds(tagIds).flatMapLatest { courseResource ->
-                        when(courseResource){
-                            is Resource.Error -> flowOf(Resource.Error(courseResource.message ?: "Courses could not be loaded"))
-                            is Resource.Loading -> flowOf(Resource.Loading())
-                            is Resource.Idle -> flowOf(Resource.Idle())
-                            is Resource.Success -> {
-                                val activeCourses = courseResource.data ?: emptyList()
+                val activeTagsMap = activeTags.associateBy { it.id }
 
-                                if (activeCourses.isEmpty()) return@flatMapLatest flowOf(Resource.Success(emptyList()))
+                // Filtreleme: Etiketi olmayanlar (null) VEYA etiketi aktif olanlar
+                val validCourses = activeCourses.filter { c ->
+                    c.tagId == null || activeTagsMap.containsKey(c.tagId)
+                }
 
-                                val courseIds = activeCourses.map { it.id }
+                if (validCourses.isEmpty()) {
+                    return@flatMapLatest flowOf(Resource.Success(emptyList()))
+                }
 
-                                // 3. Fetch all files belonging to these active Courses
-                                combine(
-                                    sFileRepository.getAllByCourseIds(courseIds),
-                                    flowOf(activeTags),
-                                    flowOf(activeCourses)
-                                ){ fileResource, tags, courses ->
-                                    when(fileResource){
-                                        is Resource.Error -> Resource.Error(fileResource.message ?: "Files could not be loaded")
-                                        is Resource.Loading -> Resource.Loading()
-                                        is Resource.Idle -> Resource.Idle()
-                                        is Resource.Success -> {
-                                            val allSFiles = fileResource.data ?: emptyList()
+                val validCourseIds = validCourses.map { it.id }
+                val courseMap = validCourses.associateBy { it.id }
 
-                                            // Early return for empty file list to trigger "Empty UI"
-                                            if (allSFiles.isEmpty()) { return@combine Resource.Success(emptyList())}
+                sFileRepository.getAllByCourseIds(validCourseIds).map { fileResource ->
+                    when (fileResource) {
+                        is Resource.Success -> {
+                            val allSFiles = fileResource.data ?: emptyList()
 
-                                            val courseMap = courses.associateBy { it.id }
+                            if (allSFiles.isEmpty()) return@map Resource.Success(emptyList())
 
-                                            val displayList = mutableListOf<DisplayItemSFile>()
-
-                                            allSFiles.forEach { sFile ->
-                                                val course = courseMap[sFile.courseId]
-
-                                                if (course != null){
-                                                    displayList.add(
-                                                        DisplayItemSFile.ContentSFile(
-                                                            course = course,
-                                                            sFile = sFile
-                                                        )
-                                                    )
-                                                }
-                                            }
-                                            // Add summary footer
-                                            displayList.add(DisplayItemSFile.FooterSFile(displayList.size))
-                                            Resource.Success(displayList)
-                                        }
-                                    }
+                            val displayList = mutableListOf<DisplayItemSFile>()
+                            allSFiles.forEach { sFile ->
+                                val associatedCourse = courseMap[sFile.courseId]
+                                if (associatedCourse != null) {
+                                    // HATA BURADAYDI: displayList.add eklenmemişti.
+                                    displayList.add(
+                                        DisplayItemSFile.ContentSFile(
+                                            course = associatedCourse,
+                                            sFile = sFile
+                                        )
+                                    )
                                 }
                             }
+
+                            displayList.add(DisplayItemSFile.FooterSFile(displayList.size))
+                            Resource.Success(displayList)
                         }
+                        is Resource.Error -> Resource.Error(fileResource.message ?: "Files could not be loaded")
+                        is Resource.Loading -> Resource.Loading()
+                        is Resource.Idle -> Resource.Idle()
                     }
                 }
+            } else if (tagRes is Resource.Error || courseRes is Resource.Error) {
+                flowOf(Resource.Error("Error loading active tags or courses"))
+            } else {
+                flowOf(Resource.Loading())
             }
         }
     }

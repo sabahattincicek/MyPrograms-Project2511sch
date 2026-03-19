@@ -93,7 +93,6 @@ class FragmentFile : Fragment() {
         Log.d(tag, "onViewCreated: Initial args received - PT: ${programTable?.title}, Course: ${course?.title}, Task: ${task?.title}")
 
         setupRecyclerAdapter()
-        setupFragmentResultListeners()
         setupObservers()
 
         binding.etSearch.doAfterTextChanged { it ->
@@ -161,56 +160,6 @@ class FragmentFile : Fragment() {
         }
     }
 
-    private fun setupFragmentResultListeners() {
-        Log.d(tag, "setupFragmentResultListeners: Initializing FragmentResultListeners.")
-
-//        childFragmentManager.setFragmentResultListener(DialogFragmentFilter.REQUEST_KEY_BASE_MODEL, viewLifecycleOwner){ requestKey, result ->
-//            val baseModel = BundleCompat.getParcelable(result, DialogFragmentFilter.RESULT_KEY_BASE_MODEL,BaseModel::class.java)
-//            Log.d(tag, "FragmentResultListener: Filter result received - Type: ${baseModel?.javaClass?.simpleName}")
-//            when(baseModel){
-//                is Tag -> {
-//                    programTable = baseModel
-//                    binding.cpProgramTable.isChecked = true
-//                    binding.cpProgramTable.isCloseIconVisible = true
-//                    binding.cpProgramTable.text = programTable!!.title
-//
-//                    binding.cpCourse.isChecked = false
-//                    binding.cpCourse.isCloseIconVisible = false
-//                    binding.cpCourse.text = getString(R.string.course)
-//
-//                    binding.cpTask.isChecked = false
-//                    binding.cpTask.isCloseIconVisible = false
-//                    binding.cpTask.text = getString(R.string.task)
-//
-//                    Log.d(tag, "FragmentResultListener: Updating filter with selected Tag.")
-//                    viewModelSFile.updateProgramTable(programTable)
-//                }
-//                is Course -> {
-//                    course = baseModel
-//                    binding.cpCourse.isChecked = true
-//                    binding.cpCourse.isCloseIconVisible = true
-//                    binding.cpCourse.text = course!!.title
-//
-//                    binding.cpTask.isChecked = false
-//                    binding.cpTask.isCloseIconVisible = false
-//                    binding.cpTask.text = getString(R.string.task)
-//
-//                    Log.d(tag, "FragmentResultListener: Updating filter with selected Course.")
-//                    viewModelSFile.updateCourse(course)
-//
-//                }
-//                is Task -> {
-//                    task = baseModel
-//                    binding.cpTask.isChecked = true
-//                    binding.cpTask.isCloseIconVisible = true
-//                    binding.cpTask.text = task!!.title
-//
-//                    Log.d(tag, "FragmentResultListener: Updating filter with selected Task.")
-//                    viewModelSFile.updateTask(task)
-//                }
-//            }
-//        }
-    }
 
     private fun setupObservers() {
         //USER STATE
