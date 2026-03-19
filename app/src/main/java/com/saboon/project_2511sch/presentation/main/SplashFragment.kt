@@ -26,6 +26,7 @@ import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
+import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -170,8 +171,18 @@ class SplashFragment : Fragment() {
                         }
                         is Resource.Success -> {
                             Log.d(tag, "operationEvent Success - User inserted")
-                            isUserReady = true
-                            tryFinalNavigation()
+                            val operationResult = resource.data //BaseVmOperationResult<User>
+                            val user = operationResult?.data
+                            val type = operationResult?.operationType
+                            when(type) {
+                                OperationType.INSERT -> {
+                                    isUserReady = true
+                                    tryFinalNavigation()
+                                }
+                                OperationType.UPDATE -> {}
+                                OperationType.DELETE -> {}
+                                null -> {}
+                            }
                         }
                     }
                 }

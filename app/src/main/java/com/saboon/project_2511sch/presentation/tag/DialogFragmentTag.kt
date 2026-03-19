@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -24,9 +25,11 @@ import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.course.DialogFragmentCourse
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
+import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -39,6 +42,7 @@ class DialogFragmentTag: DialogFragment() {
 
     private var _binding: DialogFragmentTagBinding? = null
     private val binding get() = _binding!!
+    private val viewModelUser: ViewModelUser by activityViewModels()
     private val viewModelTag: ViewModelTag by viewModels()
     private lateinit var currentUser: User
     private var tag: Tag? = null
@@ -79,7 +83,6 @@ class DialogFragmentTag: DialogFragment() {
         }
 
         arguments?.let {
-            currentUser = BundleCompat.getParcelable(it, ARG_USER, User::class.java)!!
             tag = BundleCompat.getParcelable(it,ARG_TAG, Tag::class.java)
         }
 
@@ -218,6 +221,21 @@ class DialogFragmentTag: DialogFragment() {
         }
     }
     private fun setupObservers(){
+        //USER STATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelUser.currentUser.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            currentUser = resource.data!!
+                        }
+                    }
+                }
+            }
+        }
         //TAG EVENT: INSERT, UPDATE, DELETE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -227,16 +245,30 @@ class DialogFragmentTag: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
                         is Resource.Success -> {
-                            // eger update islemi yapildiysa ve activation degisitirildiyse bu taga
-                            // bagli butun derslerin altindaki tasklarin alarmlarini sync et
-                            if (tag != null && event.data != null){
-                                if (tag!!.isActive != event.data.isActive){
-                                    viewModelTag.syncAlarms(event.data){
+                            val operationResult = event.data //BaseVMOperationResult<Tag>
+//                            tag = operationResult?.data
+                            val type = operationResult?.operationType
+
+                            when(type) {
+                                OperationType.INSERT -> {dismiss()}
+                                OperationType.UPDATE -> {
+                                    // eger update islemi yapildiysa ve activation degisitirildiyse bu taga
+                                    // bagli butun derslerin altindaki tasklarin alarmlarini sync et
+                                    if (tag != null){
+                                        if (tag!!.isActive != operationResult.data.isActive){
+                                            tag = operationResult.data
+                                            viewModelTag.syncAlarms(tag!!){
+                                                dismiss()
+                                            }
+                                        }else{
+                                            dismiss()
+                                        }
+                                    }else{
                                         dismiss()
                                     }
                                 }
-                            }else{
-                                dismiss()
+                                OperationType.DELETE -> {dismiss()}
+                                null -> {dismiss()}
                             }
                         }
                     }
@@ -262,17 +294,13 @@ class DialogFragmentTag: DialogFragment() {
         const val REQUEST_TAG = "tag_dialog_fragment_request_tag"
         const val RESULT_TAG = "tag_dialog_fragment_result_tag"
 
-        fun newInstanceForCreate(user: User):DialogFragmentTag{
+        fun newInstanceForCreate():DialogFragmentTag{
             val fragment = DialogFragmentTag()
-            fragment.arguments = bundleOf(
-                ARG_USER to user
-            )
             return fragment
         }
-        fun newInstanceForUpdate(user: User, tag: Tag): DialogFragmentTag {
+        fun newInstanceForUpdate(tag: Tag): DialogFragmentTag {
             val fragment = DialogFragmentTag()
             fragment.arguments = bundleOf(
-                ARG_USER to user,
                 ARG_TAG to tag
             )
             return fragment

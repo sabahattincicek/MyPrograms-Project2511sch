@@ -8,6 +8,8 @@ import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.domain.usecase.course.CourseReadUseCase
 import com.saboon.project_2511sch.domain.usecase.course.CourseWriteUseCase
 import com.saboon.project_2511sch.domain.usecase.course.GetCourseDisplayItemListUseCase
+import com.saboon.project_2511sch.util.BaseVMOperationResult
+import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,7 +34,7 @@ class ViewModelCourse @Inject constructor(
     private val taskRepository: ITaskRepository,
     private val alarmScheduler: IAlarmScheduler
 ) : ViewModel() {
-    private val _operationEvent = Channel<Resource<Course>>()
+    private val _operationEvent = Channel<Resource<BaseVMOperationResult<Course>>>()
     val operationEvent = _operationEvent.receiveAsFlow()
 
     private val _selectedId = MutableStateFlow<String?>(null)
@@ -59,13 +61,13 @@ class ViewModelCourse @Inject constructor(
     fun getById(id: String){
         _selectedId.value = id
     }
-    fun insert(course: Course) = executeWriteAction{
+    fun insert(course: Course) = executeWriteAction(OperationType.INSERT){
         courseWriteUseCase.insert(course)
     }
-    fun update(course: Course) = executeWriteAction{
+    fun update(course: Course) = executeWriteAction(OperationType.UPDATE){
         courseWriteUseCase.update(course)
     }
-    fun delete(course: Course) = executeWriteAction{
+    fun delete(course: Course) = executeWriteAction(OperationType.DELETE){
         courseWriteUseCase.delete(course)
     }
     fun syncAlarms(course: Course, onComplete: () -> Unit){
@@ -76,11 +78,19 @@ class ViewModelCourse @Inject constructor(
             onComplete()
         }
     }
-    private fun executeWriteAction(action: suspend () -> Resource<Course>) {
+    private fun executeWriteAction(type: OperationType, action: suspend () -> Resource<Course>) {
         viewModelScope.launch {
             try {
                 _operationEvent.send(Resource.Loading())
-                _operationEvent.send(action())
+                val result = action()
+                when(result){
+                    is Resource.Error -> {_operationEvent.send(Resource.Error(result.message ?: "Error"))}
+                    is Resource.Idle -> {_operationEvent.send(Resource.Idle())}
+                    is Resource.Loading -> {_operationEvent.send(Resource.Loading())}
+                    is Resource.Success -> {
+                        _operationEvent.send(Resource.Success(BaseVMOperationResult(result.data!!, type)))
+                    }
+                }
             } catch (e: Exception) {
                 _operationEvent.send(Resource.Error(e.localizedMessage ?: "Unexpected error"))
             }

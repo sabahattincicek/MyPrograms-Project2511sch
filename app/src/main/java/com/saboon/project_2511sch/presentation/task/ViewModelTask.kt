@@ -9,6 +9,8 @@ import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.ISettingsRepository
 import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
+import com.saboon.project_2511sch.util.BaseVMOperationResult
+import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,7 +32,7 @@ class ViewModelTask @Inject constructor(
     private val getTaskDisplayItemUseCase: GetTaskDisplayItemUseCase,
     private val alarmScheduler: IAlarmScheduler
 ): ViewModel() {
-    private val _operationEvent = Channel<Resource<Task>>()
+    private val _operationEvent = Channel<Resource<BaseVMOperationResult<Task>>>()
     val operationEvent = _operationEvent.receiveAsFlow()
 
     private val _selectedCourse = MutableStateFlow<Course?>(null)
@@ -61,43 +63,46 @@ class ViewModelTask @Inject constructor(
 
     //ACTIONS
     fun insert(course: Course, task: Task){
-        viewModelScope.launch {
-            _operationEvent.send(Resource.Loading())
+        executeWriteAction(OperationType.INSERT){
             val result = taskWriteUseCase.insert(task)
-
             if (result is Resource.Success){
                 alarmScheduler.schedule(course, task)
             }
-            _operationEvent.send(result)
+            result
         }
     }
     fun update(course: Course, task: Task){
-        viewModelScope.launch {
-            _operationEvent.send(Resource.Loading())
+        executeWriteAction(OperationType.UPDATE) {
             val result = taskWriteUseCase.update(task)
-
-            if (result is Resource.Success){
+            if (result is Resource.Success) {
                 alarmScheduler.cancel(course, task)
                 alarmScheduler.schedule(course, task)
             }
-            _operationEvent.send(result)
+            result
         }
     }
     fun delete(course: Course, task: Task){
-        viewModelScope.launch {
-            _operationEvent.send(Resource.Loading())
+        executeWriteAction(OperationType.DELETE) {
             val result = taskWriteUseCase.delete(task)
-
-            if (result is Resource.Success) alarmScheduler.cancel(course, task)
-
-            _operationEvent.send(result)
+            if (result is Resource.Success) {
+                alarmScheduler.cancel(course, task)
+            }
+            result
         }
     }
-    private fun executeWriteAction(action: suspend () -> Resource<Task>) {
+    private fun executeWriteAction(type: OperationType, action: suspend () -> Resource<Task>) {
         viewModelScope.launch {
             try {
                 _operationEvent.send(Resource.Loading())
-                _operationEvent.send(action())
+                val result = action()
+                when(result){
+                    is Resource.Error -> {_operationEvent.send(Resource.Error(result.message ?: "Error"))}
+                    is Resource.Idle -> {_operationEvent.send(Resource.Idle())}
+                    is Resource.Loading -> {_operationEvent.send(Resource.Loading())}
+                    is Resource.Success -> {
+                        _operationEvent.send(Resource.Success(BaseVMOperationResult(result.data!!, type)))
+                    }
+                }
             } catch (e: Exception) {
                 _operationEvent.send(Resource.Error(e.localizedMessage ?: "Unexpected error"))
             }

@@ -26,11 +26,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.tag.DialogFragmentTag
-import com.saboon.project_2511sch.presentation.tag.DialogFragmentTagList
+import com.saboon.project_2511sch.presentation.tag.DialogFragmentManageTag
 import com.saboon.project_2511sch.presentation.tag.DisplayItemTag
 import com.saboon.project_2511sch.presentation.tag.ViewModelTag
 import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
+import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -152,22 +153,24 @@ class DialogFragmentCourse: DialogFragment() {
         }
 
         binding.etTag.setOnClickListener {
-            if (tagList.isEmpty()){
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("No Tags Found")
-                    .setMessage("There are no tags created yet. Would you like to create a new one now?")
-                    .setNegativeButton("Cancel"){ dialog, which ->
-                        dialog.dismiss()
-                    }
-                    .setPositiveButton("Create New Tag"){ dialog, which ->
-                        val dialogTag = DialogFragmentTag.newInstanceForCreate(currentUser)
-                        dialogTag.show(childFragmentManager, "Dialog Fragment Tag")
-                    }
-                    .show()
-            }else{
-                val dialog = DialogFragmentTagList()
-                dialog.show(childFragmentManager, "DialogFragmentList")
-            }
+            val dialog = DialogFragmentManageTag.newInstanceForSelect()
+            dialog.show(childFragmentManager, "DialogFragmentList")
+//            if (tagList.isEmpty()){
+//                MaterialAlertDialogBuilder(requireContext())
+//                    .setTitle("No Tags Found")
+//                    .setMessage("There are no tags created yet. Would you like to create a new one now?")
+//                    .setNegativeButton("Cancel"){ dialog, which ->
+//                        dialog.dismiss()
+//                    }
+//                    .setPositiveButton("Create New Tag"){ dialog, which ->
+//                        val dialogTag = DialogFragmentTag.newInstanceForCreate(currentUser)
+//                        dialogTag.show(childFragmentManager, "Dialog Fragment Tag")
+//                    }
+//                    .show()
+//            }else{
+//                val dialog = DialogFragmentManageTag.newInstanceForSelect()
+//                dialog.show(childFragmentManager, "DialogFragmentList")
+//            }
         }
 
         binding.mcvColor1.setOnClickListener {
@@ -247,22 +250,14 @@ class DialogFragmentCourse: DialogFragment() {
     }
 
     private fun setupListeners(){
-        //TAG CREATE LISTENER
-        setFragmentResultListener(DialogFragmentTag.REQUEST_TAG){ requestKey, bundle ->
-            val resultTag = BundleCompat.getParcelable(bundle, DialogFragmentTag.RESULT_TAG, Tag::class.java)
-            resultTag?.let { tag ->
-                selectedTag = tag
-                binding.etTag.setText(tag.title)
-            }
-        }
         binding.tilTag.setEndIconOnClickListener {
             binding.etTag.text = null
             selectedTag = null
         }
 
-        //TAG LIST LISTENER
-        childFragmentManager.setFragmentResultListener(DialogFragmentTagList.REQUEST_TAG, viewLifecycleOwner){ requestKey, bundle ->
-            val resultTag = BundleCompat.getParcelable(bundle, DialogFragmentTagList.RESULT_TAG,Tag::class.java)
+        //TAG SELECT LISTENER
+        childFragmentManager.setFragmentResultListener(DialogFragmentManageTag.REQUEST_TAG, viewLifecycleOwner){ requestKey, bundle ->
+            val resultTag = BundleCompat.getParcelable(bundle, DialogFragmentManageTag.RESULT_TAG,Tag::class.java)
             resultTag?.let { tag ->
                 selectedTag = tag
                 binding.etTag.setText(tag.title)
@@ -318,20 +313,29 @@ class DialogFragmentCourse: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
                         is Resource.Success -> {
-                            // eger update islemi yapildiysa ve activation degisitirildiyse bu derse
-                            // bagli butun tasklarin alarmlarini sync et
-                            val updatedCourse = event.data
-                            if (course != null && updatedCourse != null){
-                                if (course!!.isActive != updatedCourse.isActive){
-                                    Log.d(TAG, "Activation status changed: ${course?.isActive} -> ${updatedCourse.isActive}. Syncing alarms...")
-                                    viewModelCourse.syncAlarms(event.data){
+                            val operationResult = event.data //BaseVMOperationResult<Course>
+//                            course = operationResult?.data
+                            val type = operationResult?.operationType
+                            when(type) {
+                                OperationType.INSERT -> {dismiss()}
+                                OperationType.UPDATE -> {
+                                    // eger update islemi yapildiysa ve activation degisitirildiyse bu derse
+                                    // bagli butun tasklarin alarmlarini sync et
+                                    if (course != null){
+                                        if (course!!.isActive != operationResult.data.isActive){
+                                            course = operationResult.data
+                                            viewModelCourse.syncAlarms(course!!){
+                                                dismiss()
+                                            }
+                                        }else{
+                                            dismiss()
+                                        }
+                                    }else{
                                         dismiss()
                                     }
-                                }else{
-                                    dismiss()
                                 }
-                            }else{
-                                dismiss()
+                                OperationType.DELETE -> {dismiss()}
+                                null -> {dismiss()}
                             }
                         }
                     }
