@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.saboon.project_2511sch.data.local.entity.CourseEntity
 import kotlinx.coroutines.flow.Flow
@@ -36,4 +37,8 @@ interface CourseDao {
     suspend fun getAllCount(): Int
     @Query("SELECT COUNT(*) FROM courses WHERE is_active = 1")
     suspend fun getAllActiveCount(): Int
+    @Transaction
+    @Update
+    suspend fun updateAll(courses: List<CourseEntity>)
+
 }
