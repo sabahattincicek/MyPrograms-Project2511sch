@@ -56,20 +56,25 @@ class GetFileDisplayItemListUseCase @Inject constructor(
                             val allSFiles = fileResource.data ?: emptyList()
                             if (allSFiles.isEmpty()) return@map Resource.Success(emptyList())
 
+                            val filesGroupedByCourse = allSFiles.groupBy { it.courseId }
+
                             val displayList = mutableListOf<DisplayItemSFile>()
-                            allSFiles.forEach { sFile ->
-                                val associatedCourse = courseMap[sFile.courseId]
-                                if (associatedCourse != null) {
-                                    displayList.add(
-                                        DisplayItemSFile.ContentSFile(
-                                            course = associatedCourse,
-                                            sFile = sFile
+                            filesGroupedByCourse.forEach { (courseId, files) ->
+                                val course = courseMap[courseId]
+                                if (course != null){
+                                    displayList.add(DisplayItemSFile.HeaderSFile(course.title))
+                                    files.forEach { sFile ->
+                                        displayList.add(
+                                            DisplayItemSFile.ContentSFile(
+                                                course = course,
+                                                sFile = sFile
+                                            )
                                         )
-                                    )
+                                    }
                                 }
                             }
 
-                            displayList.add(DisplayItemSFile.FooterSFile(displayList.size))
+                            displayList.add(DisplayItemSFile.FooterSFile(allSFiles.size))
                             Resource.Success(displayList)
                         }
                         is Resource.Error -> Resource.Error(fileResource.message ?: "Files could not be loaded")
