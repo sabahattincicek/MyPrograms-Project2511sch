@@ -14,40 +14,18 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-/**
- * UseCase to fetch and format files.
- * If a Course is provided, it returns files for that specific course.
- * If Course is null, it returns all files belonging to all active courses (including untagged ones).
- */
 class GetFileDisplayItemListUseCase @Inject constructor(
     private val sFileRepository: ISFileRepository,
     private val tagRepository: ITagRepository,
     private val courseRepository: ICourseRepository
 ) {
+
+    /**
+     * TÜM DOSYALARI GETİRİR (Filtreleme Mantığı ile)
+     * Aktif etiketlere sahip derslerin ve etiketsiz (null tag) derslerin dosyalarını döner.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(course: Course? = null): Flow<Resource<List<DisplayItemSFile>>> {
-
-        // --- DURUM 1: SPESİFİK BİR DERS İÇİN DOSYALARI GETİR ---
-        if (course != null) {
-            return sFileRepository.getAllByCourseId(course.id).map { fileResource ->
-                when (fileResource) {
-                    is Resource.Success -> {
-                        val allSFiles = fileResource.data ?: emptyList()
-                        val displayList = allSFiles.map { sFile ->
-                            DisplayItemSFile.ContentSFile(course = course, sFile = sFile)
-                        }.toMutableList<DisplayItemSFile>()
-
-                        displayList.add(DisplayItemSFile.FooterSFile(displayList.size))
-                        Resource.Success(displayList)
-                    }
-                    is Resource.Error -> Resource.Error(fileResource.message ?: "Files could not be loaded")
-                    is Resource.Loading -> Resource.Loading()
-                    is Resource.Idle -> Resource.Idle()
-                }
-            }
-        }
-
-        // --- DURUM 2: GENEL LİSTE (HOME MANTIĞI İLE) ---
+    operator fun invoke(): Flow<Resource<List<DisplayItemSFile>>> {
         return combine(
             tagRepository.getAllActive(),
             courseRepository.getAllActive()
@@ -76,14 +54,12 @@ class GetFileDisplayItemListUseCase @Inject constructor(
                     when (fileResource) {
                         is Resource.Success -> {
                             val allSFiles = fileResource.data ?: emptyList()
-
                             if (allSFiles.isEmpty()) return@map Resource.Success(emptyList())
 
                             val displayList = mutableListOf<DisplayItemSFile>()
                             allSFiles.forEach { sFile ->
                                 val associatedCourse = courseMap[sFile.courseId]
                                 if (associatedCourse != null) {
-                                    // HATA BURADAYDI: displayList.add eklenmemişti.
                                     displayList.add(
                                         DisplayItemSFile.ContentSFile(
                                             course = associatedCourse,
@@ -105,6 +81,28 @@ class GetFileDisplayItemListUseCase @Inject constructor(
                 flowOf(Resource.Error("Error loading active tags or courses"))
             } else {
                 flowOf(Resource.Loading())
+            }
+        }
+    }
+
+    /**
+     * SADECE BELİRLİ BİR DERSE AİT DOSYALARI GETİRİR
+     */
+    fun getByCourse(course: Course): Flow<Resource<List<DisplayItemSFile>>> {
+        return sFileRepository.getAllByCourseId(course.id).map { fileResource ->
+            when (fileResource) {
+                is Resource.Success -> {
+                    val allSFiles = fileResource.data ?: emptyList()
+                    val displayList = allSFiles.map { sFile ->
+                        DisplayItemSFile.ContentSFile(course = course, sFile = sFile)
+                    }.toMutableList<DisplayItemSFile>()
+
+                    displayList.add(DisplayItemSFile.FooterSFile(displayList.size))
+                    Resource.Success(displayList)
+                }
+                is Resource.Error -> Resource.Error(fileResource.message ?: "Files could not be loaded")
+                is Resource.Loading -> Resource.Loading()
+                is Resource.Idle -> Resource.Idle()
             }
         }
     }
