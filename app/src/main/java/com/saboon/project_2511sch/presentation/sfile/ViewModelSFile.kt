@@ -32,7 +32,11 @@ class ViewModelSFile @Inject constructor(
     //STATE
     @OptIn(ExperimentalCoroutinesApi::class)
     val filesState = _selectedCourse.flatMapLatest { course ->
-        getFileDisplayItemListUseCase.invoke(course)
+        if (course == null){
+            getFileDisplayItemListUseCase.invoke()
+        }else{
+            getFileDisplayItemListUseCase.getByCourse(course)
+        }
     }.stateIn(
         scope = viewModelScope,
         started = WhileSubscribed(5000),
