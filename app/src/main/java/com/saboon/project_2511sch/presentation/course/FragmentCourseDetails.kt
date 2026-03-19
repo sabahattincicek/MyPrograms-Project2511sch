@@ -166,7 +166,7 @@ class FragmentCourseDetails : Fragment() {
             }
         }
         recyclerAdapterTask.onAbsenceButtonClickListener = { taskLesson ->
-            viewModelTask.update(taskLesson)
+            viewModelTask.update(course, taskLesson)
         }
         binding.rvTasks.apply{
             adapter = recyclerAdapterTask

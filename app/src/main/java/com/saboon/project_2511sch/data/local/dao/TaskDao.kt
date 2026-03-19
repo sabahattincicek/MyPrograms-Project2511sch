@@ -22,6 +22,8 @@ interface TaskDao {
     suspend fun updateLesson(lessonEntity: TaskLessonEntity)
     @Delete
     suspend fun deleteLesson(lessonEntity: TaskLessonEntity)
+    @Query("SELECT * FROM task_lessons WHERE id = :id")
+    fun getLessonById(id: String): Flow<TaskLessonEntity?>
     @Query("SELECT * FROM task_lessons")
     fun getAllLessons(): Flow<List<TaskLessonEntity>>
     @Query("SELECT * FROM task_lessons WHERE course_id = :id")
@@ -36,6 +38,8 @@ interface TaskDao {
     suspend fun updateExam(examEntity: TaskExamEntity)
     @Delete
     suspend fun deleteExam(examEntity: TaskExamEntity)
+    @Query("SELECT * FROM task_exams WHERE id = :id")
+    fun getExamById(id: String): Flow<TaskExamEntity?>
     @Query("SELECT * FROM task_exams")
     fun getAllExams(): Flow<List<TaskExamEntity>>
     @Query("SELECT * FROM task_exams WHERE course_id = :id")
@@ -50,6 +54,8 @@ interface TaskDao {
     suspend fun updateHomework(homeworkEntity: TaskHomeworkEntity)
     @Delete
     suspend fun deleteHomework(homeworkEntity: TaskHomeworkEntity)
+    @Query("SELECT * FROM task_homeworks WHERE id = :id")
+    fun getHomeworkById(id: String): Flow<TaskHomeworkEntity?>
     @Query("SELECT * FROM task_homeworks")
     fun getAllHomeworks(): Flow<List<TaskHomeworkEntity>>
     @Query("SELECT * FROM task_homeworks WHERE course_id = :id")

@@ -318,7 +318,21 @@ class DialogFragmentCourse: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
                         is Resource.Success -> {
-                            dismiss()
+                            // eger update islemi yapildiysa ve activation degisitirildiyse bu derse
+                            // bagli butun tasklarin alarmlarini sync et
+                            val updatedCourse = event.data
+                            if (course != null && updatedCourse != null){
+                                if (course!!.isActive != updatedCourse.isActive){
+                                    Log.d(TAG, "Activation status changed: ${course?.isActive} -> ${updatedCourse.isActive}. Syncing alarms...")
+                                    viewModelCourse.syncAlarms(event.data){
+                                        dismiss()
+                                    }
+                                }else{
+                                    dismiss()
+                                }
+                            }else{
+                                dismiss()
+                            }
                         }
                     }
                 }

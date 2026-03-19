@@ -2,15 +2,19 @@ package com.saboon.project_2511sch.domain.usecase.settings
 
 import android.content.Context
 import android.net.Uri
+import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
+import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.ITagRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
+import com.saboon.project_2511sch.domain.repository.ISettingsRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
 import com.saboon.project_2511sch.presentation.profile.DataTransferPackage
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.ZipUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -18,10 +22,12 @@ import javax.inject.Inject
 
 class ImportDataUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val programTableRepository: ITagRepository,
+    private val tagRepository: ITagRepository,
     private val courseRepository: ICourseRepository,
     private val taskRepository: ITaskRepository,
     private val sFileRepository: ISFileRepository,
+    private val settingsRepository: ISettingsRepository,
+    private val alarmScheduler: IAlarmScheduler,
     private val json: Json
 ) {
     suspend fun execute(uri: Uri): Resource<Unit> = withContext(Dispatchers.IO){
@@ -43,13 +49,13 @@ class ImportDataUseCase @Inject constructor(
             extractFolder.mkdirs()
             ZipUtil.unzip(tempZipFile, extractFolder)
 
-            // 2. JSON dosyasını oku ve modelleri oluştur
+            // 3. JSON dosyasını oku ve modelleri oluştur
             val jsonFile = File(extractFolder, "export.json")
             if (!jsonFile.exists()) return@withContext Resource.Error("Not found backup file")
             val jsonString = jsonFile.readText()
             val dataTransferPackage = json.decodeFromString<DataTransferPackage>(jsonString)
 
-            // 3. Fiziksel dosyaları kalıcı klasöre taşı ve yolları güncelle
+            // 4. Fiziksel dosyaları kalıcı klasöre taşı ve yolları güncelle
             val sFilesFolder = File(context.filesDir, "sFiles")
             if (!sFilesFolder.exists()) sFilesFolder.mkdirs()
 
@@ -64,12 +70,21 @@ class ImportDataUseCase @Inject constructor(
                     sFile
                 }
             }
-            // 4. Veritabanına kaydet (Sıralama Önemlidir: Foreign Key kısıtlamaları için)
+            // 5. Veritabanına kaydet (Sıralama Önemlidir: Foreign Key kısıtlamaları için)
             // Önce tablolar, sonra kurslar, sonra tasklar ve dosyalar
-            dataTransferPackage.tags.forEach { programTableRepository.insert(it) }
+            dataTransferPackage.tags.forEach { tagRepository.insert(it) }
             dataTransferPackage.courses.forEach { courseRepository.insert(it) }
             dataTransferPackage.tasks.forEach { taskRepository.insert(it) }
             updatedSFiles.forEach { sFileRepository.insert(it) }
+
+            // 6. bildirimler icin alarmlari set et
+            val courseMap = dataTransferPackage.courses.associateBy { it.id }
+            dataTransferPackage.tasks.forEach { task ->
+                val course = courseMap[task.courseId]
+                if (course != null){
+                    alarmScheduler.schedule(course, task)
+                }
+            }
 
             Resource.Success(Unit)
         }catch (e: Exception){

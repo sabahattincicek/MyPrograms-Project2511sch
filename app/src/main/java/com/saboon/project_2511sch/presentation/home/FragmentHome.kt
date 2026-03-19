@@ -56,7 +56,6 @@ class FragmentHome : Fragment() {
         Log.d(tag, "onViewCreated: View has been created. Setting up UI and observers.")
 
         setupRecyclerAdapter()
-        setupListeners()
         setupObservers()
 
         viewModelHome.loadData()
@@ -232,37 +231,8 @@ class FragmentHome : Fragment() {
             val action = FragmentHomeDirections.actionHomeFragmentToCourseDetailsFragment(course)
             findNavController().navigate(action)
         }
-        recyclerAdapterHome.onAbsenceButtonClickListener = { taskLesson ->
-            viewModelTask.update(taskLesson)
+        recyclerAdapterHome.onAbsenceButtonClickListener = { course, taskLesson ->
+            viewModelTask.update(course, taskLesson)
         }
-    }
-
-    private fun setupListeners(){
-//        childFragmentManager.setFragmentResultListener(DialogFragmentFilter.REQUEST_KEY_BASE_MODEL, viewLifecycleOwner){ requestKey, result ->
-//            val baseModel = BundleCompat.getParcelable(result, DialogFragmentFilter.RESULT_KEY_BASE_MODEL,BaseModel::class.java)
-//            Log.d(tag, "FragmentResultListener: Filter result received - Type: ${baseModel?.javaClass?.simpleName}")
-//            when(baseModel){
-//                is Tag -> {
-//                    filteredTag = baseModel
-//                    viewModelHome.updateFilterProgramTable(filteredTag)
-//
-//                    binding.cpProgramTable.isChecked = true
-//                    binding.cpProgramTable.isCloseIconVisible = true
-//                    binding.cpProgramTable.text = filteredTag!!.title
-//
-//                    binding.cpCourse.isChecked = false
-//                    binding.cpCourse.isCloseIconVisible = false
-//                    binding.cpCourse.text = getString(R.string.course)
-//                }
-//                is Course -> {
-//                    filteredCourse = baseModel
-//                    viewModelHome.updateFilterCourse(filteredCourse)
-//
-//                    binding.cpCourse.isChecked = true
-//                    binding.cpCourse.isCloseIconVisible = true
-//                    binding.cpCourse.text = filteredCourse!!.title
-//                }
-//            }
-//        }
     }
 }

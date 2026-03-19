@@ -168,15 +168,15 @@ class DialogFragmentTaskExam: DialogFragment() {
                 val updatedExam = exam!!.copy(
                     title = binding.etTitle.text.toString(),
                     description = binding.etDescription.text.toString(),
-                    targetScore = binding.etTargetScore.text.toString().toInt(),
-                    achievedScore = binding.etAchievedScore.text.toString().toInt(),
+                    targetScore = binding.etTargetScore.text.toString().toIntOrNull() ?: 0,
+                    achievedScore = binding.etAchievedScore.text.toString().toIntOrNull() ?: 0,
                     date = selectedDateMillis,
                     timeStart = selectedTimeStartMillis,
                     timeEnd = selectedTimeEndMillis,
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString()
                 )
-                viewModelTask.update(updatedExam)
+                viewModelTask.update(course,updatedExam)
             }else{
                 val newExam = Task.Exam(
                     id = IdGenerator.generateId(binding.etTitle.text.toString()),
@@ -190,10 +190,10 @@ class DialogFragmentTaskExam: DialogFragment() {
                     timeEnd = selectedTimeEndMillis,
                     remindBefore = selectedRemindBeforeMinutes,
                     place = binding.etPlace.text.toString(),
-                    targetScore = binding.etTargetScore.text.toString().toInt(),
-                    achievedScore = binding.etAchievedScore.text.toString().toInt()
+                    targetScore = binding.etTargetScore.text.toString().toIntOrNull() ?: 0,
+                    achievedScore = binding.etAchievedScore.text.toString().toIntOrNull() ?: 0
                 )
-                viewModelTask.insert(newExam)
+                viewModelTask.insert(course,newExam)
             }
         }
         binding.btnCancel.setOnClickListener {
@@ -221,6 +221,17 @@ class DialogFragmentTaskExam: DialogFragment() {
             dateTimePicker.pickTimeMillis("End Time", selectedTimeEndMillis){ result ->
                 selectedTimeEndMillis = result
                 binding.etTimeEnd.setText(selectedTimeEndMillis.toFormattedString("HH:mm"))
+            }
+        }
+        binding.actvReminder.setOnItemClickListener { parentFragment, view, position, id ->
+            selectedRemindBeforeMinutes = when(position){
+                0 -> -1    // "No reminder" -> Index 0
+                1 -> 0     // "On Time" -> Index 1
+                2 -> 10    // "10 minutes before" -> Index 2
+                3 -> 30    // "30 minutes before" -> Index 3
+                4 -> 60    // "1 hour before" -> Index 4
+                5 -> 1440  // "1 day before" -> Index 5
+                else -> -1
             }
         }
     }
@@ -252,7 +263,7 @@ class DialogFragmentTaskExam: DialogFragment() {
         childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, viewLifecycleOwner){ requestKey, result ->
             val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
             if (isYes){
-                viewModelTask.delete(task!!)
+                viewModelTask.delete(course, task!!)
             }
         }
     }
@@ -308,6 +319,7 @@ class DialogFragmentTaskExam: DialogFragment() {
     private fun mapReminderToDisplayString(minutes: Int): String{
         val options = resources.getStringArray(R.array.reminder_options)
         return when(minutes){
+            -1 -> options[0] // "No reminder"
             0 -> options[1] // "On Time"
             10 -> options[2] // "10 minutes before"
             30 -> options[3] // "30 minutes before"

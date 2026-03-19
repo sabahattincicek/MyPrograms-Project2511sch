@@ -227,7 +227,17 @@ class DialogFragmentTag: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
                         is Resource.Success -> {
-                            dismiss()
+                            // eger update islemi yapildiysa ve activation degisitirildiyse bu taga
+                            // bagli butun derslerin altindaki tasklarin alarmlarini sync et
+                            if (tag != null && event.data != null){
+                                if (tag!!.isActive != event.data.isActive){
+                                    viewModelTag.syncAlarms(event.data){
+                                        dismiss()
+                                    }
+                                }
+                            }else{
+                                dismiss()
+                            }
                         }
                     }
                 }

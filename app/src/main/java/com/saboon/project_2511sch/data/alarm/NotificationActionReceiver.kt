@@ -11,49 +11,75 @@ import androidx.work.workDataOf
 import com.saboon.project_2511sch.data.worker.IncrementAbsenceWorker
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * A BroadcastReceiver that handles user interactions with notifications.
+ * It processes actions like "Attended" or "Missed" from the absence check notification.
+ */
 @AndroidEntryPoint
-class NotificationActionReceiver : BroadcastReceiver(){
-    private val tag = "NotificationActionReceiver"
+class NotificationActionReceiver : BroadcastReceiver() {
 
+    private val TAG = "NotificationActionReceiver"
+
+    /**
+     * Standard entry point for BroadcastReceivers.
+     * 
+     * @param context The Context in which the receiver is running.
+     * @param intent The Intent being received, containing action and task data.
+     */
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(tag, "Action received by onReceive.")
+        Log.i(TAG, "--- onReceive Triggered ---")
 
+        // Basic null safety check for context and intent
         if (context == null || intent == null) {
-            Log.e(tag, "Context or Intent is null, cannot proceed.")
+            Log.w(TAG, "Process aborted: Context or Intent is null.")
             return
         }
 
-        val courseId = intent.getStringExtra("KEY_COURSE_ID")
-        val notificationId = intent.getIntExtra("KEY_NOTIFICATION_ID", 0)
+        // Extract action and extras sent from AlarmReceiver
         val action = intent.action
+        val notificationId = intent.getIntExtra("EXTRA_NOTIFICATION_ID", 0)
+        val taskId = intent.getStringExtra("EXTRA_TASK_ID")
 
-        Log.d(tag, "Action: $action, Course ID: $courseId, Notification ID: $notificationId")
+        Log.d(TAG, "Received Intent Details - Action: $action, NotificationID: $notificationId, TaskID: $taskId")
 
-        when(action){
-            "ACTION_YES" -> {
-                Log.i(tag, "'Yes' action selected. No further action needed.")
+        // Route the logic based on the user's selection
+        when (action) {
+            "ACTION_ATTENDED_YES" -> {
+                Log.i(TAG, "User selected: YES (Attended). No background task required.")
+                // No action needed for 'Yes' currently
             }
-            "ACTION_NO" -> {
-                if (courseId != null){
-                    Log.i(tag, "'No' action selected. Enqueuing worker to increment absence for course ID: $courseId")
+            "ACTION_ATTENDED_NO" -> {
+                Log.i(TAG, "User selected: NO (Missed). Initiating absence increment process.")
+                
+                // If the user reports missing the lesson, trigger background work to update the database
+                if (taskId != null) {
+                    Log.d(TAG, "Enqueuing IncrementAbsenceWorker for LessonID: $taskId")
+                    
                     val workRequest = OneTimeWorkRequestBuilder<IncrementAbsenceWorker>()
-                        .setInputData(workDataOf("KEY_COURSE_ID" to courseId))
+                        .setInputData(workDataOf("KEY_TASK_ID" to taskId))
                         .build()
+
                     WorkManager.getInstance(context).enqueue(workRequest)
+                    Log.v(TAG, "IncrementAbsenceWorker successfully enqueued.")
                 } else {
-                    Log.w(tag, "'No' action selected, but courseId was null.")
+                    Log.e(TAG, "Critical failure: User reported a missed lesson, but TaskID is missing from intent.")
                 }
             }
             else -> {
-                Log.w(tag, "Unknown or null action received: $action")
+                Log.w(TAG, "Received an unknown action: $action")
             }
         }
 
-        // Dismiss the notification
+        // Always dismiss the notification from the tray once an action is taken
         if (notificationId != 0) {
-            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            Log.d(TAG, "Requesting NotificationManager to cancel notification ID: $notificationId")
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(notificationId)
-            Log.d(tag, "Notification with ID $notificationId has been cancelled.")
+            Log.v(TAG, "Notification $notificationId removed from tray.")
+        } else {
+            Log.w(TAG, "Warning: NotificationID is 0, skipping cancellation.")
         }
+
+        Log.i(TAG, "--- onReceive Process Finished ---")
     }
 }

@@ -50,8 +50,8 @@ object RepositoryModule {
     }
     @Singleton
     @Provides
-    fun provideAlarmScheduler(@ApplicationContext context: Context): IAlarmScheduler{
-        return AlarmSchedulerImp(context)
+    fun provideAlarmScheduler(@ApplicationContext context: Context, tagRepository: ITagRepository, settingsRepository: ISettingsRepository): IAlarmScheduler{
+        return AlarmSchedulerImp(context, tagRepository, settingsRepository)
     }
     @Singleton
     @Provides

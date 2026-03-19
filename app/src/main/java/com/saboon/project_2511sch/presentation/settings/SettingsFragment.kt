@@ -29,9 +29,11 @@ class SettingsFragment : Fragment() {
     private var currentDarkModeValue: String? = null
     private var currentAppThemeValue: String? = null
     private var currentHomeViewRangeValue: String? = null
-    private var currentHomeListItemColorEnabledValue: Boolean? = null
+    private var currentHomeListItemColorEnabledValue: Boolean = true
     private var currentHomeListItemColorSourceValue: String? = null
     private var currentOverscrollDaysCountValue: Int? = null
+    private var currentAbsenceReminderEnabledValue: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -154,6 +156,9 @@ class SettingsFragment : Fragment() {
                 SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED -> {
                     viewModelSettings.onHomeListItemColorEnabledChanged(item.isChecked)
                 }
+                SettingsConstants.PREF_KEY_ABSENCE_REMINDER_ENABLED -> {
+                    viewModelSettings.onAbsenceReminderEnabledChanged(item.isChecked)
+                }
             }
         }
         binding.rvSettings.apply {
@@ -164,8 +169,8 @@ class SettingsFragment : Fragment() {
     private fun renderSettingsList() {
         val settingsList = mutableListOf<SettingsItem>()
 
-        // DARK MODE
         settingsList.add(SettingsItem.Category("Appearance"))
+        // DARK MODE
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_DARK_MODE,
@@ -173,7 +178,6 @@ class SettingsFragment : Fragment() {
                 value = currentDarkModeValue!!
             )
         )
-
         // APP THEME
         settingsList.add(
             SettingsItem.Action(
@@ -183,8 +187,8 @@ class SettingsFragment : Fragment() {
             )
         )
 
-        // HOME VIEW RANGE
         settingsList.add(SettingsItem.Category("Home Page"))
+        // HOME VIEW RANGE
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_HOME_VIEW_RANGE,
@@ -193,7 +197,6 @@ class SettingsFragment : Fragment() {
                 value = currentHomeViewRangeValue!!
             )
         )
-
         // OVERSCROLL DAYS COUNT
         settingsList.add(
             SettingsItem.Action(
@@ -203,25 +206,34 @@ class SettingsFragment : Fragment() {
                 value = currentOverscrollDaysCountValue!!
             )
         )
-
         // HOME LIST ITEM COLOR ENABLED
         settingsList.add(
             SettingsItem.Toggle(
                 key = SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED,
                 title = "Show List Item Colors",
                 summary = "Enable or disable background colors in the home list",
-                isChecked = currentHomeListItemColorEnabledValue!! // Artık kesinlikle doğru değer
+                isChecked = currentHomeListItemColorEnabledValue
             )
         )
-
         //HOME LIST ITEM COLOR SOURCE
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE,
-                isUIEnabled = currentHomeListItemColorEnabledValue!!,
+                isUIEnabled = currentHomeListItemColorEnabledValue,
                 title = "List Item Color Source",
                 summary = "Determine the source of background colors for home list items",
                 value = currentHomeListItemColorSourceValue?.replaceFirstChar { it.uppercase() } ?: ""
+            )
+        )
+
+        settingsList.add(SettingsItem.Category("Reminder"))
+        // ABSENCE REMINDER ENABLED
+        settingsList.add(
+            SettingsItem.Toggle(
+                key = SettingsConstants.PREF_KEY_ABSENCE_REMINDER_ENABLED,
+                title = "Absence Reminder",
+                summary = "Receive notifications at the end of lessons to track your attendance.",
+                isChecked = currentAbsenceReminderEnabledValue
             )
         )
 
@@ -236,7 +248,8 @@ class SettingsFragment : Fragment() {
                     viewModelSettings.homeViewRangeState,
                     viewModelSettings.overScrollDaysCountState,
                     viewModelSettings.homeListItemColorEnabledState,
-                    viewModelSettings.homeListItemColorSourceState
+                    viewModelSettings.homeListItemColorSourceState,
+                    viewModelSettings.absenceReminderEnabledState
                 )
                 kotlinx.coroutines.flow.combine(flows) { values ->
                     val newAppTheme = values[1] as String
@@ -252,6 +265,7 @@ class SettingsFragment : Fragment() {
                     currentOverscrollDaysCountValue = values[3] as Int
                     currentHomeListItemColorEnabledValue = values[4] as Boolean
                     currentHomeListItemColorSourceValue = values[5] as String
+                    currentAbsenceReminderEnabledValue = values[6] as Boolean
                 }.collect {
                     renderSettingsList()
                 }

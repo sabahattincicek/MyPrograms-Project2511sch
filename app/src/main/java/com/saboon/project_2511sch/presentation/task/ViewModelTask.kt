@@ -6,6 +6,7 @@ import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.domain.repository.ISettingsRepository
 import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
 import com.saboon.project_2511sch.util.Resource
@@ -14,6 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -58,14 +60,38 @@ class ViewModelTask @Inject constructor(
     }
 
     //ACTIONS
-    fun insert(task: Task) = executeWriteAction{
-        taskWriteUseCase.insert(task)
+    fun insert(course: Course, task: Task){
+        viewModelScope.launch {
+            _operationEvent.send(Resource.Loading())
+            val result = taskWriteUseCase.insert(task)
+
+            if (result is Resource.Success){
+                alarmScheduler.schedule(course, task)
+            }
+            _operationEvent.send(result)
+        }
     }
-    fun update(task: Task) = executeWriteAction{
-        taskWriteUseCase.update(task)
+    fun update(course: Course, task: Task){
+        viewModelScope.launch {
+            _operationEvent.send(Resource.Loading())
+            val result = taskWriteUseCase.update(task)
+
+            if (result is Resource.Success){
+                alarmScheduler.cancel(course, task)
+                alarmScheduler.schedule(course, task)
+            }
+            _operationEvent.send(result)
+        }
     }
-    fun delete(task: Task) = executeWriteAction{
-        taskWriteUseCase.delete(task)
+    fun delete(course: Course, task: Task){
+        viewModelScope.launch {
+            _operationEvent.send(Resource.Loading())
+            val result = taskWriteUseCase.delete(task)
+
+            if (result is Resource.Success) alarmScheduler.cancel(course, task)
+
+            _operationEvent.send(result)
+        }
     }
     private fun executeWriteAction(action: suspend () -> Resource<Task>) {
         viewModelScope.launch {
@@ -76,10 +102,5 @@ class ViewModelTask @Inject constructor(
                 _operationEvent.send(Resource.Error(e.localizedMessage ?: "Unexpected error"))
             }
         }
-    }
-
-    fun setupAlarmForSchedule(tag: Tag, course: Course, task: Task){
-        alarmScheduler.scheduleReminder(tag, course, task)
-        alarmScheduler.scheduleAbsenceReminder(tag, course, task)
     }
 }

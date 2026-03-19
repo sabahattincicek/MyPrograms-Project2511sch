@@ -30,7 +30,7 @@ class RecyclerAdapterHome :
 
     var onContentItemClickListener:((Course) -> Unit)? = null
 
-    var onAbsenceButtonClickListener: ((Task.Lesson) -> Unit)? = null
+    var onAbsenceButtonClickListener: ((Course, Task.Lesson) -> Unit)? = null
 
     private var openedLayout: SwipeRevealLayout? = null
 
@@ -166,7 +166,7 @@ class RecyclerAdapterHome :
                             val updatedTask = item.task.copy(
                                 absence = absenceDateList
                             )
-                            onAbsenceButtonClickListener?.invoke(updatedTask)
+                            onAbsenceButtonClickListener?.invoke(course, updatedTask)
                         }
                         binding.btnAbsenceIncrease.setOnClickListener {
                             val absenceDateList = item.task.absence.toMutableList()
@@ -174,7 +174,7 @@ class RecyclerAdapterHome :
                             val updatedTask = item.task.copy(
                                 absence = absenceDateList
                             )
-                            onAbsenceButtonClickListener?.invoke(updatedTask)
+                            onAbsenceButtonClickListener?.invoke(course, updatedTask)
                         }
                     }
 
