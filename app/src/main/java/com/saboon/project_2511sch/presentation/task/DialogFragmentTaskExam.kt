@@ -122,11 +122,11 @@ class DialogFragmentTaskExam: DialogFragment() {
         setupListeners()
         setupObservers()
 
-        binding.toolbar.title = getString(R.string.edit)
-        binding.toolbar.subtitle = course.title
-
         val isEditMode = task != null
         if (isEditMode){
+            binding.toolbar.title = getString(R.string.edit)
+            binding.toolbar.subtitle = course.title
+
             binding.etTitle.setText(exam!!.title)
             binding.etDescription.setText(exam!!.description)
             binding.etTargetScore.setText(exam!!.targetScore.toString())
@@ -142,6 +142,8 @@ class DialogFragmentTaskExam: DialogFragment() {
             selectedTimeEndMillis = exam!!.timeEnd
             selectedRemindBeforeMinutes = exam!!.remindBefore
         }else{
+            binding.toolbar.title = getString(R.string.createTask)
+
             binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
             binding.llFilesSection.visibility = View.GONE
 
@@ -156,7 +158,7 @@ class DialogFragmentTaskExam: DialogFragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when(item.itemId){
                 R.id.action_delete -> {
-                    val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete", "Are you sure?")
+                    val dialog = DialogFragmentDeleteConfirmation.newInstance("${binding.root.context.getString(R.string.delete)}", "${binding.root.context.getString(R.string.areYouSure)}")
                     dialog.show(childFragmentManager, "DeleteConfirmationFragment")
                     true
                 }

@@ -13,15 +13,15 @@ object SettingsConstants {
 
     //APPEARANCE
     object DarkMode {
-        const val OPEN = "open"
-        const val CLOSE = "close"
+        const val DARK_MODE = "dark_mode"
+        const val LIGHT_MODE = "light_mode"
         const val SYSTEM = "system"
         const val DEFAULT = SYSTEM
         /**
          * Returns an array of the available dark mode values in a consistent order.
          */
         fun getValuesAsArray(): Array<String> {
-            return arrayOf(OPEN, CLOSE, SYSTEM) // same order with pref_dark_mode in arrays.xml
+            return arrayOf(DARK_MODE, LIGHT_MODE, SYSTEM) // same order with pref_dark_mode in arrays.xml
         }
     }
     object AppTheme {

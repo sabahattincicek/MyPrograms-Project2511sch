@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    SETTINGS-->
+    <!--    THEME-->
+    <string-array name="pref_dark_mode">
+        <item>Karanlık Mod</item>
+        <item>Aydınlık Mod</item>
+        <item>Sistem</item>
+    </string-array>
+    <string-array name="pref_app_theme">
+        <item>Coffee</item>
+        <item>Forest</item>
+        <item>Ocean</item>
+        <item>Pony</item>
+        <item>Volcano</item>
+    </string-array>
+
+    <!--    HOME PAGE-->
+    <string-array name="pref_home_view_range">
+        <item>Bu Hafta</item>
+        <item>Bu Ay</item>
+    </string-array>
+    <string-array name="pref_overscroll_days_count">
+        <item>7 Gün</item>
+        <item>14 Gün</item>
+        <item>30 Gün</item>
+        <item>60 Gün</item>
+    </string-array>
+    <string-array name="pref_home_list_item_color_source">
+        <item>Ders</item>
+        <item>Etiket</item>
+    </string-array>
+
+    <!--    APP STRINGS-->
+    <string-array name="recurrence_options">
+        <item>Tekrar etme</item>
+        <item>Günde bir tekrar et</item>
+        <item>Haftada bir tekrar et</item>
+        <item>Ayda bir tekrar et</item>
+        <item>Yılda bir tekrar et</item>
+    </string-array>
+
+    <string-array name="reminder_options">
+        <item>Hatırlatıcı yok</item>
+        <item>Tam zamanında</item>
+        <item>10 dakika önce</item>
+        <item>30 dakika önce</item>
+        <item>1 saat önce</item>
+        <item>1 gün önce</item>
+    </string-array>
+
+    <string-array name="task_types">
+        <item>Ders Oturumu</item>
+        <item>Sınav</item>
+        <item>Ödev</item>
+    </string-array>
+</resources>

@@ -92,7 +92,7 @@ class DialogFragmentCourse: DialogFragment() {
         setupListeners()
         setupObservers()
 
-        viewModelTag.getById("MyPrograms_default_tag_id")
+//        viewModelTag.getById("MyPrograms_default_tag_id")
 
         val isEditMode = course != null
         Log.d(TAG, "onCreateView: isEditMode: $isEditMode")
@@ -100,6 +100,8 @@ class DialogFragmentCourse: DialogFragment() {
         if (isEditMode){
             Log.d(TAG, "onCreateView: Edit mode. Populating fields for course: ${course!!.title}")
             course?.let { course ->
+                binding.toolbar.title = getString(R.string.editCourse)
+
                 binding.etTitle.setText(course.title)
                 binding.etDescription.setText(course.description)
                 binding.etPeople.setText(course.people)
@@ -120,6 +122,8 @@ class DialogFragmentCourse: DialogFragment() {
                 binding.msActivation.isChecked = isActive
             }
         }else{
+            binding.toolbar.title = getString(R.string.createCourse)
+
             binding.etTitle.requestFocus()
             binding.tilTag.isEndIconVisible = false
         }

@@ -123,11 +123,11 @@ class DialogFragmentTaskLesson: DialogFragment() {
         setupListeners()
         setupObservers()
 
-        binding.toolbar.title = getString(R.string.edit)
-        binding.toolbar.subtitle = course.title
-
         val isEditMode = task != null
         if (isEditMode){
+            binding.toolbar.title = getString(R.string.edit)
+            binding.toolbar.subtitle = course.title
+
             binding.etTitle.setText(lesson!!.title)
             binding.etDescription.setText(lesson!!.description)
             binding.etDate.setText(lesson!!.date.toFormattedString("dd MMMM yyyy EEEE"))
@@ -145,6 +145,8 @@ class DialogFragmentTaskLesson: DialogFragment() {
             selectedTimeEndMillis = lesson!!.timeEnd
             selectedRemindBeforeMinutes = lesson!!.remindBefore
         }else{
+            binding.toolbar.title = getString(R.string.createTask)
+
             binding.actvRepeat.setText(mapRuleToDisplayString(selectedRecurrenceRule), false)
             binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
             binding.llFilesSection.visibility = View.GONE
@@ -160,7 +162,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when(item.itemId){
                 R.id.action_delete -> {
-                    val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete", "Are you sure?")
+                    val dialog = DialogFragmentDeleteConfirmation.newInstance("${binding.root.context.getString(R.string.delete)}", "${binding.root.context.getString(R.string.areYouSure)}")
                     dialog.show(childFragmentManager, "DeleteConfirmationFragment")
                     true
                 }

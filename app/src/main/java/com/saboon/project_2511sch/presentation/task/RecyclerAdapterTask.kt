@@ -69,7 +69,12 @@ class RecyclerAdapterTask:
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item) //for click logic
             if (item is DisplayItemTask.HeaderTask){
-                binding.tvContent.text = item.taskType
+                when(item.taskType){
+                    Task.Lesson::class.simpleName -> binding.tvContent.text = binding.root.context.getString(R.string.courseSession)
+                    Task.Exam::class.simpleName -> binding.tvContent.text = binding.root.context.getString(R.string.exam)
+                    Task.Homework::class.simpleName -> binding.tvContent.text = binding.root.context.getString(R.string.homework)
+                }
+
             }
         }
     }
@@ -112,7 +117,7 @@ class RecyclerAdapterTask:
                         binding.tvDate1.text = task.timeStart.toFormattedString("HH:mm")
                         binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
                         binding.tvContent1.text = task.title
-                        binding.tvContent1Sub.text = "${getString(binding.root.context,R.string.target_score)}: ${task.targetScore}"
+                        binding.tvContent1Sub.text = "${binding.root.context.getString(R.string.target_score)}: ${task.targetScore}"
                         binding.tvContent2.text = task.date.toFormattedString("dd MMMM yyyy")
                         binding.tvContent2Sub.text = task.place
 
@@ -150,9 +155,9 @@ class RecyclerAdapterTask:
     inner class FooterTaskViewHolder(private val binding: RowSingleTextViewBinding): BaseViewHolder(binding.root){
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
-            if (item is DisplayItemTask.FooterTask){
-                binding.tvContent.text = "Count: ${item.count}"
-            }
+//            if (item is DisplayItemTask.FooterTask){
+//                binding.tvContent.text = "${item.count} ${binding.root.context.getString(R.string.tasks)}"
+//            }
         }
     }
 }

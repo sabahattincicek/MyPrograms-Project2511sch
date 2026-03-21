@@ -92,6 +92,8 @@ class DialogFragmentTag: DialogFragment() {
 
         val isEditMode = tag != null
         if (isEditMode){
+            binding.toolbar.title = getString(R.string.editTag)
+
             binding.etTitle.setText(tag!!.title)
             binding.etDescription.setText(tag!!.description)
             selectedColor = tag!!.color
@@ -108,6 +110,8 @@ class DialogFragmentTag: DialogFragment() {
             isActive = tag!!.isActive
             binding.msActivation.isChecked = isActive
         }else{
+            binding.toolbar.title = getString(R.string.createTag)
+
             binding.etTitle.requestFocus()
             binding.toolbar.menu.clear()
         }
@@ -177,7 +181,7 @@ class DialogFragmentTag: DialogFragment() {
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.action_delete -> {
-                    val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete", "Are you sure?")
+                    val dialog = DialogFragmentDeleteConfirmation.newInstance(binding.root.context.getString(R.string.delete), binding.root.context.getString(R.string.areYouSure_ifDeleteTagCouresWontDelete))
                     dialog.show(childFragmentManager, "Delete Course")
                     true
                 }
