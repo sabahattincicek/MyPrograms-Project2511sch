@@ -56,7 +56,13 @@ class DialogFragmentTaskLesson: DialogFragment() {
     private lateinit var recyclerAdapterSFileMini: RecyclerAdapterSFileMini
 
     private var selectedDateMillis: Long = System.currentTimeMillis()
-    private var selectedRecurrenceRule: RecurrenceRule = RecurrenceRule(freq = RecurrenceRule.Frequency.WEEKLY)
+    private var selectedRecurrenceRule: RecurrenceRule = RecurrenceRule(
+        freq = RecurrenceRule.Frequency.WEEKLY,
+        dtStart = selectedDateMillis,
+        until = Calendar.getInstance().apply {
+            timeInMillis = selectedDateMillis
+            add(Calendar.MONTH, 9)
+        }.timeInMillis)
     private var selectedTimeStartMillis: Long = System.currentTimeMillis()
     private var selectedTimeEndMillis: Long = System.currentTimeMillis()
     private var selectedRemindBeforeMinutes: Int = -1 // no reminder

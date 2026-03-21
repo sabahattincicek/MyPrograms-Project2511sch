@@ -114,5 +114,13 @@
     <string name="absence_reminder">Absence Reminder</string>
     <string name="receive_a_notification_after_class_sessions_asking_whether_you_attended_the_class">Receive a notification after class sessions asking whether you attended the class.</string>
     <string name="courseSessions">Course Sessions</string>
+    <string name="share">Share</string>
+    <string name="save_to_device">Save to device.</string>
+    <string name="importSuccessfully">Imported Successfully</string>
+    <string name="exportSuccessfully">Exported Successfully</string>
+    <string name="exportFail">Exported Fail!</string>
+    <string name="importFail">Import Fail!</string>
+    <string name="about">About</string>
+    <string name="areYouSure_allDataWillBeDeletedExceptUserInformations">Are you sure? All data will be deleted except user informations.</string>
 
 </resources>

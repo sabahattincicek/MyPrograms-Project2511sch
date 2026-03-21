@@ -114,4 +114,10 @@
     <string name="absence_reminder">Devamsızlık Hatırlatıcısı</string>
     <string name="receive_a_notification_after_class_sessions_asking_whether_you_attended_the_class">Ders oturumlarından sonra derse katılıp katılmadığınızı soran bildirimler alın.</string>
     <string name="courseSessions">Ders Oturumları</string>
+    <string name="share">Paylaş</string>
+    <string name="save_to_device">Cihaza kaydet</string>
+    <string name="importSuccessfully">İçe Aktarma Başarılı</string>
+    <string name="exportSuccessfully">Dışa Aktarma Başarılı</string>
+    <string name="exportFail">Dışa Aktarma Başarısız!</string>
+    <string name="importFail">İçe Aktarma Başarısız!</string>
 </resources>
