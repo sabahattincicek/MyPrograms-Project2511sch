@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/action_add_lesson"
-        android:title="@string/lesson"/>
+        android:title="@string/courseSession"/>
 
     <item
         android:id="@+id/action_add_exam"

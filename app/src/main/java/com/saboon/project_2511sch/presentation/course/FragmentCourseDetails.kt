@@ -100,7 +100,7 @@ class FragmentCourseDetails : Fragment() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.action_delete -> {
-                    val dialog = DialogFragmentDeleteConfirmation.newInstance("Delete", "Are you sure?")
+                    val dialog = DialogFragmentDeleteConfirmation.newInstance("${binding.root.context.getString(R.string.delete)}", "${binding.root.context.getString(R.string.areYouSure_allTaskWillDelete)}")
                     dialog.show(childFragmentManager, "Delete Course")
                     true
                 }

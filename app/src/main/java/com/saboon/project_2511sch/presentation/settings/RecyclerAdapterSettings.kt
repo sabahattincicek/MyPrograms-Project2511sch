@@ -49,6 +49,11 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
     inner class SettingsCategoryViewHolder(private val binding: SettingsRowCategoryBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: SettingsItem.Category){
             binding.tvContent.text = item.title
+            if (layoutPosition == 0){
+                binding.categoryDivider.visibility = View.GONE
+            }else{
+                binding.categoryDivider.visibility = View.VISIBLE
+            }
         }
     }
     inner class SettingsActionViewHolder(private val binding: SettingsRowActionBinding): RecyclerView.ViewHolder(binding.root){
@@ -86,6 +91,10 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
             binding.swSettings.setOnCheckedChangeListener { _, isChecked ->
                 item.isChecked = isChecked
                 onSwitchChange?.invoke(item)
+            }
+            binding.root.setOnClickListener {
+                //tum satira tiklayinca bile switch degissin.
+                binding.swSettings.isChecked = !binding.swSettings.isChecked
             }
 
             if (item.isUIEnabled) {

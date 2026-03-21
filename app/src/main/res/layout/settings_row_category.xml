@@ -5,6 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!-- Divider Çizgisi -->
+    <View
+        android:id="@+id/categoryDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider" />
+
     <TextView
         android:id="@+id/tv_content"
         android:layout_width="match_parent"

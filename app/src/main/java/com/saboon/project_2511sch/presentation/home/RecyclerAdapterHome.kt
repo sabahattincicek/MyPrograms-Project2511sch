@@ -100,8 +100,8 @@ class RecyclerAdapterHome :
                     diffDays == 0L -> getString(binding.root.context, R.string.today)
                     diffDays == 1L -> getString(binding.root.context, R.string.tomorrow)
                     diffDays == -1L -> getString(binding.root.context, R.string.yesterday)
-                    diffDays > 0 -> "In $diffDays days"
-                    else -> "${kotlin.math.abs(diffDays)} days ago"
+                    diffDays > 0 -> binding.root.context.getString(R.string.in_n_days, diffDays.toInt())
+                    else -> binding.root.context.getString(R.string.n_days_ago, kotlin.math.abs(diffDays).toInt())
                 }
 
                 if (item.date < today) {binding.llContainer.alpha = 0.3f}
@@ -147,7 +147,7 @@ class RecyclerAdapterHome :
                             }
                         }
                         binding.tvContent2.text = task.place
-                        binding.tvContent2Sub.text = "Absence: ${task.absence.size.toString()}"
+                        binding.tvContent2Sub.text = "${binding.root.context.getString(R.string.absence)}: ${task.absence.size}"
 
                         if (isColorEnabled){
                             binding.llContainer.background = GradientDrawable(
@@ -183,12 +183,12 @@ class RecyclerAdapterHome :
                         binding.tvDate2.text = task.timeEnd.toFormattedString("HH:mm")
                         binding.tvContent1.text = "${course.title}, ${task.title}"
                         if (task.achievedScore != null){
-                            binding.tvContent1Sub.text = "${getString(binding.root.context, R.string.achieved_score)}: ${task.achievedScore}"
+                            binding.tvContent1Sub.text = "${binding.root.context.getString(R.string.achieved_score)}: ${task.achievedScore}"
                         }else{
                             if (task.description != ""){
                                 binding.tvContent1Sub.text = task.description
                             }else{
-                                binding.tvContent1Sub.text = "${getString(binding.root.context, R.string.target_score)}: ${task.targetScore}"
+                                binding.tvContent1Sub.text = "${binding.root.context.getString(R.string.target_score)}: ${task.targetScore}"
                             }
                         }
                         binding.tvContent2.text = task.date.toFormattedString("dd.MM.yyyy")
@@ -264,9 +264,9 @@ class RecyclerAdapterHome :
                     set(Calendar.MILLISECOND, 0)
                 }.timeInMillis
 
-                binding.tvToday.text = "Today: ${today.toFormattedString("dd.MM.yyyy")}"
-                binding.tvDateRange.text = "Showing date range: ${startDay.toFormattedString("dd.MM.yyyy")} - ${endDay.toFormattedString("dd.MM.yyyy")}"
-                binding.tvItemCount.text = "Showing items: ${itemCount}"
+                binding.tvToday.text = "${binding.root.context.getString(R.string.today)}: ${today.toFormattedString("dd.MM.yyyy")}"
+                binding.tvDateRange.text = "${binding.root.context.getString(R.string.showingDateRange)}: ${startDay.toFormattedString("dd.MM.yyyy")} - ${endDay.toFormattedString("dd.MM.yyyy")}"
+                binding.tvItemCount.text = "${binding.root.context.getString(R.string.showingTasks)}: ${itemCount}"
             }
         }
     }

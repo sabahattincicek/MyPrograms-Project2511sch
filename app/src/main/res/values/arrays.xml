@@ -3,9 +3,9 @@
 <!--    SETTINGS-->
 <!--    THEME-->
     <string-array name="pref_dark_mode">
-        <item>Open</item>
-        <item>Close</item>
-        <item>System Default</item>
+        <item>Dark Mode</item>
+        <item>Light Mode</item>
+        <item>System</item>
     </string-array>
     <string-array name="pref_app_theme">
         <item>Coffee</item>
@@ -28,7 +28,7 @@
     </string-array>
     <string-array name="pref_home_list_item_color_source">
         <item>Course</item>
-        <item>Program Table</item>
+        <item>Tag</item>
     </string-array>
 
 <!--    APP STRINGS-->

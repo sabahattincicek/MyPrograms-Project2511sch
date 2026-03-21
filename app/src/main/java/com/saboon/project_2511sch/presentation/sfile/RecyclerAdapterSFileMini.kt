@@ -163,7 +163,7 @@ class RecyclerAdapterSFileMini :
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemSFile.FooterSFile){
-                binding.tvTitle.text = "Add File"
+                binding.tvTitle.text = binding.root.context.getString(R.string.addFile)
                 binding.tvDate.visibility = View.GONE
                 binding.tvFileType.visibility = View.GONE
                 binding.ivFilePreview.visibility = View.VISIBLE

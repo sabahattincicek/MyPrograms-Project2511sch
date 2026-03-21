@@ -27,7 +27,25 @@
                 app:title="@string/profile" />
         </com.google.android.material.appbar.AppBarLayout>
 
+        <FrameLayout
+            android:id="@+id/fl_loading"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#99000000"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
@@ -38,25 +56,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:orientation="vertical">
 
                 <!--Characters-->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:gravity="center_horizontal"
-                    android:visibility="gone"
-                    android:layout_marginTop="16dp">
+                    android:visibility="gone">
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/materialCardView2"
                         android:layout_width="match_parent"
                         android:layout_height="178dp"
                         android:layout_marginBottom="72dp"
-                        app:cardCornerRadius="10dp"
                         android:visibility="gone"
+                        app:cardCornerRadius="10dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -92,10 +108,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
                         android:maxLines="1"
                         android:text="Refik"
                         android:textSize="18sp"
-                        android:layout_marginTop="8dp"
                         app:layout_constraintStart_toEndOf="@+id/materialCardView"
                         app:layout_constraintTop_toTopOf="@+id/materialCardView" />
 
@@ -113,11 +129,12 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -129,155 +146,155 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
-                            android:hint="@string/full_name"/>
+                            android:hint="@string/full_name"
+                            android:padding="4dp"
+                            android:textSize="18sp" />
                         <!-- ROLE -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
-                            android:hint="@string/role"/>
+                            android:hint="@string/role"
+                            android:padding="4dp"
+                            android:textSize="18sp" />
                         <!-- ACADEMIC LEVEL -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
-                            android:hint="@string/academic_level"/>
+                            android:hint="@string/academic_level"
+                            android:padding="4dp"
+                            android:textSize="18sp" />
                         <!-- ORGANISATION -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
-                            android:hint="@string/institution"/>
+                            android:hint="@string/institution"
+                            android:padding="4dp"
+                            android:textSize="18sp" />
                         <!-- ABOUT ME -->
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
-                            android:hint="@string/about_me"/>
+                            android:hint="@string/about_me"
+                            android:padding="4dp"
+                            android:textSize="18sp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ll_text_view_container"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:visibility="visible"
-                        android:orientation="vertical">
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:visibility="visible">
                         <!-- FULL NAME -->
                         <TextView
                             android:id="@+id/tv_full_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
-                            android:maxLines="1"/>
+                            android:maxLines="1"
+                            android:padding="4dp"
+                            android:textSize="18sp" />
                         <!-- ROLE -->
                         <TextView
                             android:id="@+id/tv_role"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
-                            android:maxLines="1"/>
+                            android:maxLines="1"
+                            android:padding="4dp"
+                            android:textSize="18sp" />
                         <!-- ACADEMIC LEVEL -->
                         <TextView
                             android:id="@+id/tv_academic_level"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
-                            android:maxLines="1"/>
+                            android:maxLines="1"
+                            android:padding="4dp"
+                            android:textSize="18sp" />
                         <!-- ORGANISATION -->
                         <TextView
                             android:id="@+id/tv_organisation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
-                            android:maxLines="1"/>
+                            android:maxLines="1"
+                            android:padding="4dp"
+                            android:textSize="18sp" />
                         <!-- ABOUT ME -->
                         <TextView
                             android:id="@+id/tv_about_me"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
-                            android:maxLines="4"/>
+                            android:maxLines="4"
+                            android:padding="4dp"
+                            android:textSize="18sp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ll_edit_text_container"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:orientation="vertical">
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:visibility="gone">
                         <!-- FULL NAME -->
                         <EditText
                             android:id="@+id/et_full_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
                             android:background="?attr/colorSurfaceVariant"
+                            android:hint="@string/full_name"
                             android:maxLines="1"
-                            android:hint="@string/full_name"/>
+                            android:padding="4dp" />
                         <!-- ROLE -->
                         <EditText
                             android:id="@+id/et_role"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
                             android:background="?attr/colorSurfaceVariant"
+                            android:hint="@string/role"
                             android:maxLines="1"
-                            android:hint="@string/role"/>
+                            android:padding="4dp" />
                         <!-- ACADEMIC LEVEL -->
                         <EditText
                             android:id="@+id/et_academic_level"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
                             android:background="?attr/colorSurfaceVariant"
+                            android:hint="@string/academic_level"
                             android:maxLines="1"
-                            android:hint="@string/academic_level"/>
+                            android:padding="4dp" />
                         <!-- ORGANISATION -->
                         <EditText
                             android:id="@+id/et_organisation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
                             android:background="?attr/colorSurfaceVariant"
+                            android:hint="@string/institution"
                             android:maxLines="1"
-                            android:hint="@string/institution"/>
+                            android:padding="4dp" />
                         <!-- ABOUT ME -->
                         <EditText
                             android:id="@+id/et_about_me"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="4dp"
                             android:layout_marginBottom="8dp"
                             android:background="?attr/colorSurfaceVariant"
+                            android:hint="@string/about_me"
                             android:maxLines="4"
-                            android:hint="@string/about_me"/>
+                            android:padding="4dp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -287,26 +304,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:gravity="end">
+
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="30dp">
+
                         <ImageView
                             android:id="@+id/iv_edit_user"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="8dp"
-                            android:visibility="visible"
                             android:src="@drawable/baseline_edit_24"
+                            android:visibility="visible"
                             app:tint="?attr/colorOnSurface" />
+
                         <ImageView
                             android:id="@+id/iv_save_user"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_margin="8dp"
-                            android:visibility="gone"
                             android:src="@drawable/baseline_check_24"
+                            android:visibility="gone"
                             app:tint="?attr/colorOnSurface" />
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
@@ -316,7 +338,9 @@
                     android:id="@+id/divider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"/>
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp" />
 
                 <!-- Options List -->
                 <LinearLayout
@@ -366,6 +390,8 @@
                         android:gravity="center_vertical"
                         android:paddingTop="16dp"
                         android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         android:text="@string/settings"
                         app:drawableStartCompat="@drawable/baseline_settings_24"
                         app:drawableTint="?attr/colorOnSurface" />
@@ -374,7 +400,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp" />
 
                     <!-- Export Option -->
                     <TextView
@@ -389,6 +417,8 @@
                         android:gravity="center_vertical"
                         android:paddingTop="16dp"
                         android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         android:text="@string/export_data"
                         app:drawableStartCompat="@drawable/baseline_file_upload_24"
                         app:drawableTint="?attr/colorOnSurface" />
@@ -406,6 +436,8 @@
                         android:gravity="center_vertical"
                         android:paddingTop="16dp"
                         android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         android:text="@string/import_data"
                         app:drawableStartCompat="@drawable/baseline_file_download_24"
                         app:drawableTint="?attr/colorOnSurface" />
@@ -414,11 +446,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp" />
 
-                    <!-- Contact Support -->
+                    <!-- About -->
                     <TextView
-                        android:id="@+id/tv_contact_support"
+                        android:id="@+id/tv_about"
                         style="?attr/textAppearanceSubtitle1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -429,7 +463,9 @@
                         android:gravity="center_vertical"
                         android:paddingTop="16dp"
                         android:paddingBottom="16dp"
-                        android:text="@string/support_contact"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/about"
                         app:drawableStartCompat="@drawable/baseline_help_outline_24"
                         app:drawableTint="?attr/colorOnSurface" />
 
@@ -446,6 +482,8 @@
                         android:gravity="center_vertical"
                         android:paddingTop="16dp"
                         android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         android:text="@string/privacy_policy"
                         app:drawableStartCompat="@drawable/baseline_privacy_tip_24"
                         app:drawableTint="?attr/colorOnSurface" />
@@ -463,6 +501,8 @@
                         android:gravity="center_vertical"
                         android:paddingTop="16dp"
                         android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         android:text="@string/terms_of_use"
                         app:drawableStartCompat="@drawable/baseline_gavel_24"
                         app:drawableTint="?attr/colorOnSurface" />
@@ -471,25 +511,29 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp" />
 
                     <!-- Delete All Data -->
-                    <TextView
-                        android:id="@+id/tv_delete_all"
-                        style="?attr/textAppearanceSubtitle1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:drawablePadding="16dp"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:text="@string/delete_all_data"
-                        android:textColor="?attr/colorError"
-                        app:drawableStartCompat="@drawable/baseline_delete_forever_24"
-                        app:drawableTint="?attr/colorError" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/tv_delete_all"-->
+<!--                        style="?attr/textAppearanceSubtitle1"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="?attr/selectableItemBackground"-->
+<!--                        android:clickable="true"-->
+<!--                        android:drawablePadding="16dp"-->
+<!--                        android:focusable="true"-->
+<!--                        android:gravity="center_vertical"-->
+<!--                        android:paddingTop="16dp"-->
+<!--                        android:paddingBottom="16dp"-->
+<!--                        android:paddingStart="16dp"-->
+<!--                        android:paddingEnd="16dp"-->
+<!--                        android:text="@string/delete_all_data"-->
+<!--                        android:textColor="?attr/colorError"-->
+<!--                        app:drawableStartCompat="@drawable/baseline_delete_forever_24"-->
+<!--                        app:drawableTint="?attr/colorError" />-->
                 </LinearLayout>
 
                 <LinearLayout

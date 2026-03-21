@@ -1,6 +1,5 @@
 package com.saboon.project_2511sch.presentation.profile
 
-import android.animation.ValueAnimator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,9 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.OvershootInterpolator
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -20,10 +18,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import coil3.load
-import coil3.request.crossfade
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentProfileBinding
 import com.saboon.project_2511sch.domain.model.User
+import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Character
@@ -125,6 +124,15 @@ class ProfileFragment : Fragment() {
         binding.tvImportData.setOnClickListener {
             importFileLauncher.launch("application/zip")
         }
+        binding.tvAbout.setOnClickListener {
+
+        }
+        binding.tvPrivacyPolicy.setOnClickListener {
+
+        }
+        binding.tvTerms.setOnClickListener {
+
+        }
     }
 
     override fun onDestroyView() {
@@ -205,13 +213,13 @@ class ProfileFragment : Fragment() {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(exportFile!!.name)
-                                .setItems(arrayOf("Share", "Save to device")){ _, which ->
+                                .setItems(arrayOf(getString(R.string.share), getString(R.string.save_to_device))){ _, which ->
                                     when(which){
                                         0 -> {shareBackupFile(exportFile!!)} //SHARE
                                         1 -> {exportFileToDeviceLauncher.launch(exportFile!!.name)} //SAVE TO DEVICE
                                     }
                                 }
-                                .setNegativeButton("Cancel") { dialog, which ->
+                                .setNegativeButton(getString(R.string.cancel)) { dialog, which ->
                                     dialog.dismiss()
                                 }
                                 .show()
@@ -225,10 +233,17 @@ class ProfileFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModelProfile.importEvent.collect { resource ->
                     when(resource) {
-                        is Resource.Error -> {}
+                        is Resource.Error -> {
+                            Toast.makeText(requireContext(), R.string.importFail, Toast.LENGTH_SHORT).show()
+                        }
                         is Resource.Idle -> {}
-                        is Resource.Loading -> {}
-                        is Resource.Success -> {}
+                        is Resource.Loading -> {
+                            binding.flLoading.visibility = View.VISIBLE
+                        }
+                        is Resource.Success -> {
+                            binding.flLoading.visibility = View.GONE
+                            Toast.makeText(requireContext(), R.string.importSuccessfully, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
@@ -258,8 +273,10 @@ class ProfileFragment : Fragment() {
                     inputStream.copyTo(outputStream)
                 }
             }
+            Toast.makeText(requireContext(), R.string.exportSuccessfully, Toast.LENGTH_SHORT).show()
         }catch (e: Exception){
             Log.e("ProfileFragment", "Dosya kaydedilemedi: ${e.message}")
+            Toast.makeText(requireContext(), R.string.exportFail, Toast.LENGTH_SHORT).show()
         }finally {
             if (file.exists()) file.delete()
             exportFile = null

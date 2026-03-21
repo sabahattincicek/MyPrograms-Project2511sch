@@ -75,7 +75,7 @@ class SettingsFragment : Fragment() {
                     val checkedItem = darkModeValues.indexOf(currentDarkModeValue)
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Dark Mode")
+                        .setTitle(getString(R.string.darkMode))
                         .setSingleChoiceItems(darkModeEntries, checkedItem) { dialog, which ->
                             val selectedValue = darkModeValues[which]
                             viewModelSettings.onDarkModeSelected(selectedValue)
@@ -91,7 +91,7 @@ class SettingsFragment : Fragment() {
                     val checkedItem = appThemeValues.indexOf(currentAppThemeValue)
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("App Theme")
+                        .setTitle(getString(R.string.app_theme))
                         .setSingleChoiceItems(appThemeEntries, checkedItem) { dialog, which ->
                             val selectedValue = appThemeValues[which]
                             viewModelSettings.onAppThemeSelected(selectedValue)
@@ -107,7 +107,7 @@ class SettingsFragment : Fragment() {
                     val checkedItem = homeViewRangeValues.indexOf(currentHomeViewRangeValue)
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Home View Range")
+                        .setTitle(getString(R.string.loop_tasks))
                         .setSingleChoiceItems(homeViewRangeEntries, checkedItem) { dialog, which ->
                             val selectedValue = homeViewRangeValues[which]
                             viewModelSettings.onHomeViewRangeSelected(selectedValue)
@@ -123,7 +123,7 @@ class SettingsFragment : Fragment() {
                     val checkedItem = overscrollDaysCountValues.indexOf(currentOverscrollDaysCountValue)
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Overscroll Days Count")
+                        .setTitle(getString(R.string.overscroll))
                         .setSingleChoiceItems(overscrollDaysCountEntries, checkedItem) { dialog, which ->
                             val selectedValue = overscrollDaysCountValues[which]
                             viewModelSettings.onOversrollDaysCountChanged(selectedValue)
@@ -139,7 +139,7 @@ class SettingsFragment : Fragment() {
                     val checkedItem = homeListItemColorSourceValues.indexOf(currentHomeListItemColorSourceValue)
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Home List Item Color Source")
+                        .setTitle(getString(R.string.show_list_item_colors))
                         .setSingleChoiceItems(homeListItemColorSourceEntries, checkedItem) { dialog, which ->
                             val selectedValue = homeListItemColorSourceValues[which]
                             viewModelSettings.onHomeListItemColorSourceSelected(selectedValue)
@@ -169,70 +169,87 @@ class SettingsFragment : Fragment() {
     private fun renderSettingsList() {
         val settingsList = mutableListOf<SettingsItem>()
 
-        settingsList.add(SettingsItem.Category("Appearance"))
+        settingsList.add(SettingsItem.Category(getString(R.string.appearance)))
         // DARK MODE
+        val darkModeValues = SettingsConstants.DarkMode.getValuesAsArray()
+        val darkModeEntries = resources.getStringArray(R.array.pref_dark_mode)
+        val darkModeIndex = darkModeValues.indexOf(currentDarkModeValue).coerceAtLeast(0)
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_DARK_MODE,
-                title = "Dark Mode",
-                value = currentDarkModeValue!!
+                title = getString(R.string.darkMode),
+                value = darkModeEntries[darkModeIndex]
             )
         )
         // APP THEME
+        val appThemeValues = SettingsConstants.AppTheme.getValuesAsArray()
+        val appThemeEntries = resources.getStringArray(R.array.pref_app_theme)
+        val appThemeIndex = appThemeValues.indexOf(currentAppThemeValue).coerceAtLeast(0)
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_APP_THEME,
-                title = "App Theme",
-                value = currentAppThemeValue!!
+                title = getString(R.string.app_theme),
+                value = appThemeEntries[appThemeIndex]
             )
         )
 
-        settingsList.add(SettingsItem.Category("Home Page"))
+        settingsList.add(SettingsItem.Category(getString(R.string.home_page)))
         // HOME VIEW RANGE
+        val homeViewRangeValues = SettingsConstants.HomeViewRange.getValuesAsArray()
+        val homeViewRangeEntries = resources.getStringArray(R.array.pref_home_view_range)
+        val homeViewRangeIndex = homeViewRangeValues.indexOf(currentHomeViewRangeValue).coerceAtLeast(0)
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_HOME_VIEW_RANGE,
-                title = "Display Items View Range",
-                summary = "Ana sayfada listelenecek görevlerin tarih aralığını seçin",
-                value = currentHomeViewRangeValue!!
+                title = getString(R.string.loop_tasks),
+                summary = getString(R.string.select_loop_of_task_to_be_shown_on_the_homepage),
+                value = homeViewRangeEntries[homeViewRangeIndex]
             )
         )
         // OVERSCROLL DAYS COUNT
+        val overscrollValues = SettingsConstants.OverscrollDaysCount.getValuesAsArray().map { it.toString() }
+        val overscrollEntries = resources.getStringArray(R.array.pref_overscroll_days_count)
+        val overscrollIndex = overscrollValues.indexOf(currentOverscrollDaysCountValue.toString()).coerceAtLeast(0)
+
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_OVERSCROLL_DAYS_COUNT,
-                title = "Overscroll days count",
-                summary = "How many extra days to load when scrolling",
-                value = currentOverscrollDaysCountValue!!
+                title = getString(R.string.overscroll),
+                summary = getString(R.string.select_how_many_extra_days_will_be_loaded_with_overscrolling_at_the_beginning_and_end_of_the_list_on_the_homepage),
+                value = overscrollEntries[overscrollIndex]
             )
         )
         // HOME LIST ITEM COLOR ENABLED
         settingsList.add(
             SettingsItem.Toggle(
                 key = SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED,
-                title = "Show List Item Colors",
-                summary = "Enable or disable background colors in the home list",
+                title = getString(R.string.show_list_item_colors),
+                summary = getString(R.string.display_the_background_colors_of_list_items_on_the_homepage_if_disabled_the_background_color_will_be_transparent),
                 isChecked = currentHomeListItemColorEnabledValue
             )
         )
         //HOME LIST ITEM COLOR SOURCE
+        val sourceValues = SettingsConstants.HomeListItemColorSource.getValuesAsArray()
+        val sourceEntries = resources.getStringArray(R.array.pref_home_list_item_color_source)
+        val sourceIndex = sourceValues.indexOf(currentHomeListItemColorSourceValue).coerceAtLeast(0)
+
         settingsList.add(
             SettingsItem.Action(
                 key = SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE,
                 isUIEnabled = currentHomeListItemColorEnabledValue,
-                title = "List Item Color Source",
-                summary = "Determine the source of background colors for home list items",
-                value = currentHomeListItemColorSourceValue?.replaceFirstChar { it.uppercase() } ?: ""
+                title = getString(R.string.source_of_list_item_colors),
+                summary = getString(R.string.select_the_source_from_which_the_background_colors_of_list_items_on_the_homepage_should_be_derived),
+                value = sourceEntries[sourceIndex]
             )
         )
 
-        settingsList.add(SettingsItem.Category("Reminder"))
+        settingsList.add(SettingsItem.Category(getString(R.string.reminder)))
         // ABSENCE REMINDER ENABLED
         settingsList.add(
             SettingsItem.Toggle(
                 key = SettingsConstants.PREF_KEY_ABSENCE_REMINDER_ENABLED,
-                title = "Absence Reminder",
-                summary = "Receive notifications at the end of lessons to track your attendance.",
+                title = getString(R.string.absence_reminder),
+                summary = getString(R.string.receive_a_notification_after_class_sessions_asking_whether_you_attended_the_class),
                 isChecked = currentAbsenceReminderEnabledValue
             )
         )
