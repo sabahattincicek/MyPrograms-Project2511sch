@@ -29,6 +29,7 @@ import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
 import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
+import com.saboon.project_2511sch.presentation.widget.WidgetHelper
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.Picker
 import com.saboon.project_2511sch.util.RecurrenceRule
@@ -346,6 +347,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading -> {}
                         is Resource.Success -> {
+                            WidgetHelper.updateWidgetHome(requireContext())
                             dismiss()
                         }
                     }

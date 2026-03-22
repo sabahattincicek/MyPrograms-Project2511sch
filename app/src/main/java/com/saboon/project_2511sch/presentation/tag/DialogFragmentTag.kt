@@ -26,6 +26,7 @@ import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.course.DialogFragmentCourse
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
+import com.saboon.project_2511sch.presentation.widget.WidgetHelper
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
@@ -249,10 +250,9 @@ class DialogFragmentTag: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
                         is Resource.Success -> {
+                            WidgetHelper.updateWidgetHome(requireContext())
                             val operationResult = event.data //BaseVMOperationResult<Tag>
-//                            tag = operationResult?.data
                             val type = operationResult?.operationType
-
                             when(type) {
                                 OperationType.INSERT -> {dismiss()}
                                 OperationType.UPDATE -> {

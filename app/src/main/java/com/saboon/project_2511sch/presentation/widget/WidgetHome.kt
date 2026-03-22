@@ -245,13 +245,13 @@ class WidgetHome : GlanceAppWidget(){
             set(Calendar.MILLISECOND, 0)
         }.timeInMillis
         val date1 = when(task){
-            is Task.Lesson -> task.timeStart.toFormattedString("HH:dd")
-            is Task.Exam -> task.timeStart.toFormattedString("HH:dd")
-            is Task.Homework -> task.dueTime.toFormattedString("HH:dd")
+            is Task.Lesson -> task.timeStart.toFormattedString("HH:mm")
+            is Task.Exam -> task.timeStart.toFormattedString("HH:mm")
+            is Task.Homework -> task.dueTime.toFormattedString("HH:mm")
         }
         val date2 = when(task){
-            is Task.Lesson -> task.timeEnd.toFormattedString("HH:dd")
-            is Task.Exam -> task.timeEnd.toFormattedString("HH:dd")
+            is Task.Lesson -> task.timeEnd.toFormattedString("HH:mm")
+            is Task.Exam -> task.timeEnd.toFormattedString("HH:mm")
             is Task.Homework -> ""
         }
         val content1 = "${course.title}, ${task.title}"
