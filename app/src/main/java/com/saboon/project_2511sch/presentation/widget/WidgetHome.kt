@@ -174,12 +174,16 @@ class WidgetHome : GlanceAppWidget(){
         val context = LocalContext.current
         val bgColorProvider = GlanceTheme.colors.surface
         val textColorProvider = GlanceTheme.colors.onSurface
+        val intent = Intent(context, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
                 .background(bgColorProvider)
                 .cornerRadius(16.dp)
                 .padding(8.dp)
+                .clickable(actionStartActivity(intent))
         ) {
             Text(
                 text = context.getString(R.string.app_name),
@@ -261,7 +265,7 @@ class WidgetHome : GlanceAppWidget(){
         val tag = item.tag
         val course = item.course
         val task = item.task
-        val intent = Intent(context, MainActivity::class.java).apply{ //for click item
+        val intent = Intent(context, MainActivity::class.java).apply{
             putExtra("WIDGET_COURSE_ID", course.id)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             // Önemli: Android 12+ için Intent verisi değiştiğinde widget'ın bunu fark etmesi için:
