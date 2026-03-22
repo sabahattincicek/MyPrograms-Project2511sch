@@ -122,19 +122,6 @@ class ViewModelHome @Inject constructor(
                 DisplayRange(start, end)
             }
         }
-
-
-//        val cal = java.util.Calendar.getInstance()
-//        val dayOfWeek = cal.get(java.util.Calendar.DAY_OF_WEEK)
-//        val daysFromMonday = if (dayOfWeek == java.util.Calendar.SUNDAY) 6 else dayOfWeek - java.util.Calendar.MONDAY
-//
-//        cal.add(java.util.Calendar.DAY_OF_YEAR, -daysFromMonday)
-//        val start = getDayStartMillis(cal.timeInMillis)
-//
-//        cal.add(java.util.Calendar.DAY_OF_YEAR, 6)
-//        val end = getDayEndMillis(cal.timeInMillis)
-//
-//        return DisplayRange(start, end)
     }
 
     private fun getDayStartMillis(timestamp: Long): Long {

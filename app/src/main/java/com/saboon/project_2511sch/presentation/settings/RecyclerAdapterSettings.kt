@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.saboon.project_2511sch.databinding.SettingsRowActionBinding
-import com.saboon.project_2511sch.databinding.SettingsRowCategoryBinding
-import com.saboon.project_2511sch.databinding.SettingsRowToggleBinding
+import com.saboon.project_2511sch.databinding.RowSettingsActionBinding
+import com.saboon.project_2511sch.databinding.RowSettingsCategoryBinding
+import com.saboon.project_2511sch.databinding.RowSettingsToggleBinding
 
 class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolder>(SettingsDiffCallback()){
     var onActionClick: ((SettingsItem) -> Unit)? = null
@@ -19,9 +19,9 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
     ): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when(viewType){
-            SettingsItem.VIEW_TYPE_CATEGORY -> SettingsCategoryViewHolder(SettingsRowCategoryBinding.inflate(inflater, parent, false))
-            SettingsItem.VIEW_TYPE_ACTION -> SettingsActionViewHolder(SettingsRowActionBinding.inflate(inflater, parent, false))
-            SettingsItem.VIEW_TYPE_TOGGLE -> SettingsToggleViewHolder(SettingsRowToggleBinding.inflate(inflater, parent, false))
+            SettingsItem.VIEW_TYPE_CATEGORY -> SettingsCategoryViewHolder(RowSettingsCategoryBinding.inflate(inflater, parent, false))
+            SettingsItem.VIEW_TYPE_ACTION -> SettingsActionViewHolder(RowSettingsActionBinding.inflate(inflater, parent, false))
+            SettingsItem.VIEW_TYPE_TOGGLE -> SettingsToggleViewHolder(RowSettingsToggleBinding.inflate(inflater, parent, false))
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
@@ -46,7 +46,7 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
         }
     }
 
-    inner class SettingsCategoryViewHolder(private val binding: SettingsRowCategoryBinding): RecyclerView.ViewHolder(binding.root){
+    inner class SettingsCategoryViewHolder(private val binding: RowSettingsCategoryBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: SettingsItem.Category){
             binding.tvContent.text = item.title
             if (layoutPosition == 0){
@@ -56,7 +56,7 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
             }
         }
     }
-    inner class SettingsActionViewHolder(private val binding: SettingsRowActionBinding): RecyclerView.ViewHolder(binding.root){
+    inner class SettingsActionViewHolder(private val binding: RowSettingsActionBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: SettingsItem.Action){
             binding.tvTitle.text = item.title
             if (item.summary == null ){
@@ -78,7 +78,7 @@ class RecyclerAdapterSettings : ListAdapter<SettingsItem, RecyclerView.ViewHolde
         }
     }
 
-    inner class SettingsToggleViewHolder(private val binding: SettingsRowToggleBinding): RecyclerView.ViewHolder(binding.root){
+    inner class SettingsToggleViewHolder(private val binding: RowSettingsToggleBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: SettingsItem.Toggle){
             binding.tvTitle.text = item.title
             if (item.summary.equals("") && item.summary == null ){

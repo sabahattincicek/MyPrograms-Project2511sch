@@ -27,5 +27,5 @@
         android:id="@+id/rv_settings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/settings_row_action"/>
+        tools:listitem="@layout/row_settings_action"/>
 </LinearLayout>
