@@ -20,13 +20,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.saboon.project_2511sch.R
+import com.saboon.project_2511sch.data.worker.WidgetUpdateWorker
 import com.saboon.project_2511sch.databinding.DialogFragmentTagBinding
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
 import com.saboon.project_2511sch.presentation.course.DialogFragmentCourse
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
-import com.saboon.project_2511sch.presentation.widget.WidgetHelper
 import com.saboon.project_2511sch.util.IdGenerator
 import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
@@ -250,7 +250,7 @@ class DialogFragmentTag: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
                         is Resource.Success -> {
-                            WidgetHelper.updateWidgetHome(requireContext())
+                            WidgetUpdateWorker.enqueueUpdate(requireContext().applicationContext)
                             val operationResult = event.data //BaseVMOperationResult<Tag>
                             val type = operationResult?.operationType
                             when(type) {

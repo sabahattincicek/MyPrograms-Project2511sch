@@ -24,12 +24,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.saboon.project_2511sch.data.worker.WidgetUpdateWorker
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.tag.DialogFragmentTag
 import com.saboon.project_2511sch.presentation.tag.DialogFragmentManageTag
 import com.saboon.project_2511sch.presentation.tag.DisplayItemTag
 import com.saboon.project_2511sch.presentation.tag.ViewModelTag
-import com.saboon.project_2511sch.presentation.widget.WidgetHelper
 import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.ModelColorConstats
 import com.saboon.project_2511sch.util.OperationType
@@ -302,7 +302,7 @@ class DialogFragmentCourse: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
                         is Resource.Success -> {
-                            WidgetHelper.updateWidgetHome(requireContext())
+                            WidgetUpdateWorker.enqueueUpdate(requireContext().applicationContext)
                             val operationResult = event.data //BaseVMOperationResult<Course>
                             val type = operationResult?.operationType
                             when(type) {

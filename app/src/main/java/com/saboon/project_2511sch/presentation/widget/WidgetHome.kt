@@ -2,6 +2,8 @@ package com.saboon.project_2511sch.presentation.widget
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -9,6 +11,7 @@ import androidx.core.graphics.toColorInt
 import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.appwidget.GlanceAppWidget
@@ -45,6 +48,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import java.util.Calendar
 import androidx.glance.appwidget.lazy.items
+import androidx.glance.color.ColorProvider
 import androidx.glance.layout.fillMaxHeight
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.util.ModelColorConstats
@@ -57,6 +61,10 @@ class WidgetHome : GlanceAppWidget(){
     private lateinit var settingsRepository: ISettingsRepository
     private var isColorEnabled: Boolean = true
     private lateinit var colorSource: String
+    private lateinit var darkMode: String
+    private val LocalWidgetTextColor = staticCompositionLocalOf {
+        ColorProvider(Color.Black) //default
+    }
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
@@ -82,6 +90,7 @@ class WidgetHome : GlanceAppWidget(){
 
         isColorEnabled = settingsRepository.getHomeListItemColorEnabled().first()
         colorSource = settingsRepository.getHomeListItemColorSource().first()
+        darkMode = settingsRepository.getDarkMode().first()
 
         provideContent {
             WidgetViewHome(displayItems)
@@ -157,16 +166,21 @@ class WidgetHome : GlanceAppWidget(){
     @Composable
     private fun WidgetViewHome(items: List<DisplayItemHome>){
         val context = LocalContext.current
+        val bgColorProvider = GlanceTheme.colors.surface
+        val textColorProvider = GlanceTheme.colors.onSurface
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(ColorProvider(Color.White))
+                .background(bgColorProvider)
                 .cornerRadius(16.dp)
                 .padding(8.dp)
         ) {
             Text(
                 text = context.getString(R.string.app_name),
-                style = TextStyle(fontSize = 16.sp, color = ColorProvider(Color.Black))
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    color = textColorProvider
+                )
             )
 
             Spacer(modifier = GlanceModifier.height(8.dp))
@@ -176,7 +190,10 @@ class WidgetHome : GlanceAppWidget(){
                     Text(text = "Ders Bulunamadi", style = TextStyle(color = ColorProvider(Color.Gray)))
                 }
             }else{
-                LazyColumn(modifier = GlanceModifier.fillMaxSize()) {
+                LazyColumn(
+                    modifier = GlanceModifier
+                        .fillMaxSize(),
+                ) {
                     items(items){ item ->
                         when(item){
                             is DisplayItemHome.HeaderItemHome -> RowWidgetViewHeader(item)
@@ -208,7 +225,7 @@ class WidgetHome : GlanceAppWidget(){
             else -> context.getString(R.string.n_days_ago, kotlin.math.abs(diffDays).toInt())
         }
         val alpha = if(item.date < today) 0.3f else 1.0f
-        val textColorProvider = ColorProvider(Color.Black.copy(alpha = alpha))
+        val textColorProvider = ColorProvider(day = Color.Black.copy(alpha = alpha), night = Color.White.copy(alpha = alpha))
         Row(
             modifier = GlanceModifier
                 .fillMaxWidth()
@@ -287,100 +304,102 @@ class WidgetHome : GlanceAppWidget(){
             is Task.Homework -> task.dueDate
         }
         val alpha = if (taskDate < today) 0.3f else 1.0f
-        val textColorProvider = ColorProvider(Color.Black.copy(alpha = alpha))
-        val backgroundModifier = if (isColorEnabled){
+        val textColorProvider = ColorProvider(day = Color.Black.copy(alpha = alpha), night = Color.White.copy(alpha = alpha))
+        val containerColorProvider: ColorProvider
+        if (isColorEnabled){
             val color = if (colorSource == SettingsConstants.HomeListItemColorSource.FROM_TAG){
                 tag?.color
             }else{
                 course.color
             }
-            val containerColor = if (color != null){
-                Color( color.getContainerColor(context))
-            } else Color.Transparent
-            val bgColorProvider = ColorProvider(containerColor.copy(alpha = alpha))
-            GlanceModifier
-                .background(
-                    imageProvider = ImageProvider(R.drawable.bg_widget_gradient_mask),
-                    colorFilter = ColorFilter.tint(bgColorProvider)
-                )
+            if (color != null){
+                containerColorProvider = ColorProvider(Color( color.getContainerColor(context)).copy(alpha = alpha))
+            } else {
+                containerColorProvider = ColorProvider(Color.Transparent.copy(alpha = alpha))
+            }
         }else{
-            GlanceModifier.background(Color.Transparent.copy(alpha = alpha))
+            containerColorProvider = ColorProvider(Color.Transparent.copy(alpha = alpha))
         }
         val dividerColorProvider = when(task){
             is Task.Lesson -> ColorProvider(Color(ModelColorConstats.LESSON.toColorInt()).copy(alpha = alpha))
             is Task.Exam -> ColorProvider(Color(ModelColorConstats.EXAM.toColorInt()).copy(alpha = alpha))
             is Task.Homework -> ColorProvider(Color(ModelColorConstats.HOMEWORK.toColorInt()).copy(alpha = alpha))
         }
-
-        Row(
+        Box(
             modifier = GlanceModifier
                 .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
-                .then(backgroundModifier)
+                .padding(bottom = 4.dp)
         ) {
-
-            // LEFT: Date Section
-            Column(
-                modifier = GlanceModifier.padding(end = 8.dp),
-                horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
-                verticalAlignment = Alignment.Vertical.CenterVertically
-            ) {
-                Text(
-                    text = date1,
-                    style = TextStyle(fontSize = 14.sp, color = textColorProvider),
-                    maxLines = 1
-                )
-                Text(
-                    text = date2,
-                    style = TextStyle(fontSize = 10.sp, color = textColorProvider),
-                    maxLines = 1
-                )
-            }
-
-            // Divider
-            Spacer(
+            Row(
                 modifier = GlanceModifier
-                    .width(8.dp)
-                    .padding(end = 8.dp)
-                    .fillMaxHeight()
-                    .cornerRadius(1000.dp)
-                    .background(dividerColorProvider)
-            )
-
-            // RIGHT: Content Section
-            Column(
-                modifier = GlanceModifier
-                    .padding(start = 8.dp)
                     .fillMaxWidth()
+                    .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+                    .cornerRadius(1000.dp)
+                    .background(containerColorProvider)
             ) {
 
-                Row(modifier = GlanceModifier.fillMaxWidth()) {
+                // LEFT: Date Section
+                Column(
+                    modifier = GlanceModifier.padding(end = 8.dp),
+                    horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
+                    verticalAlignment = Alignment.Vertical.CenterVertically
+                ) {
                     Text(
-                        text = content1,
+                        text = date1,
                         style = TextStyle(fontSize = 14.sp, color = textColorProvider),
-                        modifier = GlanceModifier.defaultWeight(),
-                        maxLines = 1,
+                        maxLines = 1
                     )
                     Text(
-                        text = content2,
-                        style = TextStyle(fontSize = 14.sp, color = textColorProvider),
+                        text = date2,
+                        style = TextStyle(fontSize = 10.sp, color = textColorProvider),
                         maxLines = 1
                     )
                 }
 
-                Row(modifier = GlanceModifier.fillMaxWidth()) {
-                    Text(
-                        text = content1Sub,
-                        style = TextStyle(fontSize = 10.sp, color = textColorProvider),
-                        modifier = GlanceModifier.defaultWeight(),
-                        maxLines = 1,
-                    )
-                    Text(
-                        text = content2Sub,
-                        style = TextStyle(fontSize = 10.sp, color = textColorProvider),
-                        maxLines = 1,
-                    )
+                // Divider
+                Spacer(
+                    modifier = GlanceModifier
+                        .width(8.dp)
+                        .padding(end = 8.dp)
+                        .fillMaxHeight()
+                        .cornerRadius(1000.dp)
+                        .background(dividerColorProvider)
+                )
+
+                // RIGHT: Content Section
+                Column(
+                    modifier = GlanceModifier
+                        .padding(start = 8.dp)
+                        .fillMaxWidth()
+                ) {
+
+                    Row(modifier = GlanceModifier.fillMaxWidth()) {
+                        Text(
+                            text = content1,
+                            style = TextStyle(fontSize = 14.sp, color = textColorProvider),
+                            modifier = GlanceModifier.defaultWeight(),
+                            maxLines = 1,
+                        )
+                        Text(
+                            text = content2,
+                            style = TextStyle(fontSize = 14.sp, color = textColorProvider),
+                            maxLines = 1
+                        )
+                    }
+
+                    Row(modifier = GlanceModifier.fillMaxWidth()) {
+                        Text(
+                            text = content1Sub,
+                            style = TextStyle(fontSize = 10.sp, color = textColorProvider),
+                            modifier = GlanceModifier.defaultWeight(),
+                            maxLines = 1,
+                        )
+                        Text(
+                            text = content2Sub,
+                            style = TextStyle(fontSize = 10.sp, color = textColorProvider),
+                            maxLines = 1,
+                        )
+                    }
                 }
             }
         }
