@@ -1,6 +1,8 @@
 package com.saboon.project_2511sch.presentation.widget
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -14,7 +16,9 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.provideContent
@@ -51,8 +55,10 @@ import androidx.glance.appwidget.lazy.items
 import androidx.glance.color.ColorProvider
 import androidx.glance.layout.fillMaxHeight
 import com.saboon.project_2511sch.R
+import com.saboon.project_2511sch.presentation.main.MainActivity
 import com.saboon.project_2511sch.util.ModelColorConstats
 import java.util.concurrent.TimeUnit
+import androidx.core.net.toUri
 
 class WidgetHome : GlanceAppWidget(){
 
@@ -255,6 +261,12 @@ class WidgetHome : GlanceAppWidget(){
         val tag = item.tag
         val course = item.course
         val task = item.task
+        val intent = Intent(context, MainActivity::class.java).apply{ //for click item
+            putExtra("WIDGET_COURSE_ID", course.id)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            // Önemli: Android 12+ için Intent verisi değiştiğinde widget'ın bunu fark etmesi için:
+            data = ("custom://" + System.currentTimeMillis()).toUri()
+        }
         val today = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
@@ -336,6 +348,7 @@ class WidgetHome : GlanceAppWidget(){
                     .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
                     .cornerRadius(1000.dp)
                     .background(containerColorProvider)
+                    .clickable(actionStartActivity(intent))
             ) {
 
                 // LEFT: Date Section

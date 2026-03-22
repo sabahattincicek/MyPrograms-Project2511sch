@@ -1,21 +1,32 @@
 package com.saboon.project_2511sch.presentation.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.BundleCompat
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavGraph
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.ActivityMainBinding
+import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.presentation.course.FragmentCourseDetailsDirections
+import com.saboon.project_2511sch.presentation.course.FragmentCourseList
+import com.saboon.project_2511sch.presentation.course.FragmentCourseListDirections
+import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
+import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -25,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val viewModelSettings: ViewModelSettings by viewModels()
+    private val viewModelCourse: ViewModelCourse by viewModels()
 
 
     private val bottomNavHiddenDestination = setOf(
@@ -37,10 +49,13 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        observeTheme()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        handleWidgetIntent(intent)
+
+        observeTheme()
+
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
@@ -73,6 +88,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleWidgetIntent(intent)
+    }
+
     private fun applyInitialTheme() {
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         val currentTheme = sharedPrefs.getString(SettingsConstants.PREF_KEY_APP_THEME, SettingsConstants.AppTheme.DEFAULT)
@@ -88,6 +108,10 @@ class MainActivity : AppCompatActivity() {
         setTheme(themeResourceId)
     }
 
+    private fun handleWidgetIntent(intent: Intent?){
+        val courseId = intent?.getStringExtra("WIDGET_COURSE_ID")
+        if (courseId != null) viewModelCourse.getById(courseId)
+    }
     private fun observeTheme(){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -104,6 +128,24 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModelSettings.appThemeState.collect { theme ->
 
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelCourse.courseState.collect { resource ->
+                    when(resource) {
+                        is Resource.Error -> {}
+                        is Resource.Idle -> {}
+                        is Resource.Loading -> {}
+                        is Resource.Success -> {
+                            val course = resource.data
+                            if (course != null){
+                                val bundle = bundleOf("course" to course)
+                                findNavController(R.id.fragmentContainerView).navigate(R.id.action_global_fragmentCourseDetails, bundle)
+                            }
+                        }
+                    }
                 }
             }
         }
