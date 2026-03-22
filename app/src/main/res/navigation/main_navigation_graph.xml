@@ -79,4 +79,9 @@
             android:id="@+id/action_fragmentCourseList_to_courseDetailsFragment"
             app:destination="@id/fragmentCourseDetails" />
     </fragment>
+    <action
+        android:id="@+id/action_global_fragmentCourseDetails"
+        app:destination="@id/fragmentCourseDetails"
+        app:popUpTo="@id/fragmentCourseDetails"
+        app:popUpToInclusive="true" />
 </navigation>

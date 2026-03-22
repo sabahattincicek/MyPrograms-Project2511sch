@@ -24,6 +24,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.saboon.project_2511sch.data.worker.WidgetUpdateWorker
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.tag.DialogFragmentTag
 import com.saboon.project_2511sch.presentation.tag.DialogFragmentManageTag
@@ -159,22 +160,6 @@ class DialogFragmentCourse: DialogFragment() {
         binding.etTag.setOnClickListener {
             val dialog = DialogFragmentManageTag.newInstanceForSelect()
             dialog.show(childFragmentManager, "DialogFragmentList")
-//            if (tagList.isEmpty()){
-//                MaterialAlertDialogBuilder(requireContext())
-//                    .setTitle("No Tags Found")
-//                    .setMessage("There are no tags created yet. Would you like to create a new one now?")
-//                    .setNegativeButton("Cancel"){ dialog, which ->
-//                        dialog.dismiss()
-//                    }
-//                    .setPositiveButton("Create New Tag"){ dialog, which ->
-//                        val dialogTag = DialogFragmentTag.newInstanceForCreate(currentUser)
-//                        dialogTag.show(childFragmentManager, "Dialog Fragment Tag")
-//                    }
-//                    .show()
-//            }else{
-//                val dialog = DialogFragmentManageTag.newInstanceForSelect()
-//                dialog.show(childFragmentManager, "DialogFragmentList")
-//            }
         }
 
         binding.mcvColor1.setOnClickListener {
@@ -317,8 +302,8 @@ class DialogFragmentCourse: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading ->{}
                         is Resource.Success -> {
+                            WidgetUpdateWorker.enqueueUpdate(requireContext().applicationContext)
                             val operationResult = event.data //BaseVMOperationResult<Course>
-//                            course = operationResult?.data
                             val type = operationResult?.operationType
                             when(type) {
                                 OperationType.INSERT -> {dismiss()}

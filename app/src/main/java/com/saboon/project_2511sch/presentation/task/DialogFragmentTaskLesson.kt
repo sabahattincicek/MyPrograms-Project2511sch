@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saboon.project_2511sch.R
+import com.saboon.project_2511sch.data.worker.WidgetUpdateWorker
 import com.saboon.project_2511sch.databinding.DialogFragmentTaskLessonBinding
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
@@ -346,6 +347,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
                         is Resource.Idle -> {}
                         is Resource.Loading -> {}
                         is Resource.Success -> {
+                            WidgetUpdateWorker.enqueueUpdate(requireContext().applicationContext)
                             dismiss()
                         }
                     }

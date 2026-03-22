@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.R
+import com.saboon.project_2511sch.data.worker.WidgetUpdateWorker
 import com.saboon.project_2511sch.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -284,6 +285,7 @@ class SettingsFragment : Fragment() {
                     currentHomeListItemColorSourceValue = values[5] as String
                     currentAbsenceReminderEnabledValue = values[6] as Boolean
                 }.collect {
+                    WidgetUpdateWorker.enqueueUpdate(requireContext().applicationContext)
                     renderSettingsList()
                 }
             }

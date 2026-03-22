@@ -11,6 +11,8 @@ plugins {
     id("com.google.dagger.hilt.android")
 
     id("androidx.room") version "2.8.4"
+
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -49,6 +51,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        compose = true
     }
 }
 
@@ -68,6 +71,7 @@ dependencies {
     implementation(libs.androidx.hilt.common)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.glance.preview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -111,4 +115,8 @@ dependencies {
 
     //shimmer for loading
     implementation("com.facebook.shimmer:shimmer:0.5.0")
+
+    //glance for widget
+    implementation("androidx.glance:glance-appwidget:1.1.1")
+    implementation("androidx.glance:glance-material3:1.1.1")
 }
