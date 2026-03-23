@@ -41,8 +41,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private val bottomNavHiddenDestination = setOf(
-        R.id.splashFragment,
-        R.id.fragmentOnboarding
+        R.id.fragmentOnboarding,
+        R.id.fragmentAboutYourself,
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,8 +69,8 @@ class MainActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 val currentDestinationId = navController.currentDestination?.id
                 when {
-                    // 1. Eğer Splash ekranındaysak veya Home ekranındaysak uygulamayı kapat
-                    currentDestinationId == R.id.splashFragment || currentDestinationId == R.id.fragmentHome -> {
+                    // 1. Eğer Home ekranındaysak uygulamayı kapat
+                    currentDestinationId == R.id.fragmentHome -> {
                         finish()
                     }
                     // 2. Eğer başka bir alt sekmedeysek (Tag, Course, Task vb.) direkt Home'a git
@@ -156,8 +156,8 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModelSettings.onboardingCompletedState.collect { completed ->
-                    if (!completed){
-//                        findNavController(R.id.fragmentContainerView).navigate(R.id.onboardingFragment)
+                    if (completed){
+                        findNavController(R.id.fragmentContainerView).navigate(R.id.fragmentHome)
                     }
                 }
             }

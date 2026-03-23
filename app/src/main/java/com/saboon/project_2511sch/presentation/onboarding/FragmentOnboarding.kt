@@ -88,8 +88,8 @@ class FragmentOnboarding : Fragment() {
             override fun onPageSelected(position: Int) {
                 if (pages[position].isPermission){
                     // notification permission page
-                    binding.btnNext.text = "Grant Permission And Start"
-                    binding.btnSkip.text = "Start Without Grant Permission"
+                    binding.btnNext.text = "Grant Permission"
+                    binding.btnSkip.text = "Keep Going Without Grant Permission"
                 }else{
                     binding.btnNext.text = "Next"
                     binding.btnSkip.text = "Skip"
@@ -117,7 +117,7 @@ class FragmentOnboarding : Fragment() {
 
     private fun finishOnboarding(){
         viewModelSetting.isOnoardingCompleted(true)
-        val action = FragmentOnboardingDirections.actionFragmentOnboardingToFragmentHome()
+        val action = FragmentOnboardingDirections.actionFragmentOnboardingToFragmentAboutYourself()
         findNavController().navigate(action)
     }
 

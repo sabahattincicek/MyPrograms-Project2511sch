@@ -3,19 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation_graph"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/fragmentOnboarding">
 
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.saboon.project_2511sch.presentation.main.SplashFragment"
-        android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
-        <action
-            android:id="@+id/action_splashFragment_to_homeFragment"
-            app:destination="@id/fragmentOnboarding"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
     <fragment
         android:id="@+id/fragmentCourseDetails"
         android:name="com.saboon.project_2511sch.presentation.course.FragmentCourseDetails"
@@ -90,9 +79,20 @@
         android:label="fragment_onboarding"
         tools:layout="@layout/fragment_onboarding" >
         <action
-            android:id="@+id/action_fragmentOnboarding_to_fragmentHome"
-            app:destination="@id/fragmentHome"
+            android:id="@+id/action_fragmentOnboarding_to_fragmentAboutYourself"
+            app:destination="@id/fragmentAboutYourself"
             app:popUpTo="@id/fragmentOnboarding"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAboutYourself"
+        android:name="com.saboon.project_2511sch.presentation.user.FragmentAboutYourself"
+        android:label="fragment_about_yourself"
+        tools:layout="@layout/fragment_about_yourself" >
+        <action
+            android:id="@+id/action_fragmentAboutYourself_to_fragmentHome"
+            app:destination="@id/fragmentHome"
+            app:popUpTo="@id/fragmentAboutYourself"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>
