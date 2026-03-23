@@ -122,5 +122,7 @@
     <string name="importFail">Import Fail!</string>
     <string name="about">About</string>
     <string name="areYouSure_allDataWillBeDeletedExceptUserInformations">Are you sure? All data will be deleted except user informations.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

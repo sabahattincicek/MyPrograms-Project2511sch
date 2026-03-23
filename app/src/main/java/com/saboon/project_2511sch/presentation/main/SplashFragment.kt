@@ -40,7 +40,7 @@ class SplashFragment : Fragment() {
     private val tag = "SplashFragment"
 
     private val viewModelUser : ViewModelUser by activityViewModels()
-    private var isPermissionProcessDone = false
+    private var isPermissionProcessDone = true
     private var isUserReady = false
 
     private val requestPermissionLauncher =
@@ -61,7 +61,6 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(tag, "onViewCreated called")
-        checkNotificationPermission()
         setupObservers()
     }
     private fun checkNotificationPermission() {

@@ -26,4 +26,8 @@ interface ISettingsRepository {
     //CHARACTER
     fun getSelectedCharacter(): Flow<String>
     suspend fun setSelectedCharacter(id: String)
+
+    //SPLASH
+    fun getOnboardingCompleted(): Flow<Boolean>
+    suspend fun setOnboardingComplete(completed: Boolean)
 }

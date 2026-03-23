@@ -12,7 +12,7 @@ import androidx.core.content.edit
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 
 class SettingsRepositoryImp @Inject constructor(
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
 ) : ISettingsRepository {
 
     private fun getStringFlow(key: String, defaultValue: String): Flow<String> = callbackFlow {
@@ -133,6 +133,27 @@ class SettingsRepositoryImp @Inject constructor(
         withContext(Dispatchers.IO){
             sharedPreferences.edit{
                 putString(SettingsConstants.PREF_KEY_CHARACTER, id)
+            }
+        }
+    }
+
+    override fun getOnboardingCompleted(): Flow<Boolean> = callbackFlow {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            if (key == SettingsConstants.PREF_KEY_ONBOARDING_COMPLETED) {
+                trySend(prefs.getBoolean(SettingsConstants.PREF_KEY_ONBOARDING_COMPLETED, false))
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+        trySend(sharedPreferences.getBoolean(SettingsConstants.PREF_KEY_ONBOARDING_COMPLETED,
+            SettingsConstants.OnboardingCompleted.DEFAULT))
+
+        awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
+    }
+
+    override suspend fun setOnboardingComplete(completed: Boolean) {
+        withContext(Dispatchers.IO) {
+            sharedPreferences.edit {
+                putBoolean(SettingsConstants.PREF_KEY_ONBOARDING_COMPLETED, completed)
             }
         }
     }

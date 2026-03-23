@@ -119,4 +119,7 @@ dependencies {
     //glance for widget
     implementation("androidx.glance:glance-appwidget:1.1.1")
     implementation("androidx.glance:glance-material3:1.1.1")
+
+    //splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
