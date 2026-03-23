@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -40,12 +41,14 @@ class MainActivity : AppCompatActivity() {
 
 
     private val bottomNavHiddenDestination = setOf(
-        R.id.splashFragment
+        R.id.fragmentOnboarding,
+        R.id.fragmentAboutYourself,
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         applyInitialTheme() // Daha super.onCreate çağrılmadan, veritabanındaki temayı anlık oku ve bas.
+        val splashScreen = installSplashScreen()
 
         super.onCreate(savedInstanceState)
 
@@ -57,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         observeTheme()
 
 
+
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
@@ -65,8 +69,8 @@ class MainActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 val currentDestinationId = navController.currentDestination?.id
                 when {
-                    // 1. Eğer Splash ekranındaysak veya Home ekranındaysak uygulamayı kapat
-                    currentDestinationId == R.id.splashFragment || currentDestinationId == R.id.fragmentHome -> {
+                    // 1. Eğer Home ekranındaysak uygulamayı kapat
+                    currentDestinationId == R.id.fragmentHome -> {
                         finish()
                     }
                     // 2. Eğer başka bir alt sekmedeysek (Tag, Course, Task vb.) direkt Home'a git
@@ -145,6 +149,15 @@ class MainActivity : AppCompatActivity() {
                                 findNavController(R.id.fragmentContainerView).navigate(R.id.action_global_fragmentCourseDetails, bundle)
                             }
                         }
+                    }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelSettings.onboardingCompletedState.collect { completed ->
+                    if (completed){
+                        findNavController(R.id.fragmentContainerView).navigate(R.id.fragmentHome)
                     }
                 }
             }

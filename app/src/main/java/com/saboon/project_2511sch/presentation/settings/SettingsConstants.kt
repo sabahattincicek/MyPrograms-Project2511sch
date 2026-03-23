@@ -10,6 +10,7 @@ object SettingsConstants {
     const val PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE = "pref_key_home_list_item_color"
     const val PREF_KEY_CHARACTER = "pref_key_character"
     const val PREF_KEY_ABSENCE_REMINDER_ENABLED = "pref_key_absence_reminder_enabled"
+    const val PREF_KEY_ONBOARDING_COMPLETED = "pref_key_onboarding_completed"
 
     //APPEARANCE
     object DarkMode {
@@ -73,4 +74,7 @@ object SettingsConstants {
         const val DEFAULT = true
     }
 
+    object OnboardingCompleted {
+        const val DEFAULT = false
+    }
 }

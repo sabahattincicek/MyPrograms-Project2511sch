@@ -26,7 +26,7 @@
     <string name="full_name">Full Name:</string>
     <string name="role">Title:</string>
     <string name="academic_level">Class:</string>
-    <string name="institution">Institution:</string>
+    <string name="school">School:</string>
     <string name="about_me">About Me:</string>
     <string name="settings">Settings</string>
     <string name="export_data">Export</string>
@@ -122,5 +122,7 @@
     <string name="importFail">Import Fail!</string>
     <string name="about">About</string>
     <string name="areYouSure_allDataWillBeDeletedExceptUserInformations">Are you sure? All data will be deleted except user informations.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

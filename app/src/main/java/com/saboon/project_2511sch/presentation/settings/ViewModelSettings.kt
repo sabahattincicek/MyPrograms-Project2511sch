@@ -1,6 +1,5 @@
 package com.saboon.project_2511sch.presentation.settings
 
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -72,6 +71,12 @@ class ViewModelSettings @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = SettingsConstants.AbsenceReminderEnabled.DEFAULT
         )
+    val onboardingCompletedState: StateFlow<Boolean> = settingsRepository.getOnboardingCompleted()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = SettingsConstants.OnboardingCompleted.DEFAULT
+        )
 
     //ACTIONS
     fun onDarkModeSelected(darkModeValue: String){
@@ -115,6 +120,11 @@ class ViewModelSettings @Inject constructor(
             val courses = courseRepository.getAllActive().first().data ?: emptyList()
             val tasks = taskRepository.getAll().first().data ?: emptyList()
             alarmScheduler.syncAbsenceAlarms(enabled, courses, tasks)
+        }
+    }
+    fun isOnoardingCompleted(completed: Boolean){
+        viewModelScope.launch {
+            settingsRepository.setOnboardingComplete(completed)
         }
     }
 }
