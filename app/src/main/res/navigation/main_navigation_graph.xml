@@ -14,8 +14,8 @@
             android:id="@+id/action_courseDetailsFragment_to_fileFragment"
             app:destination="@id/fragmentFile" />
         <argument
-            android:name="course"
-            app:argType="com.saboon.project_2511sch.domain.model.Course" />
+            android:name="courseId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/fragmentHome"
@@ -34,11 +34,6 @@
         <action
             android:id="@+id/action_fileFragment_to_courseDetailsFragment"
             app:destination="@id/fragmentCourseDetails" />
-        <argument
-            android:name="course"
-            app:argType="com.saboon.project_2511sch.domain.model.Course"
-            app:nullable="true"
-            android:defaultValue="@null" />
         <argument
             android:name="searchFilter"
             app:argType="string"

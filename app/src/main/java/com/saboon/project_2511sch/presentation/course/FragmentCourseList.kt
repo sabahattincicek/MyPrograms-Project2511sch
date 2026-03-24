@@ -77,7 +77,7 @@ class FragmentCourseList : Fragment() {
     private fun setupAdapters(){
         recyclerAdapterCourse = RecyclerAdapterCourse()
         recyclerAdapterCourse.onItemClickListener = { course ->
-            val action = FragmentCourseListDirections.actionFragmentCourseListToCourseDetailsFragment(course)
+            val action = FragmentCourseListDirections.actionFragmentCourseListToCourseDetailsFragment(course.id)
             findNavController().navigate(action)
         }
         binding.rvCourses.apply {

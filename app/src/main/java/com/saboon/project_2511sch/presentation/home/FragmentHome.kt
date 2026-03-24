@@ -228,7 +228,7 @@ class FragmentHome : Fragment() {
         }
         recyclerAdapterHome.onContentItemClickListener = { course ->
             Log.d(tag, "Recycler item clicked. Course: ${course.title}")
-            val action = FragmentHomeDirections.actionHomeFragmentToCourseDetailsFragment(course)
+            val action = FragmentHomeDirections.actionHomeFragmentToCourseDetailsFragment(course.id)
             findNavController().navigate(action)
         }
         recyclerAdapterHome.onAbsenceButtonClickListener = { course, taskLesson ->
