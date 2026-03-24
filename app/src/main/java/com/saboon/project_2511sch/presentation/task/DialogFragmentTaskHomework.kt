@@ -36,6 +36,7 @@ import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfir
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
 import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
 import com.saboon.project_2511sch.util.IdGenerator
+import com.saboon.project_2511sch.util.PermissionManager
 import com.saboon.project_2511sch.util.Picker
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open
@@ -88,7 +89,10 @@ class DialogFragmentTaskHomework: DialogFragment() {
         if (isGranted){
 
         }else{
-            showPermissionDeniedDialog()
+            PermissionManager.NotificationPermission.showPermissionRationale(this){ // onNegativeClick
+                selectedRemindBeforeMinutes = -1
+                binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
+            }
         }
     }
 
@@ -135,6 +139,8 @@ class DialogFragmentTaskHomework: DialogFragment() {
         setupAdapters()
         setupListeners()
         setupObservers()
+
+        checkAndRequestNotificationPermission()
 
         val isEditMode = task != null
         if (isEditMode){
@@ -331,27 +337,11 @@ class DialogFragmentTaskHomework: DialogFragment() {
     private fun checkAndRequestNotificationPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            //system grant notification permission already
         }
     }
 
-    private fun showPermissionDeniedDialog(){
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(getString(R.string.notification_permission_required))
-        builder.setMessage(getString(R.string.reminders_don_t_work_when_notifications_are_turned_off))
-        builder.setPositiveButton(getString(R.string.go_to_settings)){ dialog, which ->
-            val intent = Intent().apply {
-                action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-                putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-            }
-            startActivity(intent)
-        }
-        builder.setNegativeButton(getString(R.string.cancel)){ dialog, which ->
-            selectedRemindBeforeMinutes = -1 // no reminder
-            binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
-            dialog.dismiss()
-        }
-        builder.show()
-    }
 
     companion object{
         const val ARG_USER = "dialog_task_homework_arg_user"

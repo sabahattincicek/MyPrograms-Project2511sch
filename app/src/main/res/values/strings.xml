@@ -134,5 +134,6 @@
     <string name="notification_permission_required">Notification Permission Required</string>
     <string name="go_to_settings">Go To Settings</string>
     <string name="notification_permission_denied">Notification Permission Denied!</string>
+    <string name="should_grant_notification_permission_for_reminder">Should grant notification permission for reminder</string>
 
 </resources>
