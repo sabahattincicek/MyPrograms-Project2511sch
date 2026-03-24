@@ -26,6 +26,7 @@ object PermissionManager {
         }
         fun showPermissionRationale(
             fragment: Fragment,
+            onPositiveClick: (() -> Unit)? = null,
             onNegativeClick: (() -> Unit)? = null
         ){
             val context = fragment.requireContext()
@@ -38,6 +39,7 @@ object PermissionManager {
                     putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
                 }
                 fragment.startActivity(intent)
+                onPositiveClick?.invoke()
             }
             builder.setNegativeButton(context.getString(R.string.cancel)){ dialog, which ->
                 onNegativeClick?.invoke()

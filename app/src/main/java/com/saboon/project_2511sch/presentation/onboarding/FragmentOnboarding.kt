@@ -24,6 +24,7 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentOnboardingBinding
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
+import com.saboon.project_2511sch.util.PermissionManager
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
