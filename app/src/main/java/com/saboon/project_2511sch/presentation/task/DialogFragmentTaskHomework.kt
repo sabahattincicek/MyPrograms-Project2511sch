@@ -1,15 +1,18 @@
 package com.saboon.project_2511sch.presentation.task
 
 import android.Manifest
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -85,10 +88,7 @@ class DialogFragmentTaskHomework: DialogFragment() {
         if (isGranted){
 
         }else{
-            selectedRemindBeforeMinutes = -1 // no reminder
-            binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
-            Toast.makeText(requireContext(), getString(R.string.reminders_don_t_work_when_notifications_are_turned_off),
-                Toast.LENGTH_LONG).show()
+            showPermissionDeniedDialog()
         }
     }
 
@@ -334,9 +334,27 @@ class DialogFragmentTaskHomework: DialogFragment() {
         }
     }
 
+    private fun showPermissionDeniedDialog(){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(getString(R.string.notification_permission_required))
+        builder.setMessage(getString(R.string.reminders_don_t_work_when_notifications_are_turned_off))
+        builder.setPositiveButton(getString(R.string.go_to_settings)){ dialog, which ->
+            val intent = Intent().apply {
+                action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+            }
+            startActivity(intent)
+        }
+        builder.setNegativeButton(getString(R.string.cancel)){ dialog, which ->
+            selectedRemindBeforeMinutes = -1 // no reminder
+            binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
     companion object{
         const val ARG_USER = "dialog_task_homework_arg_user"
-        const val ARG_PROGRAM_TABLE = "dialog_task_homework_arg_program_table"
         const val ARG_COURSE = "dialog_task_homework_arg_course"
         const val ARG_TASK = "dialog_task_homework_arg_task"
 

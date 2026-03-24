@@ -1,6 +1,7 @@
 package com.saboon.project_2511sch.presentation.settings
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
+    private val TAG_MAIN = "SettingsFragmentMain"
+    private val TAG_DETAIL = "SettingsFragmentDetail"
+
     private var _binding: FragmentSettingsBinding?=null
     private val binding get() = _binding!!
 
@@ -37,48 +41,56 @@ class SettingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.i(TAG_MAIN, "SettingsFragment onCreate")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG_DETAIL, "Inflating FragmentSettingsBinding")
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.i(TAG_MAIN, "SettingsFragment onViewCreated")
 
         setupAdapters()
         setupObservers()
 
         binding.toolbar.setNavigationOnClickListener {
+            Log.d(TAG_DETAIL, "Toolbar back clicked, popping back stack")
             findNavController().popBackStack()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.i(TAG_MAIN, "SettingsFragment onDestroyView")
         _binding = null
     }
 
     private fun setupAdapters(){
+        Log.d(TAG_DETAIL, "Setting up RecyclerAdapterSettings")
         recyclerAdapterSettings = RecyclerAdapterSettings()
         recyclerAdapterSettings.onActionClick = { settingItem ->
             val item = settingItem as SettingsItem.Action
+            Log.i(TAG_MAIN, "Setting action clicked: ${item.key}")
+            
             when(item.key){
                 SettingsConstants.PREF_KEY_DARK_MODE -> {
                     val darkModeEntries = resources.getStringArray(R.array.pref_dark_mode)
                     val darkModeValues = SettingsConstants.DarkMode.getValuesAsArray()
-
                     val checkedItem = darkModeValues.indexOf(currentDarkModeValue)
+                    Log.v(TAG_DETAIL, "Opening Dark Mode dialog. Current value: $currentDarkModeValue")
 
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.darkMode))
                         .setSingleChoiceItems(darkModeEntries, checkedItem) { dialog, which ->
                             val selectedValue = darkModeValues[which]
+                            Log.i(TAG_MAIN, "Dark Mode selected: $selectedValue")
                             viewModelSettings.onDarkModeSelected(selectedValue)
                             dialog.dismiss()
                         }
@@ -88,13 +100,14 @@ class SettingsFragment : Fragment() {
                 SettingsConstants.PREF_KEY_APP_THEME -> {
                     val appThemeEntries = resources.getStringArray(R.array.pref_app_theme)
                     val appThemeValues = SettingsConstants.AppTheme.getValuesAsArray()
-
                     val checkedItem = appThemeValues.indexOf(currentAppThemeValue)
+                    Log.v(TAG_DETAIL, "Opening App Theme dialog. Current value: $currentAppThemeValue")
 
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.app_theme))
                         .setSingleChoiceItems(appThemeEntries, checkedItem) { dialog, which ->
                             val selectedValue = appThemeValues[which]
+                            Log.i(TAG_MAIN, "App Theme selected: $selectedValue")
                             viewModelSettings.onAppThemeSelected(selectedValue)
                             dialog.dismiss()
                         }
@@ -104,13 +117,14 @@ class SettingsFragment : Fragment() {
                 SettingsConstants.PREF_KEY_HOME_VIEW_RANGE -> {
                     val homeViewRangeEntries = resources.getStringArray(R.array.pref_home_view_range)
                     val homeViewRangeValues = SettingsConstants.HomeViewRange.getValuesAsArray()
-
                     val checkedItem = homeViewRangeValues.indexOf(currentHomeViewRangeValue)
+                    Log.v(TAG_DETAIL, "Opening Home View Range dialog. Current value: $currentHomeViewRangeValue")
 
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.loop_tasks))
                         .setSingleChoiceItems(homeViewRangeEntries, checkedItem) { dialog, which ->
                             val selectedValue = homeViewRangeValues[which]
+                            Log.i(TAG_MAIN, "Home View Range selected: $selectedValue")
                             viewModelSettings.onHomeViewRangeSelected(selectedValue)
                             dialog.dismiss()
                         }
@@ -120,13 +134,14 @@ class SettingsFragment : Fragment() {
                 SettingsConstants.PREF_KEY_OVERSCROLL_DAYS_COUNT -> {
                     val overscrollDaysCountEntries = resources.getStringArray(R.array.pref_overscroll_days_count)
                     val overscrollDaysCountValues = SettingsConstants.OverscrollDaysCount.getValuesAsArray()
-
                     val checkedItem = overscrollDaysCountValues.indexOf(currentOverscrollDaysCountValue)
+                    Log.v(TAG_DETAIL, "Opening Overscroll Days dialog. Current value: $currentOverscrollDaysCountValue")
 
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.overscroll))
                         .setSingleChoiceItems(overscrollDaysCountEntries, checkedItem) { dialog, which ->
                             val selectedValue = overscrollDaysCountValues[which]
+                            Log.i(TAG_MAIN, "Overscroll Days selected: $selectedValue")
                             viewModelSettings.onOversrollDaysCountChanged(selectedValue)
                             dialog.dismiss()
                         }
@@ -136,13 +151,14 @@ class SettingsFragment : Fragment() {
                 SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_SOURCE -> {
                     val homeListItemColorSourceEntries = resources.getStringArray(R.array.pref_home_list_item_color_source)
                     val homeListItemColorSourceValues = SettingsConstants.HomeListItemColorSource.getValuesAsArray()
-
                     val checkedItem = homeListItemColorSourceValues.indexOf(currentHomeListItemColorSourceValue)
+                    Log.v(TAG_DETAIL, "Opening Home List Color Source dialog. Current value: $currentHomeListItemColorSourceValue")
 
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(getString(R.string.show_list_item_colors))
                         .setSingleChoiceItems(homeListItemColorSourceEntries, checkedItem) { dialog, which ->
                             val selectedValue = homeListItemColorSourceValues[which]
+                            Log.i(TAG_MAIN, "Home List Color Source selected: $selectedValue")
                             viewModelSettings.onHomeListItemColorSourceSelected(selectedValue)
                             dialog.dismiss()
                         }
@@ -153,11 +169,14 @@ class SettingsFragment : Fragment() {
         }
         recyclerAdapterSettings.onSwitchChange = { settingItem ->
             val item = settingItem as SettingsItem.Toggle
+            Log.i(TAG_MAIN, "Setting toggle changed: ${item.key} to ${item.isChecked}")
             when(item.key){
                 SettingsConstants.PREF_KEY_HOME_LIST_ITEM_COLOR_ENABLED -> {
+                    Log.d(TAG_DETAIL, "Home list item color enabled changed: ${item.isChecked}")
                     viewModelSettings.onHomeListItemColorEnabledChanged(item.isChecked)
                 }
                 SettingsConstants.PREF_KEY_ABSENCE_REMINDER_ENABLED -> {
+                    Log.d(TAG_DETAIL, "Absence reminder enabled changed: ${item.isChecked}")
                     viewModelSettings.onAbsenceReminderEnabledChanged(item.isChecked)
                 }
             }
@@ -168,6 +187,7 @@ class SettingsFragment : Fragment() {
         }
     }
     private fun renderSettingsList() {
+        Log.d(TAG_DETAIL, "Rendering settings list UI")
         val settingsList = mutableListOf<SettingsItem>()
 
         settingsList.add(SettingsItem.Category(getString(R.string.appearance)))
@@ -255,9 +275,11 @@ class SettingsFragment : Fragment() {
             )
         )
 
+        Log.v(TAG_DETAIL, "Submitting ${settingsList.size} items to adapter")
         recyclerAdapterSettings.submitList(settingsList)
     }
     private fun setupObservers() {
+        Log.d(TAG_DETAIL, "Setting up state observers")
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 val flows = listOf(
@@ -271,8 +293,11 @@ class SettingsFragment : Fragment() {
                 )
                 kotlinx.coroutines.flow.combine(flows) { values ->
                     val newAppTheme = values[1] as String
+                    Log.v(TAG_DETAIL, "Settings states combined update received")
+
                     // Eğer App Theme değişmişse (ve ilk açılış değilse) activity'yi yeniden başlat
                     if (currentAppThemeValue != null && currentAppThemeValue != newAppTheme) {
+                        Log.i(TAG_MAIN, "App Theme changed from $currentAppThemeValue to $newAppTheme. Recreating activity.")
                         currentAppThemeValue = newAppTheme
                         activity?.recreate()
                     }
@@ -284,7 +309,10 @@ class SettingsFragment : Fragment() {
                     currentHomeListItemColorEnabledValue = values[4] as Boolean
                     currentHomeListItemColorSourceValue = values[5] as String
                     currentAbsenceReminderEnabledValue = values[6] as Boolean
+                    
+                    Log.v(TAG_DETAIL, "Values updated: DarkMode=$currentDarkModeValue, Theme=$currentAppThemeValue, AbsenceReminder=$currentAbsenceReminderEnabledValue")
                 }.collect {
+                    Log.d(TAG_DETAIL, "Enqueuing widget update worker and rendering list")
                     WidgetUpdateWorker.enqueueUpdate(requireContext().applicationContext)
                     renderSettingsList()
                 }

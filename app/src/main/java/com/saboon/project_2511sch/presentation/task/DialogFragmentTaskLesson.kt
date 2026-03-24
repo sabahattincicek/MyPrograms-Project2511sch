@@ -1,16 +1,21 @@
 package com.saboon.project_2511sch.presentation.task
 
 import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -18,7 +23,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.glance.Button
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -27,7 +31,6 @@ import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.data.worker.WidgetUpdateWorker
 import com.saboon.project_2511sch.databinding.DialogFragmentTaskLessonBinding
 import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.model.User
@@ -94,12 +97,8 @@ class DialogFragmentTaskLesson: DialogFragment() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted){
-
         }else{
-            selectedRemindBeforeMinutes = -1 // no reminder
-            binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
-            Toast.makeText(requireContext(), getString(R.string.reminders_don_t_work_when_notifications_are_turned_off),
-                Toast.LENGTH_LONG).show()
+            showPermissionDeniedDialog()
         }
     }
 
@@ -239,9 +238,7 @@ class DialogFragmentTaskLesson: DialogFragment() {
             }
         }
         binding.actvReminder.setOnItemClickListener { parentFragment, view, position, id ->
-            if (position > 0){
-                checkAndRequestNotificationPermission()
-            }
+            if (position > 0) checkAndRequestNotificationPermission()
             selectedRemindBeforeMinutes = when(position){
                 0 -> -1    // "No reminder" -> Index 0
                 1 -> 0     // "On Time" -> Index 1
@@ -251,6 +248,9 @@ class DialogFragmentTaskLesson: DialogFragment() {
                 5 -> 1440  // "1 day before" -> Index 5
                 else -> -1
             }
+        }
+        binding.ivNotificationsOff.setOnClickListener {
+            showPermissionDeniedDialog()
         }
         binding.etDate.setOnClickListener {
             dateTimePicker.pickDateMillis("Date", selectedDateMillis){ result ->
@@ -413,11 +413,29 @@ class DialogFragmentTaskLesson: DialogFragment() {
             else -> options[0] // "No reminder"
         }
     }
-
     private fun checkAndRequestNotificationPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+    }
+
+    private fun showPermissionDeniedDialog(){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(getString(R.string.notification_permission_required))
+        builder.setMessage(getString(R.string.reminders_don_t_work_when_notifications_are_turned_off))
+        builder.setPositiveButton(getString(R.string.go_to_settings)){ dialog, which ->
+            val intent = Intent().apply {
+                action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+            }
+            startActivity(intent)
+        }
+        builder.setNegativeButton(getString(R.string.cancel)){ dialog, which ->
+            selectedRemindBeforeMinutes = -1
+            binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
+            dialog.dismiss()
+        }
+        builder.show()
     }
 
     companion object{
