@@ -91,7 +91,7 @@ class FragmentCourseDetails : Fragment() {
         setupListeners()
         setupObservers()
 
-        viewModelCourse.getById(args.course.id)
+        viewModelCourse.getById(args.courseId)
 
 
         binding.topAppBar.setNavigationOnClickListener {
@@ -122,7 +122,7 @@ class FragmentCourseDetails : Fragment() {
             showAddTaskMenu(view)
         }
         binding.ivFiles.setOnClickListener {
-            val action = FragmentCourseDetailsDirections.actionCourseDetailsFragmentToFileFragment(course,  course.title)
+            val action = FragmentCourseDetailsDirections.actionCourseDetailsFragmentToFileFragment( course.title)
             findNavController().navigate(action)
         }
     }

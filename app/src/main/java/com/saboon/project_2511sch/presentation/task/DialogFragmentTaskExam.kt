@@ -1,13 +1,19 @@
 package com.saboon.project_2511sch.presentation.task
 
+import android.Manifest
+import android.content.Intent
 import android.icu.util.Calendar
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -31,6 +37,7 @@ import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfir
 import com.saboon.project_2511sch.presentation.sfile.RecyclerAdapterSFileMini
 import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
 import com.saboon.project_2511sch.util.IdGenerator
+import com.saboon.project_2511sch.util.PermissionManager
 import com.saboon.project_2511sch.util.Picker
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open
@@ -78,6 +85,19 @@ class DialogFragmentTaskExam: DialogFragment() {
         }
     }
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted){
+
+        }else{
+            PermissionManager.NotificationPermission.showPermissionRationale(this){ // onNegativeClick
+                selectedRemindBeforeMinutes = -1
+                binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.DialogAnimation)
@@ -122,6 +142,8 @@ class DialogFragmentTaskExam: DialogFragment() {
         setupAdapters()
         setupListeners()
         setupObservers()
+
+        checkAndRequestNotificationPermission()
 
         val isEditMode = task != null
         if (isEditMode){
@@ -227,6 +249,7 @@ class DialogFragmentTaskExam: DialogFragment() {
             }
         }
         binding.actvReminder.setOnItemClickListener { parentFragment, view, position, id ->
+            if (position > 0) checkAndRequestNotificationPermission()
             selectedRemindBeforeMinutes = when(position){
                 0 -> -1    // "No reminder" -> Index 0
                 1 -> 0     // "On Time" -> Index 1
@@ -333,9 +356,16 @@ class DialogFragmentTaskExam: DialogFragment() {
         }
     }
 
+    private fun checkAndRequestNotificationPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            //system grant notification permission already
+        }
+    }
+
     companion object{
         const val ARG_USER = "dialog_task_exam_arg_user"
-        const val ARG_PROGRAM_TABLE = "dialog_task_exam_arg_program_table"
         const val ARG_COURSE = "dialog_task_exam_arg_course"
         const val ARG_TASK = "dialog_task_exam_arg_task"
 

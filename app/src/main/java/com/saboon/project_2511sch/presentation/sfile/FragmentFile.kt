@@ -23,6 +23,7 @@ import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.SFile
 import com.saboon.project_2511sch.domain.model.User
 import com.saboon.project_2511sch.presentation.common.DialogFragmentDeleteConfirmation
+import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.open
@@ -40,27 +41,7 @@ class FragmentFile : Fragment() {
     private val viewModelSFile: ViewModelSFile by viewModels()
     private lateinit var recyclerAdapterSFile: RecyclerAdapterSFile
     private lateinit var currentUser: User
-    private var course: Course? = null
-    private var uri: Uri? = null
     private var searchFilter: String? = null
-
-    private val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-        if (uri != null) {
-            this.uri = uri
-            course?.let { course ->
-                val sFile = SFile(
-                    id = "generate in repository",
-                    createdBy = currentUser.id,
-                    appVersionAtCreation = getString(R.string.app_version),
-                    title = "generate in repository",
-                    description = "",
-                    courseId = course.id,
-                    filePath = "generate in repository"
-                )
-                viewModelSFile.insert(sFile, uri)
-            }
-        }
-    }
 
 
     private val tag = "FragmentFile"
@@ -83,9 +64,6 @@ class FragmentFile : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(tag, "onViewCreated: View hierarchy created.")
 
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-
-        course = args.course
         searchFilter = args.searchFilter
 
         setupRecyclerAdapter()
@@ -122,9 +100,6 @@ class FragmentFile : Fragment() {
                 }
             }
         }
-         binding.fabAddNewFile.setOnClickListener { anchorView ->
-             selectFileLauncher.launch(arrayOf("*/*"))
-         }
     }
 
 

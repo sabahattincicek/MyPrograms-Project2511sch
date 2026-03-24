@@ -7,63 +7,56 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavGraph
-import androidx.navigation.findNavController
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.ActivityMainBinding
-import com.saboon.project_2511sch.domain.model.Course
-import com.saboon.project_2511sch.presentation.course.FragmentCourseDetailsDirections
-import com.saboon.project_2511sch.presentation.course.FragmentCourseList
-import com.saboon.project_2511sch.presentation.course.FragmentCourseListDirections
-import com.saboon.project_2511sch.presentation.course.ViewModelCourse
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
-import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    // TODO: BUTUN DIALOG FRAGMENTLERDE DOGRUDAN NESNENIN KENDISINI DEGIL SADECE ID YI GONDER VE DIALOG FRAGMENT ICINDE FLOWLA OKU
+
     private lateinit var binding: ActivityMainBinding
 
     private val viewModelSettings: ViewModelSettings by viewModels()
-    private val viewModelCourse: ViewModelCourse by viewModels()
+    private lateinit var navHostFragment: NavHostFragment
+    private lateinit var navController: NavController
 
 
     private val bottomNavHiddenDestination = setOf(
         R.id.fragmentOnboarding,
         R.id.fragmentAboutYourself,
     )
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         applyInitialTheme() // Daha super.onCreate çağrılmadan, veritabanındaki temayı anlık oku ve bas.
-        val splashScreen = installSplashScreen()
 
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        handleWidgetIntent(intent)
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        navController = navHostFragment.navController
+        binding.bottomNavigationView.setupWithNavController(navController)
+
+        if (savedInstanceState == null) {
+            handleWidgetIntent(intent)
+        }
 
         observeTheme()
 
-
-
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        val navController = navHostFragment.navController
-        binding.bottomNavigationView.setupWithNavController(navController)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -114,50 +107,29 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleWidgetIntent(intent: Intent?){
         val courseId = intent?.getStringExtra("WIDGET_COURSE_ID")
-        if (courseId != null) viewModelCourse.getById(courseId)
+        if (courseId != null) {
+            val bundle = bundleOf("courseId" to courseId)
+            navController.navigate(R.id.action_global_fragmentCourseDetails, bundle)
+            intent.removeExtra("WIDGET_COURSE_ID")
+        }
     }
     private fun observeTheme(){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSettings.appDarkModeState.collect { darkModeValue ->
-                    when (darkModeValue) {
-                        SettingsConstants.DarkMode.DARK_MODE  -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                        SettingsConstants.DarkMode.LIGHT_MODE -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                        else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                    }
-                }
-            }
-        }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSettings.appThemeState.collect { theme ->
-
-                }
-            }
-        }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelCourse.courseState.collect { resource ->
-                    when(resource) {
-                        is Resource.Error -> {}
-                        is Resource.Idle -> {}
-                        is Resource.Loading -> {}
-                        is Resource.Success -> {
-                            val course = resource.data
-                            if (course != null){
-                                val bundle = bundleOf("course" to course)
-                                findNavController(R.id.fragmentContainerView).navigate(R.id.action_global_fragmentCourseDetails, bundle)
-                            }
+                // dark mode state
+                launch {
+                    viewModelSettings.appDarkModeState.collect { darkModeValue ->
+                        when (darkModeValue) {
+                            SettingsConstants.DarkMode.DARK_MODE  -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                            SettingsConstants.DarkMode.LIGHT_MODE -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                         }
                     }
                 }
-            }
-        }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelSettings.onboardingCompletedState.collect { completed ->
-                    if (completed){
-                        findNavController(R.id.fragmentContainerView).navigate(R.id.fragmentHome)
+                // appTheme state
+                launch {
+                    viewModelSettings.appThemeState.collect { theme ->
+
                     }
                 }
             }

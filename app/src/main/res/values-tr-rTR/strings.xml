@@ -120,4 +120,13 @@
     <string name="exportSuccessfully">Dışa Aktarma Başarılı</string>
     <string name="exportFail">Dışa Aktarma Başarısız!</string>
     <string name="importFail">İçe Aktarma Başarısız!</string>
+    <string name="about">Hakkında</string>
+    <string name="areYouSure_allDataWillBeDeletedExceptUserInformations">Emin misin? Kullanıcı verileri haricinde bütün veriler silinecektir.</string>
+    <string name="next">Sonraki</string>
+    <string name="skip">Atla</string>
+    <string name="grant_permission">İzin Ver</string>
+    <string name="keep_going_without_grant_permission">İzin Vermeden Devam Et</string>
+    <string name="permission_granted">İzin Verildi</string>
+    <string name="reminders_don_t_work_when_notifications_are_turned_off">Bildirimler kapatılırsa hatırlatıcılar çalışmayacaktır.</string>
+    <string name="start">Başla</string>
 </resources>
