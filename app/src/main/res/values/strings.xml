@@ -130,5 +130,6 @@
     <string name="keep_going_without_grant_permission">Keep Going Without Grant Permission</string>
     <string name="permission_granted">Permission Granted</string>
     <string name="reminders_don_t_work_when_notifications_are_turned_off">Reminders don\'t work when notifications are turned off.</string>
+    <string name="start">Start</string>
 
 </resources>
