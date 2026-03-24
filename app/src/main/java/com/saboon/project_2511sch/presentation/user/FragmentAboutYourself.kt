@@ -82,23 +82,6 @@ class FragmentAboutYourself : Fragment() {
         _binding = null
     }
     private fun setupObserver(){
-        // USER STATE
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModelUser.currentUser.collect { resource ->
-                    when(resource) {
-                        is Resource.Error -> {}
-                        is Resource.Idle -> {}
-                        is Resource.Loading -> {}
-                        is Resource.Success -> {
-                            if (resource.data != null){
-                                goToHome()
-                            }
-                        }
-                    }
-                }
-            }
-        }
         //USER EVENT: INSERT
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){

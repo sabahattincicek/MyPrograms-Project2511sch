@@ -12,21 +12,28 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentOnboardingBinding
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
+import com.saboon.project_2511sch.presentation.user.ViewModelUser
+import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import kotlin.getValue
 
 @AndroidEntryPoint
 class FragmentOnboarding : Fragment() {
 
     private var _binding: FragmentOnboardingBinding?=null
     private val binding get() = _binding!!
-
     private val viewModelSetting: ViewModelSettings by viewModels()
 
     private lateinit var recyclerAdapter: RecyclerAdapterOnboarding
@@ -37,7 +44,8 @@ class FragmentOnboarding : Fragment() {
         if (isGranted){
             finishOnboarding()
         } else {
-            Toast.makeText(context, "Bildirimler kapalıyken hatırlatıcılar çalışmaz.", Toast.LENGTH_LONG).show()
+            Toast.makeText(context,
+                getString(R.string.reminders_don_t_work_when_notifications_are_turned_off), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -88,17 +96,17 @@ class FragmentOnboarding : Fragment() {
             override fun onPageSelected(position: Int) {
                 if (pages[position].isPermission){
                     // notification permission page
-                    binding.btnNext.text = "Grant Permission"
-                    binding.btnSkip.text = "Keep Going Without Grant Permission"
+                    binding.btnNext.text = getString(R.string.grant_permission)
+                    binding.btnSkip.text = getString(R.string.keep_going_without_grant_permission)
                 }else{
-                    binding.btnNext.text = "Next"
-                    binding.btnSkip.text = "Skip"
+                    binding.btnNext.text = getString(R.string.next)
+                    binding.btnSkip.text = getString(R.string.skip)
                 }
             }
         })
 
         binding.btnNext.setOnClickListener {
-            if (binding.btnNext.text.equals("Next")){
+            if (binding.btnNext.text.equals(getString(R.string.next))){
                 binding.viewPager.currentItem += 1
             }else{
                 //grant permission and start
@@ -106,7 +114,7 @@ class FragmentOnboarding : Fragment() {
             }
         }
         binding.btnSkip.setOnClickListener {
-            if (binding.btnSkip.text.equals("Skip")){
+            if (binding.btnSkip.text.equals(getString(R.string.skip))){
                 binding.viewPager.currentItem = pages.size - 1 // go to last (permission) page
             }else{
                 //start without grant permission
@@ -133,7 +141,7 @@ class FragmentOnboarding : Fragment() {
             // Android 13 altı: Sistem izni istenemez (zaten izin var kabul edilir)
             // Ama biz kullanıcıya "Bildirimleriniz açık" mesajı verip
             // bir sonraki sayfaya kaydırabiliriz.
-            Toast.makeText(context, "Bildirimleriniz aktif edildi.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.permission_granted), Toast.LENGTH_SHORT).show()
             binding.viewPager.currentItem += 1
         }
     }
