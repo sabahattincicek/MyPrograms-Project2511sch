@@ -18,7 +18,7 @@ title: About MyPrograms
 <div align="center">
   <img src="./assets/logo.png" alt="MyPrograms Logo" width="120">
   <h1>MyPrograms</h1>
-  <p><strong>Your Ultimate Academic Companion – Today and Tomorrow</strong></p>
+  <p><strong>Your Ultimate Academic Companion – Built for Students, by Students</strong></p>
 </div>
 
 ---
@@ -27,7 +27,15 @@ title: About MyPrograms
 
 **MyPrograms** is more than just a calendar; it’s a personal assistant designed to help students master their academic schedule. We know how overwhelming student life can be—balancing classes, exams, and endless study materials is tough. MyPrograms simplifies this by organizing everything into one intuitive, beautiful timeline.
 
-Currently, the app focuses on **Privacy and Speed**. All your data stays securely on your phone, giving you instant access even without internet. But we are just getting started! We are building a future where your academic life is seamlessly synchronized across all your devices.
+---
+
+## 🌟 Why Choose MyPrograms?
+
+We believe that academic success should be accessible to everyone without any barriers.
+
+- **🎓 100% Free:** No subscriptions, no locked features, and no hidden costs. Every tool in this app is available to all students.
+- **🚫 No Advertisements:** A clean, distraction-free environment. No banners, no pop-ups—just you and your studies.
+- **🔒 Privacy & Speed:** Currently, the app is a local-first experience. Your personal schedule and files are stored securely on your phone, ensuring lightning-fast access even without an internet connection.
 
 ---
 
@@ -45,8 +53,6 @@ Currently, the app focuses on **Privacy and Speed**. All your data stays securel
 
 ## 🚀 Key Features
 
-We’ve built MyPrograms to handle the real-world needs of a busy student:
-
 ### 📅 Smart Daily Timeline
 Never ask "What's next?" again. Whether it’s a weekly lecture, a one-time seminar, or an upcoming exam, MyPrograms calculates your schedule and presents it in a clear, easy-to-read timeline.
 
@@ -54,16 +60,10 @@ Never ask "What's next?" again. Whether it’s a weekly lecture, a one-time semi
 Stop digging through your phone's folders for lecture notes. You can attach PDFs, images, and documents directly to your courses. When it’s time for class, your materials are right there waiting for you.
 
 ### 🏷️ Organize Your Way
-Use custom Tags to categorize your life. Want to focus only on your "Major" courses or hide "Optional" workshops for a while? With our active filtering system, you only see what matters to you at any given moment.
+Use custom Tags to categorize your life. Want to focus only on your "Major" courses or hide "Optional" workshops for a while? With our active filtering system, you only see what matters to you.
 
 ### 📱 Home Screen Widgets
 Stay organized without even opening the app. Our beautiful widgets bring your daily schedule directly to your home screen, keeping you informed with just a glance.
-
----
-
-## 🛡️ The MyPrograms Advantage
-- **Fast & Responsive:** Since your data is stored locally, there's zero lag. Everything opens instantly.
-- **Data Control:** You can backup your entire academic history to your phone and restore it whenever you want.
 
 ---
 
@@ -71,13 +71,13 @@ Stay organized without even opening the app. Our beautiful widgets bring your da
 
 We are constantly evolving to make your student life even better:
 
-1.  **☁️ Cloud Sync:** Soon, you'll be able to create an account and keep your data safe in the cloud, allowing you to switch between devices without losing a single note.
-2.  **🤝 Shared Schedules:** Collaborating on a group project? Soon you'll be able to share course schedules and materials with your classmates with just one tap.
-3.  **📊 Performance Insights:** Visual charts to help you track your study habits and exam progress over time.
+1.  **☁️ Cloud Sync:** We are working on optional cloud storage, allowing you to access your schedule across multiple devices safely.
+2.  **🤝 Peer Sharing:** Collaborative features to let you share schedules or study materials with your classmates instantly.
+3.  **📊 Performance Insights:** Visual tools to help you track your study habits and exam progress over time.
 
 ---
 
 ## 👥 Who is MyPrograms For?
-- **University Students** managing complex, alternating weekly schedules.
+- **University Students** with complex, alternating weekly schedules.
 - **High Schoolers** staying on top of exam dates and homework deadlines.
-- **Lifelong Learners** who need a structured way to organize their learning materials.
+- **Lifelong Learners** who need a structured way to manage their learning materials.
