@@ -16,75 +16,75 @@ title: About MyPrograms
 ---
 
 <div align="center">
-  <img src="./assets/logo.png" alt="MyPrograms Logo" width="150">
+  <img src="./assets/logo.png" alt="MyPrograms Logo" width="120">
   <h1>MyPrograms</h1>
-  <p><strong>The Ultimate Local-First Academic Planner for Students</strong></p>
+  <p><strong>Your Ultimate Academic Companion – Today and Tomorrow</strong></p>
 </div>
 
 ---
 
 ## ℹ️ What is MyPrograms?
 
-**MyPrograms** is a powerful, privacy-focused academic assistant designed specifically for students who want to take full control of their educational life. Unlike complex, cloud-heavy enterprise tools, MyPrograms follows a **"Local-First"** philosophy: everything you enter stays on your device, ensuring maximum speed and total privacy.
+**MyPrograms** is more than just a calendar; it’s a personal assistant designed to help students master their academic schedule. We know how overwhelming student life can be—balancing classes, exams, and endless study materials is tough. MyPrograms simplifies this by organizing everything into one intuitive, beautiful timeline.
+
+Currently, the app focuses on **Privacy and Speed**. All your data stays securely on your phone, giving you instant access even without internet. But we are just getting started! We are building a future where your academic life is seamlessly synchronized across all your devices.
 
 ---
 
 ## 📸 Screenshots
-<p align="center">
-  <!-- TODO: Ekran görüntülerini eklediğinde buradaki yorumları kaldır ve linkleri güncelle -->
+<div align="center">
+  <!-- TODO: Link images here -->
   <!-- <img src="./assets/ss_home.png" width="30%" /> -->
   <!-- <img src="./assets/ss_schedule.png" width="30%" /> -->
   <!-- <img src="./assets/ss_files.png" width="30%" /> -->
   <br>
-  <i>(Visuals coming soon - A clean, modern UI experience)</i>
-</p>
+  <i>(Visuals coming soon - Experience a clean and modern interface)</i>
+</div>
 
 ---
 
-## 🚀 Key Features (What can you do?)
+## 🚀 Key Features
 
-Based on our advanced **Domain-Driven Architecture**, MyPrograms offers features that go beyond a simple calendar:
+We’ve built MyPrograms to handle the real-world needs of a busy student:
 
-### 📅 Smart Schedule Management
-Using our advanced `RecurrenceRule` logic, the app doesn't just store events; it calculates your academic patterns. Whether it's a weekly lecture or a one-time exam, the app generates a dynamic timeline for you.
+### 📅 Smart Daily Timeline
+Never ask "What's next?" again. Whether it’s a weekly lecture, a one-time seminar, or an upcoming exam, MyPrograms calculates your schedule and presents it in a clear, easy-to-read timeline.
 
-### 📁 Integrated Study Materials
-Through the `SFile` system and Android's **Storage Access Framework (SAF)**, you can link your lecture notes, PDFs, and images directly to your courses. Access your study materials exactly where and when you need them.
+### 📁 All Your Study Files in One Place
+Stop digging through your phone's folders for lecture notes. You can attach PDFs, images, and documents directly to your courses. When it’s time for class, your materials are right there waiting for you.
 
-### 🏷️ Active Filtering & Tags
-Organize your life using Tags. You can mute entire categories of courses or focus only on what's important today. The `GetHomeDisplayItemsUseCase` ensures that your home screen only shows what you care about.
+### 🏷️ Organize Your Way
+Use custom Tags to categorize your life. Want to focus only on your "Major" courses or hide "Optional" workshops for a while? With our active filtering system, you only see what matters to you at any given moment.
 
-### 📱 Jetpack Glance Widgets
-Stay on top of your day without even opening the app. Our modern **Compose-based widgets** bring your schedule directly to your home screen with a beautiful, responsive design.
-
----
-
-## 🛠️ Technical Vision (How it works)
-- **Local Database:** Powered by **Room (SQLite)** for permanent, lightning-fast storage.
-- **Clean Architecture:** Built with UseCases, Repositories, and ViewModels to ensure a crash-free, maintainable experience.
-- **Privacy:** No external servers, no tracking. Your data is your own.
+### 📱 Home Screen Widgets
+Stay organized without even opening the app. Our beautiful widgets bring your daily schedule directly to your home screen, keeping you informed with just a glance.
 
 ---
 
-## 🗺️ Future Roadmap (What's next?)
-
-We are constantly evolving! Here is what we are planning for the next major updates:
-
-1.  **☁️ Cloud Sync (Firebase):** Optional account creation and cross-device synchronization for those who want to access their schedule on multiple devices.
-2.  **🤝 Peer Sharing:** A secure way to share your course schedules or study materials with your classmates.
-3.  **📊 Academic Analytics:** Visual charts to track your exam performance and study habits over time.
-4.  **🎨 More Customization:** Advanced theme engines and more widget styles to match your personal aesthetic.
+## 🛡️ The MyPrograms Advantage
+- **Fast & Responsive:** Since your data is stored locally, there's zero lag. Everything opens instantly.
+- **Data Control:** You can backup your entire academic history to your phone and restore it whenever you want.
 
 ---
 
-## 👥 Who is it for?
-- **University Students** with complex, recurring weekly schedules.
-- **High Schoolers** preparing for major exams.
-- **Lifelong Learners** who need a structured way to manage their study files and progress.
+## 🗺️ Future Roadmap
+
+We are constantly evolving to make your student life even better:
+
+1.  **☁️ Cloud Sync:** Soon, you'll be able to create an account and keep your data safe in the cloud, allowing you to switch between devices without losing a single note.
+2.  **🤝 Shared Schedules:** Collaborating on a group project? Soon you'll be able to share course schedules and materials with your classmates with just one tap.
+3.  **📊 Performance Insights:** Visual charts to help you track your study habits and exam progress over time.
 
 ---
 
-<p align="center" style="margin-top: 50px; font-size: 0.9em; color: #8b949e;">
+## 👥 Who is MyPrograms For?
+- **University Students** managing complex, alternating weekly schedules.
+- **High Schoolers** staying on top of exam dates and homework deadlines.
+- **Lifelong Learners** who need a structured way to organize their learning materials.
+
+---
+
+<div align="center" style="margin-top: 50px; font-size: 0.9em; color: #8b949e;">
   Developed with ❤️ for students. <br>
   © 2026 MyPrograms Development.
-</p>
+</div>
