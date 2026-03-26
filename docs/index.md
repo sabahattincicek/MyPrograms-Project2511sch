@@ -1,3 +1,8 @@
+---
+layout: default
+title: Home
+---
+
 ## Welcome to MyPrograms Support
 Choose a document below to review our policies and technical information.
 
