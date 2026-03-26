@@ -18,7 +18,7 @@ Choose a document below to review our policies and technical information.
 ---
 
 ### 📬 Contact Info
-- **Developer Support:** [E-posta Adresin]
+- **Developer Support:** sabahattincck@outlook.com
 - **App Package:** `com.saboon.project_2511sch`
 
 ---

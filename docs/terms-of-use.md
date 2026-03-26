@@ -81,4 +81,4 @@ We reserve the right, at our sole discretion, to modify or replace these Terms a
 ## 9. Contact
 If you have any questions about these Terms, please contact us at:
 
-**Email:** [Your Contact Email Here]
+**Email:** sabahattincck@outlook.com

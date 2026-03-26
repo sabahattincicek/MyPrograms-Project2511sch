@@ -89,4 +89,4 @@ We may update our Privacy Policy from time to time. We will notify you of any ch
 ## 9. Contact Us
 If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.
 
-**Email:** [Your Contact Email Here]
+**Email:** sabahattincck@outlook.com
