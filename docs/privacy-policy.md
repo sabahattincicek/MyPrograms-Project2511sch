@@ -1,3 +1,8 @@
+---
+layout: default
+title: Privacy Policy
+---
+
 # Privacy Policy for MyPrograms
 
 **Last Updated:** March 26, 2026

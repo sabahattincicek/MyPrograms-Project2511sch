@@ -1,18 +1,22 @@
-# MyPrograms Support & Legal
-
-Welcome to the official support page for **MyPrograms**. Please select a document below to review:
-
 ---
+layout: default
+title: Home
+---
+
+## Welcome to MyPrograms Support
+Choose a document below to review our policies and technical information.
 
 ### 📄 [Privacy Policy](./privacy-policy)
-Our commitment to your data security and privacy.
+*Detailed information on how we keep your data safe and strictly on your device.*
 
 ### ⚖️ [Terms of Use](./terms-of-use)
-The rules and regulations for using the Application.
+*Rules for using the application and our disclaimer regarding academic reminders.*
 
 ### ℹ️ [About MyPrograms](./about)
-Technical details, features, and project information.
+*Technical specifications, features, and the vision of the project.*
 
 ---
-**Contact:** [E-posta Adresin]
-**Package Name:** `com.saboon.project_2511sch`
+
+### 📬 Contact Info
+- **Developer Support:** [E-posta Adresin]
+- **App Package:** `com.saboon.project_2511sch`
