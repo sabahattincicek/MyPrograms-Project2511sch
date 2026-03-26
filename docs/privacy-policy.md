@@ -3,6 +3,18 @@ layout: default
 title: Privacy Policy
 ---
 
+<div style="margin-bottom: 20px;">
+  <a href="./" style="text-decoration: none; color: #0366d6; display: flex; align-items: center; gap: 5px; font-weight: bold;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12"></line>
+      <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+    Back to Support Home
+  </a>
+</div>
+
+---
+
 # Privacy Policy for MyPrograms
 
 **Last Updated:** March 26, 2026
