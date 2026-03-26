@@ -129,4 +129,12 @@
     <string name="permission_granted">İzin Verildi</string>
     <string name="reminders_don_t_work_when_notifications_are_turned_off">Bildirimler kapatılırsa hatırlatıcılar çalışmayacaktır.</string>
     <string name="start">Başla</string>
+    <string name="notification_permission_required">Bildirim İzni Verilmelidir</string>
+    <string name="go_to_settings">Ayarlara Git</string>
+    <string name="notification_permission_denied">Bildirim İzni Reddedildi!</string>
+    <string name="should_grant_notification_permission_for_reminder">Hatırlatıcılar için bildiri0m izni verilmelidir.</string>
+    <string name="legal_agreement_title">Yasal Bilgilendirme</string>
+    <string name="by_continuing_you_agree_to_our_terms">Devam ederek, uygulamamızın Kullanım Koşulları ve Gizlilik Politikasını okumuş ve kabul etmiş sayılırsınız.</string>
+    <string name="accept_and_continue">Kabul Et ve Devam Et</string>
+    <string name="view_terms">Koşulları İncele</string>
 </resources>

@@ -450,9 +450,9 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp" />
 
-                    <!-- About -->
+                    <!-- Contact and Support -->
                     <TextView
-                        android:id="@+id/tv_about"
+                        android:id="@+id/tv_support"
                         style="?attr/textAppearanceSubtitle1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -465,8 +465,8 @@
                         android:paddingBottom="16dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:text="@string/about"
-                        app:drawableStartCompat="@drawable/baseline_help_outline_24"
+                        android:text="@string/support_contact"
+                        app:drawableStartCompat="@drawable/baseline_contact_support_24"
                         app:drawableTint="?attr/colorOnSurface" />
 
                     <!-- Privacy Policy -->
@@ -505,6 +505,25 @@
                         android:paddingEnd="16dp"
                         android:text="@string/terms_of_use"
                         app:drawableStartCompat="@drawable/baseline_gavel_24"
+                        app:drawableTint="?attr/colorOnSurface" />
+
+                    <!-- About -->
+                    <TextView
+                        android:id="@+id/tv_about"
+                        style="?attr/textAppearanceSubtitle1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:drawablePadding="16dp"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/about"
+                        app:drawableStartCompat="@drawable/baseline_help_outline_24"
                         app:drawableTint="?attr/colorOnSurface" />
 
                     <com.google.android.material.divider.MaterialDivider

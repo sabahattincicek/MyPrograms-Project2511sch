@@ -31,6 +31,8 @@ import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
+import androidx.core.net.toUri
+import com.saboon.project_2511sch.util.AppConstants
 
 
 @AndroidEntryPoint
@@ -49,7 +51,6 @@ class ProfileFragment : Fragment() {
 
     private lateinit var characterManager: CharacterManager
     private lateinit var selectedCharacter: Character
-
     //select folder to save export file
     private val exportFileToDeviceLauncher = registerForActivityResult(
         ActivityResultContracts.CreateDocument("application/zip")
@@ -124,14 +125,21 @@ class ProfileFragment : Fragment() {
         binding.tvImportData.setOnClickListener {
             importFileLauncher.launch("application/zip")
         }
-        binding.tvAbout.setOnClickListener {
-
+        binding.tvSupport.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, AppConstants.SUPPORT_URL.toUri())
+            startActivity(intent)
         }
         binding.tvPrivacyPolicy.setOnClickListener {
-
+            val intent = Intent(Intent.ACTION_VIEW, AppConstants.PRIVACY_POLICY_URL.toUri())
+            startActivity(intent)
         }
         binding.tvTerms.setOnClickListener {
-
+            val intent = Intent(Intent.ACTION_VIEW, AppConstants.TERMS_OF_USE_URL.toUri())
+            startActivity(intent)
+        }
+        binding.tvAbout.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, AppConstants.ABOUT_APP_URL.toUri())
+            startActivity(intent)
         }
     }
 

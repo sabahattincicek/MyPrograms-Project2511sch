@@ -135,5 +135,9 @@
     <string name="go_to_settings">Go To Settings</string>
     <string name="notification_permission_denied">Notification Permission Denied!</string>
     <string name="should_grant_notification_permission_for_reminder">Should grant notification permission for reminder</string>
+    <string name="legal_agreement_title">Legal Agreement</string>
+    <string name="by_continuing_you_agree_to_our_terms">By contiuning you agree to our terms.</string>
+    <string name="accept_and_continue">Accept and Continue</string>
+    <string name="view_terms">View Terms</string>
 
 </resources>

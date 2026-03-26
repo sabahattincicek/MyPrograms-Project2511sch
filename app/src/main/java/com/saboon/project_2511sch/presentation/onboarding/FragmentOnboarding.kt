@@ -2,6 +2,7 @@ package com.saboon.project_2511sch.presentation.onboarding
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -19,11 +21,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentOnboardingBinding
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
+import com.saboon.project_2511sch.util.AppConstants
 import com.saboon.project_2511sch.util.PermissionManager
 import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -125,9 +129,21 @@ class FragmentOnboarding : Fragment() {
     }
 
     private fun finishOnboarding(){
-        viewModelSetting.isOnoardingCompleted(true)
-        val action = FragmentOnboardingDirections.actionFragmentOnboardingToFragmentAboutYourself()
-        findNavController().navigate(action)
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        builder.setTitle(getString(R.string.legal_agreement_title))
+        builder.setMessage(getString(R.string.by_continuing_you_agree_to_our_terms))
+        builder.setPositiveButton(getString(R.string.accept_and_continue)){dialog, which ->
+            viewModelSetting.isOnoardingCompleted(true)
+            val action = FragmentOnboardingDirections.actionFragmentOnboardingToFragmentAboutYourself()
+            findNavController().navigate(action)
+            dialog.dismiss()
+        }
+        builder.setNegativeButton(getString(R.string.view_terms)){dialog, which ->
+            val intent = Intent(Intent.ACTION_VIEW, AppConstants.SUPPORT_URL.toUri())
+            startActivity(intent)
+        }
+        builder.setCancelable(false)
+        builder.show()
     }
 
     override fun onDestroyView() {
