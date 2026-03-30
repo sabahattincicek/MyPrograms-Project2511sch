@@ -13,7 +13,7 @@
     <string name="swipe_to_load_previous_days">Swipe to load previous days</string>
     <string name="no_course_or_task_found">No course or task found. \n\nTo get started, create a Program Table and add courses and tasks.</string>
     <string name="program_tables">Program Tables</string>
-    <string name="no_program_table_found">No program table found. \n\nCreate one to organize your courses and tasks.</string>
+    <string name="no_tag_found">No tag found. \n\nCreate one to organize your courses and tasks.</string>
     <string name="program_table_details">Program Table Details</string>
     <string name="files">Files</string>
     <string name="no_course_found">No course found.</string>
@@ -21,7 +21,7 @@
     <string name="no_task_found">No task found.</string>
     <string name="search_in_files">Search in files</string>
     <string name="tasks">Tasks</string>
-    <string name="no_file_found">No file found</string>
+    <string name="no_file_found">No file found. \n\nYou can add a new file from the Course Details.</string>
     <string name="profile">Profile</string>
     <string name="full_name">Full Name:</string>
     <string name="role">Title:</string>

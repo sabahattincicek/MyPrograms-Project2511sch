@@ -75,9 +75,9 @@
             <LinearLayout
                 android:id="@+id/ll_emptyList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:orientation="vertical">
                 <ImageView
                     android:layout_width="250dp"
