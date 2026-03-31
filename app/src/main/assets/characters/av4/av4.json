@@ -6,7 +6,7 @@
     "en": "I'm Ezgi. Trusting people comes naturally to me; if someone tells me something, I usually believe it. People say I’m kind — sometimes too kind. I open up quickly to new ideas and new people. Maybe that’s why I can be a little gullible at times. Still, I’m not very good at closing my heart. Thinking badly of others just isn’t who I am."
   },
   "portrait": "file:///android_asset/characters/av4/images/av4_portrait.webp",
-  "cover": "file:///android_asset/characters/av4/images/av4_actv1.webp",
+  "cover": "file:///android_asset/characters/av4/images/av4_cover.webp",
   "activities": [
     {
       "id": "actv1",

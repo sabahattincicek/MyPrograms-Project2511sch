@@ -13,7 +13,7 @@
     <string name="swipe_to_load_previous_days">Önceki günleri yüklemek için kaydırın</string>
     <string name="no_course_or_task_found">Ders veya görev bulunamadı. \n\nBaşlamak için bir Program Tablosu oluşturun ve dersler ile görevler ekleyin.</string>
     <string name="program_tables">Program Tabloları</string>
-    <string name="no_program_table_found">Program tablosu bulunamadı. \n\nDerslerinizi ve görevlerinizi düzenlemek için bir tane oluşturun.</string>
+    <string name="no_tag_found">Etiket bulunamadı. \n\nDerslerinizi ve görevlerinizi düzenlemek için bir tane oluşturun.</string>
     <string name="program_table_details">Program Tablosu Detayları</string>
     <string name="files">Dosyalar</string>
     <string name="no_course_found">Ders bulunamadı.</string>
@@ -21,7 +21,7 @@
     <string name="no_task_found">Görev bulunamadı.</string>
     <string name="search_in_files">Dosyalarda ara</string>
     <string name="tasks">Görevler</string>
-    <string name="no_file_found">Dosya bulunamadı</string>
+    <string name="no_file_found">Dosya bulunamadı. \n\nDers detaylarından yeni bir dosya ekleyebilirsiniz.</string>
     <string name="profile">Profil</string>
     <string name="full_name">Ad Soyad:</string>
     <string name="role">Unvan:</string>

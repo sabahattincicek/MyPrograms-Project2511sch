@@ -72,22 +72,22 @@ class FragmentOnboarding : Fragment() {
             OnboardingPage(
                 title = "Derslerini Planla",
                 description = "Hangi gün hangi dersin olduğunu kolayca takip et.",
-                imageRes = R.drawable.ic_launcher_foreground
-            ),
-            OnboardingPage(
-                title = "Sınavları Kaçırma",
-                description = "Sınav tarihlerini ve hedeflerini belirle, biz sana hatırlatalım.",
-                imageRes = R.drawable.ic_launcher_background
+                imageRes = R.drawable.av1_onboarding_derslerini_planla
             ),
             OnboardingPage(
                 title = "Widget Desteği",
                 description = "Uygulamayı açmadan ana ekranından programına göz at.",
-                imageRes = R.drawable.empty_list
+                imageRes = R.drawable.av3_onboarding_widget_destegi
+            ),
+            OnboardingPage(
+                title = "Sınavları Kaçırma",
+                description = "Sınav tarihlerini ve hedeflerini belirle, biz sana hatırlatalım.",
+                imageRes = R.drawable.av2_onboarding_sinavlari_kacirma
             ),
             OnboardingPage(
                 title ="Bildirimleri Aç",
                 description = "Ders ve sınav hatırlatıcılarını alabilmek için bildirim izni vermen gerekiyor.",
-                imageRes = R.drawable.baseline_home_24, // Uygun bir ikon koy
+                imageRes = R.drawable.av4_onboarding_bildirimleri_ac,
                 isPermission = true
             ),
         )

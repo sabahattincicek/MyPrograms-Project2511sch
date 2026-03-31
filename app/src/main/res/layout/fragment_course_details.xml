@@ -258,21 +258,23 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:visibility="gone"
-                android:orientation="horizontal"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/SECTION_TASKS">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/empty_list" />
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:src="@drawable/av2_empty_list" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="32dp"
                     android:text="@string/no_task_found"
                     android:textAlignment="center"
