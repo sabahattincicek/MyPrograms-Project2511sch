@@ -12,10 +12,29 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/empty_list"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Üst Karartma (Top Scrim) -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:background="@drawable/bg_onboarding_top_scrim"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Alt Karartma (Bottom Scrim) -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="350dp"
+        android:background="@drawable/bg_onboarding_bottom_scrim"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -27,6 +46,12 @@
         android:layout_marginTop="100dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:shadowColor="#000000"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,6 +67,11 @@
         android:layout_marginBottom="200dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
+        android:textColor="@android:color/white"
+        android:shadowColor="#000000"
+        android:shadowDx="2.5"
+        android:shadowDy="2.5"
+        android:shadowRadius="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

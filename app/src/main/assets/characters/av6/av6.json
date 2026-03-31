@@ -6,7 +6,7 @@
     "en": "I'm Melisa. Got a task? No need to overcomplicate it — I think fast and decide fast. For me, it doesn’t have to be perfect, it just has to work. If you’re stuck, I’ll find a solution without panicking. Sure, I can be a bit impulsive sometimes, but at least things get done. If there’s action, I’m in."
   },
   "portrait": "file:///android_asset/characters/av6/images/av6_portrait.webp",
-  "cover": "file:///android_asset/characters/av6/images/av6_actv1.webp",
+  "cover": "file:///android_asset/characters/av6/images/av6_cover.webp",
   "activities": [
     {
       "id": "actv1",

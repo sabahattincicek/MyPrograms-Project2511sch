@@ -6,7 +6,7 @@
     "en": "I'm Arif. At school, I’m mostly known for my looks, but what really defines me is how I connect with people. If you need help, I’m there. Meeting new people and having conversations gives me energy. I admit, I enjoy the attention. But sometimes, while trying to be there for everyone, I end up neglecting my own responsibilities. I’m not very good at saying no, because I don’t like disappointing people."
   },
   "portrait": "file:///android_asset/characters/av3/images/av3_portrait.webp",
-  "cover": "file:///android_asset/characters/av3/images/av3_actv1.webp",
+  "cover": "file:///android_asset/characters/av3/images/av3_cover.webp",
   "activities": [
     {
       "id": "actv1",

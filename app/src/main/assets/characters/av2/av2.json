@@ -6,7 +6,7 @@
     "en": "I'm Zeynep. Learning something halfway is just not my style; I can’t relax until I’ve researched a topic in depth. My grades are usually high because I truly dive deep when I study. My friends sometimes call me a ‘walking encyclopedia.’ But I admit, I can get stuck on details, and I can’t help correcting wrong information. In trying to be perfect, I sometimes put too much pressure on myself."
   },
   "portrait": "file:///android_asset/characters/av2/images/av2_portrait.webp",
-  "cover": "file:///android_asset/characters/av2/images/av2_actv1.webp",
+  "cover": "file:///android_asset/characters/av2/images/av2_cover.webp",
   "activities": [
     {
       "id": "actv1",
