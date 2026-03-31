@@ -3,6 +3,8 @@
   <img src="app/src/main/res/drawable/ic_launcher_foreground.xml" width="128" height="128" />
 </p>
 
+### v1.0.0-beta
+
 **MyPrograms**, öğrencilerin yoğun ders ve sınav programlarını tek bir merkezden, modern ve hızlı bir arayüzle yönetebilmeleri için geliştirilmiş bir akademik ajanda uygulamasıdır.
 
 [English Version Below](#english-version)
