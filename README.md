@@ -1,7 +1,8 @@
 # MyPrograms - Modern Academic Planner
 <p align="center">
-  <img src="assets/logo/my_programs_logo.png" width="128" height="128" />
+  <img alt="my_programs_logo" src="https://github.com/user-attachments/assets/9fc19e31-22ec-42e0-9dd9-c56e81394dde" width="128" height="128" />
 </p>
+
 
 ### v1.0.0-beta
 
