@@ -1,4 +1,4 @@
-# MyPrograms - Modern Academic Planner 🎓
+# MyPrograms - Modern Academic Planner
 <p align="center">
   <img src="app/src/main/res/drawable/ic_launcher_foreground.xml" width="128" height="128" />
 </p>
