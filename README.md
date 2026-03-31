@@ -57,7 +57,9 @@ Bu proje eğitim amaçlı geliştirilmiş olup, tüm hakları geliştiriciye ait
 - [ ] **Analytics:** Visual insights into study habits and exam performance.
 
 ### License
-This project is developed for educational purposes. All rights reserved by the developer.
+Bu proje **GNU AFFERO GENERAL PUBLIC LICENSE** altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına göz atabilirsiniz.
+
+This project is licensed under the **GNU AFFERO GENERAL PUBLIC LICENSE**. See the [LICENSE](LICENSE) file for details.
 
 ---
 
