@@ -11,7 +11,7 @@
         android:id="@+id/ivOnboarding"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/empty_list"
+        android:src="@drawable/av1_onboarding_derslerini_planla"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
