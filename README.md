@@ -3,9 +3,6 @@
   <img alt="my_programs_logo" src="https://github.com/user-attachments/assets/9fc19e31-22ec-42e0-9dd9-c56e81394dde" width="128" height="128" />
 </p>
 
-
-### v1.0.0-beta
-
 **MyPrograms**, öğrencilerin yoğun ders ve sınav programlarını tek bir merkezden, modern ve hızlı bir arayüzle yönetebilmeleri için geliştirilmiş bir akademik ajanda uygulamasıdır.
 
 [English Version Below](#english-version)
@@ -75,6 +72,14 @@ This project is licensed under the **GNU AFFERO GENERAL PUBLIC LICENSE**. See th
 ## İletişim / Contact
 - **Developer:** Sabahattin Çiçek
 - **Email:** sabahattincck@outlook.com
+
+---
+
+<p align="center">
+  <a href="https://sabahattincicek.github.io/MyPrograms-Project2511sch/">
+    <strong>🌐 Official Support & Legal Page</strong>
+  </a>
+</p>
 
 ---
 *Developed with ❤️  for students worldwide.*
