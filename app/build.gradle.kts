@@ -26,7 +26,7 @@ android {
         minSdk = 29
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,6 +52,13 @@ android {
         viewBinding = true
         dataBinding = true
         compose = true
+    }
+    applicationVariants.all {
+        outputs.all {
+            val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            val typePrefix = if (buildType.name == "release") "release" else "debug"
+            output.outputFileName = "${namespace}_MyPrograms_${defaultConfig.versionName}_${typePrefix}.apk"
+        }
     }
 }
 
