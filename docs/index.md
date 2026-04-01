@@ -21,19 +21,21 @@ Choose a document below to review our policies and technical information.
 MyPrograms is a passion project developed for students, and it's **100% free and ad-free**. If you find it helpful and want to support my work, you can contribute through Kreosus below:
 
 <!-- Kreosus Widget Start -->
-<div id="kreosus" data-id="5442" data-start-page="0" data-bg-color="ffffff" data-iframe-api="true"></div>
-<script>
-(function (d, s, id) {
-  let js, kjs = d.getElementById(id)[0];
-  if (d.getElementById(id)) {
-    return;
-  }
-  js = d.createElement(s);
-  js.id = id;
-  js.src = 'https://kreosus.com/public/kreosus/iframe/js/iframe-api.js';
-  kjs.parentNode.insertBefore(js, kjs);
-}(document, 'script', 'kreosus-iframe-api'));
-</script>
+<div align="center" style="margin: 20px 0;">
+    <!-- Kreosus Widget Start -->
+    <div id="kreosus" data-id="5442" data-start-page="0" data-bg-color="ffffff" data-iframe-api="true"></div>
+    <script>
+    (function (d, s, id) {
+      var js, kjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); 
+      js.id = id;
+      js.src = 'https://kreosus.com/public/kreosus/iframe/js/iframe-api.js';
+      kjs.parentNode.insertBefore(js, kjs);
+    }(document, 'script', 'kreosus-iframe-api'));
+    </script>
+    <!-- Kreosus Widget End -->
+</div>
 <!-- Kreosus Widget End -->
 
 ---

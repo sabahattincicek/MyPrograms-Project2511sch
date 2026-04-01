@@ -1,3 +1,6 @@
 theme: jekyll-theme-minimal
 title: MyPrograms Support & Legal
 description: Official support, privacy policy, and terms of use for MyPrograms App.
+commonmarker:
+  options:
+    unsafe: true
