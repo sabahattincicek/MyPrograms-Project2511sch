@@ -137,4 +137,5 @@
     <string name="by_continuing_you_agree_to_our_terms">Devam ederek, uygulamamızın Kullanım Koşulları ve Gizlilik Politikasını okumuş ve kabul etmiş sayılırsınız.</string>
     <string name="accept_and_continue">Kabul Et ve Devam Et</string>
     <string name="view_terms">Koşulları İncele</string>
+    <string name="untagged">Etiketlenmemiş</string>
 </resources>

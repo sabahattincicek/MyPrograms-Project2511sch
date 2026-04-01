@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.semantics.dismiss
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentAboutYourselfBinding
 import com.saboon.project_2511sch.domain.model.User
@@ -44,6 +46,7 @@ class FragmentAboutYourself : Fragment() {
         setupObserver()
 
         binding.btnStart.setOnClickListener {
+            binding.pbLoading.visibility = View.VISIBLE
             val newUser = User(
                 id = IdGenerator.generateId(binding.etFullName.text.toString()),
                 createdBy = "",
@@ -60,6 +63,7 @@ class FragmentAboutYourself : Fragment() {
             viewModelUser.insert(newUser)
         }
         binding.btnSkip.setOnClickListener {
+            binding.pbLoading.visibility = View.VISIBLE
             val newUser = User(
                 id = IdGenerator.generateId("default-user"),
                 createdBy = "",
@@ -87,10 +91,32 @@ class FragmentAboutYourself : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModelUser.operationEvent.collect { resource ->
                     when(resource) {
-                        is Resource.Error -> {}
-                        is Resource.Idle -> {}
-                        is Resource.Loading -> {}
+                        is Resource.Error -> {
+                            binding.pbLoading.visibility = View.GONE
+                            val errorMessage = resource.message ?: getString(R.string.error_unknown)
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(getString(R.string.error_occurred))
+                                .setMessage(errorMessage)
+                                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                                    dialog.dismiss()
+                                }
+                                .show()
+                        }
+                        is Resource.Idle -> {
+                            binding.pbLoading.visibility = View.GONE
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("User Inserting Idle")
+                                .setMessage("Resource Idle")
+                                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                                    dialog.dismiss()
+                                }
+                                .show()
+                        }
+                        is Resource.Loading -> {
+                            binding.pbLoading.visibility = View.VISIBLE
+                        }
                         is Resource.Success -> {
+                            binding.pbLoading.visibility = View.GONE
                             val operationResult = resource.data //BaseVmOperationResult<User>
                             val user = operationResult?.data
                             val type = operationResult?.operationType

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.RowGeneralItemBinding
 import com.saboon.project_2511sch.databinding.RowSingleTextViewBinding
 import com.saboon.project_2511sch.databinding.RowSingleTextViewLeftBinding
@@ -64,7 +65,7 @@ class RecyclerAdapterCourse: ListAdapter<DisplayItemCourse, BaseViewHolder>(Base
                     if (!item.tag.isActive) binding.tvContent.alpha = 0.3f
                     else binding.tvContent.alpha = 1.0f
                 }
-                if (item.tag == null) binding.tvContent.text = "Untagged"
+                if (item.tag == null) binding.tvContent.text = binding.root.context.getString(R.string.untagged)
             }
         }
     }

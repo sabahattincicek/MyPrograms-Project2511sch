@@ -158,6 +158,7 @@ class RecyclerAdapterTask:
 //            if (item is DisplayItemTask.FooterTask){
 //                binding.tvContent.text = "${item.count} ${binding.root.context.getString(R.string.tasks)}"
 //            }
+            binding.tvContent.text = ""
         }
     }
 }
