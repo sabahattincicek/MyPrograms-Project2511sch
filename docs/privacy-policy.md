@@ -54,14 +54,27 @@ We believe you should have full control over your data.
 
 ---
 
-## 4. Third-Party Services
-Currently, MyPrograms **does not** use:
-*   Third-party Analytics (e.g., Firebase Analytics, Flurry).
-*   Advertising Networks (e.g., AdMob, Unity Ads).
-*   Location Tracking or Background Sensors.
+## 4. Third-Party Services & Payment Processing
 
-The only third-party interaction occurs through standard **Google Play Services** for core system functions like app updates and basic crash reporting provided by the Google Play Console.
+Transparency is our priority. We distinguish between what happens inside the Android application and what happens on our official support website.
 
+### 4.1 In-App (Android Application)
+The **MyPrograms** Android application is designed to be a private, offline-first tool.
+*   **No Ads or Tracking:** The app binary does not include any third-party advertising SDKs (like AdMob) or invasive analytics (like Firebase Analytics).
+*   **No In-App Purchases:** There are no payment systems or "pay-to-unlock" features within the app.
+*   **Essential System Services:** To operate correctly on the Android platform, the app interacts with **Google Play Services**. These services are provided by Google and are used for core system functions like app updates, security patches, and basic crash reporting provided via the Google Play Console.
+    *   *Reference:* [Google Play Services Privacy Policy](https://policies.google.com/privacy)
+
+### 4.2 Support Website & Contributions (GitHub Pages)
+If you choose to visit our official support website to contribute to the project's sustainability:
+*   **Kreosus (Support Widget):** We utilize a third-party widget from **Kreosus** solely on our GitHub Pages support site. Kreosus is a platform that allows independent developers to receive financial support from their community.
+*   **Payment Data:** When you make a contribution via the Kreosus widget, they process your payment information (e.g., credit card details, email, name) as an independent data controller. **MyPrograms does not receive, process, or store your financial data.**
+    *   *Reference:* [Kreosus Privacy Policy](https://kreosus.com/privacy)
+
+### 4.3 Third-Party References
+For your safety, we recommend reviewing the privacy practices of the following essential providers used by our platform:
+*   **Google (OS & Play Store):** [Privacy & Terms](https://policies.google.com/privacy)
+*   **GitHub (Hosting for Support Site):** [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement)
 ---
 
 ## 5. Future Roadmap: Cloud Synchronization
