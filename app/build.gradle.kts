@@ -7,7 +7,7 @@ plugins {
     kotlin("plugin.serialization") version "2.0.21"
     id("androidx.navigation.safeargs.kotlin")
 
-    id("com.google.devtools.ksp") version "2.2.10-2.0.2"
+    id("com.google.devtools.ksp") version "2.3.2"
     id("com.google.dagger.hilt.android")
 
     id("androidx.room") version "2.8.4"
