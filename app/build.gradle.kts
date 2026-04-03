@@ -115,7 +115,7 @@ dependencies {
 
 
     //serialisation for json
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 
     //preference for settings
     implementation("androidx.preference:preference-ktx:1.2.1")
