@@ -57,7 +57,7 @@ android {
         outputs.all {
             val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
             val typePrefix = if (buildType.name == "release") "release" else "debug"
-            output.outputFileName = "${namespace}_MyPrograms_${defaultConfig.versionName}_${typePrefix}.apk"
+            output.outputFileName = "MyPrograms_${defaultConfig.versionName}_${typePrefix}.apk"
         }
     }
 }
