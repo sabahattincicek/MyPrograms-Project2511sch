@@ -128,5 +128,5 @@ dependencies {
     implementation("androidx.glance:glance-material3:1.1.1")
 
     //splash screen
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.core:core-splashscreen:1.2.0")
 }
