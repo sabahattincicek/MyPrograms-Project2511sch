@@ -11,12 +11,10 @@ interface ICourseRepository {
     suspend fun delete(course: Course): Resource<Course>
 
     suspend fun update(course: Course): Resource<Course>
-    suspend fun activationById(id: String, isActive: Boolean): Resource<Unit>
     fun getById(id: String): Flow<Resource<Course>>
     fun getAll(): Flow<Resource<List<Course>>>
     fun getAllActive(): Flow<Resource<List<Course>>>
     fun getAllByTagId(id: String): Flow<Resource<List<Course>>>
-    fun getAllByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>>
     fun getAllActivesByTagIds(ids: List<String>): Flow<Resource<List<Course>>>
     suspend fun removeTagFromCourses(tagId: String): Resource<Unit>
 

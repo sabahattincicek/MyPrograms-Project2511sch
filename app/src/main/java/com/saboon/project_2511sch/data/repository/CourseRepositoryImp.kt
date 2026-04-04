@@ -43,18 +43,6 @@ class CourseRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun activationById(
-        id: String,
-        isActive: Boolean
-    ): Resource<Unit> {
-        try {
-            courseDao.activationById(id, isActive)
-            return Resource.Success(Unit)
-        }catch (e: Exception){
-            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
-        }
-    }
-
     override fun getById(id: String): Flow<Resource<Course>> {
         return courseDao.getById(id)
             .map<CourseEntity, Resource<Course>> { courseEntity ->
@@ -87,16 +75,6 @@ class CourseRepositoryImp @Inject constructor(
 
     override fun getAllByTagId(id: String): Flow<Resource<List<Course>>> {
         return courseDao.getAllByTagId(id)
-            .map<List<CourseEntity>, Resource<List<Course>>> { courseEntities ->
-                Resource.Success(courseEntities.map { it.toDomain() })
-            }
-            .catch { e ->
-                emit(Resource.Error(e.localizedMessage?:"An unexpected error occurred"))
-            }
-    }
-
-    override fun getAllByProgramTableIds(ids: List<String>): Flow<Resource<List<Course>>> {
-        return courseDao.getAllByProgramTableIds(ids)
             .map<List<CourseEntity>, Resource<List<Course>>> { courseEntities ->
                 Resource.Success(courseEntities.map { it.toDomain() })
             }

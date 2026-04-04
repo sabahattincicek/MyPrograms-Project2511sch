@@ -19,8 +19,6 @@ interface CourseDao {
     suspend fun delete(course: CourseEntity)
     @Update
     suspend fun update(course: CourseEntity)
-    @Query("UPDATE courses SET is_active = :isActive WHERE id = :id")
-    suspend fun activationById(id: String, isActive: Boolean)
     @Query("SELECT * FROM courses WHERE id = :id")
     fun getById(id: String): Flow<CourseEntity>
     @Query("SELECT * FROM courses")
