@@ -41,17 +41,6 @@ class TagRepositoryImp @Inject constructor(
             return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
         }
     }
-    override suspend fun activationById(
-        id: String,
-        isActive: Boolean
-    ): Resource<Unit> {
-        try {
-            tagDao.activationById(id, isActive)
-            return Resource.Success(Unit)
-        }catch (e: Exception){
-            return Resource.Error(e.localizedMessage?:"An unexpected error occurred")
-        }
-    }
     override fun getById(id: String): Flow<Resource<Tag>> {
         return tagDao.getById(id)
             .map<TagEntity, Resource<Tag>> { entity ->

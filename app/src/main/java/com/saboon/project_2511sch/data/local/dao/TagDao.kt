@@ -18,8 +18,6 @@ interface TagDao {
     suspend fun update(tagEntity: TagEntity)
     @Delete
     suspend fun delete(tagEntity: TagEntity)
-    @Query("UPDATE tags SET is_active = :isActive WHERE id = :id")
-    suspend fun activationById(id: String, isActive: Boolean)
     @Query("SELECT * FROM tags WHERE id = :id")
     fun getById(id: String): Flow<TagEntity>
     @Query("SELECT * FROM tags")
