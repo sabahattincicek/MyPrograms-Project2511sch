@@ -79,9 +79,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.glance.preview)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+
 
     //hilt
     implementation("com.google.dagger:hilt-android:2.57.2")
@@ -129,4 +127,13 @@ dependencies {
 
     //splash screen
     implementation("androidx.core:core-splashscreen:1.2.0")
+
+    //test
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation("com.google.truth:truth:1.4.5")
+    androidTestImplementation("com.google.truth:truth:1.4.5")
+    testImplementation("androidx.room:room-testing:${room_version}")
+    androidTestImplementation("androidx.room:room-testing:${room_version}")
 }
