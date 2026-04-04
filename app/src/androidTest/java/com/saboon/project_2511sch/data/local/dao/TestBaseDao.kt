@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.saboon.project_2511sch.data.local.database.Database
 import com.saboon.project_2511sch.data.local.entity.CourseEntity
+import com.saboon.project_2511sch.data.local.entity.SFileEntity
 import com.saboon.project_2511sch.data.local.entity.TagEntity
 import com.saboon.project_2511sch.data.local.entity.TaskExamEntity
 import com.saboon.project_2511sch.data.local.entity.TaskHomeworkEntity
@@ -157,5 +158,23 @@ abstract class TestBaseDao{
         title = "",
         description = "",
         color = "",
+    )
+    val baseSFileEntity = SFileEntity(
+        id = "test-sfile",
+        createdAt = 0L,
+        createdBy = "",
+        appVersionAtCreation = "1.0.0",
+        updatedAt = 0L,
+        version = 1,
+        isActive = true,
+        isDeleted = false,
+        deletedAt = 0L,
+        syncStatus = 0,
+        contentHash = "",
+        serverVersion = 1,
+        courseId = "test-course",
+        title = "",
+        description = "",
+        filePath = "",
     )
 }

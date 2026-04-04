@@ -21,6 +21,7 @@ class TestTaskDao : TestBaseDao() {
     fun setup(){
         taskDao = database.taskDao()
 
+        //for sqlite foreign key
         runTest {
             database.courseDao().insert(baseCourseEntity.copy(id = "c1"))
             database.courseDao().insert(baseCourseEntity.copy(id = "c2"))
