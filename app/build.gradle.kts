@@ -95,7 +95,8 @@ dependencies {
     implementation("androidx.room:room-ktx:${room_version}")
 
     //coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    val coroutines_version = "1.10.2"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutines_version}")
 
     // ViewModel
     val lifecycle_version = "2.10.0"
@@ -134,6 +135,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     testImplementation("com.google.truth:truth:1.4.5")
     androidTestImplementation("com.google.truth:truth:1.4.5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${coroutines_version}")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${coroutines_version}")
     testImplementation("androidx.room:room-testing:${room_version}")
     androidTestImplementation("androidx.room:room-testing:${room_version}")
 }
