@@ -54,4 +54,40 @@
         <item>Exam</item>
         <item>Homework</item>
     </string-array>
+
+    <string-array name="ataturk_quotes">
+        <item>"The truest guide in life is science and knowledge. Seeking guidance outside of science and knowledge is ignorance, folly, and deviation."</item>
+        <item>"It is education that either raises a nation as a free, independent, honorable, and high society, or condemns it to slavery and misery."</item>
+        <item>"It is education that makes a nation live as a free, independent, honorable, and high society, or drags it into slavery and poverty."</item>
+        <item>"The greatest battle is the one fought against ignorance."</item>
+        <item>"Those who save nations are solely and only teachers. A nation deprived of teachers and educators has not yet earned the name of a nation."</item>
+        <item>"We must raise generations whose minds are free, whose conscience is free, and whose knowledge is free."</item>
+        <item>"Children deprived of education and training are the greatest danger to a nation."</item>
+        <item>"As long as ignorance is not eliminated, we remain in place. And something that stands still is actually going backward."</item>
+        <item>"School teaches young minds respect for humanity, love for the nation and country, honor, and independence."</item>
+        <item>"Teachers! The new generation will be your work."</item>
+        <item>"The aim of education is not only to raise knowledgeable individuals, but also to raise productive and moral individuals with developed thinking abilities."</item>
+        <item>"To succeed in education, we must progress in the light of modern science and knowledge."</item>
+        <item>"Enlightening, educating, and elevating our women as much as our men is one of our most important duties."</item>
+        <item>"Education and training are the fundamental conditions for becoming a nation and building a prosperous homeland."</item>
+        <item>"A society, a nation, consists of two genders: men and women. Is it possible for half of a society to remain chained to the ground while the other half rises to the skies?"</item>
+        <item>"The foundation of the education policy we will follow is, first of all, to eliminate ignorance."</item>
+        <item>"A villager deprived of education is a fundamental element of a nation, yet its weakest link."</item>
+        <item>"The assurance of the future lies in education based on solid foundations, and education relies on teachers."</item>
+        <item>"Primary and secondary education must certainly provide the science and techniques required by humanity and civilization; but it must do so in such a practical way that the child feels confident they will not starve after leaving school."</item>
+        <item>"Scientific and technical studies can only take place in schools. Therefore, schools are essential. Let us all remember the name \"school\" with respect and reverence."</item>
+        <item>"It is certain that a nation which rapidly reaches a high level in education and training will increase all its material and moral strengths in the struggle for life."</item>
+        <item>"Teaching is a lifelong learning process."</item>
+        <item>"The enemy of society is ignorance; the enemy of ignorance is the teacher."</item>
+        <item>"Education is the most important force to civilize and elevate a nation."</item>
+        <item>"Spiritual strength develops especially through science and faith."</item>
+        <item>"No matter the extent of their education, children and youth must first be taught the necessity of struggling against all elements hostile to Turkey's independence, identity, and national traditions."</item>
+        <item>"The method to be applied in education is to make knowledge a practical and usable tool for people."</item>
+        <item>"The life of a nation is related to the civilized and social environment in which it lives. Enlightening this environment with science and knowledge is only possible through education and training."</item>
+        <item>"Educational programs must reveal and develop the abilities of children and youth, and instill in them a sense of freedom and independence."</item>
+        <item>"Equipping our citizens—men and women alike—at all levels of education with practical knowledge to be successful and productive in economic life forms the basic principle of our education system."</item>
+        <item>"No matter the level of education they receive, children and youth must first be taught the necessity of fighting against all elements hostile to Turkey's independence."</item>
+        <item>"Youth! You are the ones who strengthen and sustain our courage. With the education and knowledge you receive, you will become the most valuable symbol of human dignity and love of the homeland."</item>
+    </string-array>
+
 </resources>
