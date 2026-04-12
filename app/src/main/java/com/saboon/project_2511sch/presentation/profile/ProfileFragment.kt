@@ -86,6 +86,9 @@ class ProfileFragment : Fragment() {
 
         setupObservers()
 
+        val quotes = resources.getStringArray(R.array.ataturk_quotes)
+        binding.tvAtaturkQuotes.text = "\"${quotes.random()}\""
+
         characterManager = CharacterManager(requireContext())
         selectedCharacter = characterManager.getCharacter("av1")!!
 

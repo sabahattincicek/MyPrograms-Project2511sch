@@ -54,4 +54,40 @@
         <item>Sınav</item>
         <item>Ödev</item>
     </string-array>
+
+    <string-array name="ataturk_quotes">
+        <item>"Hayatta en hakiki mürşit ilimdir, fendir. İlim ve fennin dışında mürşit aramak gaflettir, cehalettir, delalettir."</item>
+        <item>"Eğitimdir ki, bir milleti ya hür, bağımsız, şanlı, yüksek bir toplum halinde yaşatır ya da esaret ve sefalete terk eder."</item>
+        <item>"Bir milleti, hür, bağımsız, şanlı, yüksek bir toplum olarak yaşatan da kölelik ve yoksulluğa terk eden de eğitimdir."</item>
+        <item>"En büyük savaş, cahilliğe karşı yapılan savaştır."</item>
+        <item>"Milletleri kurtaranlar yalnız ve ancak öğretmenlerdir. Öğretmenden, eğiticiden yoksun bir millet, henüz millet adını almak yeteneğini kazanmamıştır."</item>
+        <item>"Fikri hür, vicdanı hür, irfanı hür nesiller yetiştirmeliyiz."</item>
+        <item>"Eğitim ve öğretimden mahrum bırakılmış çocuklar, bir ulusun en büyük tehlikesidir."</item>
+        <item>"Cehalet yok edilmedikçe, yerimizdeyiz. Yerinde duran bir şey ise geriye gidiyor demektir."</item>
+        <item>"Okul genç beyinlere; insanlığa saygıyı, millet ve memleket sevgisini, şerefi, bağımsızlığı öğretir."</item>
+        <item>"Öğretmenler! Yeni nesil sizin eseriniz olacaktır."</item>
+        <item>"Eğitimin amacı, yalnız bilgili insan yetiştirmek değil, aynı zamanda düşünme yeteneği gelişmiş, üretken ve ahlaklı bireyler yetiştirmektir."</item>
+        <item>"Eğitimde başarılı olmak için, çağdaş ilim ve fenin ışığında ilerlemeliyiz."</item>
+        <item>"Kadınlarımızın da erkeklerimiz kadar aydınlatılması, eğitilmesi ve yükseltilmesi, en önemli görevlerimizden biridir."</item>
+        <item>"Eğitim ve öğretim, millet olmanın, bayındır bir vatan kurmanın temel şartıdır."</item>
+        <item>"Bir içtimai topluluk, bir millet, erkek ve kadın denilen iki cins insandan oluşur. Mümkün müdür ki, bir toplumun yarısı topraklara, zincirlere bağlı kaldıkça diğer kısmı göklere yükselebilsin?"</item>
+        <item>"Bizim izleyeceğimiz eğitim siyasetinin temeli, önce cehaleti yok etmektir."</item>
+        <item>"Eğitimden yoksun bırakılan bir köylü, bir ulusun temel unsurudur ama en zayıf halkasıdır."</item>
+        <item>"Geleceğin güvencesi sağlam temellere dayalı bir eğitime, eğitim ise öğretmene dayalıdır."</item>
+        <item>"İlk ve orta öğretim mutlaka insanlığın ve medeniyetin gerektirdiği ilmi ve tekniği versin; fakat o kadar pratik bir tarzda versin ki, çocuk okuldan çıktığı zaman aç kalmaya mahkûm olmadığına emin olsun."</item>
+        <item>"İlim ve fen çalışmaları ancak okullarda olur. Bundan dolayı okullar gereklidir. Okul adını hep beraber hürmetle, saygıyla analım."</item>
+        <item>"Eğitim ve öğretimde hızla yüksek bir düzeye çıkacak bir milletin, yaşam mücadelesinde maddi, manevi bütün kuvvetlerinin artacağı kesindir."</item>
+        <item>"Öğretmenlik, ömür boyu sürecek bir öğrenciliktir."</item>
+        <item>"Toplumun düşmanı cehalet, cehaletin düşmanı öğretmendir."</item>
+        <item>"Eğitim, bir milleti medenileştirmek ve yükseltmek için en önemli güçtür."</item>
+        <item>"Manevi kuvvet, özellikle bilim ve inançla yüksek bir biçimde gelişir."</item>
+        <item>"Yetişecek çocuklarımıza ve gençlerimize, görecekleri tahsilin hududu ne olursa olsun, en evvel Türkiye'nin istiklaline, kendi benliğine, millî an'anelerine düşman olan bütün unsurlarla mücadele lüzumu öğretilmelidir."</item>
+        <item>"Eğitim ve öğretimde uygulanacak yol, bilgiyi insan için pratik ve kullanılması mümkün bir donanım haline getirmektir."</item>
+        <item>"Milletin hayatı, içinde yaşadığı medeni ve içtimai çevre ile ilgilidir. Bu çevrenin ilim ve fen ile aydınlatılması, ancak eğitim ve öğretim sayesinde mümkün olur."</item>
+        <item>"Eğitim programlarının, çocukların ve gençlerin yeteneklerini ortaya çıkarıp geliştirmesi, onlara hürriyet ve bağımsızlık duygusunu aşılaması gerekir."</item>
+        <item>"Yurttaşlarımızın, kadın-erkek, bütün öğrenim basamaklarında, ekonomik hayatta başarılı ve verimli olmaları için pratik bilgilerle donatılmaları, eğitimimizin temel ilkesini oluşturmalıdır."</item>
+        <item>"Yetişecek çocuklarımıza ve gençlerimize, görecekleri tahsilin sınırı ne olursa olsun, en önce Türkiye'nin bağımsızlığına düşman olan bütün unsurlarla mücadele etmenin gerekliliği öğretilmelidir."</item>
+        <item>"Gençler! Cesaretimizi kuvvetlendiren ve sürdüren sizsiniz. Siz, almakta olduğunuz terbiye ve irfan ile insanlık değerinin, vatan sevgisinin en değerli simgesi olacaksınız."</item>
+    </string-array>
+
 </resources>
