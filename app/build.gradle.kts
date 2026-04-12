@@ -83,6 +83,7 @@ dependencies {
 
     //hilt
     implementation("com.google.dagger:hilt-android:2.57.2")
+    implementation(libs.androidx.runner)
     ksp("com.google.dagger:hilt-android-compiler:2.57.2")
 
     // Hilt-WorkManager Integration
