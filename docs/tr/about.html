@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakkında - MyPrograms</title>
+    <link rel="icon" type="image/png" href="../assets/ic_launcher-playstore.png">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #24292e;
+            --secondary-text: #586069;
+            --accent-color: #0366d6;
+            --border-color: #e1e4e8;
+            --card-bg: #fafafa;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0d1117;
+                --text-color: #c9d1d9;
+                --secondary-text: #8b949e;
+                --accent-color: #58a6ff;
+                --border-color: #30363d;
+                --card-bg: #161b22;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .nav-back {
+            margin-bottom: 0;
+        }
+        .nav-back a {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lang-switcher {
+            text-align: right;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        .lang-link {
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+        .lang-link:hover { background-color: var(--card-bg); }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-section img {
+            margin-bottom: 20px;
+        }
+
+        h1 { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        h2 { margin-top: 40px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+        h3 { margin-top: 30px; color: var(--text-color); }
+
+        hr { border: 0; border-top: 1px solid var(--border-color); margin: 40px 0; }
+
+        .screenshot-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .screenshot-container img {
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .feature-item {
+            margin-bottom: 25px;
+        }
+
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-nav">
+    <div class="nav-back">
+        <a href="index.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Destek Ana Sayfasına Dön
+        </a>
+    </div>
+
+    <div class="lang-switcher">
+        <a href="../about.html" class="lang-link">🇺🇸 English</a>
+    </div>
+</div>
+
+<div class="header-section">
+    <img src="https://github.com/user-attachments/assets/9fc19e31-22ec-42e0-9dd9-c56e81394dde" alt="MyPrograms Logo" width="120">
+    <h1>MyPrograms Hakkında</h1>
+    <p><strong>Nihai Akademik Yardımcınız – Öğrenciler Tarafından, Öğrenciler İçin Geliştirildi</strong></p>
+    <p>MyPrograms, mutlak gizliliği korurken öğrencileri modern organizasyon araçlarıyla güçlendirmek için tasarlanmış açık kaynaklı bir girişimdir.</p>
+</div>
+
+<section>
+    <h2>MyPrograms Nedir?</h2>
+    <p><strong>MyPrograms</strong> sadece bir takvimden daha fazlasıdır; öğrencilerin akademik programlarına hakim olmalarına yardımcı olmak için tasarlanmış bir kişisel asistandır. Öğrenci hayatının ne kadar yoğun olabileceğini biliyoruz; dersleri, sınavları ve sonu gelmeyen çalışma materyallerini dengelemek zordur. MyPrograms, her şeyi sezgisel ve güzel bir zaman çizelgesinde organize ederek bu süreci basitleştirir.</p>
+</section>
+
+<section>
+    <h2>Neden MyPrograms?</h2>
+    <p>Akademik başarının hiçbir engel olmadan herkes için erişilebilir olması gerektiğine inanıyoruz.</p>
+    <ul>
+        <li><strong>%100 Ücretsiz:</strong> Abonelik yok, kilitli özellikler yok ve gizli maliyetler yok. Bu uygulamadaki her araç tüm öğrenciler için mevcuttur.</li>
+        <li><strong>Reklam Yok:</strong> Temiz ve dikkat dağıtıcı olmayan bir ortam. Banner yok, açılır pencere (pop-up) yok; sadece siz ve çalışmalarınız.</li>
+        <li><strong>Gizlilik ve Hız:</strong> Şu anda uygulama yerel-öncelikli bir deneyim sunar. Kişisel programınız ve dosyalarınız telefonunuzda güvenli bir şekilde saklanır, bu da internet bağlantısı olmasa bile ışık hızında erişim sağlar.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Ekran Görüntüleri</h2>
+    <div class="screenshot-container">
+        <img src="https://github.com/user-attachments/assets/41e7b75f-2dd9-4d71-ba63-8504059a4d41" width="30%" alt="Ana Ekran" />
+        <img src="https://github.com/user-attachments/assets/afb35115-3b46-4ac8-b2a9-de5c409dbab3" width="30%" alt="Program Ekranı" />
+        <div style="width: 100%; margin-top: 10px;">
+            <i>(Görseller yakında güncellenecektir - Temiz ve modern bir arayüzü deneyimleyin)</i>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Temel Özellikler</h2>
+
+    <div class="feature-item">
+        <h3>Akıllı Günlük Zaman Çizelgesi</h3>
+        <p>Bir daha asla "Sırada ne var?" diye sormayın. İster haftalık bir ders, ister tek seferlik bir seminer veya yaklaşan bir sınav olsun; MyPrograms programınızı hesaplar ve net, okunması kolay bir zaman çizelgesinde sunar.</p>
+    </div>
+
+    <div class="feature-item">
+        <h3>Tüm Çalışma Dosyalarınız Tek Bir Yerde</h3>
+        <p>Ders notları için telefonunuzun klasörlerini karıştırmayı bırakın. PDF'leri, görselleri ve belgeleri doğrudan kurslarınıza ekleyebilirsiniz. Ders vakti geldiğinde materyalleriniz orada sizi bekliyor olacak.</p>
+    </div>
+
+    <div class="feature-item">
+        <h3>Kendi Tarzınızla Organize Edin</h3>
+        <p>Hayatınızı kategorize etmek için özel Etiketler kullanın. Sadece "Bölüm" derslerinize mi odaklanmak istiyorsunuz yoksa "Seçmeli" atölyeleri bir süreliğine gizlemek mi? Aktif filtreleme sistemimizle sadece sizin için önemli olanları görürsünüz.</p>
+    </div>
+
+    <div class="feature-item">
+        <h3>Ana Ekran Widget'ları</h3>
+        <p>Uygulamayı açmadan bile organize kalın. Şık widget'larımız günlük programınızı doğrudan ana ekranınıza getirerek tek bir bakışla bilgilenmenizi sağlar.</p>
+    </div>
+</section>
+
+<section>
+    <h2>Gelecek Yol Haritası</h2>
+    <p>Öğrenci hayatınızı daha da kolaylaştırmak için sürekli gelişiyoruz:</p>
+    <ul>
+        <li><strong>Bulut Senkronizasyonu:</strong> Programınıza birden fazla cihazdan güvenli bir şekilde erişmenizi sağlayacak isteğe bağlı bulut depolama üzerinde çalışıyoruz.</li>
+        <li><strong>Arkadaşlarla Paylaşım:</strong> Programları veya çalışma materyallerini sınıf arkadaşlarınızla anında paylaşmanıza olanak tanıyan iş birliği özellikleri.</li>
+        <li><strong>Performans Analizleri:</strong> Çalışma alışkanlıklarınızı ve sınav ilerlemenizi zaman içinde takip etmenize yardımcı olacak görsel araçlar.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>MyPrograms Kimler İçin?</h2>
+    <ul>
+        <li>Karmaşık ve dönüşümlü haftalık programları olan <strong>Üniversite Öğrencileri</strong>.</li>
+        <li>Sınav tarihlerini ve ödev teslim tarihlerini takip eden <strong>Lise Öğrencileri</strong>.</li>
+        <li>Öğrenme materyallerini yönetmek için yapılandırılmış bir yola ihtiyaç duyan <strong>Yaşam Boyu Öğrenenler</strong>.</li>
+    </ul>
+</section>
+
+<footer>
+    <p>Dünya çapındaki öğrenciler için ❤️ ile geliştirildi.</p>
+    <p><strong>Tamamen Ücretsiz ve Reklamsız.</strong></p>
+    <p>© 2026 MyPrograms Geliştirme</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gizlilik Politikası - MyPrograms</title>
+    <link rel="icon" type="image/png" href="../assets/ic_launcher-playstore.png">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #24292e;
+            --secondary-text: #586069;
+            --accent-color: #0366d6;
+            --border-color: #e1e4e8;
+            --card-bg: #fafafa;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0d1117;
+                --text-color: #c9d1d9;
+                --secondary-text: #8b949e;
+                --accent-color: #58a6ff;
+                --border-color: #30363d;
+                --card-bg: #161b22;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .nav-back {
+            margin-bottom: 0;
+        }
+        .nav-back a {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lang-switcher {
+            text-align: right;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        .lang-link {
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+        .lang-link:hover { background-color: var(--card-bg); }
+
+        h1 { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        h2 { margin-top: 40px; color: var(--accent-color); }
+        h3 { margin-top: 30px; }
+
+        hr { border: 0; border-top: 1px solid var(--border-color); margin: 40px 0; }
+
+        .last-updated { color: var(--secondary-text); font-style: italic; }
+
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-nav">
+    <div class="nav-back">
+        <a href="index.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Destek Ana Sayfasına Dön
+        </a>
+    </div>
+
+    <div class="lang-switcher">
+        <a href="../privacy-policy.html" class="lang-link">🇺🇸 English</a>
+    </div>
+</div>
+
+<h1>MyPrograms Gizlilik Politikası</h1>
+<p class="last-updated">Son Güncelleme: 26 Mart 2026</p>
+
+<section>
+    <h2>1. Giriş</h2>
+    <p><strong>MyPrograms</strong>'a hoş geldiniz. Gizliliğinize saygı duyuyor ve kullanıcılarımızın kişisel verilerini korumayı taahhüt ediyoruz. Bu Gizlilik Politikası, mobil uygulamamız aracılığıyla bilgilerin toplanması, kullanılması ve açıklanmasıyla ilgili uygulamalarımızı açıklar.</p>
+    <p>MyPrograms, <strong>"Yerel-Öncelikli" (Local-First)</strong> felsefesiyle inşa edilmiştir. Akademik hayatınızın, programlarınızın ve özel çalışma materyallerinizin tamamen sizin kontrolünüzde kalması gerektiğine inanıyoruz.</p>
+</section>
+
+<hr>
+
+<section>
+    <h2>2. Bilgi Toplama ve Yönetimi</h2>
+
+    <h3>2.1 Yerel Depolama (Cihaz Üzerinde İşleme)</h3>
+    <p>MyPrograms'ın temel işlevselliği, internet bağlantısına veya harici sunuculara ihtiyaç duymadan çalışacak şekilde tasarlanmıştır.</p>
+    <ul>
+        <li><strong>Veri Türleri:</strong> Girdiğiniz tüm bilgiler (Ders detayları, ders programları, sınav tarihleri, ödevler ve etiketler dahil) güvenli bir Room/SQLite veritabanı kullanılarak cihazınızda yerel olarak saklanır.</li>
+        <li><strong>Sunucu Senkronizasyonu Yok:</strong> Mevcut durumda MyPrograms, akademik verilerinizi herhangi bir harici sunucuya, bulut sağlayıcısına veya veritabanına iletmez. Verileriniz, donanımınızdaki uygulamanın özel depolama alanı içinde izole edilmiştir.</li>
+    </ul>
+
+    <h3>2.2 Depolama Erişim Çerçevesi (SAF) ve Dosyalar</h3>
+    <p>Uygulama, kullanıcıların kolay erişim için yerel dosyaları (PDF'ler, resimler, belgeler) kurslarıyla ilişkilendirmesine olanak tanır.</p>
+    <ul>
+        <li><strong>Erişim İlkesi:</strong> Resmi Android Depolama Erişim Çerçevesini (SAF) kullanıyoruz. Bu, uygulamanın geniş bir "Tüm Dosyalara Erişim" (MANAGE_EXTERNAL_STORAGE) izni istememesini sağlar.</li>
+        <li><strong>Kullanıcı Onayı:</strong> MyPrograms yalnızca sizin sistem dosya seçicisi aracılığıyla açıkça seçtiğiniz belirli dosyalara erişim sağlar. Cihazınızdaki diğer klasörlerden veya dosyalardan veri indekslemez, taramaz veya toplamaz.</li>
+    </ul>
+
+    <h3>2.3 Bildirimler ve Hatırlatıcılar</h3>
+    <p>Uygulama, POST_NOTIFICATIONS izni ister (Android 13 ve üzeri sürümlerde).</p>
+    <ul>
+        <li><strong>Amaç:</strong> Bu izin, yalnızca yaklaşan dersleriniz ve teslim tarihleriniz için yerel alarmları ve hatırlatıcıları tetiklemek amacıyla kullanılır.</li>
+        <li><strong>Yerel Yürütme:</strong> Bu hatırlatıcılar tamamen cihazınızdaki Android sistemi tarafından oluşturulur ve yürütülür; üçüncü taraf bir bildirim servisine hiçbir veri gönderilmez.</li>
+    </ul>
+</section>
+
+<hr>
+
+<section>
+    <h2>3. Veri Taşınabilirliği ve Yedekleme</h2>
+    <p>Verileriniz üzerinde tam kontrole sahip olmanız gerektiğine inanıyoruz.</p>
+    <ul>
+        <li><strong>Dışa Aktar:</strong> Kullanıcılar tüm yerel veritabanlarını bir yedekleme dosyasına aktarabilirler.</li>
+    </ul>
+    <ul>
+        <li><strong>İçe Aktar:</strong> Kullanıcılar, daha önce oluşturulmuş bir yedekleme dosyasını içe aktararak akademik geçmişlerini geri yükleyebilirler.</li>
+    </ul>
+    <p><strong>Kullanıcı Sorumluluğu:</strong> Veriler yerel olarak saklandığından, cihazın kaybolması, çalınması veya hasar görmesi durumunda geliştirici verilerinizi geri getiremez. Uygulamanın kaldırılması veya cihaz arızası sırasında veri kaybını önlemek için düzenli olarak manuel yedekleme yapmanız şiddetle önerilir.</p>
+</section>
+
+<hr>
+
+<section>
+    <h2>4. Üçüncü Taraf Hizmetleri ve Ödeme İşlemleri</h2>
+    <p>Şeffaflık önceliğimizdir. Android uygulamasının içinde olanlar ile resmi destek web sitemizde olanlar arasında ayrım yapıyoruz.</p>
+
+    <h3>4.1 Uygulama İçi (Android Uygulaması)</h3>
+    <p>MyPrograms Android uygulaması, gizli ve çevrimdışı öncelikli bir araç olarak tasarlanmıştır.</p>
+    <ul>
+        <li><strong>Reklam veya Takip Yok:</strong> Uygulama paketi, herhangi bir üçüncü taraf reklam SDK'sı (AdMob gibi) veya istilacı analitik araçları (Firebase Analytics gibi) içermez.</li>
+        <li><strong>Uygulama İçi Satın Alma Yok:</strong> Uygulama içinde herhangi bir ödeme sistemi veya "kilidi açmak için öde" özelliği yoktur.</li>
+        <li><strong>Temel Sistem Hizmetleri:</strong> Android platformunda doğru şekilde çalışabilmek için uygulama Google Play Hizmetleri ile etkileşime girer. Bu hizmetler Google tarafından sağlanır ve uygulama güncellemeleri, güvenlik yamaları ve Google Play Console aracılığıyla sağlanan temel hata raporlama gibi temel sistem işlevleri için kullanılır.</li>
+        <li><em>Referans:</em> <a href="https://policies.google.com/privacy" target="_blank">Google Play Hizmetleri Gizlilik Politikası</a></li>
+    </ul>
+
+    <h3>4.2 Destek Web Sitesi ve Katkılar (GitHub Pages)</h3>
+    <p>Projenin sürdürülebilirliğine katkıda bulunmak için resmi destek web sitemizi ziyaret etmeyi seçerseniz:</p>
+    <ul>
+        <li><strong>Kreosus (Destek Bileşeni):</strong> Yalnızca GitHub Pages üzerindeki destek sitemizde Kreosus'a ait bir üçüncü taraf bileşeni kullanıyoruz. Kreosus, bağımsız geliştiricilerin topluluklarından finansal destek almalarını sağlayan bir platformdur.</li>
+        <li><strong>Ödeme Verileri:</strong> Kreosus bileşeni aracılığıyla bir katkıda bulunduğunuzda, ödeme bilgilerinizi (örneğin kredi kartı bilgileri, e-posta, isim) bağımsız bir veri sorumlusu olarak işlerler. MyPrograms finansal verilerinizi almaz, işlemez veya saklamaz.</li>
+        <li><em>Referans:</em> <a href="https://kreosus.com/privacy" target="_blank">Kreosus Gizlilik Politikası</a></li>
+    </ul>
+
+    <h3>4.3 Üçüncü Taraf Referansları</h3>
+    <p>Güvenliğiniz için platformumuz tarafından kullanılan aşağıdaki temel sağlayıcıların gizlilik uygulamalarını incelemenizi öneririz:</p>
+    <ul>
+        <li><strong>Google (İşletim Sistemi ve Play Store):</strong> <a href="https://policies.google.com/privacy" target="_blank">Gizlilik ve Şartlar</a></li>
+        <li><strong>GitHub (Destek Sitesi Barındırma):</strong> <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub Gizlilik Bildirimi</a></li>
+    </ul>
+</section>
+
+<hr>
+
+<section>
+    <h2>5. Gelecek Yol Haritası: Bulut Senkronizasyonu</h2>
+    <p>Gelecekteki güncellemelerde isteğe bağlı bulut tabanlı özellikler sunabiliriz (örneğin, cihazlar arası senkronizasyon veya veri paylaşımı için Firebase entegrasyonu).</p>
+    <ul>
+        <li><strong>Şeffaflık:</strong> Bu tür özellikler sunulursa, bunlar kesinlikle isteğe bağlı olacaktır.</li>
+        <li><strong>Onay:</strong> Verileriniz yalnızca açıkça bir hesap oluşturmanız ve senkronizasyon özelliklerini etkinleştirmeniz durumunda güvenli bir bulut ortamına yüklenecektir. O tarihte bu politikanın revize edilmiş bir versiyonu sunulacaktır.</li>
+    </ul>
+</section>
+
+<hr>
+
+<section>
+    <h2>6. Çocukların Gizliliği</h2>
+    <p>MyPrograms her yaştan öğrenci için tasarlanmıştır. 13 yaşın altındaki çocuklardan bilerek kişisel bilgi toplamıyoruz. Tüm veriler kullanıcının cihazında yerel olarak saklandığından, uygulama küçüklerin çalışmalarını yönetmesi için güvenli bir ortam olmaya devam etmektedir.</p>
+</section>
+
+<hr>
+
+<section>
+    <h2>7. Veri Silme</h2>
+    <p>Tüm veriler cihazınızda saklandığından, MyPrograms uygulamasını silmek veya Android Ayarlarındaki "Verileri Temizle" seçeneğini kullanmak tüm derslerinizi, görevlerinizi ve ayarlarınızı kalıcı olarak silecektir. Bu işlem geri alınamaz.</p>
+</section>
+
+<hr>
+
+<section>
+    <h2>8. Bu Gizlilik Politikasındaki Değişiklikler</h2>
+    <p>Gizlilik Politikamızı zaman zaman güncelleyebiliriz. Yeni Gizlilik Politikasını bu sayfada yayınlayarak sizi her türlü değişiklikten haberdar edeceğiz. Herhangi bir değişiklik için bu Gizlilik Politikasını periyodik olarak incelemeniz önerilir.</p>
+</section>
+
+<hr>
+
+<section>
+    <h2>9. Bize Ulaşın</h2>
+    <p>Gizlilik Politikamız hakkında herhangi bir sorunuz veya öneriniz varsa, bizimle iletişime geçmekten çekinmeyin.</p>
+    <p>E-posta: <a href="mailto:sabahattincck@outlook.com">sabahattincck@outlook.com</a></p>
+</section>
+
+<footer>
+    <p>© 2026 MyPrograms Geliştirme</p>
+</footer>
+
+</body>
+</html>
