@@ -159,10 +159,12 @@ class DialogFragmentTaskHomework: DialogFragment() {
         }else{
             binding.toolbar.title = getString(R.string.createTask)
 
+            binding.etTitle.setText(getString(R.string.homework))
             binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
             binding.llFilesSection.visibility = View.GONE
 
             binding.etTitle.requestFocus()
+            binding.etTitle.selectAll()
 
             binding.toolbar.menu.clear()
         }

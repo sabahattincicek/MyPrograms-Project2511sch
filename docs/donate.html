@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support the Developer - MyPrograms</title>
+    <link rel="icon" type="image/png" href="https://github.com/user-attachments/assets/9fc19e31-22ec-42e0-9dd9-c56e81394dde">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #24292e;
+            --secondary-text: #586069;
+            --accent-color: #0366d6;
+            --border-color: #e1e4e8;
+            --card-bg: #fafafa;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0d1117;
+                --text-color: #c9d1d9;
+                --secondary-text: #8b949e;
+                --accent-color: #58a6ff;
+                --border-color: #30363d;
+                --card-bg: #161b22;
+            }
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+                .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .nav-back {
+            margin-bottom: 0;
+        }
+        .nav-back a {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lang-switcher {
+            text-align: right;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        .lang-link {
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+        .lang-link:hover { background-color: var(--card-bg); }
+        .profile-header { text-align: center; margin-bottom: 40px; }
+        .profile-header img { border-radius: 50%; border: 4px solid var(--accent-color); margin-bottom: 15px; }
+        .story-section { background-color: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--border-color); }
+        .kreosus-container { margin-top: 40px; text-align: center; padding: 20px; border-top: 2px solid var(--border-color); }
+        h1, h2 { color: var(--text-color); }
+        footer { margin-top: 60px; text-align: center; font-size: 0.9rem; color: var(--secondary-text); }
+    </style>
+</head>
+<body>
+
+<div class="top-nav">
+    <div class="nav-back">
+        <a href="index.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to Support Home
+        </a>
+    </div>
+
+    <div class="lang-switcher">
+        <a href="tr/donate.html" class="lang-link">🇹🇷 Türkçe</a>
+    </div>
+</div>
+
+<div class="profile-header">
+    <!-- Buraya kendi fotoğrafını veya bir avatar koyabilirsin -->
+    <img src="https://github.com/sabahattincicek.png" width="120" height="120" alt="Developer Photo">
+    <h1>Hi, I'm Sabahattin!</h1>
+    <p>Independent Developer & Student</p>
+</div>
+
+<div class="story-section">
+    <h2>The Story of MyPrograms</h2>
+    <p>I started developing <strong>MyPrograms</strong> because I needed a simple, fast, and privacy-respecting way to manage my own academic life. As a student, I was tired of apps filled with intrusive ads, expensive subscriptions, and complex cloud systems that track every move.</p>
+
+    <p>I decided to build something different: A <strong>100% free</strong>, <strong>ad-free</strong>, and <strong>local-first</strong> academic planner. Every line of code in this project is written by me during my spare time between classes and exams.</p>
+
+    <h2>Why Support?</h2>
+    <p>Developing and maintaining an app as a solo developer takes a lot of time and effort. My goal is to keep MyPrograms free for every student out there, forever. Your support helps me cover the basic costs and motivates me to keep adding new features like cloud sync and better widgets.</p>
+</div>
+
+<div class="kreosus-container">
+    <h3>Support the Journey</h3>
+    <p>If MyPrograms has helped you stay organized, consider buying me a coffee through Kreosus!</p>
+
+    <!-- Kreosus Widget -->
+    <div id="kreosus" data-id="5442" data-start-page="0" data-bg-color="ffffff" data-iframe-api="true"></div>
+    <script>
+        (function (d, s, id) {
+            var js, kjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://kreosus.com/public/kreosus/iframe/js/iframe-api.js';
+            kjs.parentNode.insertBefore(js, kjs);
+        }(document, 'script', 'kreosus-iframe-api'));
+    </script>
+</div>
+
+<footer>
+    <p>© 2026 MyPrograms Development - Built with passion.</p>
+</footer>
+
+</body>
+</html>

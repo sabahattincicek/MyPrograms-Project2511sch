@@ -137,5 +137,11 @@
     <string name="by_continuing_you_agree_to_our_terms">Devam ederek, uygulamamızın Kullanım Koşulları ve Gizlilik Politikasını okumuş ve kabul etmiş sayılırsınız.</string>
     <string name="accept_and_continue">Kabul Et ve Devam Et</string>
     <string name="view_terms">Koşulları İncele</string>
+    <string name="ok">Tamam</string>
     <string name="untagged">Etiketlenmemiş</string>
+    <string name="error_unknown">Bilinmeyen bir hata gerçekleşti</string>
+    <string name="error_occurred">Hata gerçekleşti</string>
+    <string name="did_you_attend">Katıldın mı?</string>
+    <string name="were_you_able_to_attend_the_lesson">\'%1$s\' ders oturumuna katılabildin mi?</string>
+    <string name="will_start_in_minutes">%1$s, %2$d dakika sonra başlayacak.</string>
 </resources>

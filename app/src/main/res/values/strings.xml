@@ -143,5 +143,9 @@
     <string name="error_occurred">Error Occurred</string>
     <string name="ok">Ok</string>
     <string name="untagged">Untagged</string>
+    <string name="did_you_attend">Did you attend?</string>
+    <string name="were_you_able_to_attend_the_lesson">Were you able to attend the \'%1$s\' lesson?</string>
+    <string name="will_start_in_minutes">%1$s will start in %2$d minutes.</string>
+    <string name="support_developer">Support the Developer</string>
 
 </resources>

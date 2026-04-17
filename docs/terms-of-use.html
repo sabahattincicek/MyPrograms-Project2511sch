@@ -36,10 +36,15 @@
             color: var(--text-color);
         }
 
-        .nav-back {
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 30px;
         }
-
+        .nav-back {
+            margin-bottom: 0;
+        }
         .nav-back a {
             text-decoration: none;
             color: var(--accent-color);
@@ -48,6 +53,19 @@
             align-items: center;
             gap: 8px;
         }
+        .lang-switcher {
+            text-align: right;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        .lang-link {
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+        .lang-link:hover { background-color: var(--card-bg); }
 
         h1 { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
         h2 { margin-top: 40px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
@@ -76,14 +94,20 @@
 </head>
 <body>
 
-<div class="nav-back">
-    <a href="index.html">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        Back to Support Home
-    </a>
+<div class="top-nav">
+    <div class="nav-back">
+        <a href="index.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to Support Home
+        </a>
+    </div>
+
+    <div class="lang-switcher">
+        <a href="tr/terms-of-use.html" class="lang-link">🇹🇷 Türkçe</a>
+    </div>
 </div>
 
 <h1>Terms of Use for MyPrograms</h1>

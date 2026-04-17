@@ -173,12 +173,13 @@ class DialogFragmentTaskLesson: DialogFragment() {
             selectedRemindBeforeMinutes = lesson!!.remindBefore
         }else{
             binding.toolbar.title = getString(R.string.createTask)
-
+            binding.etTitle.setText(getString(R.string.lesson))
             binding.actvRepeat.setText(mapRuleToDisplayString(selectedRecurrenceRule), false)
             binding.actvReminder.setText(mapReminderToDisplayString(-1), false)
             binding.llFilesSection.visibility = View.GONE
 
             binding.etTitle.requestFocus()
+            binding.etTitle.selectAll()
 
             binding.toolbar.menu.clear()
         }

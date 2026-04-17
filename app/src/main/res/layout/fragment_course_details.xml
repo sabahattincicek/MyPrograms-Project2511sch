@@ -286,12 +286,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_tasks"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/SECTION_TASKS" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
