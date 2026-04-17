@@ -6,8 +6,6 @@ import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.util.BaseDisplayListItem
 
 sealed class DisplayItemHome: BaseDisplayListItem {
-
-
     data class HeaderItemHome(
         val date: Long
     ) : DisplayItemHome(){
