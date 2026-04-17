@@ -160,6 +160,51 @@
             background-color: var(--accent-color);
             color: #ffffff !important;
         }
+        .donate-container {
+            margin-top: 80px;
+            padding: 40px;
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            text-align: center;
+            border: 2px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .donate-container h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .donate-container p {
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 15px;
+        }
+        .donate-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--accent-color);
+            color: white !important;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(3, 102, 214, 0.3);
+        }
+
+        .donate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(3, 102, 214, 0.4);
+            filter: brightness(1.1);
+        }
     </style>
 </head>
 <body>
@@ -218,26 +263,45 @@
     </a>
 </div>
 
-<div class="support-container">
-    <h3>❤️ Support the Project</h3>
-    <p>MyPrograms is a passion project developed for students, and it's <strong>100% free and ad-free</strong>.
-        As an open-source tool, your support helps me maintain the project and develop new features.
-        If you find it helpful, you can contribute through Kreosus below:
+<!--<div class="support-container">-->
+<!--    <h3>❤️ Support the Project</h3>-->
+<!--    <p>MyPrograms is a passion project developed for students, and it's <strong>100% free and ad-free</strong>.-->
+<!--        As an open-source tool, your support helps me maintain the project and develop new features.-->
+<!--        If you find it helpful, you can contribute through Kreosus below:-->
+<!--    </p>-->
+
+<!--    &lt;!&ndash; Kreosus Widget &ndash;&gt;-->
+<!--    <div id="kreosus" data-id="5442" data-start-page="0" data-bg-color="ffffff" data-iframe-api="true"></div>-->
+<!--    <script>-->
+<!--        (function (d, s, id) {-->
+<!--          var js, kjs = d.getElementsByTagName(s)[0];-->
+<!--          if (d.getElementById(id)) return;-->
+<!--          js = d.createElement(s);-->
+<!--          js.id = id;-->
+<!--          js.src = 'https://kreosus.com/public/kreosus/iframe/js/iframe-api.js';-->
+<!--          kjs.parentNode.insertBefore(js, kjs);-->
+<!--        }(document, 'script', 'kreosus-iframe-api'));-->
+<!--    </script>-->
+<!--</div>-->
+
+<div class="donate-container">
+    <h3>❤️ Support the Journey</h3>
+    <p>
+        MyPrograms is a solo passion project developed for students, and it's <strong>100% free and ad-free</strong>.
+        I'm building this tool to make our academic lives easier, one line of code at a time.
+    </p>
+    <p>
+        If MyPrograms has helped you stay organized, you can learn more about my story and find ways to support the development.
     </p>
 
-    <!-- Kreosus Widget -->
-    <div id="kreosus" data-id="5442" data-start-page="0" data-bg-color="ffffff" data-iframe-api="true"></div>
-    <script>
-        (function (d, s, id) {
-          var js, kjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s);
-          js.id = id;
-          js.src = 'https://kreosus.com/public/kreosus/iframe/js/iframe-api.js';
-          kjs.parentNode.insertBefore(js, kjs);
-        }(document, 'script', 'kreosus-iframe-api'));
-    </script>
+    <a href="donate.html" class="donate-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        Learn More & Support
+    </a>
 </div>
+
 
 <footer>
     <p>© 2026 MyPrograms Development</p>

@@ -5,4 +5,5 @@ object AppConstants {
     const val PRIVACY_POLICY_URL = "$SUPPORT_URL/privacy-policy"
     const val TERMS_OF_USE_URL = "$SUPPORT_URL/terms-of-use"
     const val ABOUT_APP_URL = "$SUPPORT_URL/about"
+    const val DONATE_PAGE_URL = "$SUPPORT_URL/donate-page"
 }

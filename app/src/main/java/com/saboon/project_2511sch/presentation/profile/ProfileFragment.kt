@@ -144,6 +144,10 @@ class ProfileFragment : Fragment() {
             val intent = Intent(Intent.ACTION_VIEW, AppConstants.ABOUT_APP_URL.toUri())
             startActivity(intent)
         }
+        binding.tvSupportProject.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, AppConstants.SUPPORT_URL.toUri())
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {
