@@ -1,5 +1,6 @@
 {
   "app_name": "Programlarım",
+  "page_title": "MyPrograms | Destek ve Yasal Bilgiler",
   "lang_button": "\uD83C\uDDFA\uD83C\uDDF8 English",
   "dev_badge": "Bağımsız Geliştirici",
   "build_with_love_for_students": "Öğrenciler için ❤\uFE0F ile geliştirildi.",
@@ -18,7 +19,7 @@
   "card_about_desc": "Uygulamanın amacı ve özellikleri hakkında detaylı bilgi için inceleyebilirsiniz.",
   "card_suggestion": "Öneri ve Hata Bildirimi",
   "card_suggestion_desc": "Bir sorun mu fark ettiniz ya da öneriniz mi var? Bize yazın.",
-  "support_project_title": "❤\uFE0F Support the Journey",
+  "support_project_title": "❤\uFE0F Yolculuğu Destekleyin",
   "support_project_text": "MyPrograms, öğrenciler için geliştirilmiş kişisel bir projedir ve <strong>%100 ücretsiz ve reklamsızdır</strong>. Akademik hayatımızı kolaylaştırmak için bu uygulamayı her seferinde bir satır kod yazarak geliştirmeye çalışıyorum.",
   "support_project_sub_text": "Eğer MyPrograms işlerinizi kolaylaştırmaya yardımcı olduysa, hikayem hakkında daha fazla bilgi edinebilir ve gelişimi destekleyebilirsiniz.",
   "support_project_button": "Daha Fazla Bilgi ve Destek",
