@@ -381,9 +381,10 @@
 <script>
     async function loadLanguage(lang) {
         const fetchPath = `i18n/index/${lang}.json`;
+
         try {
             const response = await fetch(fetchPath);
-            if (!response.ok) throw new Error('Dil dosyası yüklenemedi');
+            if (!response.ok) throw new Error(`Dosya bulunamadı: ${fetchPath}`);
 
             const translations = await response.json();
 
@@ -392,7 +393,7 @@
                 document.title = translations.page_title;
             }
 
-            // 2. data-i18n olan her şeyi doldur (Buton dahil!)
+            // 2. data-i18n olan her şeyi doldur
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[key]) {
@@ -403,8 +404,15 @@
             // 3. Ayarları kaydet
             document.documentElement.lang = lang;
             localStorage.setItem('preferredLang', lang);
+
+            // 4. Dropdown butonunu güncelle (Eğer JSON'da lang_button varsa)
+            const dropBtn = document.getElementById('current-lang');
+            if (dropBtn && translations.lang_button) {
+                dropBtn.innerHTML = translations.lang_button;
+            }
+
         } catch (error) {
-            console.error('Hata:', error);
+            console.error('Yükleme Hatası:', error);
         }
     }
 
@@ -417,7 +425,7 @@
     // 2. Yoksa tarayıcı dili Türkçe mi?
     // 3. O da olmazsa İngilizce.
     const initialLang = localStorage.getItem('preferredLang') ||
-                        (navigator.language.startsWith('tr') ? 'tr' : 'en');
+                    (navigator.language.startsWith('tr') ? 'tr' : 'en');
 
     loadLanguage(initialLang);
 </script>
