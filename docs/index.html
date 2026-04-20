@@ -371,7 +371,7 @@
 
 <script>
     async function loadLanguage(lang) {
-        const fetchPath = `../i18n/index/${lang}.json`;
+        const fetchPath = `i18n/index/${lang}.json`;
         try {
             const response = await fetch(fetchPath);
             if (!response.ok) throw new Error('Dil dosyası yüklenemedi');
