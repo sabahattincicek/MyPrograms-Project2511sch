@@ -217,11 +217,9 @@
 </div>
 
 <header>
-    <span class="dev-badge">Bağımsız Geliştirici</span>
+    <span class="dev-badge" data-i18n="dev_badge"></span>
     <h1>MyPrograms</h1>
-    <p class="mission-statement">
-        Öğrenciler için ❤️ ile geliştirildi. MyPrograms, akademik yönetimi <strong>Yerel-Öncelikli</strong>, gizliliğe saygılı ve ışık hızında bir deneyimle basitleştirmek için oluşturuldu.
-    </p>
+    <p class="mission-statement" data-i18n="mission_statement"></p>
 
     <div style="display: flex; justify-content: center; gap:10px; flex-wrap: wrap;">
         <!-- Proje Butonu -->
@@ -239,11 +237,8 @@
 </header>
 
 <section>
-    <h2>Vizyonumuz</h2>
-    <p>
-        <strong>Sabahattin Çiçek</strong> tarafından geliştirilen MyPrograms, karmaşık takvim uygulamaları ile basit not alma araçları arasındaki boşluğu doldurmayı hedefler.
-        Tüm programlarınızı ve çalışma materyallerinizi doğrudan cihazınızda işleyerek, verilerinizin gizliliğini değil, sadece notlarınızı düşünmenizi sağlar.
-    </p>
+    <h2 data-i18n="vision_title"></h2>
+    <p data-i18n="vision_text"></p>
 </section>
 
 <h2>Destek ve Yasal Belgeler</h2>
@@ -292,6 +287,45 @@
     <p>İletişim: <a href="mailto:sabahattincck@outlook.com">sabahattincck@outlook.com</a></p>
     <p><small>Uygulama Paketi: com.saboon.project_2511sch</small></p>
 </footer>
+
+<script>
+    async function loadLanguage(lang) {
+        try {
+            // Dil dosyasını çekiyoruz (tr.json veya en.json)
+            const response = await fetch(`i18n/${lang}.json`);
+            if (!response.ok) throw new Error('Dil dosyası yüklenemedi');
+
+            const translations = await response.json();
+
+            // data-i18n niteliği olan tüm elementleri bul ve metni değiştir
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[key]) {
+                    el.innerHTML = translations[key];
+                }
+            });
+
+            // Seçimi kaydet ve HTML lang niteliğini güncelle
+            document.documentElement.lang = lang;
+            localStorage.setItem('preferredLang', lang);
+        } catch (error) {
+            console.error('Hata:', error);
+        }
+    }
+
+    function changeLang(lang) {
+        loadLanguage(lang);
+    }
+
+    // Sayfa açıldığında:
+    // 1. Kaydedilmiş dil var mı?
+    // 2. Yoksa tarayıcı dili Türkçe mi?
+    // 3. O da olmazsa İngilizce.
+    const initialLang = localStorage.getItem('preferredLang') ||
+                        (navigator.language.startsWith('tr') ? 'tr' : 'en');
+
+    loadLanguage(initialLang);
+</script>
 
 </body>
 </html>
