@@ -1,0 +1,136 @@
+{
+  "lang": "tr",
+  "lang_button": "🇹🇷 Türkçe",
+  "back_to_home_button": "Destek Ana Sayfasına Dön",
+  "terms_title": "MyPrograms Kullanım Koşulları",
+  "last_updated": "Son Güncelleme: Nisan 22, 2026",
+  "footer_copyright": "© 2026 MyPrograms Development",
+  "content_sections": [
+    {
+      "title": "Şartların Kabulü",
+      "body": [
+        {
+          "type": "p",
+          "content": "Bu Kullanım Koşulları, MyPrograms mobil uygulamasının kullanımına ilişkin yasal şartları belirler. Uygulamayı indirerek, kurarak veya kullanarak bu koşulları kabul etmiş sayılırsınız. Bu şartları kabul etmiyorsanız uygulamayı kullanmamanız gerekmektedir."
+        }
+      ]
+    },
+    {
+      "title": "Hizmetin Tanımı",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms, öğrencilerin ders programlarını, sınav tarihlerini ve ödevlerini düzenlemelerine yardımcı olan bir akademik planlama uygulamasıdır. Uygulama, kullanıcıların kendi girdikleri veriler üzerinden çalışır ve bir resmi eğitim kurumu veya akademik kayıt sistemi değildir."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Ders programı oluşturma ve düzenleme",
+            "Sınav ve ödev takibi",
+            "Hatırlatıcılar ve planlama araçları"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Akademik Sorumluluk Reddi",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms yalnızca bir yardımcı araçtır ve resmi akademik kayıt yerine geçmez. Kullanıcı tarafından girilen bilgilerin doğruluğu tamamen kullanıcının sorumluluğundadır."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Yanlış veya eksik veri girişlerinden doğabilecek sonuçlardan geliştirici sorumlu değildir",
+            "Bildirimlerin (hatırlatıcıların) cihaz ayarları, pil optimizasyonu veya teknik sebeplerle çalışmamasından geliştirici sorumlu tutulamaz",
+            "Akademik başarısızlık, sınav kaçırma veya benzeri sonuçlardan geliştirici sorumlu değildir"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Veri Güvenliği ve Yedekleme",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms uygulaması kullanıcı verilerini yerel cihazda saklar. Uygulama herhangi bir merkezi sunucuya veri göndermez."
+        },
+        {
+          "type": "p",
+          "content": "Veri güvenliği ve yedekleme sorumluluğu tamamen kullanıcıya aittir."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Uygulamanın silinmesi durumunda veriler kalıcı olarak kaybolabilir",
+            "Cihazın kaybolması veya sıfırlanması halinde veri kurtarma garantisi yoktur",
+            "Kullanıcı düzenli yedek alma sorumluluğunu kabul eder"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Fikri Mülkiyet Hakları",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms uygulaması açık kaynak olarak sunulmaktadır ve GNU Affero General Public License (AGPL) kapsamında lisanslanmıştır. Uygulamanın kaynak kodu herkese açıktır ve lisans şartlarına uygun olarak kullanılabilir, değiştirilebilir ve dağıtılabilir."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Uygulamanın kaynak kodu GitHub üzerinden erişilebilir ve AGPL lisans şartlarına tabidir",
+            "Yapılan değişiklikler ve türev çalışmalar aynı lisans (AGPL) altında paylaşılmalıdır",
+            "Uygulamanın ağ üzerinden sunulan değiştirilmiş versiyonları da kaynak kodu ile birlikte paylaşılmalıdır",
+            "Lisans şartlarına uyulmaması durumunda hukuki sorumluluk doğabilir"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Yasaklanmış Kullanımlar",
+      "body": [
+        {
+          "type": "p",
+          "content": "Kullanıcılar uygulamayı yürürlükteki yasalara ve bu kullanım koşullarına uygun şekilde kullanmakla yükümlüdür."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Uygulamayı yasa dışı amaçlarla kullanmak",
+            "Uygulamanın güvenliğini veya işleyişini bozacak girişimlerde bulunmak",
+            "Yetkisiz erişim sağlamaya çalışmak",
+            "Uygulamayı kötüye kullanmak veya zarar vermek"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Değişiklikler",
+      "body": [
+        {
+          "type": "p",
+          "content": "Geliştirici, bu Kullanım Koşullarını dilediği zaman güncelleme hakkını saklı tutar. Yapılan değişiklikler güncellendiği tarihten itibaren geçerli olur."
+        },
+        {
+          "type": "p",
+          "content": "Kullanıcıların güncel koşulları düzenli olarak kontrol etmesi önerilir. Uygulamayı kullanmaya devam etmeniz, güncellenmiş şartları kabul ettiğiniz anlamına gelir."
+        }
+      ]
+    },
+    {
+      "title": "İletişim",
+      "body": [
+        {
+          "type": "p",
+          "content": "Bu Kullanım Koşulları hakkında sorularınız için bizimle iletişime geçebilirsiniz."
+        },
+        {
+          "type": "p",
+          "content": "E-posta: <a href='mailto:sabahattincck@outlook.com'>sabahattincck@outlook.com</a>"
+        }
+      ]
+    }
+  ]
+}
