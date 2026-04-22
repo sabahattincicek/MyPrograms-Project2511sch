@@ -1,0 +1,175 @@
+{
+  "lang": "tr",
+  "lang_button": "\uD83C\uDDF9\uD83C\uDDF7 Türkçe",
+  "back_to_home_button": "Destek Ana Sayfasına Dön",
+  "privacy_policy_title": "MyPrograms Gizlilik Politikası",
+  "last_updated": "Son güncelleme:",
+  "footer_copyright": "© 2026 MyPrograms Development",
+  "content_sections": [
+    {
+      "title": "Giriş",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms uygulaması, öğrencilerin ders programlarını, sınav tarihlerini ve ödevlerini daha düzenli bir şekilde yönetmelerine yardımcı olmak amacıyla geliştirilmiş bir akademik asistandır. Bu Gizlilik Politikası, uygulamanın kullanıcı verilerini nasıl işlediğini, sakladığını ve koruduğunu açıklamaktadır."
+        },
+        {
+          "type": "p",
+          "content": "Uygulamayı kullanarak, bu politikada belirtilen veri işleme uygulamalarını kabul etmiş sayılırsınız."
+        }
+      ]
+    },
+    {
+      "title": "Bilgi Toplama (Yerel Depolama Vurgusu)",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms uygulaması ‘Local-First’ bir mimari ile çalışır. Kullanıcıya ait tüm veriler (dersler, sınavlar, ödevler ve notlar) yalnızca cihaz üzerinde bulunan yerel SQLite (Room) veritabanında saklanır."
+        },
+        {
+          "type": "h3",
+          "content": "Toplanan Veri Türleri"
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Kullanıcının oluşturduğu ders programları",
+            "Sınav ve ödev bilgileri",
+            "Uygulama içi notlar ve hatırlatmalar"
+          ]
+        },
+        {
+          "type": "p",
+          "content": "Uygulama mevcut sürümde herhangi bir kullanıcı verisini sunuculara göndermez, üçüncü taraf analiz (analytics) veya reklam SDK’ları içermez."
+        }
+      ]
+    },
+    {
+      "title": "Dosya Erişimi (SAF)",
+      "body": [
+        {
+          "type": "p",
+          "content": "Kullanıcılar derslerine PDF, görsel veya benzeri materyaller ekleyebilir. Bu işlem Android Storage Access Framework (SAF) kullanılarak gerçekleştirilir."
+        },
+        {
+          "type": "p",
+          "content": "Uygulama, cihazdaki tüm dosyalara erişim izni istemez. Sadece kullanıcının açıkça seçtiği dosyalara erişim sağlanır."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Tüm dosya erişimleri kullanıcı onayı ile gerçekleşir",
+            "Uygulama dosyaları sunucuya yüklemez",
+            "Dosyalar yalnızca yerel olarak referanslanır"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Bildirimler",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms, ders ve sınav hatırlatıcıları için yerel bildirimler (local notifications) kullanır."
+        },
+        {
+          "type": "p",
+          "content": "Bu bildirimler cihaz içinde oluşturulur ve herhangi bir dış sunucuya gönderilmez."
+        }
+      ]
+    },
+    {
+      "title": "Yedekleme ve Veri Sorumluluğu",
+      "body": [
+        {
+          "type": "p",
+          "content": "Uygulama, kullanıcıların verilerini manuel olarak dışa aktarmasına (export) ve geri yüklemesine (import) olanak tanır."
+        },
+        {
+          "type": "p",
+          "content": "Tüm veriler kullanıcı cihazında saklandığı için veri güvenliği ve yedekleme sorumluluğu kullanıcıya aittir."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Veriler cihaz silinirse kaybolabilir",
+            "Kullanıcı düzenli yedek alma sorumluluğuna sahiptir",
+            "Uygulama veri kaybından sorumlu tutulamaz"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Üçüncü Taraf Hizmetleri (Google Play vb.)",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms uygulaması şu an için üçüncü taraf reklam, analiz veya izleme hizmetleri kullanmaz."
+        },
+        {
+          "type": "p",
+          "content": "Ancak uygulama Google Play Store üzerinden dağıtıldığı için Google Play’in kendi hizmet şartları ve veri politikaları geçerli olabilir."
+        }
+      ]
+    },
+    {
+      "title": "Gelecek Planları (Bulut Senkronizasyonu)",
+      "body": [
+        {
+          "type": "p",
+          "content": "Gelecekte uygulamaya isteğe bağlı (opt-in) bulut senkronizasyonu özelliği eklenebilir."
+        },
+        {
+          "type": "p",
+          "content": "Bu özellik Supabase veya Firebase gibi üçüncü taraf altyapılar üzerinden çalışabilir ve yalnızca kullanıcı onayı ile aktif hale gelir."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Kullanıcı onayı olmadan veri senkronizasyonu yapılmayacaktır",
+            "Yerel kullanım seçeneği her zaman korunacaktır",
+            "Kullanıcı verileri şifreleme ile korunacaktır"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Çocukların Gizliliği",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms uygulaması genel olarak eğitim amaçlı bir araçtır ve her yaş grubuna hitap edebilir."
+        },
+        {
+          "type": "p",
+          "content": "Uygulama mevcut durumda herhangi bir kişisel veri toplamadığı için çocuklardan bilinçli olarak veri toplanmaz."
+        },
+        {
+          "type": "p",
+          "content": "Ebeveyn veya yasal temsilcilerin gözetimi altında kullanım önerilir."
+        }
+      ]
+    },
+    {
+      "title": "Veri Silme ve İletişim",
+      "body": [
+        {
+          "type": "p",
+          "content": "Kullanıcılar, uygulama içindeki tüm verilerini cihazdan silerek tamamen kaldırabilir."
+        },
+        {
+          "type": "p",
+          "content": "Uygulama herhangi bir sunucu tabanlı veri tutmadığı için silme işlemi cihaz üzerinde gerçekleşir."
+        },
+        {
+          "type": "h3",
+          "content": "İletişim"
+        },
+        {
+          "type": "p",
+          "content": "Gizlilik politikası ile ilgili sorularınız için geliştirici ile uygulama mağazası üzerinden veya belirtilen iletişim kanallarından iletişime geçebilirsiniz."
+        }
+      ]
+    }
+  ]
+}
