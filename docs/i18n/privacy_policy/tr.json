@@ -3,7 +3,7 @@
   "lang_button": "\uD83C\uDDF9\uD83C\uDDF7 Türkçe",
   "back_to_home_button": "Destek Ana Sayfasına Dön",
   "privacy_policy_title": "MyPrograms Gizlilik Politikası",
-  "last_updated": "Son güncelleme:",
+  "last_updated": "Son Güncelleme: Nisan 22, 2026",
   "footer_copyright": "© 2026 MyPrograms Development",
   "content_sections": [
     {
@@ -11,57 +11,63 @@
       "body": [
         {
           "type": "p",
-          "content": "MyPrograms uygulaması, öğrencilerin ders programlarını, sınav tarihlerini ve ödevlerini daha düzenli bir şekilde yönetmelerine yardımcı olmak amacıyla geliştirilmiş bir akademik asistandır. Bu Gizlilik Politikası, uygulamanın kullanıcı verilerini nasıl işlediğini, sakladığını ve koruduğunu açıklamaktadır."
+          "content": "MyPrograms uygulaması, öğrencilerin akademik süreçlerini (ders programları, sınavlar ve ödevler) daha verimli yönetebilmesi amacıyla geliştirilmiş bir mobil uygulamadır. Bu Gizlilik Politikası, uygulamanın hangi verileri nasıl işlediğini, sakladığını ve koruduğunu şeffaf bir şekilde açıklamak amacıyla hazırlanmıştır."
         },
         {
           "type": "p",
-          "content": "Uygulamayı kullanarak, bu politikada belirtilen veri işleme uygulamalarını kabul etmiş sayılırsınız."
+          "content": "Uygulamayı kullanarak, burada belirtilen veri işleme ve gizlilik uygulamalarını kabul etmiş sayılırsınız. MyPrograms, kullanıcı gizliliğini temel prensip olarak benimser ve mümkün olduğunca minimum veri yaklaşımıyla çalışır."
         }
       ]
     },
     {
-      "title": "Bilgi Toplama (Yerel Depolama Vurgusu)",
+      "title": "Bilgi Toplama ve Yerel Depolama",
       "body": [
         {
           "type": "p",
-          "content": "MyPrograms uygulaması ‘Local-First’ bir mimari ile çalışır. Kullanıcıya ait tüm veriler (dersler, sınavlar, ödevler ve notlar) yalnızca cihaz üzerinde bulunan yerel SQLite (Room) veritabanında saklanır."
+          "content": "MyPrograms uygulaması ‘Local-First’ mimari yaklaşımı kullanır. Bu yaklaşım gereği kullanıcıya ait tüm veriler yalnızca cihaz üzerinde saklanır ve dış sunuculara gönderilmez."
         },
         {
           "type": "h3",
-          "content": "Toplanan Veri Türleri"
+          "content": "Yerel Olarak Saklanan Veriler"
         },
         {
           "type": "ul",
           "content": [
-            "Kullanıcının oluşturduğu ders programları",
-            "Sınav ve ödev bilgileri",
-            "Uygulama içi notlar ve hatırlatmalar"
+            "Ders programları ve ders bilgileri",
+            "Sınav tarihleri ve hatırlatıcılar",
+            "Ödevler ve kişisel notlar",
+            "Kullanıcı tarafından oluşturulan planlama verileri"
           ]
         },
         {
           "type": "p",
-          "content": "Uygulama mevcut sürümde herhangi bir kullanıcı verisini sunuculara göndermez, üçüncü taraf analiz (analytics) veya reklam SDK’ları içermez."
+          "content": "Tüm bu veriler Android cihazlarda SQLite (Room) veritabanı kullanılarak yerel olarak saklanır. Uygulama mevcut sürümde herhangi bir kullanıcı verisini internet üzerinden iletmez."
+        },
+        {
+          "type": "p",
+          "content": "Uygulama içerisinde reklam, analiz (analytics) veya kullanıcı davranışı izleme SDK’ları bulunmamaktadır."
         }
       ]
     },
     {
-      "title": "Dosya Erişimi (SAF)",
+      "title": "Dosya Erişimi (Storage Access Framework - SAF)",
       "body": [
         {
           "type": "p",
-          "content": "Kullanıcılar derslerine PDF, görsel veya benzeri materyaller ekleyebilir. Bu işlem Android Storage Access Framework (SAF) kullanılarak gerçekleştirilir."
-        },
-        {
-          "type": "p",
-          "content": "Uygulama, cihazdaki tüm dosyalara erişim izni istemez. Sadece kullanıcının açıkça seçtiği dosyalara erişim sağlanır."
+          "content": "MyPrograms, kullanıcıların dersleriyle ilgili PDF, görsel veya diğer dosyaları eklemesine izin verir. Bu işlem Android Storage Access Framework (SAF) kullanılarak gerçekleştirilir."
         },
         {
           "type": "ul",
           "content": [
-            "Tüm dosya erişimleri kullanıcı onayı ile gerçekleşir",
-            "Uygulama dosyaları sunucuya yüklemez",
-            "Dosyalar yalnızca yerel olarak referanslanır"
+            "Uygulama tüm cihaz dosyalarına erişim sağlamaz",
+            "Sadece kullanıcının manuel olarak seçtiği dosyalara erişilir",
+            "Dosyalar üçüncü taraf sunuculara yüklenmez",
+            "Dosya erişimi tamamen kullanıcı onayı ile gerçekleşir"
           ]
+        },
+        {
+          "type": "p",
+          "content": "SAF yaklaşımı sayesinde kullanıcı gizliliği korunur ve uygulama minimum izin prensibi ile çalışır."
         }
       ]
     },
@@ -70,65 +76,95 @@
       "body": [
         {
           "type": "p",
-          "content": "MyPrograms, ders ve sınav hatırlatıcıları için yerel bildirimler (local notifications) kullanır."
-        },
-        {
-          "type": "p",
-          "content": "Bu bildirimler cihaz içinde oluşturulur ve herhangi bir dış sunucuya gönderilmez."
-        }
-      ]
-    },
-    {
-      "title": "Yedekleme ve Veri Sorumluluğu",
-      "body": [
-        {
-          "type": "p",
-          "content": "Uygulama, kullanıcıların verilerini manuel olarak dışa aktarmasına (export) ve geri yüklemesine (import) olanak tanır."
-        },
-        {
-          "type": "p",
-          "content": "Tüm veriler kullanıcı cihazında saklandığı için veri güvenliği ve yedekleme sorumluluğu kullanıcıya aittir."
+          "content": "Uygulama, ders ve sınav hatırlatıcıları için yerel bildirim sistemini kullanır. Bu bildirimler cihaz üzerinde oluşturulur ve herhangi bir dış sunucuya iletilmez."
         },
         {
           "type": "ul",
           "content": [
-            "Veriler cihaz silinirse kaybolabilir",
-            "Kullanıcı düzenli yedek alma sorumluluğuna sahiptir",
+            "Bildirimler yalnızca kullanıcı cihazında çalışır",
+            "İnternet bağlantısı gerektirmez",
+            "Kullanıcı tarafından istenildiğinde kapatılabilir"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Yedekleme, Dışa Aktarma ve Veri Sorumluluğu",
+      "body": [
+        {
+          "type": "p",
+          "content": "Kullanıcılar uygulama içerisindeki verilerini istedikleri zaman dışa aktarabilir (export) veya geri yükleyebilir (import). Bu işlem kullanıcıya tam veri kontrolü sağlar."
+        },
+        {
+          "type": "p",
+          "content": "Tüm veriler yerel cihazda saklandığı için veri güvenliği ve yedekleme sorumluluğu tamamen kullanıcıya aittir."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Cihaz silinirse veriler kalıcı olarak kaybolabilir",
+            "Kullanıcı düzenli yedek alma sorumluluğunu kabul eder",
             "Uygulama veri kaybından sorumlu tutulamaz"
           ]
         }
       ]
     },
     {
-      "title": "Üçüncü Taraf Hizmetleri (Google Play vb.)",
+      "title": "Üçüncü Taraf Hizmetleri ve Bağış Sistemi",
       "body": [
         {
           "type": "p",
-          "content": "MyPrograms uygulaması şu an için üçüncü taraf reklam, analiz veya izleme hizmetleri kullanmaz."
+          "content": "MyPrograms uygulaması içerisinde doğrudan üçüncü taraf analiz, reklam veya veri toplama servisleri kullanılmamaktadır. Ancak uygulama ile ilişkili resmi web sitesi üzerinden bazı üçüncü taraf hizmetler kullanılabilir."
+        },
+        {
+          "type": "h3",
+          "content": "Bağış Sistemi"
         },
         {
           "type": "p",
-          "content": "Ancak uygulama Google Play Store üzerinden dağıtıldığı için Google Play’in kendi hizmet şartları ve veri politikaları geçerli olabilir."
-        }
-      ]
-    },
-    {
-      "title": "Gelecek Planları (Bulut Senkronizasyonu)",
-      "body": [
-        {
-          "type": "p",
-          "content": "Gelecekte uygulamaya isteğe bağlı (opt-in) bulut senkronizasyonu özelliği eklenebilir."
-        },
-        {
-          "type": "p",
-          "content": "Bu özellik Supabase veya Firebase gibi üçüncü taraf altyapılar üzerinden çalışabilir ve yalnızca kullanıcı onayı ile aktif hale gelir."
+          "content": "Uygulamanın resmi web sitesi üzerinden kullanıcılar isteğe bağlı olarak bağış yapabilir. Bu işlem üçüncü taraf bir ödeme altyapısı olan Kreosus üzerinden gerçekleştirilir."
         },
         {
           "type": "ul",
           "content": [
-            "Kullanıcı onayı olmadan veri senkronizasyonu yapılmayacaktır",
-            "Yerel kullanım seçeneği her zaman korunacaktır",
-            "Kullanıcı verileri şifreleme ile korunacaktır"
+            "Kreosus hizmeti: <a href='https://kreosus.com' target='_blank'>https://kreosus.com</a>",
+            "Ödemeler doğrudan Kreosus altyapısı üzerinden yapılır",
+            "MyPrograms kullanıcı ödeme bilgilerini görmez veya saklamaz",
+            "Tüm ödeme işlemleri Kreosus’un kendi gizlilik politikalarına tabidir: <a href='https://kreosus.com/privacy' target='_blank'>https://kreosus.com/privacy</a>"
+          ]
+        },
+        {
+          "type": "h3",
+          "content": "Web Sitesi ve Barındırma"
+        },
+        {
+          "type": "p",
+          "content": "MyPrograms’ın resmi web sitesi GitHub Pages üzerinde barındırılmaktadır: <a href='https://pages.github.com' target='_blank'>https://pages.github.com</a>"
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Site statik olarak GitHub Pages altyapısı üzerinden yayınlanır",
+            "Sunucu taraflı kullanıcı verisi işlenmez",
+            "GitHub’un kendi gizlilik politikası geçerlidir: <a href='https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement' target='_blank'>https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement</a>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Gelecek Planları (Bulut ve Cross-Platform)",
+      "body": [
+        {
+          "type": "p",
+          "content": "Gelecekte MyPrograms uygulamasına isteğe bağlı bulut senkronizasyonu ve cross-platform (çoklu platform desteği) özellikleri eklenmesi planlanmaktadır."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Bulut senkronizasyonu tamamen isteğe bağlı (opt-in) olacaktır",
+            "Yerel kullanım (offline) seçeneği korunacaktır",
+            "Kullanıcı verileri yalnızca kullanıcı onayı ile buluta aktarılacaktır",
+            "Cross-platform destek ile farklı cihazlar arasında senkronizasyon sağlanabilecektir"
           ]
         }
       ]
@@ -138,36 +174,37 @@
       "body": [
         {
           "type": "p",
-          "content": "MyPrograms uygulaması genel olarak eğitim amaçlı bir araçtır ve her yaş grubuna hitap edebilir."
+          "content": "MyPrograms uygulaması eğitim odaklı bir araçtır ve farklı yaş grupları tarafından kullanılabilir. Ancak uygulama mevcut yapısı gereği kullanıcı verilerini sunucuya iletmediği için doğrudan veri toplama gerçekleştirmez."
         },
         {
           "type": "p",
-          "content": "Uygulama mevcut durumda herhangi bir kişisel veri toplamadığı için çocuklardan bilinçli olarak veri toplanmaz."
-        },
-        {
-          "type": "p",
-          "content": "Ebeveyn veya yasal temsilcilerin gözetimi altında kullanım önerilir."
+          "content": "Yine de 18 yaş altı kullanıcıların uygulamayı ebeveyn veya yasal temsilci gözetiminde kullanmaları önerilir."
         }
       ]
     },
     {
-      "title": "Veri Silme ve İletişim",
+      "title": "Veri Silme",
       "body": [
         {
           "type": "p",
-          "content": "Kullanıcılar, uygulama içindeki tüm verilerini cihazdan silerek tamamen kaldırabilir."
+          "content": "Kullanıcılar uygulama içerisindeki tüm verilerini cihaz üzerinden manuel olarak silebilir. Uygulama herhangi bir merkezi sunucuya veri göndermediği için silme işlemi tamamen yerel cihaz üzerinde gerçekleşir."
         },
         {
           "type": "p",
-          "content": "Uygulama herhangi bir sunucu tabanlı veri tutmadığı için silme işlemi cihaz üzerinde gerçekleşir."
-        },
+          "content": "Veri silme işlemi geri alınamaz ve kalıcıdır."
+        }
+      ]
+    },
+    {
+      "title": "Bize Ulaşın",
+      "body": [
         {
-          "type": "h3",
-          "content": "İletişim"
+          "type": "p",
+          "content": "Gizlilik Politikamız hakkında herhangi bir sorunuz veya öneriniz varsa, bizimle iletişime geçmekten çekinmeyin."
         },
         {
           "type": "p",
-          "content": "Gizlilik politikası ile ilgili sorularınız için geliştirici ile uygulama mağazası üzerinden veya belirtilen iletişim kanallarından iletişime geçebilirsiniz."
+          "content": "E-posta: <a href='mailto:sabahattincck@outlook.com'>sabahattincck@outlook.com</a>"
         }
       ]
     }
