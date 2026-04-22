@@ -1,0 +1,99 @@
+{
+  "lang_button": "🇺🇸 English",
+  "about_page_title": "About - MyPrograms",
+  "back_to_home_button": "Return to Support Home",
+  "about_title": "About MyPrograms",
+  "about_subtitle": "Your Ultimate Academic Assistant – Built by a Student for Students",
+  "about_mission": "MyPrograms is an open-source initiative designed to empower students with modern organizational tools while preserving absolute privacy.",
+  "footer_text_1": "Built with ❤️ for students worldwide.",
+  "footer_text_2": "Completely Free and Ad-Free.",
+  "footer_copyright": "© 2026 MyPrograms Development",
+  "content_sections": [
+    {
+      "title": "What is MyPrograms?",
+      "body": [
+        {
+          "type": "p",
+          "content": "<strong>MyPrograms</strong> is more than just a calendar; it is a personal assistant designed to help students masterfully manage their academic schedules. We know how overwhelming student life can be—balancing classes, exams, and endless study materials is difficult. MyPrograms simplifies this process by organizing everything into a single intuitive and visually appealing timeline."
+        }
+      ]
+    },
+    {
+      "title": "Why MyPrograms?",
+      "body": [
+        {
+          "type": "p",
+          "content": "We believe academic success should be accessible to everyone without barriers."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "<strong>100% Free:</strong> No subscriptions, no locked features, and no hidden costs. Every tool in this application is available to all students.",
+            "<strong>No Ads:</strong> A clean and distraction-free environment. No banners, no pop-ups; just you and your studies.",
+            "<strong>Privacy and Speed:</strong> The application currently offers a local-first experience. Your personal schedule and files are securely stored on your phone, ensuring lightning-fast access even without an internet connection."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Screenshots",
+      "body": [
+        {
+          "type": "images",
+          "caption": "(Images will be updated soon - Experience the modern interface)",
+          "content": [
+            { "src": "https://github.com/user-attachments/assets/41e7b75f-2dd9-4d71-ba63-8504059a4d41", "width": "30%", "alt": "Home Screen" },
+            { "src": "https://github.com/user-attachments/assets/afb35115-3b46-4ac8-b2a9-de5c409dbab3", "width": "30%", "alt": "Schedule Screen" }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Core Features",
+      "body": [
+        { "type": "h3", "content": "Smart Daily Timeline" },
+        { "type": "p", "content": "Never ask “What’s next?” again. Whether it’s a weekly class, a one-time seminar, or an upcoming exam, MyPrograms calculates your schedule and presents it in a clear, easy-to-read timeline." },
+        { "type": "h3", "content": "All Your Study Files in One Place" },
+        { "type": "p", "content": "Stop digging through your phone’s folders for lecture notes. You can attach PDFs, images, and documents directly to your courses. When it’s time for class, your materials will be there waiting for you." },
+        { "type": "h3", "content": "Organize Your Way" },
+        { "type": "p", "content": "Use custom Tags to categorize your life. Want to focus only on your “Major” courses or temporarily hide “Elective” workshops? With our active filtering system, you see only what matters to you." },
+        { "type": "h3", "content": "Home Screen Widgets" },
+        { "type": "p", "content": "Stay organized without even opening the app. Our sleek widgets bring your daily schedule directly to your home screen, keeping you informed at a glance." }
+      ]
+    },
+    {
+      "title": "Future Roadmap",
+      "body": [
+        {
+          "type": "p",
+          "content": "We are continuously improving to make your student life even easier:"
+        },
+        {
+          "type": "ul",
+          "content": [
+            "<strong>Cloud Synchronization:</strong> We are working on optional cloud storage that will allow you to securely access your schedule from multiple devices.",
+            "<strong>Sharing with Friends:</strong> Collaboration features that enable you to instantly share schedules or study materials with classmates.",
+            "<strong>Performance Analytics:</strong> Visual tools to help you track your study habits and exam progress over time."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Who is MyPrograms For?",
+      "body": [
+        {
+          "type": "p",
+          "content": "We are continuously improving to make your student life even easier:"
+        },
+        {
+          "type": "ul",
+          "content": [
+            "<strong>University Students</strong> with complex and rotating weekly schedules.",
+            "<strong>High School Students</strong> tracking exam dates and assignment deadlines.",
+            "<strong>Lifelong Learners</strong> who need a structured way to manage learning materials."
+          ]
+        }
+      ]
+    }
+  ]
+}

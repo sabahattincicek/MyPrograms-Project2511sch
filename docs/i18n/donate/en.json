@@ -1,0 +1,27 @@
+{
+  "lang": "en",
+  "lang_button": "🇺🇸 English",
+  "donate_page_title": "Support the Developer - MyPrograms",
+  "back_to_home_button": "Return to Support Home",
+  "profile_greeting": "Hello, I'm Sabahattin!",
+  "profile_sub": "Independent Developer & Student",
+  "support_title": "Support the Journey",
+  "support_desc": "If MyPrograms has helped you stay organized, you can consider buying me a coffee via Kreosus!",
+  "footer_signature": "© 2026 MyPrograms Development",
+  "story_sections": [
+    {
+      "title": "The Story of MyPrograms",
+      "body": [
+        "I started developing <strong>MyPrograms</strong> because I needed a simple, fast, and privacy-respecting way to manage my own academic life. As a student, I was tired of complex cloud systems that track every move, expensive subscriptions, and apps filled with ads.",
+        "I decided to build something different: a <strong>100% free</strong>, <strong>ad-free</strong>, and <strong>local-first</strong> academic planner. Every line of code in this project was written by me during the spare time between classes and exams."
+      ]
+    },
+    {
+      "title": "Why Should You Support?",
+      "body": [
+        "As a solo developer, building and maintaining an application requires a lot of time and effort. My goal is to keep MyPrograms completely free for all students forever.",
+        "Your support helps me cover basic costs and motivates me to add new features such as cloud synchronization."
+      ]
+    }
+  ]
+}
