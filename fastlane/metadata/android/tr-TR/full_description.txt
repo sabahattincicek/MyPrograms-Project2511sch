@@ -1,0 +1,8 @@
+    MyPrograms, ders programlarınızı yönetebileceğiniz ve akademik materyallerinizi kolayca organize edebileceğiniz hızlı ve basit bir asistandır.
+
+    Temel Özellikler:
+    - Akıllı Zaman Çizelgesi: Derslerinizi ve sınavlarınızı otomatik olarak hesaplar.
+    - Gizlilik Odaklı: Tüm verileriniz yalnızca cihazınızda güvenle saklanır.
+    - Ders Materyalleri: PDF ve görselleri doğrudan derslerinize ekleyin.
+    - Ana Ekran Widget'ları: Tek bir bakışla organize kalın.
+    - %100 Ücretsiz ve Reklamsız.

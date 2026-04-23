@@ -1,0 +1,8 @@
+    MyPrograms is a fast and user-friendly assistant where you can manage your schedules and easily organize academic materials in one place.
+
+    Key Features:
+    - Smart Timeline: Automatically calculates your lectures and exams.
+    - Privacy-First: All data is stored locally on your device.
+    - Study Materials: Attach PDFs and images directly to your courses.
+    - Home Screen Widgets: Stay organized at a glance.
+    - 100% Free and Ad-Free.
