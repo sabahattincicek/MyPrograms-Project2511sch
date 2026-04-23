@@ -52,4 +52,4 @@ This project is an open-source initiative. MyPrograms is licensed under the **GN
 - **Web:** [Support Page](https://sabahattincicek.github.io/MyPrograms-Project2511sch/)
 
 ---
-*Developed for students worldwide. 100% Free & Ad-Free.*
+*Developed with ❤️  for students worldwide.*
