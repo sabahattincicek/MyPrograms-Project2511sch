@@ -5,13 +5,19 @@
 </p>
 
 <p align="center">
-  <a href="https://sabahattincicek.github.io/MyPrograms-Project2511sch/"><strong>Official Support & Legal Page</strong></a> | 
-  <a href="https://github.com/sabahattincicek/MyPrograms-Project2511sch/releases"><strong>Latest Releases (APK)</strong></a>
+  <a href="https://sabahattincicek.github.io/MyPrograms-Project2511sch/"><strong>Official Support & Legal Page</strong></a>
 </p>
 
 ---
 
 **MyPrograms** is a fast, modern, and privacy-focused academic assistant designed for students to manage their course schedules, exams, and study materials in one unified timeline.
+
+## Download
+You can download the latest version of MyPrograms from the following sources:
+
+- **GitHub Releases:** [Download APK](https://github.com/sabahattincicek/MyPrograms-Project2511sch/releases)
+- **Google Play:** *Coming Soon*
+- **F-Droid:** *Coming Soon*
 
 ## Key Features
 - **Smart Timeline:** Automatically calculates recurring lectures and displays your day in a clean, intuitive flow.
@@ -46,5 +52,4 @@ This project is an open-source initiative. MyPrograms is licensed under the **GN
 - **Web:** [Support Page](https://sabahattincicek.github.io/MyPrograms-Project2511sch/)
 
 ---
-*Developed with ❤️  for students worldwide.*
----
+*Developed for students worldwide. 100% Free & Ad-Free.*
