@@ -145,7 +145,7 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
         binding.tvSupportProject.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, AppConstants.SUPPORT_URL.toUri())
+            val intent = Intent(Intent.ACTION_VIEW, AppConstants.DONATE_PAGE_URL.toUri())
             startActivity(intent)
         }
     }
