@@ -157,4 +157,25 @@ class SettingsRepositoryImp @Inject constructor(
             }
         }
     }
+
+    override fun getHomeEmptyHeaderHideEnabled(): Flow<Boolean> = callbackFlow {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            if (key == SettingsConstants.PREF_KEY_HOME_EMPTY_HEADER_HIDE_ENABLED) {
+                trySend(prefs.getBoolean(SettingsConstants.PREF_KEY_HOME_EMPTY_HEADER_HIDE_ENABLED,
+                    SettingsConstants.HomeEmptyHeaderHideEnabled.DEFAULT))
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+        trySend(sharedPreferences.getBoolean(SettingsConstants.PREF_KEY_HOME_EMPTY_HEADER_HIDE_ENABLED,
+            SettingsConstants.HomeEmptyHeaderHideEnabled.DEFAULT))
+        awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
+    }
+
+    override suspend fun setHomeEmptyHeaderHideEnabled(enabled: Boolean) {
+        withContext(Dispatchers.IO) {
+            sharedPreferences.edit {
+                putBoolean( SettingsConstants.PREF_KEY_HOME_EMPTY_HEADER_HIDE_ENABLED, enabled)
+            }
+        }
+    }
 }

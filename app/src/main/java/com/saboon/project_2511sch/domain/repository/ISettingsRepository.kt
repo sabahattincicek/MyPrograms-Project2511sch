@@ -30,4 +30,8 @@ interface ISettingsRepository {
     //SPLASH
     fun getOnboardingCompleted(): Flow<Boolean>
     suspend fun setOnboardingComplete(completed: Boolean)
+
+    //HOME EMPTY HEADER HIDE
+    fun getHomeEmptyHeaderHideEnabled(): Flow<Boolean>
+    suspend fun setHomeEmptyHeaderHideEnabled(enabled: Boolean)
 }
