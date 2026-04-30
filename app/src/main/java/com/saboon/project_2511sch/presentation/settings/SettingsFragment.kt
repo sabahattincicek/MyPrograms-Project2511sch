@@ -36,6 +36,7 @@ class SettingsFragment : Fragment() {
     private var currentHomeViewRangeValue: String? = null
     private var currentHomeListItemColorEnabledValue: Boolean = true
     private var currentHomeListItemColorSourceValue: String? = null
+    private var currentHomeEmptyHeaderHideEnabledValue: Boolean = false
     private var currentOverscrollDaysCountValue: Int? = null
     private var currentAbsenceReminderEnabledValue: Boolean = true
 
@@ -179,6 +180,9 @@ class SettingsFragment : Fragment() {
                     Log.d(TAG_DETAIL, "Absence reminder enabled changed: ${item.isChecked}")
                     viewModelSettings.onAbsenceReminderEnabledChanged(item.isChecked)
                 }
+                SettingsConstants.PREF_KEY_HOME_EMPTY_HEADER_HIDE_ENABLED -> {
+                    viewModelSettings.onHomeEmptyHeaderHideEnabledChanged(item.isChecked)
+                }
             }
         }
         binding.rvSettings.apply {
@@ -263,6 +267,15 @@ class SettingsFragment : Fragment() {
                 value = sourceEntries[sourceIndex]
             )
         )
+        //HOME EMPTY HEADER HIDE ENABLED
+        settingsList.add(
+            SettingsItem.Toggle(
+                key = SettingsConstants.PREF_KEY_HOME_EMPTY_HEADER_HIDE_ENABLED,
+                title = getString(R.string.hide_headers_for_empty_days),
+                summary = getString(R.string.if_enabled_dates_with_no_tasks_or_lessons_will_not_be_displayed_on_the_home_screen),
+                isChecked = currentHomeEmptyHeaderHideEnabledValue
+            )
+        )
 
         settingsList.add(SettingsItem.Category(getString(R.string.reminder)))
         // ABSENCE REMINDER ENABLED
@@ -274,6 +287,8 @@ class SettingsFragment : Fragment() {
                 isChecked = currentAbsenceReminderEnabledValue
             )
         )
+
+
 
         Log.v(TAG_DETAIL, "Submitting ${settingsList.size} items to adapter")
         recyclerAdapterSettings.submitList(settingsList)
@@ -289,6 +304,7 @@ class SettingsFragment : Fragment() {
                     viewModelSettings.overScrollDaysCountState,
                     viewModelSettings.homeListItemColorEnabledState,
                     viewModelSettings.homeListItemColorSourceState,
+                    viewModelSettings.homeEmptyHeaderHideEnabledState,
                     viewModelSettings.absenceReminderEnabledState
                 )
                 kotlinx.coroutines.flow.combine(flows) { values ->
@@ -308,7 +324,8 @@ class SettingsFragment : Fragment() {
                     currentOverscrollDaysCountValue = values[3] as Int
                     currentHomeListItemColorEnabledValue = values[4] as Boolean
                     currentHomeListItemColorSourceValue = values[5] as String
-                    currentAbsenceReminderEnabledValue = values[6] as Boolean
+                    currentHomeEmptyHeaderHideEnabledValue = values[6] as Boolean
+                    currentAbsenceReminderEnabledValue = values[7] as Boolean
                     
                     Log.v(TAG_DETAIL, "Values updated: DarkMode=$currentDarkModeValue, Theme=$currentAppThemeValue, AbsenceReminder=$currentAbsenceReminderEnabledValue")
                 }.collect {

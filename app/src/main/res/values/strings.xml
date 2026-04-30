@@ -147,5 +147,7 @@
     <string name="were_you_able_to_attend_the_lesson">Were you able to attend the \'%1$s\' lesson?</string>
     <string name="will_start_in_minutes">%1$s will start in %2$d minutes.</string>
     <string name="support_developer">Support the Developer</string>
+    <string name="hide_headers_for_empty_days">Hide headers for empty days</string>
+    <string name="if_enabled_dates_with_no_tasks_or_lessons_will_not_be_displayed_on_the_home_screen">If enabled, dates with no tasks or lessons will not be displayed on the home screen.</string>
 
 </resources>

@@ -12,6 +12,8 @@ object SettingsConstants {
     const val PREF_KEY_ABSENCE_REMINDER_ENABLED = "pref_key_absence_reminder_enabled"
     const val PREF_KEY_ONBOARDING_COMPLETED = "pref_key_onboarding_completed"
 
+    const val PREF_KEY_HOME_EMPTY_HEADER_HIDE_ENABLED = "pref_key_home_empty_header_hide"
+
     //APPEARANCE
     object DarkMode {
         const val DARK_MODE = "dark_mode"
@@ -75,6 +77,10 @@ object SettingsConstants {
     }
 
     object OnboardingCompleted {
+        const val DEFAULT = false
+    }
+
+    object HomeEmptyHeaderHideEnabled {
         const val DEFAULT = false
     }
 }

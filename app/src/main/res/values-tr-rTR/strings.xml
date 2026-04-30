@@ -144,4 +144,7 @@
     <string name="did_you_attend">Katıldın mı?</string>
     <string name="were_you_able_to_attend_the_lesson">\'%1$s\' ders oturumuna katılabildin mi?</string>
     <string name="will_start_in_minutes">%1$s, %2$d dakika sonra başlayacak.</string>
+    <string name="support_developer">Geliştiriciyi Destekle</string>
+    <string name="hide_headers_for_empty_days">Boş günleri gizle</string>
+    <string name="if_enabled_dates_with_no_tasks_or_lessons_will_not_be_displayed_on_the_home_screen">Etkinleştirildiğinde, görev veya ders olmayan tarihler ana ekranda görüntülenmez.</string>
 </resources>
