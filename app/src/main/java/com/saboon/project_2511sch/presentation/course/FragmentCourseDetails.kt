@@ -37,6 +37,7 @@ import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskExam
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskHomework
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskLesson
+import com.saboon.project_2511sch.presentation.task.DisplayItemTask
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.open
 import kotlin.getValue
@@ -144,6 +145,7 @@ class FragmentCourseDetails : Fragment() {
         binding.tvPersonPrimary.setTextColor(textColor)
         binding.tvPersonSecondary.setTextColor(textColor)
         binding.tvDescription.setTextColor(textColor)
+        binding.tvAbsence.setTextColor(textColor)
         binding.tvTag.setTextColor(textColor)
         binding.tvTag.compoundDrawableTintList = ColorStateList.valueOf(textColor)
     }
@@ -257,8 +259,17 @@ class FragmentCourseDetails : Fragment() {
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            val taskDisplayItemList = resource.data
-                            if (taskDisplayItemList.isNullOrEmpty()){
+                            val taskDisplayItemList = (resource.data as? List<DisplayItemTask>) ?: emptyList()
+
+                            val totalAbsence = taskDisplayItemList
+                                .filterIsInstance<DisplayItemTask.ContentTask>()
+                                .map { it.task }
+                                .filterIsInstance<Task.Lesson>()
+                                .sumOf { it.absence.size }
+
+                            binding.tvAbsence.text = "${getString(R.string.absence)}: ${totalAbsence} ${getString(R.string.sessions)}"
+
+                            if (taskDisplayItemList.isEmpty()){
                                 binding.llEmptyList.visibility = View.VISIBLE
                                 binding.rvTasks.visibility = View.GONE
                             }else{
