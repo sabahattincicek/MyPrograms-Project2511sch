@@ -87,8 +87,9 @@ class WidgetHome : GlanceAppWidget(){
 
         val filter = FilterTask(lesson = true, exam = true, homework = true)
         val dateRange = getInitialRange()
+        val isHideHeaders = settingsRepository.getHomeEmptyHeaderHideEnabled().first()
 
-        val result = getHomeDisplayItemsUseCase(filter, dateRange.start, dateRange.end).first()
+        val result = getHomeDisplayItemsUseCase(filter, dateRange.start, dateRange.end, isHideHeaders).first()
 
         val displayItems = if (result is Resource.Success){
             result.data?.filter { it !is DisplayItemHome.FooterItemHome } ?: emptyList()

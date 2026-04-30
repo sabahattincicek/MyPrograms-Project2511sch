@@ -27,7 +27,12 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
     private val taskRepository: ITaskRepository
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(filterTask: FilterTask, startDate: Long, endDate: Long): Flow<Resource<List<DisplayItemHome>>> {
+    operator fun invoke(
+        filterTask: FilterTask,
+        startDate: Long,
+        endDate: Long,
+        hideEmptyHeaders: Boolean
+    ): Flow<Resource<List<DisplayItemHome>>> {
         // 1. Fetch active Tags and active Courses simultaneously using combine
         return combine(
             tagRepository.getAllActive(),
@@ -79,7 +84,8 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                                 validCourses,
                                 filteredTasks,
                                 startDate,
-                                endDate
+                                endDate,
+                                hideEmptyHeaders
                             )
                             Resource.Success(displayItems)
                         }
@@ -100,7 +106,8 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
         courses: List<Course>,
         tasks: List<Task>,
         startDate: Long,
-        endDate: Long
+        endDate: Long,
+        isHideEmptyHeaders: Boolean
     ): List<DisplayItemHome> {
         val finalEvents = mutableListOf<DisplayItemHome.ContentItemHome>()
 
@@ -170,10 +177,10 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
 
         // Step 3: Loop through every day in range to ensure mandatory Headers
         while (currentDayMillis <= finalDayMillis) {
-            displayItemsWithHeaders.add(DisplayItemHome.HeaderItemHome(date = currentDayMillis))
 
             val tasksForThisDay = eventsGroupedByDay[currentDayMillis]
             if (tasksForThisDay != null) {
+                displayItemsWithHeaders.add(DisplayItemHome.HeaderItemHome(date = currentDayMillis))
                 val sortedTasks = tasksForThisDay.sortedBy {
                     when(val t = it.task) {
                         is Task.Lesson -> t.timeStart
@@ -182,6 +189,8 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                     }
                 }
                 displayItemsWithHeaders.addAll(sortedTasks)
+            }else if (!isHideEmptyHeaders){
+                displayItemsWithHeaders.add(DisplayItemHome.HeaderItemHome(date = currentDayMillis))
             }
 
             calendar.timeInMillis = currentDayMillis

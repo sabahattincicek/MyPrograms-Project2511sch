@@ -35,11 +35,12 @@ class ViewModelHome @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val displayItemsState = combine(
         _filterTaskState,
-        _dateRange
-    ) { filterTask, range ->
-        Pair(filterTask, range)
-    }.flatMapLatest { (filterTask, range) ->
-        getHomeDisplayItemsUseCase.invoke(filterTask, range.start, range.end)
+        _dateRange,
+        settingsRepository.getHomeEmptyHeaderHideEnabled()
+    ) { filterTask, range, isHideHeaders ->
+        Triple(filterTask, range, isHideHeaders)
+    }.flatMapLatest { (filterTask, range, isHideHeaders) ->
+        getHomeDisplayItemsUseCase.invoke(filterTask, range.start, range.end, isHideHeaders)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
