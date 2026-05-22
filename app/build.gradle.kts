@@ -25,7 +25,7 @@ android {
         applicationId = "com.saboon.project_2511sch"
         minSdk = 29
         targetSdk = 36
-        versionCode = 3
+        versionCode = 4
         versionName = "1.0.0-ct1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -39,7 +39,7 @@ android {
                 "proguard-rules.pro"
             )
             ndk {
-                debugSymbolLevel = "SYMBOL_TABLE"
+                debugSymbolLevel = "FULL"
             }
         }
     }
