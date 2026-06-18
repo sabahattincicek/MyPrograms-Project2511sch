@@ -440,7 +440,7 @@
 
         try {
             const response = await fetch(fetchPath);
-            if (!response.ok) throw new Error(`Dosya bulunamadı: ${fetchPath}`);
+            if (!response.ok) throw new Error(`Dil dosyası yüklenemedi: ${fetchPath} (Durum: ${response.status})`);
 
             const translations = await response.json();
 
@@ -468,7 +468,9 @@
             }
 
         } catch (error) {
-            console.error('Yükleme Hatası:', error);
+            console.error('Dil Yükleme Hatası:', error);
+            // Eğer TR yüklenemezse ve varsayılan EN değilse, EN'yi dene
+            if (lang !== 'en') loadLanguage('en');
         }
     }
 
