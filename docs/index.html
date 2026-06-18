@@ -363,6 +363,48 @@
     <h1 data-i18n="app_name"></h1>
     <p class="mission-statement" data-i18n="build_with_love_for_students"></p>
     <p class="mission-statement" data-i18n="mission_statement"></p>
+    
+    <!-- İndirme ve Kurulum Bölümü -->
+    <div class="download-section" style="margin-top: 30px; padding: 25px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; text-align: center;">
+        <h2 style="border:none; padding:0; margin-top:0; margin-bottom:10px; font-size: 1.5rem;" data-i18n="download_title"></h2>
+        <p style="color: var(--secondary-text); margin-bottom: 20px;" data-i18n="download_desc"></p>
+        
+        <a href="https://github.com/sabahattincicek/MyPrograms-Project2511sch/releases/latest" class="download-btn-main" target="_blank">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span data-i18n="download_apk_button"></span>
+        </a>
+
+        <div class="install-guide" style="margin-top: 25px; text-align: left; padding: 15px; background-color: rgba(3, 102, 214, 0.05); border-radius: 12px; font-size: 0.9rem;">
+            <strong style="display: block; margin-bottom: 8px; color: var(--accent-color);" data-i18n="install_guide_title"></strong>
+            <p style="margin: 0; color: var(--secondary-text);" data-i18n="install_guide_text"></p>
+        </div>
+    </div>
+
+    <style>
+        .download-btn-main {
+            display: inline-flex;
+            align-items: center;
+            background-color: #2ea44f; /* Yeşil tonu, güven verir */
+            color: white !important;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(46, 164, 79, 0.3);
+        }
+        .download-btn-main:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 6px 16px rgba(46, 164, 79, 0.4);
+        }
+    </style>
+
     <!-- GITHUB BUTONLARI KONTEYNERI -->
     <div style="display: flex; justify-content: center; gap:10px; flex-wrap: wrap;">
         <!-- Proje Butonu -->
