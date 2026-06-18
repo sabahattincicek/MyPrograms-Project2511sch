@@ -13,7 +13,7 @@
   "install_guide_title": "How to Install?",
   "install_guide_text": "1. Click the download button and select the file ending in <b>release.apk</b> under the 'Assets' section on the page. <br>2. If you see an 'Install apps from unknown sources' warning, select 'Allow'. <br>3. Once the installation is finished, your app is ready to use.",
   "kao_info_text": "The restrictive policies imposed on independent developers by tech giants do more than just stifle innovation; they also limit your freedom as users to use the apps you want, however you want. This situation leads many independent apps you love to eventually disappear or become trapped within systems beyond your control. To ensure MyPrograms remains forever free, ad-free, and entirely under your control, I stand against these unfair limitations and advocate for Android to remain an open platform.",
-  "kao_banner_text": "Support Keep Android Open",
+  "kao_more_info_link": "Learn more at keepandroidopen.org",
   "github_profile_button": "@sabahattincicek",
   "vision_title": "Our Vision",
   "vision_text": "MyPrograms aims to bridge the gap between complex calendar applications and simple note-taking tools. Our core philosophy is that technology should be an enabler, not a barrier, when managing your academic life. While prioritizing keeping your data under your control (on your device), we aim to offer both freedom and security with upcoming cloud synchronization features. MyPrograms is an open-source project that continuously evolves to help students at all levels elevate their study discipline with a digital assistant.",

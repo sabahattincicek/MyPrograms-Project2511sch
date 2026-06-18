@@ -13,7 +13,7 @@
   "install_guide_title": "Nasıl Kurulur?",
   "install_guide_text": "1. İndir butonuna basın ve açılan sayfada 'Assets' bölümündeki sonu <b>release.apk</b> ile biten dosyayı indirin. <br>2. Dosyayı açtığınızda 'Bilinmeyen kaynaklardan uygulama yükleme' uyarısı gelirse 'İzin Ver' seçeneğini işaretleyin. <br>3. Kurulum tamamlandığında uygulamanız kullanıma hazır olacaktır.",
   "kao_info_text": "Teknoloji devlerinin bağımsız geliştiricilere dayattığı kısıtlayıcı politikalar, sadece yeni fikirlerin önünü kesmekle kalmıyor, aynı zamanda siz kullanıcıların dilediğiniz uygulamayı dilediğiniz şekilde kullanma özgürlüğünü de kısıtlıyor. Bu durum, sevdiğiniz pek çok bağımsız uygulamanın zamanla yok olmasına veya kontrolünüz dışındaki sistemlere mahkum edilmesine yol açıyor. MyPrograms'ın her zaman özgür, reklamsız ve tamamen sizin kontrolünüzde kalması için bu haksız sınırlamalara karşı duruyor ve Android'in açık bir platform olarak kalmasını savunuyorum.",
-  "kao_banner_text": "Keep Android Open'ı Destekle",
+  "kao_more_info_link": "Daha fazla bilgi için: keepandroidopen.org",
   "github_profile_button": "@sabahattincicek",
   "vision_title": "Vizyonumuz",
   "vision_text": "MyPrograms, karmaşık takvim uygulamaları ile basit not alma araçları arasındaki boşluğu doldurmayı hedefler. Temel felsefemiz, akademik hayatınızı yönetirken teknolojinin bir engel değil, bir kolaylaştırıcı olmasıdır. Verilerinizin kontrolünü öncelikle size (cihazınıza) bırakırken, yakında eklenecek olan bulut senkronizasyonu ile özgürlük ve güvenliği bir arada sunmayı amaçlıyoruz. MyPrograms, her seviyeden öğrencinin çalışma disiplinini dijital bir asistanla zirveye taşıması için sürekli gelişen açık kaynaklı bir projedir.",
