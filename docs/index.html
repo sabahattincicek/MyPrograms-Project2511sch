@@ -243,7 +243,7 @@
             background-color: var(--accent-color);
             color: #ffffff !important;
         }
-        .donate-container {
+        .support-developer-container {
             margin-top: 80px;
             padding: 40px;
             background-color: var(--card-bg);
@@ -254,14 +254,49 @@
             flex-direction: column;
             align-items: center;
         }
+        /* Keep Android Open Banner Stilleri */
+        .keep-android-open-banner {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .keep-android-open-banner p {
+            margin: 0;
+            color: var(--secondary-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .kao-banner-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--accent-color);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .kao-banner-link:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
 
-        .donate-container h3 {
+        .support-developer-container h3 {
             font-size: 2rem;
             margin-bottom: 20px;
             color: var(--text-color);
         }
 
-        .donate-container p {
+        .support-developer-container p {
             max-width: 650px;
             margin-left: auto;
             margin-right: auto;
@@ -304,6 +339,23 @@
             <button onclick="changeLang('en')">🇺🇸 English</button>
         </div>
     </div>
+</div>
+
+<!-- Keep Android Open Banner Section (Artık Header Üstünde) -->
+<div class="keep-android-open-banner">
+    <!-- Resmi Banner Script Container (Artık en üstte) -->
+    <div id="keepandroidopen-banner" style="margin-bottom: 15px; width: 100%; align-self: stretch;"></div>
+    <script src="https://keepandroidopen.org/banner.js?lang=tr&size=mini&animation=off&hidebutton=off&id=keepandroidopen-banner"></script>
+
+    <p data-i18n="kao_info_text"></p>
+    <a href="https://keepandroidopen.com/" target="_blank" class="kao-banner-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        <span data-i18n="kao_banner_text"></span>
+    </a>
 </div>
 
 <header>
@@ -359,7 +411,7 @@
     </a>
 </div>
 
-<div class="donate-container">
+<div class="support-developer-container">
     <h3 data-i18n="support_project_title"></h3>
     <p data-i18n="support_project_text"></p>
     <p data-i18n="support_project_sub_text"></p>
@@ -374,17 +426,13 @@
 
 
 <footer>
-    <p data-i18n="foot_copyright"></p>
+    <p data-i18n="footer_copyright"></p>
     <p>
         <span data-i18n="footer_contact"></span>
         <a href="mailto:sabahattincck@outlook.com" data-i18n="footer_contact_text"></a>
     </p>
     <p><small data-i18n="footer_app_package"></small></p>
-    <div id="keepandroidopen-banner"></div>
 </footer>
-
-<script src="https://keepandroidopen.org/banner.js?lang=tr&size=minimal&animation=off&id=keepandroidopen-banner"></script>
-
 
 <script>
     async function loadLanguage(lang) {
