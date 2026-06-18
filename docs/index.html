@@ -329,7 +329,7 @@
 <div class="keep-android-open-banner">
     <!-- Resmi Banner Script Container (Artık en üstte) -->
     <div id="keepandroidopen-banner" style="margin-bottom: 15px; width: 100%; align-self: stretch;"></div>
-    <script src="https://keepandroidopen.org/banner.js?lang=tr&size=mini&animation=off&hidebutton=off&id=keepandroidopen-banner"></script>
+    <!-- Banner script'i, sayfanın diline göre JavaScript tarafından dinamik olarak yüklenecektir. -->
 
     <p data-i18n="kao_info_text"></p>
     <a href="https://keepandroidopen.org/tr/" target="_blank" style="font-weight: 600; text-decoration: underline;" data-i18n="kao_more_info_link"></a>
@@ -484,6 +484,24 @@
             const dropBtn = document.getElementById('current-lang');
             if (dropBtn && translations.lang_button) {
                 dropBtn.innerHTML = translations.lang_button;
+            }
+
+            // 5. Keep Android Open banner script'ini doğru dil parametresiyle dinamik olarak yükle
+            const bannerContainer = document.getElementById('keepandroidopen-banner');
+            if (bannerContainer) {
+                // Önceki dilden kalan banner içeriğini temizle (Çift banner oluşmasını engeller)
+                bannerContainer.innerHTML = '';
+
+                // Mevcut banner script'ini DOM'dan kaldır
+                const existingScript = document.getElementById('kao-banner-script');
+                if (existingScript) {
+                    existingScript.remove();
+                }
+
+                const script = document.createElement('script');
+                script.id = 'kao-banner-script'; // Script'i kolayca bulup kaldırmak için bir ID ekle
+                script.src = `https://keepandroidopen.org/banner.js?lang=${lang}&size=mini&animation=off&hidebutton=off&id=keepandroidopen-banner`;
+                document.head.appendChild(script); // Script'i head'e ekle
             }
 
         } catch (error) {
