@@ -16,7 +16,6 @@
 You can download the latest version of MyPrograms from the following sources:
 
 - **GitHub Releases:** [Download APK](https://github.com/sabahattincicek/MyPrograms-Project2511sch/releases)
-- **Google Play:** *Coming Soon*
 - **F-Droid:** *Coming Soon*
 
 ## Key Features
