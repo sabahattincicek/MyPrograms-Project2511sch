@@ -288,6 +288,10 @@
             box-shadow: 0 6px 20px rgba(3, 102, 214, 0.4);
             filter: brightness(1.1);
         }
+        #banner-container {
+            order: 9999; /* Forces the container to the absolute bottom of the flex layout */
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -376,7 +380,11 @@
         <a href="mailto:sabahattincck@outlook.com" data-i18n="footer_contact_text"></a>
     </p>
     <p><small data-i18n="footer_app_package"></small></p>
+    <div id="keepandroidopen-banner"></div>
 </footer>
+
+<script src="https://keepandroidopen.org/banner.js?lang=tr&size=minimal&animation=off&id=keepandroidopen-banner"></script>
+
 
 <script>
     async function loadLanguage(lang) {
