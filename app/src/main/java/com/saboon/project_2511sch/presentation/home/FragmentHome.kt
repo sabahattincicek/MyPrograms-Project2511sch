@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
 import com.saboon.project_2511sch.presentation.task.AbsenceDialogs
-import com.saboon.project_2511sch.presentation.task.FilterTask
+import com.saboon.project_2511sch.domain.model.FilterTask
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
 import com.saboon.project_2511sch.presentation.task.ViewModelTask

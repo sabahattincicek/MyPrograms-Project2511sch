@@ -32,8 +32,7 @@ Uyulacak kurallar:
 - Yeni bağımlılıklar Hilt ile enjekte edilir; elle nesne üretilmez.
 - Mevcut adlandırma korunur: `FragmentX`, `DialogFragmentX`, `ViewModelX`, `RecyclerAdapterX`, `DisplayItemX`, `IXRepository`, `XRepositoryImp`.
 
-Bilinen ihlal: bazı use case'ler `presentation` paketinden sınıf import ediyor (`DisplayItem*`, `FilterTask`, `DataTransferPackage`).
-Bu borç `ROADMAP.md` içinde takip ediliyor. Yeni kodda bu ihlal tekrarlanmaz; dokunulan dosyada fırsat varsa düzeltilir.
+Domain katmanı presentation'dan hiçbir sınıf import etmez. Liste satırlarını (`DisplayItem*`) domain modellerinden presentation'daki eşleyiciler (`toXDisplayItems`) üretir.
 
 ## Yorum satırı kuralları
 

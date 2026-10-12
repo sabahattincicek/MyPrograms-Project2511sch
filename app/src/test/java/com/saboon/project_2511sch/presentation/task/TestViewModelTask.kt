@@ -4,10 +4,11 @@ import com.google.common.truth.Truth.assertThat
 import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.AbsenceRecord
 import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.domain.model.CourseTasks
 import com.saboon.project_2511sch.domain.usecase.task.GetCourseAbsenceRecordsUseCase
 import com.saboon.project_2511sch.domain.usecase.task.GetDefaultAbsenceDateUseCase
 import com.saboon.project_2511sch.domain.usecase.task.LessonAbsenceWriteUseCase
-import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemUseCase
+import com.saboon.project_2511sch.domain.usecase.task.GetCourseTasksUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TestBaseTask
 import com.saboon.project_2511sch.util.OperationType
@@ -33,7 +34,7 @@ import org.junit.Test
 class TestViewModelTask : TestBaseTask() {
 
     private val taskWriteUseCase = mockk<TaskWriteUseCase>()
-    private val getTaskDisplayItemUseCase = mockk<GetTaskDisplayItemUseCase>()
+    private val getCourseTasksUseCase = mockk<GetCourseTasksUseCase>()
     private val lessonAbsenceWriteUseCase = mockk<LessonAbsenceWriteUseCase>()
     private val alarmScheduler = mockk<IAlarmScheduler>(relaxed = true)
     private val course = mockk<Course>(relaxed = true)
@@ -44,7 +45,7 @@ class TestViewModelTask : TestBaseTask() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         viewModel = ViewModelTask(
             taskWriteUseCase,
-            getTaskDisplayItemUseCase,
+            getCourseTasksUseCase,
             GetCourseAbsenceRecordsUseCase(),
             lessonAbsenceWriteUseCase,
             GetDefaultAbsenceDateUseCase(),
@@ -71,13 +72,8 @@ class TestViewModelTask : TestBaseTask() {
     fun `absenceRecordsState lists absences of the selected course lessons`() = runTest {
         // GIVEN: the course has a lesson with two absences, an exam and the list header/footer
         val lesson = baseLesson.copy(id = "l1", title = "Teori", absence = listOf(100L, 200L))
-        val displayItems = listOf(
-            DisplayItemTask.HeaderTask("Lesson"),
-            DisplayItemTask.ContentTask(course, lesson),
-            DisplayItemTask.ContentTask(course, baseExam),
-            DisplayItemTask.FooterTask(2)
-        )
-        every { getTaskDisplayItemUseCase.invoke(course) } returns flowOf(Resource.Success(displayItems))
+        every { getCourseTasksUseCase.invoke(course) } returns
+            flowOf(Resource.Success(CourseTasks(course, listOf(lesson, baseExam))))
         val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.absenceRecordsState.collect {} }
 
         // WHEN
@@ -94,7 +90,7 @@ class TestViewModelTask : TestBaseTask() {
     @Test
     fun `absenceRecordsState is empty when tasks fail to load`() = runTest {
         // GIVEN
-        every { getTaskDisplayItemUseCase.invoke(course) } returns flowOf(Resource.Error("Database Error"))
+        every { getCourseTasksUseCase.invoke(course) } returns flowOf(Resource.Error("Database Error"))
         val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.absenceRecordsState.collect {} }
 
         // WHEN

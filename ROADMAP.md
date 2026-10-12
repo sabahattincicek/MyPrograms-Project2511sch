@@ -16,15 +16,21 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 - [x] Açık PR'ları `main`'e birleştir: #60 (kurallar ve Timber), #62 (test altyapısı), #61 (site)
 - [x] `main-test` branch'ini sil
 - [x] Debug sürümünü mağaza sürümünün yanına kurulacak şekilde ayarla (`.debug` paket eki) ve telefonda çalıştır
-- [ ] Asistanın PR birleştirebilmesi için izin kuralını ekle (`/permissions` → `PowerShell(gh pr merge *)`)
-- [ ] GitHub'da `main` ve `production` için branch koruması aç (doğrudan push kapalı, PR zorunlu)
+- [x] Asistanın PR birleştirebilmesi için izin kuralını ekle (`/permissions` → `PowerShell(gh pr merge *)`)
+- [x] GitHub'da `main` ve `production` için branch koruması aç (doğrudan push kapalı, PR zorunlu)
 
 ## Aşama 1 — Clean Architecture borçları
 
-- [ ] `DisplayItem*` sınıflarına olan bağımlılığı domain use case'lerinden kaldır (`GetHomeDisplayItemsUseCase`, `GetTaskDisplayItemUseCase`, `GetCourseDisplayItemListUseCase`, `GetTagDisplayItemListUseCase`, `GetFileDisplayItemListUseCase`, `SFileReadUseCase`)
-- [ ] `FilterTask` sınıfını presentation'dan domain'e taşı
-- [ ] `DataTransferPackage` sınıfını presentation'dan domain'e taşı (`ExportDataUseCase`, `ImportDataUseCase`)
-- [ ] Domain katmanında Android framework bağımlılığı kalıp kalmadığını denetle
+- [x] `DisplayItem*` sınıflarına olan bağımlılığı domain use case'lerinden kaldır (`GetHomeDisplayItemsUseCase`, `GetTaskDisplayItemUseCase`, `GetCourseDisplayItemListUseCase`, `GetTagDisplayItemListUseCase`, `GetFileDisplayItemListUseCase`, `SFileReadUseCase`)
+- [x] `FilterTask` sınıfını presentation'dan domain'e taşı
+- [x] `DataTransferPackage` sınıfını presentation'dan domain'e taşı (`ExportDataUseCase`, `ImportDataUseCase`)
+- [x] Domain katmanındaki Android framework bağımlılıklarını denetle (sonuç aşağıdaki üç madde)
+- [ ] `ExportDataUseCase` / `ImportDataUseCase` içindeki `Context` ve dosya işlemlerini data katmanına taşı (domain'de bir yedekleme arayüzü ile)
+- [ ] `ISFileRepository`, `SFileWriteUseCase` ve `ImportDataUseCase` içindeki `android.net.Uri` kullanımını domain'den çıkar
+- [ ] Domain modellerindeki `Parcelable` bağımlılığı için karar ver (ekranlar arası taşıma için kullanılıyor; şimdilik kabul edilen istisna)
+- [ ] Data katmanının presentation'a bağımlılığını kaldır: `SettingsRepositoryImp` → `SettingsConstants`, `WidgetUpdateWorker` → `WidgetHome`
+- [ ] `ViewModelTag` ve `ViewModelCourse` içinde repository'lere doğrudan erişimi use case'e taşı (`syncAlarms`)
+- [ ] Yedek dosyası adındaki ve `exportDate` alanındaki tarih biçimi hatasını düzelt (`HHddss` → `HHmmss`)
 - [ ] Dokunulan dosyalara sınıf ve fonksiyon KDoc'larını ekle (sürekli iş)
 
 ## Aşama 2 — Test altyapısı
@@ -40,7 +46,7 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 
 - [x] Ders detayında toplam devamsızlık sayısını göster
 - [x] Devamsızlık yazısına basınca devamsızlık tarihlerini listele
-- [ ] Devamsızlık özelliğini (`feature/course-absence-count`, #63) `main`'e birleştir
+- [x] Devamsızlık özelliğini (`feature/course-absence-count`, #63) `main`'e birleştir
 - [x] Bildirimdeki "Katılmadım" devamsızlığı bildirimin ait olduğu oturumun tarihiyle kaydetsin
 - [x] Elle "+" ile devamsızlık eklerken tarih sorulsun (ana ekran ve ders detayı)
 - [x] "-" düğmesi hangi kaydın silineceğini sorsun
