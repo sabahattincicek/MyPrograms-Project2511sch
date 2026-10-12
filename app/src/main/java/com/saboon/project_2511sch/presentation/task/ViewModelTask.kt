@@ -9,11 +9,12 @@ import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.usecase.task.GetCourseAbsenceRecordsUseCase
 import com.saboon.project_2511sch.domain.usecase.task.GetDefaultAbsenceDateUseCase
 import com.saboon.project_2511sch.domain.usecase.task.LessonAbsenceWriteUseCase
-import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemUseCase
+import com.saboon.project_2511sch.domain.usecase.task.GetCourseTasksUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
 import com.saboon.project_2511sch.util.BaseVMOperationResult
 import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
+import com.saboon.project_2511sch.util.mapData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -43,7 +44,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewModelTask @Inject constructor(
     private val taskWriteUseCase: TaskWriteUseCase,
-    private val getTaskDisplayItemUseCase: GetTaskDisplayItemUseCase,
+    private val getCourseTasksUseCase: GetCourseTasksUseCase,
     private val getCourseAbsenceRecordsUseCase: GetCourseAbsenceRecordsUseCase,
     private val lessonAbsenceWriteUseCase: LessonAbsenceWriteUseCase,
     private val getDefaultAbsenceDateUseCase: GetDefaultAbsenceDateUseCase,
@@ -56,13 +57,13 @@ class ViewModelTask @Inject constructor(
 
     //STATE
     @OptIn(ExperimentalCoroutinesApi::class)
-    val tasksState = _selectedCourse.flatMapLatest { course ->
+    val tasksState: StateFlow<Resource<List<DisplayItemTask>>> = _selectedCourse.flatMapLatest { course ->
         if (course == null) {
             // Eğer ders seçilmemişse boş bir başarı sonucu dön (veya Idle)
             flowOf(Resource.Success(emptyList()))
         } else {
-            // UseCase artık doğrudan Course nesnesini bekliyor
-            getTaskDisplayItemUseCase.invoke(course)
+            getCourseTasksUseCase.invoke(course)
+                .map { resource -> resource.mapData { it.toTaskDisplayItems() } }
         }
     }.stateIn(
         scope = viewModelScope,
@@ -72,7 +73,7 @@ class ViewModelTask @Inject constructor(
 
     // Derived from tasksState so the absence list always matches the tasks shown on screen.
     val absenceRecordsState: StateFlow<List<AbsenceRecord>> = tasksState.map { resource ->
-        val tasks = (resource.data as? List<*>).orEmpty()
+        val tasks = resource.data.orEmpty()
             .filterIsInstance<DisplayItemTask.ContentTask>()
             .map { it.task }
         getCourseAbsenceRecordsUseCase(tasks)

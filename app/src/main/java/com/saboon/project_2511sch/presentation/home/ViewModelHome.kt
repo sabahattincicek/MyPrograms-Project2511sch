@@ -3,10 +3,11 @@ package com.saboon.project_2511sch.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saboon.project_2511sch.domain.repository.ISettingsRepository
-import com.saboon.project_2511sch.domain.usecase.home.GetHomeDisplayItemsUseCase
-import com.saboon.project_2511sch.presentation.task.FilterTask
+import com.saboon.project_2511sch.domain.usecase.home.GetHomeTimelineUseCase
+import com.saboon.project_2511sch.domain.model.FilterTask
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.util.Resource
+import com.saboon.project_2511sch.util.mapData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,19 +15,26 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import java.util.Calendar
 import javax.inject.Inject
 
+/**
+ * ViewModel for the home timeline.
+ * 
+ * Holds the shown date range and the task type filter and exposes the timeline rows for them
+ * ([displayItemsState]). The range starts as the current week or month (a user setting) and
+ * grows a number of days at a time when the user overscrolls the list.
+ */
 @HiltViewModel
 class ViewModelHome @Inject constructor(
-    private val getHomeDisplayItemsUseCase: GetHomeDisplayItemsUseCase,
+    private val getHomeTimelineUseCase: GetHomeTimelineUseCase,
     private val settingsRepository: ISettingsRepository
 ): ViewModel() {
-
-    private val tag = "ViewModelHome"
 
     private val _dateRange = MutableStateFlow(getInitialRange())
     private val _filterTaskState = MutableStateFlow(FilterTask())
@@ -40,7 +48,8 @@ class ViewModelHome @Inject constructor(
     ) { filterTask, range, isHideHeaders ->
         Triple(filterTask, range, isHideHeaders)
     }.flatMapLatest { (filterTask, range, isHideHeaders) ->
-        getHomeDisplayItemsUseCase.invoke(filterTask, range.start, range.end, isHideHeaders)
+        getHomeTimelineUseCase.invoke(filterTask, range.start, range.end, isHideHeaders)
+            .map { resource -> resource.mapData { it.toHomeDisplayItems() } }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -48,11 +57,17 @@ class ViewModelHome @Inject constructor(
     )
 
     //FILTER
+    /**
+     * Changes which task types the timeline shows.
+     */
     fun updateFilterTask(filter: FilterTask) {
+        Timber.d("Filter changed: lesson=%s, exam=%s, homework=%s", filter.lesson, filter.exam, filter.homework)
         _filterTaskState.value = filter
     }
 
-    // Mevcut haftayı yükle (Pazartesi - Pazar)
+    /**
+     * Resets the range to the initial week or month, unless a non-empty timeline is already shown.
+     */
     fun loadData() {
         if (displayItemsState.value is Resource.Success &&
             (displayItemsState.value as Resource.Success).data?.isNotEmpty() == true){
@@ -61,8 +76,11 @@ class ViewModelHome @Inject constructor(
         _dateRange.value = getInitialRange()
     }
 
-    // Geriye doğru x gün daha ekle
+    /**
+     * Extends the range [daysCount] days into the past.
+     */
     fun loadPrevious(daysCount: Int) {
+        Timber.d("Extend range to the past: days=%d", daysCount)
         _dateRange.update { current ->
             val newStart = Calendar.getInstance().apply {
                 timeInMillis = current.start
@@ -72,8 +90,11 @@ class ViewModelHome @Inject constructor(
         }
     }
 
-    // İleriye doğru x gün daha ekle
+    /**
+     * Extends the range [daysCount] days into the future.
+     */
     fun loadNext(daysCount: Int) {
+        Timber.d("Extend range to the future: days=%d", daysCount)
         _dateRange.update { current ->
             val newEnd = Calendar.getInstance().apply {
                 timeInMillis = current.end
@@ -83,6 +104,10 @@ class ViewModelHome @Inject constructor(
         }
     }
 
+    /**
+     * Returns the current week (Monday to Sunday) or the current month, depending on the
+     * home view range setting.
+     */
     private fun getInitialRange(): DisplayRange {
         val calendar = Calendar.getInstance()
         calendar.firstDayOfWeek = Calendar.MONDAY
@@ -125,6 +150,9 @@ class ViewModelHome @Inject constructor(
         }
     }
 
+    /**
+     * Returns the first millisecond of the day [timestamp] falls on.
+     */
     private fun getDayStartMillis(timestamp: Long): Long {
         return Calendar.getInstance().apply {
             timeInMillis = timestamp
@@ -135,6 +163,9 @@ class ViewModelHome @Inject constructor(
         }.timeInMillis
     }
 
+    /**
+     * Returns the last millisecond of the day [timestamp] falls on.
+     */
     private fun getDayEndMillis(timestamp: Long): Long {
         return Calendar.getInstance().apply {
             timeInMillis = timestamp

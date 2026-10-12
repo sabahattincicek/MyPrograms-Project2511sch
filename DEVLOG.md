@@ -7,6 +7,45 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 15:10 — Branch koruması açıldı, domain katmanı ekran sınıflarından ayrıldı
+
+**Yapılanlar**
+
+- GitHub'da `main` ve `production` için branch koruması açıldı: PR zorunlu (onay sayısı 0), doğrudan ve zorla push kapalı, branch silme kapalı, yönetici dahil.
+- `FilterTask` ve `DataTransferPackage` presentation'dan `domain/model` altına taşındı.
+- Domain use case'leri artık ekran satırı (`DisplayItem*`) üretmiyor, domain modeli döndürüyor:
+  - `GetCourseDisplayItemListUseCase` → `GetCoursesGroupedByTagUseCase` (`CourseGroup`)
+  - `GetFileDisplayItemListUseCase` → `GetFilesGroupedByCourseUseCase` (`CourseFiles`)
+  - `GetTaskDisplayItemUseCase` → `GetCourseTasksUseCase` (`CourseTasks`)
+  - `GetHomeDisplayItemsUseCase` → `GetHomeTimelineUseCase` (`HomeTimeline`, `HomeDay`, `HomeTimelineItem`)
+  - `GetTagDisplayItemListUseCase` silindi; etiket listesi `TagReadUseCase.getAll()` ile geliyor.
+- Satırları (başlık, içerik, alt bilgi) oluşturan eşleyiciler presentation'a eklendi: `toTagDisplayItems`, `toCourseDisplayItems`, `toSFileDisplayItems`, `toTaskDisplayItems`, `toHomeDisplayItems`.
+- `Resource.mapData` yardımcı fonksiyonu eklendi.
+- `RecurrenceRule` ve `GetHomeTimelineUseCase` Android ICU takvimi yerine `java.util.Calendar` kullanıyor.
+- İçi boş ve kullanılmayan `SFileReadUseCase` silindi.
+- Dokunulan ViewModel'lere (`Tag`, `Course`, `SFile`, `Home`) KDoc ve Timber logları eklendi.
+- Testler: 4 yeni use case testi, satır eşleyicileri, `Resource.mapData`, `RecurrenceRule`. `testDebugUnitTest`: 82 testin 82'si geçti.
+- Telefonda denendi (örnek veri yeniden eklendi, bir etiketle): ana sayfa, ders listesi (etiket grupları) ve ders detayı öncekiyle aynı göründü, çökme yok.
+
+**Kararlar**
+
+- Liste satırlarının nasıl dizileceği (başlık, alt bilgi, boş durum) presentation'ın işi sayıldı; domain yalnızca gruplanmış veriyi veriyor.
+- Ana ekranda "hiç görev yok" ile "bu aralıkta görev yok" ayrımı `HomeTimeline.hasTasks` ile korunuyor; ekran davranışı değişmedi.
+- Android takvimi yerine Java takvimi: haftalık / günlük / aylık adımlar aynı sonucu veriyor, kod artık birim testinde çalışabiliyor.
+- Domain modellerindeki `Parcelable` şimdilik kabul edilen istisna olarak bırakıldı.
+- Branch korumasında onay sayısı 0: tek kişilik depoda PR sahibinin kendi PR'ını birleştirebilmesi için.
+
+**Tespitler**
+
+- Domain'de kalan Android bağımlılıkları: `ExportDataUseCase` / `ImportDataUseCase` içinde `Context`, dosya deposu arayüzünde ve iki use case'te `Uri`, modellerde `Parcelable`. ROADMAP'e yazıldı.
+- Data katmanı da presentation'a bağımlı: `SettingsRepositoryImp` → `SettingsConstants`, `WidgetUpdateWorker` → `WidgetHome`.
+- `ViewModelTag` ve `ViewModelCourse` alarm eşitlemesi için repository'lere doğrudan erişiyor.
+- Yedek dosyası adındaki tarih biçimi hatalı (`HHddss`: dakika yerine gün yazıyor).
+- Dört ViewModel (`Tag`, `Course`, `SFile`, `Home`) ve `WidgetHome` için birim testi yazılmadı; değişen mantık test edilen use case ve eşleyicilerde.
+- Etiket listesi, dosya listesi (örnek veride dosya yok) ve ana ekran widget'ı telefonda denenmedi.
+
+---
+
 ## 2026-10-12 13:50 — Devamsızlık doğru tarihle kaydediliyor
 
 **Yapılanlar**

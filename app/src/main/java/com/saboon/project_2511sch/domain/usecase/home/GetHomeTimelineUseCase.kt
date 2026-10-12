@@ -1,14 +1,15 @@
 package com.saboon.project_2511sch.domain.usecase.home
 
-import android.icu.util.Calendar
 import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.domain.model.FilterTask
+import com.saboon.project_2511sch.domain.model.HomeDay
+import com.saboon.project_2511sch.domain.model.HomeTimeline
+import com.saboon.project_2511sch.domain.model.HomeTimelineItem
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.ITagRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
-import com.saboon.project_2511sch.presentation.task.FilterTask
-import com.saboon.project_2511sch.presentation.home.DisplayItemHome
 import com.saboon.project_2511sch.util.RecurrenceRule
 import com.saboon.project_2511sch.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,22 +18,40 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
+import java.util.Calendar
 import javax.inject.Inject
+
 /**
- * UseCase to fetch and prepare the list of items to be displayed on the Home screen.
+ * UseCase that builds the day by day timeline of tasks for the home screen and the home widget.
+ *
+ * It takes the tasks of every visible course (active, and either untagged or with an active
+ * tag), keeps the requested task types, expands repeating lessons into one occurrence per
+ * session inside the date range and groups the occurrences by day.
+ * How the timeline is drawn (day headers, footer) is decided by the presentation layer.
  */
-class GetHomeDisplayItemsUseCase @Inject constructor(
+class GetHomeTimelineUseCase @Inject constructor(
     private val tagRepository: ITagRepository,
     private val courseRepository: ICourseRepository,
     private val taskRepository: ITaskRepository
 ) {
+    /**
+     * @param filterTask Which task types to include.
+     * @param startDate Start of the range (milliseconds).
+     * @param endDate End of the range (milliseconds).
+     * @param hideEmptyDays When true, days without any task are left out of the result.
+     * @return A Flow of the timeline. [HomeTimeline.hasTasks] is false when there is no visible
+     * course or no task of the requested types.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(
         filterTask: FilterTask,
         startDate: Long,
         endDate: Long,
-        hideEmptyHeaders: Boolean
-    ): Flow<Resource<List<DisplayItemHome>>> {
+        hideEmptyDays: Boolean
+    ): Flow<Resource<HomeTimeline>> {
+        val emptyTimeline = HomeTimeline(startDate, endDate, emptyList(), hasTasks = false)
+
         // 1. Fetch active Tags and active Courses simultaneously using combine
         return combine(
             tagRepository.getAllActive(),
@@ -55,13 +74,11 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
 
                 // Early return if no valid courses are found
                 if (validCourses.isEmpty()) {
-                    return@flatMapLatest flowOf(Resource.Success(emptyList()))
+                    return@flatMapLatest flowOf(Resource.Success(emptyTimeline))
                 }
 
-                val validCourseIds = validCourses.map { it.id }
-
                 // 3. Fetch all tasks belonging to the validated courses
-                taskRepository.getAllTasksByCourseIds(validCourseIds).map { taskResource ->
+                taskRepository.getAllTasksByCourseIds(validCourses.map { it.id }).map { taskResource ->
                     when(taskResource) {
                         is Resource.Success -> {
                             val tasks = taskResource.data ?: emptyList()
@@ -75,19 +92,12 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                                 }
                             }
 
-                            // Trigger Empty State UI if no tasks match filters after validation
-                            if (filteredTasks.isEmpty()) return@map Resource.Success(emptyList())
+                            // Nothing to show at all: let the UI show its empty state
+                            if (filteredTasks.isEmpty()) return@map Resource.Success(emptyTimeline)
 
-                            // Process the validated data into UI-ready display items
-                            val displayItems = generateAndGroupDisplayList(
-                                activeTags,
-                                validCourses,
-                                filteredTasks,
-                                startDate,
-                                endDate,
-                                hideEmptyHeaders
-                            )
-                            Resource.Success(displayItems)
+                            val days = buildDays(activeTags, validCourses, filteredTasks, startDate, endDate, hideEmptyDays)
+                            Timber.d("Home timeline built: tasks=%d, days=%d", filteredTasks.size, days.size)
+                            Resource.Success(HomeTimeline(startDate, endDate, days, hasTasks = true))
                         }
                         is Resource.Error -> Resource.Error(taskResource.message ?: "Tasks could not be loaded")
                         is Resource.Loading -> Resource.Loading()
@@ -95,21 +105,27 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                     }
                 }
             } else if (tagRes is Resource.Error || courseRes is Resource.Error) {
+                Timber.w("Home timeline could not be loaded: tag=%s, course=%s", tagRes.message, courseRes.message)
                 flowOf(Resource.Error("Error loading active tags or courses"))
             } else {
                 flowOf(Resource.Loading())
             }
         }
     }
-    private fun generateAndGroupDisplayList(
+
+    /**
+     * Expands the tasks into their occurrences inside the range and groups them by day.
+     * Every day of the range is returned, unless [hideEmptyDays] removes the ones without tasks.
+     */
+    private fun buildDays(
         tags: List<Tag>,
         courses: List<Course>,
         tasks: List<Task>,
         startDate: Long,
         endDate: Long,
-        isHideEmptyHeaders: Boolean
-    ): List<DisplayItemHome> {
-        val finalEvents = mutableListOf<DisplayItemHome.ContentItemHome>()
+        hideEmptyDays: Boolean
+    ): List<HomeDay> {
+        val occurrences = mutableListOf<HomeTimelineItem>()
 
         val tagMap = tags.associateBy { it.id }
         val courseMap = courses.associateBy { it.id }
@@ -129,7 +145,7 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
 
                         if (rRule.freq == RecurrenceRule.Frequency.ONCE){
                             if (task.date in startDate..endDate && task.date in fromDate..untilDate){
-                                finalEvents.add(DisplayItemHome.ContentItemHome(tag, course, task, task.id))
+                                occurrences.add(HomeTimelineItem(tag, course, task, task.id))
                             }
                         } else {
                             while (occurrenceDate < startDate && occurrenceDate < untilDate) {
@@ -137,8 +153,8 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                                 occurrenceDate = next
                             }
                             while (occurrenceDate in startDate..endDate && occurrenceDate in fromDate..untilDate){
-                                finalEvents.add(
-                                    DisplayItemHome.ContentItemHome(
+                                occurrences.add(
+                                    HomeTimelineItem(
                                         tag, course, task.copy(date = occurrenceDate), "${task.id}_${occurrenceDate}"
                                     )
                                 )
@@ -148,20 +164,20 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
                     }
                     is Task.Exam -> {
                         if (task.date in startDate..endDate) {
-                            finalEvents.add(DisplayItemHome.ContentItemHome(tag, course, task, "single_${task.id}"))
+                            occurrences.add(HomeTimelineItem(tag, course, task, "single_${task.id}"))
                         }
                     }
                     is Task.Homework -> {
                         if (task.dueDate in startDate..endDate) {
-                            finalEvents.add(DisplayItemHome.ContentItemHome(tag, course, task, "single_${task.id}"))
+                            occurrences.add(HomeTimelineItem(tag, course, task, "single_${task.id}"))
                         }
                     }
                 }
             }
         }
 
-        // Step 2: Group task occurrences by day for UI Header placement
-        val eventsGroupedByDay = finalEvents.groupBy {
+        // Step 2: Group task occurrences by day
+        val occurrencesByDay = occurrences.groupBy {
             val taskDate = when(val t = it.task) {
                 is Task.Lesson -> t.date
                 is Task.Exam -> t.date
@@ -170,27 +186,25 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
             getDayStartMillis(taskDate)
         }
 
-        val displayItemsWithHeaders = mutableListOf<DisplayItemHome>()
+        // Step 3: Walk through every day of the range
+        val days = mutableListOf<HomeDay>()
         val calendar = Calendar.getInstance()
         var currentDayMillis = getDayStartMillis(startDate)
         val finalDayMillis = getDayStartMillis(endDate)
 
-        // Step 3: Loop through every day in range to ensure mandatory Headers
         while (currentDayMillis <= finalDayMillis) {
-
-            val tasksForThisDay = eventsGroupedByDay[currentDayMillis]
-            if (tasksForThisDay != null) {
-                displayItemsWithHeaders.add(DisplayItemHome.HeaderItemHome(date = currentDayMillis))
-                val sortedTasks = tasksForThisDay.sortedBy {
+            val itemsOfDay = occurrencesByDay[currentDayMillis]
+            if (itemsOfDay != null) {
+                val sortedItems = itemsOfDay.sortedBy {
                     when(val t = it.task) {
                         is Task.Lesson -> t.timeStart
                         is Task.Exam -> t.timeStart
                         is Task.Homework -> 0L
                     }
                 }
-                displayItemsWithHeaders.addAll(sortedTasks)
-            }else if (!isHideEmptyHeaders){
-                displayItemsWithHeaders.add(DisplayItemHome.HeaderItemHome(date = currentDayMillis))
+                days.add(HomeDay(currentDayMillis, sortedItems))
+            } else if (!hideEmptyDays){
+                days.add(HomeDay(currentDayMillis, emptyList()))
             }
 
             calendar.timeInMillis = currentDayMillis
@@ -198,13 +212,12 @@ class GetHomeDisplayItemsUseCase @Inject constructor(
             currentDayMillis = getDayStartMillis(calendar.timeInMillis)
         }
 
-        // Step 4: Add summary footer
-        val footerItem = DisplayItemHome.FooterItemHome(startDate, endDate, finalEvents.size)
-        displayItemsWithHeaders.add(footerItem)
-
-        return displayItemsWithHeaders
+        return days
     }
 
+    /**
+     * Returns midnight (local time) of the day [timestamp] falls on.
+     */
     private fun getDayStartMillis(timestamp: Long):Long{
         val calendar = Calendar.getInstance().apply {
             timeInMillis = timestamp

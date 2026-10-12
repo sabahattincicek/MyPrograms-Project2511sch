@@ -1,7 +1,7 @@
 package com.saboon.project_2511sch.domain.usecase.settings
 
 import android.content.Context
-import com.saboon.project_2511sch.presentation.profile.DataTransferPackage
+import com.saboon.project_2511sch.domain.model.DataTransferPackage
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.ITagRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository

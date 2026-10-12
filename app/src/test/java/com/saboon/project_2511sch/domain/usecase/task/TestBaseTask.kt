@@ -1,12 +1,43 @@
 package com.saboon.project_2511sch.domain.usecase.task
 
+import com.saboon.project_2511sch.domain.model.Course
+import com.saboon.project_2511sch.domain.model.SFile
+import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.util.ModelColor
 import com.saboon.project_2511sch.util.RecurrenceRule
 
 /**
- * Shared sample tasks for unit tests. Copy and override only the fields a test cares about.
+ * Shared sample tags, courses, files and tasks for unit tests. Copy and override only the fields a test cares about.
  */
 abstract class TestBaseTask {
+    val baseTag = Tag(
+        id = "test-tag",
+        createdBy = "",
+        appVersionAtCreation = "1.0.0",
+        title = "",
+        description = "",
+        color = ModelColor()
+    )
+    val baseCourse = Course(
+        id = "test-course",
+        createdBy = "",
+        appVersionAtCreation = "1.0.0",
+        tagId = null,
+        title = "",
+        description = "",
+        people = "",
+        color = ModelColor()
+    )
+    val baseSFile = SFile(
+        id = "test-sfile",
+        createdBy = "",
+        appVersionAtCreation = "1.0.0",
+        courseId = "test-course",
+        title = "",
+        description = "",
+        filePath = ""
+    )
     val baseLesson = Task.Lesson(
         id = "test-lesson",
         createdAt = 0L,
