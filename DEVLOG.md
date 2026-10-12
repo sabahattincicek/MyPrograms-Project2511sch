@@ -7,6 +7,26 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 15:50 — Yedek dosyasındaki tarih biçimi düzeltildi
+
+**Yapılanlar**
+
+- Yedek dosyası adında ve `exportDate` alanında dakika yerine ayın günü yazılıyordu (`HHddss`). Biçim `DataTransferPackage.EXPORT_DATE_FORMAT` sabitine alındı ve `yyyyMMdd_HHmmss` olarak düzeltildi.
+- `ExportDataUseCase` için KDoc ve Timber logları eklendi.
+- `TestDataTransferPackage` eklendi. `testDebugUnitTest`: 84 testin 84'ü geçti.
+- GitHub Actions iş akışı (#66) birleştirildi; ilk çalıştırmada `gradlew` çalıştırma izni eksikti, düzeltildikten sonra 5 dk 24 sn'de geçti.
+
+**Kararlar**
+
+- Eski yedekler etkilenmiyor: `exportDate` yalnızca bilgi amaçlı bir metin, içe aktarma onu yorumlamıyor.
+- Yerel git ayarında `core.filemode` kapatıldı; Windows'ta `gradlew`'in çalıştırma izninin her `git add`'de geri alınmasını önlemek için.
+
+**Tespitler**
+
+- `ExportDataUseCase` `Context`'e bağlı olduğu için birim testi yazılmadı; yedek alma telefonda denenmedi.
+
+---
+
 ## 2026-10-12 15:30 — GitHub Actions ile otomatik derleme, test ve lint
 
 **Yapılanlar**

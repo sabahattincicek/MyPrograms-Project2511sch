@@ -14,9 +14,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
+/**
+ * UseCase that writes a backup of all user data to a ZIP file.
+ *
+ * The ZIP contains `export.json` (a serialized [DataTransferPackage] with every tag, course,
+ * task and file record) and, under `files/`, the attached files themselves. The ZIP is created
+ * in the app cache directory; the caller is responsible for handing it to the user.
+ * ImportDataUseCase reads the same layout back.
+ */
 class ExportDataUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val programTableRepository: ITagRepository,
@@ -25,6 +34,10 @@ class ExportDataUseCase @Inject constructor(
     private val sFileRepository: ISFileRepository,
     private val json: Json
 ) {
+    /**
+     * Collects the data, writes the backup ZIP and returns it.
+     * Returns [Resource.Error] when reading the data or writing the file fails.
+     */
     suspend fun execute(): Resource<File> = withContext(Dispatchers.IO){
         try {
             // 1. Verileri topla
@@ -56,15 +69,17 @@ class ExportDataUseCase @Inject constructor(
             }
 
             // 4. Final ZIP dosyasını oluştur
-            val zipFile = File(context.cacheDir, "MyProgram_Export_${System.currentTimeMillis().toFormattedString("yyyyMMdd_HHddss")}.zip")
+            val zipFile = File(context.cacheDir, "MyProgram_Export_${System.currentTimeMillis().toFormattedString(DataTransferPackage.EXPORT_DATE_FORMAT)}.zip")
             ZipUtil.zipFiles(zipFile, filesMap)
 
             // Temizlik
             jsonFile.delete()
 
+            Timber.i("Backup written: tags=%d, courses=%d, tasks=%d, files=%d", programTables.size, courses.size, tasks.size, sFiles.size)
             Resource.Success(zipFile)
 
         }catch (e: Exception){
+            Timber.e(e, "Backup could not be written")
             Resource.Error(e.message ?: "Bilinmeyen bir hata oluştu")
         }
     }
