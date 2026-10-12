@@ -7,6 +7,33 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 16:30 — F-Droid hazırlığı ve 1.1.0 sürüm numarası
+
+**Yapılanlar**
+
+- Sürüm `1.1.0` (kod 6) yapıldı; `app_version` metni de `1.1.0` oldu.
+- `dependenciesInfo` kapatıldı: APK'ya Google anahtarıyla şifrelenmiş bağımlılık bilgisi bloğu artık eklenmiyor (F-Droid şartı). Release APK'sında bloğun olmadığı doğrulandı.
+- `fastlane/metadata/android` altına İngilizce ve Türkçe sürüm notu (`changelogs/6.txt`), simge ve dörder ekran görüntüsü eklendi; açıklama metinlerindeki satır başı boşlukları temizlendi.
+- F-Droid tarif dosyası yazıldı: `fdroid/com.saboon.project_2511sch.yml`.
+- Release derlemesi imzasız olarak sorunsuz çıktı (yaklaşık 10 MB); birim testleri ve lint geçti.
+
+**Kararlar**
+
+- Sürüm numarası `1.1.0`: `1.0.0`'dan beri yeni özellikler eklendi (devamsızlık tarihleri, boş günleri gizleme). Depo sahibine önerildi, itiraz gelmedi; etiket atılmadan önce onayı alınacak.
+- `production`'a birleştirme ve `1.1.0` etiketi henüz yapılmadı; sürüm numarası onayı bekliyor.
+- Ekran görüntüleri debug uygulamasındaki örnek veriyle alındı; İngilizce görüntülerde ders adları Türkçe.
+- Tarif dosyası uygulama derlemesinde kullanılmıyor; yalnızca F-Droid başvurusuna eklenecek dosyanın depoda saklanan kopyası.
+- Lisans alanı `AGPL-3.0-only` yazıldı; depo "or later" demiyor.
+
+**Tespitler**
+
+- Uygulama F-Droid'de yok (`fdroiddata` içinde tarif dosyası bulunmuyor). Daha önce başvuru yapılıp yapılmadığı görülemedi.
+- Uygulamanın kendi izinleri arasında internet yok; APK'da kütüphanelerden gelen `WAKE_LOCK`, `ACCESS_NETWORK_STATE` ve `FOREGROUND_SERVICE` izinleri var.
+- F-Droid'in kendi derleme aracı burada çalıştırılmadı; asıl derleme kontrolü onların tarafında olacak.
+- GitLab hesabı açılamadı: doğrulama kodu gelmedi.
+
+---
+
 ## 2026-10-12 15:50 — Yedek dosyasındaki tarih biçimi düzeltildi
 
 **Yapılanlar**

@@ -1,0 +1,5 @@
+- Course details now show the total number of absences; tap it to see the dates.
+- Adding an absence by hand asks for the date; removing one lets you choose which.
+- Answering "No" on the attendance notification records the absence for that session.
+- New setting to hide days without tasks on the home screen.
+- Fixed the date in backup file names.

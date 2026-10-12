@@ -25,8 +25,8 @@ android {
         applicationId = "com.saboon.project_2511sch"
         minSdk = 29
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.0.0-ct1"
+        versionCode = 6
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,6 +55,11 @@ android {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
+    }
+    dependenciesInfo {
+        // F-Droid cannot verify the dependency metadata block, which is encrypted with a Google key.
+        includeInApk = false
+        includeInBundle = false
     }
     buildFeatures {
         viewBinding = true

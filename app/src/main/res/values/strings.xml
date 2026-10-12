@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">My Programs</string>
-    <string name="app_version">1.0.0</string>
+    <string name="app_version">1.1.0</string>
     <string name="program_table">Program Table</string>
     <string name="course">Course</string>
     <string name="programs">Programs</string>

@@ -1,0 +1,36 @@
+# F-Droid build recipe for MyPrograms.
+# This file is not used by the app build. It is the file to add as
+# metadata/com.saboon.project_2511sch.yml in a merge request to
+# https://gitlab.com/fdroid/fdroiddata
+#
+# Before submitting: replace the value of "commit" below with the full commit
+# hash that the 1.1.0 tag points to (git rev-parse 1.1.0^{commit}).
+
+Categories:
+  - Science & Education
+  - Time
+License: AGPL-3.0-only
+AuthorName: Sabahattin Çiçek
+AuthorEmail: sabahattincck@outlook.com
+WebSite: https://sabahattincicek.github.io/MyPrograms-Project2511sch/
+SourceCode: https://github.com/sabahattincicek/MyPrograms-Project2511sch
+IssueTracker: https://github.com/sabahattincicek/MyPrograms-Project2511sch/issues
+Donate: https://sabahattincicek.github.io/MyPrograms-Project2511sch/donate.html
+
+AutoName: MyPrograms
+
+RepoType: git
+Repo: https://github.com/sabahattincicek/MyPrograms-Project2511sch.git
+
+Builds:
+  - versionName: 1.1.0
+    versionCode: 6
+    commit: REPLACE_WITH_COMMIT_HASH_OF_TAG_1.1.0
+    subdir: app
+    gradle:
+      - yes
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.1.0
+CurrentVersionCode: 6
