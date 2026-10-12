@@ -132,4 +132,7 @@ dependencies {
 
     //splash screen
     implementation("androidx.core:core-splashscreen:1.2.0")
+
+    //timber for logging
+    implementation("com.jakewharton.timber:timber:5.0.1")
 }
