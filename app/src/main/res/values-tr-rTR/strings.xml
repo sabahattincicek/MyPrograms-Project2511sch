@@ -148,4 +148,6 @@
     <string name="hide_headers_for_empty_days">Boş günleri gizle</string>
     <string name="if_enabled_dates_with_no_tasks_or_lessons_will_not_be_displayed_on_the_home_screen">Etkinleştirildiğinde, görev veya ders olmayan tarihler ana ekranda görüntülenmez.</string>
     <string name="sessions">oturum</string>
+    <string name="absence_dates">Devamsızlık tarihleri</string>
+    <string name="no_absence_recorded">Kayıtlı devamsızlık yok.</string>
 </resources>

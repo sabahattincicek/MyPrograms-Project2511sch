@@ -38,7 +38,12 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 
 ## Aşama 3 — Sıradaki sürüm
 
-- [ ] Ders detayındaki devamsızlık sayısı özelliğini (`feature/course-absence-count`) cihazda dene ve birleştir
+- [x] Ders detayında toplam devamsızlık sayısını göster
+- [x] Devamsızlık yazısına basınca devamsızlık tarihlerini listele
+- [ ] Devamsızlık özelliğini (`feature/course-absence-count`, #63) `main`'e birleştir
+- [ ] Devamsızlık tarihinin yanlış kaydedilmesini düzelt: ders detayındaki "+" ve bildirimdeki "Katılmadım" gerçek devamsızlık günü yerine dersin kayıtlı tarihini (`lesson.date`) ekliyor
+- [ ] Ana ekrandaki devamsızlık "+" / "-" düğmelerinin dersin kayıtlı tarihini o haftanın tarihiyle değiştirip değiştirmediğini cihazda doğrula ve düzelt (`task.copy(date = occurrenceDate)` güncellemeye gidiyor)
+- [ ] Devamsızlık "-" düğmesini düzelt: yalnızca `task.date` ile eşleşen kaydı siliyor, eşleşme yoksa hiçbir şey silmiyor
 - [x] Sitedeki "Keep Android Open" bölümünü sayfanın altına taşı (#61)
 - [ ] `1.0.0` sonrası `main`'de biriken değişiklikleri (ana ekranda boş gün başlıklarını gizleme ayarı vb.) sürüm notlarına dök
 - [ ] `versionCode` / `versionName` değerlerini yeni sürüm için güncelle

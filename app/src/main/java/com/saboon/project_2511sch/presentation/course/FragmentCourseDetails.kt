@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentCourseDetailsBinding
 import com.saboon.project_2511sch.domain.model.Task
@@ -26,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.saboon.project_2511sch.domain.model.AbsenceRecord
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.model.SFile
@@ -37,11 +39,26 @@ import com.saboon.project_2511sch.presentation.sfile.ViewModelSFile
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskExam
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskHomework
 import com.saboon.project_2511sch.presentation.task.DialogFragmentTaskLesson
-import com.saboon.project_2511sch.presentation.task.DisplayItemTask
 import com.saboon.project_2511sch.presentation.user.ViewModelUser
 import com.saboon.project_2511sch.util.open
+import com.saboon.project_2511sch.util.toFormattedString
+import timber.log.Timber
 import kotlin.getValue
 
+/**
+ * Course details screen (presentation layer).
+ *
+ * Shows everything that belongs to one course, identified by the `courseId` navigation argument:
+ * - the course card (title, people, description, tag and total absence count),
+ * - a horizontal preview of the files attached to the course,
+ * - the course's tasks grouped as lessons, exams and homeworks.
+ *
+ * From here the user can edit or delete the course, add / edit tasks, attach files, change the
+ * absence count of a lesson and open the list of absence dates by tapping the absence text.
+ *
+ * The fragment only renders state and forwards user actions; data comes from [ViewModelCourse],
+ * [ViewModelTask], [ViewModelSFile], [ViewModelTag] and the activity-scoped [ViewModelUser].
+ */
 @AndroidEntryPoint
 class FragmentCourseDetails : Fragment() {
 
@@ -59,6 +76,7 @@ class FragmentCourseDetails : Fragment() {
     private lateinit var course: Course
     private var uri: Uri? = null
     private var tag: Tag? = null
+    private var absenceRecords: List<AbsenceRecord> = emptyList()
 
     private val selectFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         if (uri != null) {
@@ -76,6 +94,9 @@ class FragmentCourseDetails : Fragment() {
         }
     }
 
+    /**
+     * Inflates the layout through view binding.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,6 +106,9 @@ class FragmentCourseDetails : Fragment() {
         return binding.root
     }
 
+    /**
+     * Wires adapters, listeners and observers, then requests the course given in the navigation arguments.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -92,6 +116,7 @@ class FragmentCourseDetails : Fragment() {
         setupListeners()
         setupObservers()
 
+        Timber.d("Course details opened: courseId=%s", args.courseId)
         viewModelCourse.getById(args.courseId)
 
 
@@ -122,11 +147,18 @@ class FragmentCourseDetails : Fragment() {
         binding.fabAdd.setOnClickListener { view ->
             showAddTaskMenu(view)
         }
+        binding.tvAbsence.setOnClickListener {
+            showAbsenceDatesDialog()
+        }
         binding.ivFiles.setOnClickListener {
             val action = FragmentCourseDetailsDirections.actionCourseDetailsFragmentToFileFragment( course.title)
             findNavController().navigate(action)
         }
     }
+
+    /**
+     * Fills the course card with the loaded course and applies the course color to its texts.
+     */
     @SuppressLint("UseCompatTextViewDrawableApis") //for tvTag drawable start icon tint
     private fun applyDataToView(){
         binding.tvTitleCourse.text = course.title
@@ -149,6 +181,9 @@ class FragmentCourseDetails : Fragment() {
         binding.tvTag.setTextColor(textColor)
         binding.tvTag.compoundDrawableTintList = ColorStateList.valueOf(textColor)
     }
+    /**
+     * Creates the task and file adapters and connects their click callbacks to dialogs and ViewModels.
+     */
     private fun setupAdapters(){
         recyclerAdapterTask = RecyclerAdapterTask()
         recyclerAdapterTask.onContentItemClickListener = { task ->
@@ -186,6 +221,9 @@ class FragmentCourseDetails : Fragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
+    /**
+     * Shows the popup menu for choosing which kind of task (lesson, exam or homework) to add.
+     */
     private fun showAddTaskMenu(anchorView: View){
         PopupMenu(requireContext(), anchorView).apply {
             menuInflater.inflate(R.menu.menu_add_task, menu)
@@ -213,6 +251,29 @@ class FragmentCourseDetails : Fragment() {
         }
     }
 
+    /**
+     * Shows the dates of the course's recorded absences, newest first, each with its lesson title.
+     * Shows a short message instead when there is no absence.
+     */
+    private fun showAbsenceDatesDialog(){
+        Timber.d("Showing absence dates: courseId=%s, records=%d", args.courseId, absenceRecords.size)
+        val builder = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.absence_dates)
+            .setPositiveButton(R.string.ok, null)
+        if (absenceRecords.isEmpty()) {
+            builder.setMessage(R.string.no_absence_recorded)
+        } else {
+            val items = absenceRecords.map { record ->
+                "${record.date.toFormattedString("dd.MM.yyyy EEEE")} - ${record.lessonTitle}"
+            }
+            builder.setItems(items.toTypedArray(), null)
+        }
+        builder.show()
+    }
+
+    /**
+     * Collects every ViewModel state and event while the view is at least STARTED and renders it.
+     */
     private fun setupObservers(){
         //USER STATE
         viewLifecycleOwner.lifecycleScope.launch {
@@ -259,17 +320,8 @@ class FragmentCourseDetails : Fragment() {
                         is Resource.Idle<*> -> {}
                         is Resource.Loading<*> -> {}
                         is Resource.Success<*> -> {
-                            val taskDisplayItemList = (resource.data as? List<DisplayItemTask>) ?: emptyList()
-
-                            val totalAbsence = taskDisplayItemList
-                                .filterIsInstance<DisplayItemTask.ContentTask>()
-                                .map { it.task }
-                                .filterIsInstance<Task.Lesson>()
-                                .sumOf { it.absence.size }
-
-                            binding.tvAbsence.text = "${getString(R.string.absence)}: ${totalAbsence} ${getString(R.string.sessions)}"
-
-                            if (taskDisplayItemList.isEmpty()){
+                            val taskDisplayItemList = resource.data
+                            if (taskDisplayItemList.isNullOrEmpty()){
                                 binding.llEmptyList.visibility = View.VISIBLE
                                 binding.rvTasks.visibility = View.GONE
                             }else{
@@ -280,6 +332,15 @@ class FragmentCourseDetails : Fragment() {
                             }
                         }
                     }
+                }
+            }
+        }
+        //ABSENCE STATE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModelTask.absenceRecordsState.collect { records ->
+                    absenceRecords = records
+                    binding.tvAbsence.text = "${getString(R.string.absence)}: ${records.size} ${getString(R.string.sessions)}"
                 }
             }
         }
@@ -362,6 +423,9 @@ class FragmentCourseDetails : Fragment() {
 
     }
 
+    /**
+     * Listens for the delete confirmation dialog result and deletes the course when confirmed.
+     */
     private fun setupListeners(){
         childFragmentManager.setFragmentResultListener(DialogFragmentDeleteConfirmation.REQUEST_KEY, this) { requestKey, result ->
             val isYes = result.getBoolean(DialogFragmentDeleteConfirmation.RESULT_KEY)
@@ -370,6 +434,9 @@ class FragmentCourseDetails : Fragment() {
             }
         }
     }
+    /**
+     * Releases the view binding.
+     */
     override fun onDestroy() {
         super.onDestroy()
 

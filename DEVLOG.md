@@ -7,6 +7,33 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 13:30 — Devamsızlık tarihleri listesi eklendi
+
+**Yapılanlar**
+
+- `AbsenceRecord` domain modeli ve `GetCourseAbsenceRecordsUseCase` eklendi: bir dersin görevlerinden devamsızlık kayıtlarını çıkarır, yeniden eskiye sıralar.
+- `ViewModelTask` içine `absenceRecordsState` eklendi (`tasksState`'ten türetiliyor).
+- `FragmentCourseDetails`: devamsızlık yazısına basınca tarihleri ve ders saatinin adını gösteren bir pencere açılıyor; kayıt yoksa "Kayıtlı devamsızlık yok." yazıyor. Toplam sayı artık aynı kaynaktan hesaplanıyor.
+- Dokunulan dosyalara KDoc ve Timber logları eklendi; `ViewModelTask`'taki kullanılmayan import'lar kaldırıldı.
+- Testler: `TestGetCourseAbsenceRecordsUseCase` (6), `TestViewModelTask` (5), ortak örnek veriler için `TestBaseTask`. `testDebugUnitTest`: 15 testin 15'i geçti.
+- Debug uygulamasının veritabanına adb ile örnek veri eklendi (Fizik, Programlama, Türk Dili; ders saatleri, devamsızlıklar, bir sınav, bir ödev).
+- Telefonda denendi: Fizik dersinde "Devamsızlık: 3 oturum" ve pencerede 3 tarih doğru göründü.
+
+**Kararlar**
+
+- Devamsızlık hesabı fragment'tan alınıp use case'e taşındı; fragment yalnızca gösteriyor, mantık birim testiyle korunuyor.
+- Use case veritabanına gitmiyor, ViewModel'in elindeki görev listesini kullanıyor; böylece liste ekrandaki görevlerle her zaman aynı.
+- Aynı tarih iki kez kayıtlıysa iki satır gösteriliyor, çünkü sayı da iki sayıyor.
+- Pencere için ayrı bir DialogFragment yazılmadı; salt okunur kısa bir liste için `MaterialAlertDialogBuilder` yeterli.
+- Kayıtlı tarihlerin doğruluğu bu işte düzeltilmedi; ayrı iş olarak ROADMAP'e yazıldı.
+
+**Tespitler**
+
+- Kayıtlı devamsızlık tarihleri her zaman gerçek devamsızlık günü değil. Ders detayındaki "+" düğmesi ve bildirimdeki "Katılmadım" (`IncrementAbsenceWorker`) dersin kayıtlı tarihini (`lesson.date`) ekliyor. Yalnızca ana ekrandaki "+" o haftanın tarihini ekliyor.
+- Ana ekrandaki "+" / "-" düğmeleri dersi `date = o haftanın tarihi` olarak güncellemeye gönderiyor; bu, dersin kayıtlı tarihini değiştiriyor olabilir. Koddan görüldü, cihazda doğrulanmadı.
+- "-" düğmesi yalnızca `task.date` ile eşleşen kaydı siliyor.
+- `GetCourseAbsenceRecordsUseCase` ilk yüklemede boş listeyle bir kez fazladan çalışıyor (logda `tasks=0`); zararsız.
+
 ## 2026-10-12 13:10 — PR'lar birleşti, debug sürümü telefonda çalışıyor
 
 **Yapılanlar**
