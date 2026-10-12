@@ -1,7 +1,7 @@
 package com.saboon.project_2511sch.presentation.home
 
 import android.os.Bundle
-import android.util.Log
+import timber.log.Timber
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saboon.project_2511sch.databinding.FragmentHomeBinding
+import com.saboon.project_2511sch.presentation.task.AbsenceDialogs
 import com.saboon.project_2511sch.presentation.task.FilterTask
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
 import com.saboon.project_2511sch.presentation.settings.ViewModelSettings
@@ -23,6 +24,17 @@ import com.saboon.project_2511sch.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+/**
+ * Home screen (presentation layer): the timeline of upcoming and past tasks.
+ *
+ * Shows the tasks of all active courses grouped by day, for a date range that grows when the
+ * user overscrolls at the top or bottom. Chips filter the list by task type. Tapping a row
+ * opens the course details; swiping a lesson row reveals the absence buttons, where "+" asks
+ * for the date of the absence and "-" asks which recorded absence to remove.
+ *
+ * Data comes from the activity-scoped [ViewModelHome]; absence changes go through
+ * [ViewModelTask] and display settings come from [ViewModelSettings].
+ */
 @AndroidEntryPoint
 class FragmentHome : Fragment() {
 
@@ -35,25 +47,34 @@ class FragmentHome : Fragment() {
     private lateinit var recyclerAdapterHome: RecyclerAdapterHome
     private var overscrollDaysCount = SettingsConstants.OverscrollDaysCount.DEFAULT
 
-    private val tag = "FragmentHome"
 
+    /**
+     * Logs fragment creation; no state is restored here.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(tag, "onCreate: Fragment is being created.")
+        Timber.d("onCreate: Fragment is being created.")
     }
 
+    /**
+     * Inflates the layout through view binding.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(tag, "onCreateView: Layout is being inflated.")
+        Timber.d("onCreateView: Layout is being inflated.")
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    /**
+     * Sets up the list and observers, loads the timeline and wires the filter chips,
+     * overscroll paging and the "scroll to today" button.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(tag, "onViewCreated: View has been created. Setting up UI and observers.")
+        Timber.d("onViewCreated: View has been created. Setting up UI and observers.")
 
         setupRecyclerAdapter()
         setupObservers()
@@ -61,7 +82,7 @@ class FragmentHome : Fragment() {
         viewModelHome.loadData()
 
         binding.cpLesson.setOnCheckedChangeListener { _, isChecked ->
-            Log.d(tag, "cpLesson checked state changed: $isChecked")
+            Timber.d("cpLesson checked state changed: $isChecked")
             if (!binding.cpLesson.isChecked && !binding.cpExam.isChecked && !binding.cpHomework.isChecked){
                 viewModelHome.updateFilterTask(FilterTask())
             }else{
@@ -74,7 +95,7 @@ class FragmentHome : Fragment() {
             }
         }
         binding.cpExam.setOnCheckedChangeListener { _, isChecked ->
-            Log.d(tag, "cpExam checked state changed: $isChecked")
+            Timber.d("cpExam checked state changed: $isChecked")
             if (!binding.cpLesson.isChecked && !binding.cpExam.isChecked && !binding.cpHomework.isChecked){
                 viewModelHome.updateFilterTask(FilterTask())
             }else{
@@ -87,7 +108,7 @@ class FragmentHome : Fragment() {
             }
         }
         binding.cpHomework.setOnCheckedChangeListener { _, isChecked ->
-            Log.d(tag, "cpHomework checked state changed: $isChecked")
+            Timber.d("cpHomework checked state changed: $isChecked")
             if (!binding.cpLesson.isChecked && !binding.cpExam.isChecked && !binding.cpHomework.isChecked){
                 viewModelHome.updateFilterTask(FilterTask())
             }else{
@@ -101,10 +122,10 @@ class FragmentHome : Fragment() {
         }
         binding.osaOverScroll.onActionTriggered = {isTop ->
             if (isTop) {
-                Log.d(tag, "overscroll triggered: Top")
+                Timber.d("overscroll triggered: Top")
                 viewModelHome.loadPrevious(overscrollDaysCount)
             } else {
-                Log.d(tag, "overscroll triggered: Bottom")
+                Timber.d("overscroll triggered: Bottom")
                 viewModelHome.loadNext(overscrollDaysCount)
             }
         }
@@ -133,28 +154,35 @@ class FragmentHome : Fragment() {
         }
     }
 
+    /**
+     * Releases the view binding.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d(tag, "onDestroyView: View is being destroyed, nullifying binding to prevent memory leaks.")
+        Timber.d("onDestroyView: View is being destroyed, nullifying binding to prevent memory leaks.")
         _binding = null
     }
+
+    /**
+     * Collects the timeline items and the display settings while the view is at least STARTED.
+     */
     private fun setupObservers(){
         // DISPLAY ITEMS STATE
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d(tag, "Subscribing to displayItemsState flow.")
+                Timber.d("Subscribing to displayItemsState flow.")
                 viewModelHome.displayItemsState.collect { result ->
                     when (result) {
                         is Resource.Error<*> -> {
-                            Log.e(tag, "displayItemsState: Error - ${result.message}")
+                            Timber.e("displayItemsState: Error - ${result.message}")
                             binding.shimmerViewContainer.visibility = View.GONE
                             binding.shimmerViewContainer.stopShimmer()
                         }
                         is Resource.Idle<*> -> {
-                            Log.d(tag, "displayItemsState: Idle.")
+                            Timber.d("displayItemsState: Idle.")
                         }
                         is Resource.Loading<*> -> {
-                            Log.d(tag, "displayItemsState: Loading.")
+                            Timber.d("displayItemsState: Loading.")
                             binding.shimmerViewContainer.visibility = View.VISIBLE
                             binding.shimmerViewContainer.startShimmer()
                             binding.llEmptyList.visibility = View.GONE
@@ -219,20 +247,33 @@ class FragmentHome : Fragment() {
         }
     }
 
+    /**
+     * Creates the timeline adapter and connects row clicks and the absence buttons.
+     */
     private fun setupRecyclerAdapter() {
-        Log.d(tag, "setupRecyclerAdapter: Initializing RecyclerAdapterHome.")
+        Timber.d("setupRecyclerAdapter: Initializing RecyclerAdapterHome.")
         recyclerAdapterHome = RecyclerAdapterHome()
         binding.rvHome.apply {
             adapter = recyclerAdapterHome
             layoutManager = LinearLayoutManager(context)
         }
         recyclerAdapterHome.onContentItemClickListener = { course ->
-            Log.d(tag, "Recycler item clicked. Course: ${course.title}")
+            Timber.d("Recycler item clicked. Course: ${course.title}")
             val action = FragmentHomeDirections.actionHomeFragmentToCourseDetailsFragment(course.id)
             findNavController().navigate(action)
         }
-        recyclerAdapterHome.onAbsenceButtonClickListener = { course, taskLesson ->
-            viewModelTask.update(course, taskLesson)
+        // A home row is one session of a lesson, so its date is the natural default to offer.
+        recyclerAdapterHome.onAbsenceIncreaseClickListener = { lesson ->
+            AbsenceDialogs.showAddAbsenceDatePicker(
+                requireContext(), childFragmentManager, lesson.date
+            ) { date ->
+                viewModelTask.addAbsence(lesson, date)
+            }
+        }
+        recyclerAdapterHome.onAbsenceDecreaseClickListener = { lesson ->
+            AbsenceDialogs.showRemoveAbsenceDialog(requireContext(), lesson) { date ->
+                viewModelTask.removeAbsence(lesson, date)
+            }
         }
     }
 }

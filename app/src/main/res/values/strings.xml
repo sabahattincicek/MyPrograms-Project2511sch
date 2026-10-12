@@ -152,5 +152,7 @@
     <string name="sessions">sessions</string>
     <string name="absence_dates">Absence dates</string>
     <string name="no_absence_recorded">No absence recorded.</string>
+    <string name="absence_date">Absence date</string>
+    <string name="remove_absence">Remove absence</string>
 
 </resources>

@@ -150,4 +150,6 @@
     <string name="sessions">oturum</string>
     <string name="absence_dates">Devamsızlık tarihleri</string>
     <string name="no_absence_recorded">Kayıtlı devamsızlık yok.</string>
+    <string name="absence_date">Devamsızlık tarihi</string>
+    <string name="remove_absence">Devamsızlığı sil</string>
 </resources>

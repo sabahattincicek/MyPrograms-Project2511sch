@@ -41,9 +41,12 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 - [x] Ders detayında toplam devamsızlık sayısını göster
 - [x] Devamsızlık yazısına basınca devamsızlık tarihlerini listele
 - [ ] Devamsızlık özelliğini (`feature/course-absence-count`, #63) `main`'e birleştir
-- [ ] Devamsızlık tarihinin yanlış kaydedilmesini düzelt: ders detayındaki "+" ve bildirimdeki "Katılmadım" gerçek devamsızlık günü yerine dersin kayıtlı tarihini (`lesson.date`) ekliyor
-- [ ] Ana ekrandaki devamsızlık "+" / "-" düğmelerinin dersin kayıtlı tarihini o haftanın tarihiyle değiştirip değiştirmediğini cihazda doğrula ve düzelt (`task.copy(date = occurrenceDate)` güncellemeye gidiyor)
-- [ ] Devamsızlık "-" düğmesini düzelt: yalnızca `task.date` ile eşleşen kaydı siliyor, eşleşme yoksa hiçbir şey silmiyor
+- [x] Bildirimdeki "Katılmadım" devamsızlığı bildirimin ait olduğu oturumun tarihiyle kaydetsin
+- [x] Elle "+" ile devamsızlık eklerken tarih sorulsun (ana ekran ve ders detayı)
+- [x] "-" düğmesi hangi kaydın silineceğini sorsun
+- [x] Devamsızlık değişikliği dersin kayıtlı tarihini değiştirmesin (ders veritabanından yeniden okunup yalnızca devamsızlık listesi güncelleniyor)
+- [ ] Bildirimden "Katılmadım" akışını cihazda gerçek bir bildirimle dene (yalnızca birim testleriyle doğrulandı)
+- [ ] Ders düzenleme penceresindeki tarih seçici de seçilen günü UTC gece yarısı olarak kaydediyor; Greenwich'in batısındaki saat dilimlerinde bir gün önceyi gösterir (`Picker.pickDateMillis`)
 - [x] Sitedeki "Keep Android Open" bölümünü sayfanın altına taşı (#61)
 - [ ] `1.0.0` sonrası `main`'de biriken değişiklikleri (ana ekranda boş gün başlıklarını gizleme ayarı vb.) sürüm notlarına dök
 - [ ] `versionCode` / `versionName` değerlerini yeni sürüm için güncelle

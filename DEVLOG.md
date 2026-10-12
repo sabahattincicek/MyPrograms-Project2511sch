@@ -7,6 +7,35 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 13:50 — Devamsızlık doğru tarihle kaydediliyor
+
+**Yapılanlar**
+
+- `LessonAbsenceWriteUseCase` eklendi: devamsızlık ekleme ve silmenin tek yeri. Dersi id ile veritabanından yeniden okuyup yalnızca devamsızlık listesini değiştiriyor.
+- Bildirim: `AlarmReceiver` devamsızlık bildirimine oturum tarihini ekliyor, `NotificationActionReceiver` bunu `IncrementAbsenceWorker`'a iletiyor, worker o tarihle kaydediyor.
+- Elle ekleme: "+" düğmesi artık tarih seçici açıyor (`AbsenceDialogs`). Ana ekranda varsayılan tarih o satırın oturumu, ders detayında dersin en son başlamış oturumu (`GetDefaultAbsenceDateUseCase`).
+- Silme: "-" düğmesi o ders saatinin kayıtlı devamsızlıklarını listeliyor, seçilen siliniyor.
+- `ViewModelTask`'a `addAbsence`, `removeAbsence`, `getDefaultAbsenceDate` eklendi. Adaptörler artık görevi kendileri değiştirmiyor, yalnızca tıklamayı bildiriyor.
+- Dokunulan dosyalarda `android.util.Log` Timber'a çevrildi (`FragmentHome`, `AlarmReceiver`, `NotificationActionReceiver`, `IncrementAbsenceWorker`), KDoc'lar tamamlandı.
+- Testler: `TestLessonAbsenceWriteUseCase` (10), `TestGetDefaultAbsenceDateUseCase` (6), `TestAbsenceDialogs` (4), `TestViewModelTask` (7). `testDebugUnitTest`: 37 testin 37'si geçti.
+- Telefonda denendi: ders detayında "+" ile 05.10.2026 eklendi, listede göründü, "-" ile silindi; ana ekranda "+" tarih seçiciyi açtı.
+
+**Kararlar**
+
+- Bildirimin oturum tarihi olarak bildirimin gösterildiği an kullanılıyor. Devamsızlık alarmı oturum bittiğinde çaldığı için bu an o oturumun gününe denk geliyor; kullanıcı günler sonra cevaplasa da tarih değişmiyor.
+- Eski sürümün gösterdiği, tarih taşımayan bildirimler cevaplanırsa cevaplandığı an kaydediliyor.
+- "-" için hangi kaydın silineceği soruluyor. Eski davranış (dersin kayıtlı tarihiyle eşleşeni sil) elle seçilen tarihlerle çalışmazdı.
+- Devamsızlık değişince alarmlar yeniden kurulmuyor; devamsızlık dersin saatini değiştirmiyor.
+- Tarih seçiciden gelen gün, yerel saatle öğlen 12:00 olarak kaydediliyor; böylece her saat diliminde seçilen günde kalıyor.
+- Ana ekranda da tarih soruluyor (istek "elle eklemede tarih sorsun" olduğu için), ama o satırın günü hazır seçili geliyor.
+
+**Tespitler**
+
+- Eski kodda ana ekrandaki "+" / "-" dersin kayıtlı tarihini o haftanın tarihiyle değiştirerek kaydediyordu; yeni akışta bu yol kullanılmıyor.
+- Bildirim akışı cihazda gerçek bildirimle denenmedi; alıcı dışarıya kapalı olduğu için adb ile tetiklenemedi.
+- `IncrementAbsenceWorker`, `AlarmReceiver`, `NotificationActionReceiver`, `FragmentHome` ve adaptörler için birim testi yazılmadı (Android'e bağlı sınıflar); mantıkları test edilen use case'lere taşındı.
+- Bu değişiklikten önce kaydedilmiş devamsızlıkların tarihleri olduğu gibi kaldı.
+
 ## 2026-10-12 13:30 — Devamsızlık tarihleri listesi eklendi
 
 **Yapılanlar**

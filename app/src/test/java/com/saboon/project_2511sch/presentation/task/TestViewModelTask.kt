@@ -5,6 +5,8 @@ import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.AbsenceRecord
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.usecase.task.GetCourseAbsenceRecordsUseCase
+import com.saboon.project_2511sch.domain.usecase.task.GetDefaultAbsenceDateUseCase
+import com.saboon.project_2511sch.domain.usecase.task.LessonAbsenceWriteUseCase
 import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TestBaseTask
@@ -32,6 +34,7 @@ class TestViewModelTask : TestBaseTask() {
 
     private val taskWriteUseCase = mockk<TaskWriteUseCase>()
     private val getTaskDisplayItemUseCase = mockk<GetTaskDisplayItemUseCase>()
+    private val lessonAbsenceWriteUseCase = mockk<LessonAbsenceWriteUseCase>()
     private val alarmScheduler = mockk<IAlarmScheduler>(relaxed = true)
     private val course = mockk<Course>(relaxed = true)
     private lateinit var viewModel: ViewModelTask
@@ -43,6 +46,8 @@ class TestViewModelTask : TestBaseTask() {
             taskWriteUseCase,
             getTaskDisplayItemUseCase,
             GetCourseAbsenceRecordsUseCase(),
+            lessonAbsenceWriteUseCase,
+            GetDefaultAbsenceDateUseCase(),
             alarmScheduler
         )
     }
@@ -98,6 +103,41 @@ class TestViewModelTask : TestBaseTask() {
         // THEN
         assertThat(viewModel.absenceRecordsState.value).isEmpty()
         job.cancel()
+    }
+
+    @Test
+    fun `addAbsence saves through the absence use case and leaves alarms untouched`() = runTest {
+        // GIVEN
+        val lesson = baseLesson.copy(id = "l1")
+        coEvery { lessonAbsenceWriteUseCase.add("l1", 500L) } returns Resource.Success(lesson)
+
+        // WHEN
+        viewModel.addAbsence(lesson, 500L)
+        viewModel.operationEvent.first()
+        val result = viewModel.operationEvent.first()
+
+        // THEN
+        assertThat(result).isInstanceOf(Resource.Success::class.java)
+        coVerify { lessonAbsenceWriteUseCase.add("l1", 500L) }
+        coVerify(exactly = 0) { alarmScheduler.schedule(any(), any()) }
+        coVerify(exactly = 0) { alarmScheduler.cancel(any(), any()) }
+    }
+
+    @Test
+    fun `removeAbsence failure emits Error`() = runTest {
+        // GIVEN
+        val lesson = baseLesson.copy(id = "l1")
+        coEvery { lessonAbsenceWriteUseCase.remove("l1", 500L) } returns
+            Resource.Error(LessonAbsenceWriteUseCase.ABSENCE_NOT_FOUND)
+
+        // WHEN
+        viewModel.removeAbsence(lesson, 500L)
+        viewModel.operationEvent.first()
+        val result = viewModel.operationEvent.first()
+
+        // THEN
+        assertThat(result).isInstanceOf(Resource.Error::class.java)
+        assertThat(result.message).isEqualTo(LessonAbsenceWriteUseCase.ABSENCE_NOT_FOUND)
     }
 
     @Test

@@ -7,6 +7,8 @@ import com.saboon.project_2511sch.domain.model.AbsenceRecord
 import com.saboon.project_2511sch.domain.model.Course
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.usecase.task.GetCourseAbsenceRecordsUseCase
+import com.saboon.project_2511sch.domain.usecase.task.GetDefaultAbsenceDateUseCase
+import com.saboon.project_2511sch.domain.usecase.task.LessonAbsenceWriteUseCase
 import com.saboon.project_2511sch.domain.usecase.task.GetTaskDisplayItemUseCase
 import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
 import com.saboon.project_2511sch.util.BaseVMOperationResult
@@ -33,7 +35,7 @@ import javax.inject.Inject
  * Used by the course details and home screens. It exposes:
  * - [tasksState]: the display list of the selected course's tasks,
  * - [absenceRecordsState]: the absences of the selected course's lessons, derived from [tasksState],
- * - [operationEvent]: one-shot results of insert / update / delete actions.
+ * - [operationEvent]: one-shot results of insert / update / delete and absence actions.
  *
  * Write actions also keep the reminder alarms in sync through [IAlarmScheduler], so a task
  * is never saved without its alarm being scheduled, rescheduled or cancelled accordingly.
@@ -43,6 +45,8 @@ class ViewModelTask @Inject constructor(
     private val taskWriteUseCase: TaskWriteUseCase,
     private val getTaskDisplayItemUseCase: GetTaskDisplayItemUseCase,
     private val getCourseAbsenceRecordsUseCase: GetCourseAbsenceRecordsUseCase,
+    private val lessonAbsenceWriteUseCase: LessonAbsenceWriteUseCase,
+    private val getDefaultAbsenceDateUseCase: GetDefaultAbsenceDateUseCase,
     private val alarmScheduler: IAlarmScheduler
 ): ViewModel() {
     private val _operationEvent = Channel<Resource<BaseVMOperationResult<Task>>>()
@@ -129,6 +133,35 @@ class ViewModelTask @Inject constructor(
             }
             result
         }
+    }
+
+    /**
+     * Records an absence of [lesson] on [date]. Reminder alarms are left as they are,
+     * because an absence does not change when the lesson takes place.
+     */
+    fun addAbsence(lesson: Task.Lesson, date: Long){
+        Timber.d("Add absence: lessonId=%s, date=%d", lesson.id, date)
+        executeWriteAction(OperationType.UPDATE) {
+            lessonAbsenceWriteUseCase.add(lesson.id, date)
+        }
+    }
+
+    /**
+     * Removes one recorded absence of [lesson] on [date].
+     */
+    fun removeAbsence(lesson: Task.Lesson, date: Long){
+        Timber.d("Remove absence: lessonId=%s, date=%d", lesson.id, date)
+        executeWriteAction(OperationType.UPDATE) {
+            lessonAbsenceWriteUseCase.remove(lesson.id, date)
+        }
+    }
+
+    /**
+     * Returns the date to preselect when adding an absence to [lesson] by hand:
+     * its most recent session that has already started.
+     */
+    fun getDefaultAbsenceDate(lesson: Task.Lesson): Long {
+        return getDefaultAbsenceDateUseCase(lesson, System.currentTimeMillis())
     }
 
     /**

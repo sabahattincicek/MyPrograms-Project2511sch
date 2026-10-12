@@ -20,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.saboon.project_2511sch.R
 import com.saboon.project_2511sch.databinding.FragmentCourseDetailsBinding
 import com.saboon.project_2511sch.domain.model.Task
+import com.saboon.project_2511sch.presentation.task.AbsenceDialogs
 import com.saboon.project_2511sch.presentation.task.RecyclerAdapterTask
 import com.saboon.project_2511sch.presentation.task.ViewModelTask
 import com.saboon.project_2511sch.util.Resource
@@ -53,8 +54,9 @@ import kotlin.getValue
  * - a horizontal preview of the files attached to the course,
  * - the course's tasks grouped as lessons, exams and homeworks.
  *
- * From here the user can edit or delete the course, add / edit tasks, attach files, change the
- * absence count of a lesson and open the list of absence dates by tapping the absence text.
+ * From here the user can edit or delete the course, add / edit tasks, attach files, add an
+ * absence to a lesson for a chosen date ("+"), remove a recorded absence ("-") and open the
+ * list of absence dates by tapping the absence text.
  *
  * The fragment only renders state and forwards user actions; data comes from [ViewModelCourse],
  * [ViewModelTask], [ViewModelSFile], [ViewModelTag] and the activity-scoped [ViewModelUser].
@@ -202,8 +204,17 @@ class FragmentCourseDetails : Fragment() {
                 }
             }
         }
-        recyclerAdapterTask.onAbsenceButtonClickListener = { taskLesson ->
-            viewModelTask.update(course, taskLesson)
+        recyclerAdapterTask.onAbsenceIncreaseClickListener = { lesson ->
+            AbsenceDialogs.showAddAbsenceDatePicker(
+                requireContext(), childFragmentManager, viewModelTask.getDefaultAbsenceDate(lesson)
+            ) { date ->
+                viewModelTask.addAbsence(lesson, date)
+            }
+        }
+        recyclerAdapterTask.onAbsenceDecreaseClickListener = { lesson ->
+            AbsenceDialogs.showRemoveAbsenceDialog(requireContext(), lesson) { date ->
+                viewModelTask.removeAbsence(lesson, date)
+            }
         }
         binding.rvTasks.apply{
             adapter = recyclerAdapterTask
