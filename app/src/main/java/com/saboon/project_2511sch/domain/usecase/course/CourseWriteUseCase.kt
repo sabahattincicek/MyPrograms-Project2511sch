@@ -22,7 +22,4 @@ class CourseWriteUseCase @Inject constructor(
     suspend fun delete(course: Course): Resource<Course>{
         return courseRepository.delete(course)
     }
-    suspend fun activationById(id: String, isActive: Boolean): Resource<Unit>{
-        return courseRepository.activationById(id, isActive)
-    }
 }

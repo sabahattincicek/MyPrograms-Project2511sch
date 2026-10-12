@@ -38,11 +38,12 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.saboon.project_2511sch.domain.model.Task
 import com.saboon.project_2511sch.domain.repository.ISettingsRepository
-import com.saboon.project_2511sch.domain.usecase.home.GetHomeDisplayItemsUseCase
+import com.saboon.project_2511sch.domain.usecase.home.GetHomeTimelineUseCase
+import com.saboon.project_2511sch.presentation.home.toHomeDisplayItems
 import com.saboon.project_2511sch.presentation.home.DisplayItemHome
 import com.saboon.project_2511sch.presentation.home.DisplayRange
 import com.saboon.project_2511sch.presentation.settings.SettingsConstants
-import com.saboon.project_2511sch.presentation.task.FilterTask
+import com.saboon.project_2511sch.domain.model.FilterTask
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.toFormattedString
 import dagger.hilt.EntryPoint
@@ -63,7 +64,7 @@ import androidx.core.net.toUri
 class WidgetHome : GlanceAppWidget(){
 
 
-    private lateinit var getHomeDisplayItemsUseCase: GetHomeDisplayItemsUseCase
+    private lateinit var getHomeTimelineUseCase: GetHomeTimelineUseCase
     private lateinit var settingsRepository: ISettingsRepository
     private var isColorEnabled: Boolean = true
     private lateinit var colorSource: String
@@ -75,23 +76,24 @@ class WidgetHome : GlanceAppWidget(){
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     interface WidgetEntryPoint{
-        fun getHomeDisplayItemsUseCase(): GetHomeDisplayItemsUseCase
+        fun getHomeTimelineUseCase(): GetHomeTimelineUseCase
         fun settingsRepository(): ISettingsRepository
     }
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val appContext = context.applicationContext
         val entryPoint = EntryPointAccessors.fromApplication(appContext, WidgetEntryPoint::class.java)
-        getHomeDisplayItemsUseCase = entryPoint.getHomeDisplayItemsUseCase()
+        getHomeTimelineUseCase = entryPoint.getHomeTimelineUseCase()
         settingsRepository = entryPoint.settingsRepository()
 
         val filter = FilterTask(lesson = true, exam = true, homework = true)
         val dateRange = getInitialRange()
+        val isHideHeaders = settingsRepository.getHomeEmptyHeaderHideEnabled().first()
 
-        val result = getHomeDisplayItemsUseCase(filter, dateRange.start, dateRange.end).first()
+        val result = getHomeTimelineUseCase(filter, dateRange.start, dateRange.end, isHideHeaders).first()
 
         val displayItems = if (result is Resource.Success){
-            result.data?.filter { it !is DisplayItemHome.FooterItemHome } ?: emptyList()
+            result.data?.toHomeDisplayItems()?.filter { it !is DisplayItemHome.FooterItemHome } ?: emptyList()
         }else emptyList()
 
         isColorEnabled = settingsRepository.getHomeListItemColorEnabled().first()

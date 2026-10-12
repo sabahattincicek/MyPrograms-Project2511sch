@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">My Programs</string>
-    <string name="app_version">1.0.0</string>
+    <string name="app_version">1.1.0</string>
     <string name="program_table">Program Table</string>
     <string name="course">Course</string>
     <string name="programs">Programs</string>
@@ -123,7 +123,6 @@
     <string name="about">About</string>
     <string name="areYouSure_allDataWillBeDeletedExceptUserInformations">Are you sure? All data will be deleted except user informations.</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="next">Next</string>
     <string name="skip">Skip</string>
     <string name="grant_permission">Grant Permission</string>
@@ -147,5 +146,12 @@
     <string name="were_you_able_to_attend_the_lesson">Were you able to attend the \'%1$s\' lesson?</string>
     <string name="will_start_in_minutes">%1$s will start in %2$d minutes.</string>
     <string name="support_developer">Support the Developer</string>
+    <string name="hide_headers_for_empty_days">Hide headers for empty days</string>
+    <string name="if_enabled_dates_with_no_tasks_or_lessons_will_not_be_displayed_on_the_home_screen">If enabled, dates with no tasks or lessons will not be displayed on the home screen.</string>
+    <string name="sessions">sessions</string>
+    <string name="absence_dates">Absence dates</string>
+    <string name="no_absence_recorded">No absence recorded.</string>
+    <string name="absence_date">Absence date</string>
+    <string name="remove_absence">Remove absence</string>
 
 </resources>

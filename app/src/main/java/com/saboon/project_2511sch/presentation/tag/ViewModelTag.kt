@@ -6,12 +6,12 @@ import com.saboon.project_2511sch.domain.alarm.IAlarmScheduler
 import com.saboon.project_2511sch.domain.model.Tag
 import com.saboon.project_2511sch.domain.repository.ICourseRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
-import com.saboon.project_2511sch.domain.usecase.tag.GetTagDisplayItemListUseCase
 import com.saboon.project_2511sch.domain.usecase.tag.TagReadUseCase
 import com.saboon.project_2511sch.domain.usecase.tag.TagWriteUseCase
 import com.saboon.project_2511sch.util.BaseVMOperationResult
 import com.saboon.project_2511sch.util.OperationType
 import com.saboon.project_2511sch.util.Resource
+import com.saboon.project_2511sch.util.mapData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -21,16 +21,24 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * ViewModel for tags.
+ * 
+ * Exposes the selected tag ([tagState]), the rows of the tag list ([tagsState]) and one-shot
+ * results of insert / update / delete actions ([operationEvent]). It can also resynchronize
+ * the reminder alarms of every task under a tag after the tag is switched on or off.
+ */
 @HiltViewModel
 class ViewModelTag @Inject constructor(
     private val tagWriteUseCase: TagWriteUseCase,
     private val tagReadUseCase: TagReadUseCase,
-    private val getTagDisplayItemListUseCase: GetTagDisplayItemListUseCase,
     private val courseRepository: ICourseRepository,
     private val taskRepository: ITaskRepository,
     private val alarmScheduler: IAlarmScheduler
@@ -54,7 +62,8 @@ class ViewModelTag @Inject constructor(
         )
 
     val tagsState: StateFlow<Resource<List<DisplayItemTag>>> =
-        getTagDisplayItemListUseCase.invoke()
+        tagReadUseCase.getAll()
+            .map { resource -> resource.mapData { it.toTagDisplayItems() } }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
@@ -63,19 +72,37 @@ class ViewModelTag @Inject constructor(
 
 
     //ACTIONS
+    /**
+     * Selects the tag whose details [tagState] should expose.
+     */
     fun  getById(id: String){
+        Timber.d("Select tag: id=%s", id)
         _selectedId.value = id
     }
+    /**
+     * Saves a new tag.
+     */
     fun insert(tag: Tag) = executeWriteAction(OperationType.INSERT){
         tagWriteUseCase.insert(tag)
     }
+    /**
+     * Saves changes to an existing tag.
+     */
     fun update(tag: Tag) = executeWriteAction(OperationType.UPDATE){
         tagWriteUseCase.update(tag)
     }
+    /**
+     * Deletes a tag; its courses stay and become untagged.
+     */
     fun delete(tag: Tag) = executeWriteAction(OperationType.DELETE){
         tagWriteUseCase.delete(tag)
     }
+    /**
+     * Reschedules or cancels the alarms of every task under [tag] to match its active state,
+     * then calls [onComplete].
+     */
     fun syncAlarms(tag: Tag, onComplete: () -> Unit){
+        Timber.d("Sync tag alarms: tagId=%s", tag.id)
         viewModelScope.launch {
             val allCourses = courseRepository.getAll().first().data ?: emptyList()
             val allTasks = taskRepository.getAll().first().data ?: emptyList()
@@ -83,7 +110,11 @@ class ViewModelTag @Inject constructor(
             onComplete()
         }
     }
+    /**
+     * Runs a write [action] and reports its progress and result through [operationEvent].
+     */
     private fun executeWriteAction(type: OperationType, action: suspend () -> Resource<Tag>) {
+        Timber.d("Tag write action: type=%s", type)
         viewModelScope.launch {
             try {
                 _operationEvent.send(Resource.Loading())
@@ -97,6 +128,7 @@ class ViewModelTag @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
+                Timber.e(e, "Tag write action threw")
                 _operationEvent.send(Resource.Error(e.localizedMessage ?: "Unexpected error"))
             }
         }

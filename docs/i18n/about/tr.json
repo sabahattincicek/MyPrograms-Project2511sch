@@ -1,0 +1,99 @@
+{
+  "lang_button": "🇹🇷 Türkçe",
+  "about_page_title": "Hakkında - MyPrograms",
+  "back_to_home_button": "Destek Ana Sayfasına Dön",
+  "about_title": "MyPrograms Hakkında",
+  "about_subtitle": "Nihai Akademik Yardımcınız – Öğrenciler İçin Bir Öğrenci Tarafından Geliştirildi",
+  "about_mission": "MyPrograms, mutlak gizliliği korurken öğrencileri modern organizasyon araçlarıyla güçlendirmek için tasarlanmış açık kaynaklı bir girişimdir.",
+  "footer_text_1": "Dünya çapındaki öğrenciler için ❤️ ile geliştirildi.",
+  "footer_text_2": "Tamamen Ücretsiz ve Reklamsız.",
+  "footer_copyright": "© 2026 MyPrograms Development",
+  "content_sections": [
+    {
+      "title": "MyPrograms Nedir?",
+      "body": [
+        {
+          "type": "p",
+          "content": "<strong>MyPrograms</strong> sadece bir takvimden fazlasıdır; öğrencilerin akademik programlarını ustalıkla yönetmelerine yardımcı olmak için tasarlanmış bir kişisel asistandır. Öğrenci hayatının ne kadar bunaltıcı olabileceğini biliyoruz—dersleri, sınavları ve bitmek bilmeyen çalışma materyallerini dengelemek zordur. MyPrograms, tüm bunları tek bir sezgisel ve estetik zaman çizelgesinde düzenleyerek süreci basitleştirir."
+        }
+      ]
+    },
+    {
+      "title": "Neden MyPrograms?",
+      "body": [
+        {
+          "type": "p",
+          "content": "Akademik başarının hiçbir engel olmadan herkes için erişilebilir olması gerektiğine inanıyoruz."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "<strong>%100 Ücretsiz:</strong> Abonelik yok, kilitli özellikler yok ve gizli maliyetler yok. Bu uygulamadaki her araç tüm öğrenciler için mevcuttur.",
+            "<strong>Reklam Yok:</strong> Temiz ve dikkat dağıtıcı olmayan bir ortam. Banner yok, açılır pencere (pop-up) yok; sadece siz ve çalışmalarınız.",
+            "<strong>Gizlilik ve Hız:</strong> Şu anda uygulama yerel-öncelikli bir deneyim sunar. Kişisel programınız ve dosyalarınız telefonunuzda güvenli bir şekilde saklanır, bu da internet bağlantısı olmasa bile ışık hızında erişim sağlar."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Ekran Görüntüleri",
+      "body": [
+        {
+          "type": "images",
+          "caption": "(Görseller yakında güncellenecektir - Modern arayüzü deneyimleyin)",
+          "content": [
+            { "src": "https://github.com/user-attachments/assets/41e7b75f-2dd9-4d71-ba63-8504059a4d41", "width": "30%", "alt": "Ana Ekran" },
+            { "src": "https://github.com/user-attachments/assets/afb35115-3b46-4ac8-b2a9-de5c409dbab3", "width": "30%", "alt": "Program Ekranı" }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Temel Özellikler",
+      "body": [
+        { "type": "h3", "content": "Akıllı Günlük Zaman Çizelgesi" },
+        { "type": "p", "content": "Bir daha asla \"Sırada ne var?\" diye sormayın. İster haftalık bir ders, ister tek seferlik bir seminer veya yaklaşan bir sınav olsun; MyPrograms programınızı hesaplar ve net, okunması kolay bir zaman çizelgesinde sunar." },
+        { "type": "h3", "content": "Tüm Çalışma Dosyalarınız Tek Bir Yerde" },
+        { "type": "p", "content": "Ders notları için telefonunuzun klasörlerini karıştırmayı bırakın. PDF'leri, görselleri ve belgeleri doğrudan kurslarınıza ekleyebilirsiniz. Ders vakti geldiğinde materyalleriniz orada sizi bekliyor olacak." },
+        { "type": "h3", "content": "Kendi Tarzınızla Organize Edin" },
+        { "type": "p", "content": "Hayatınızı kategorize etmek için özel Etiketler kullanın. Sadece \"Bölüm\" derslerinize mi odaklanmak istiyorsunuz yoksa \"Seçmeli\" atölyeleri bir süreliğine gizlemek mi? Aktif filtreleme sistemimizle sadece sizin için önemli olanları görürsünüz." },
+        { "type": "h3", "content": "Ana Ekran Widget'ları" },
+        { "type": "p", "content": "Uygulamayı açmadan bile organize kalın. Şık widget'larımız günlük programınızı doğrudan ana ekranınıza getirerek tek bir bakışla bilgilenmenizi sağlar." }
+      ]
+    },
+    {
+      "title": "Gelecek Yol Haritası",
+      "body": [
+        {
+          "type": "p",
+          "content": "Öğrencilik hayatınızı daha da kolaylaştırmak için sürekli gelişiyoruz:"
+        },
+        {
+          "type": "ul",
+          "content": [
+            "<strong>Bulut Senkronizasyonu:</strong> Programınıza birden fazla cihazdan güvenli bir şekilde erişmenizi sağlayacak isteğe bağlı bulut depolama üzerinde çalışıyoruz.",
+            "<strong>Arkadaşlarla Paylaşım:</strong> Programları veya çalışma materyallerini sınıf arkadaşlarınızla anında paylaşmanıza olanak tanıyan iş birliği özellikleri.",
+            "<strong>Performans Analizleri:</strong> Çalışma alışkanlıklarınızı ve sınav ilerlemenizi zaman içinde takip etmenize yardımcı olacak görsel araçlar."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "MyPrograms Kimler İçin?",
+      "body": [
+        {
+          "type": "p",
+          "content": "Öğrencilik hayatınızı daha da kolaylaştırmak için sürekli gelişiyoruz:"
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Karmaşık ve dönüşümlü haftalık programları olan <strong>Üniversite Öğrencileri</strong>.",
+            "Sınav tarihlerini ve ödev teslim tarihlerini takip eden <strong>Lise Öğrencileri</strong>.",
+            "Öğrenme materyallerini yönetmek için yapılandırılmış bir yola ihtiyaç duyan <strong>Yaşam Boyu Öğrenenler</strong>."
+          ]
+        }
+      ]
+    }
+  ]
+}

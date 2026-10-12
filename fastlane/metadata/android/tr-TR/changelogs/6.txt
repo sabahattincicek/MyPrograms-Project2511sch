@@ -1,0 +1,5 @@
+- Ders detayında toplam devamsızlık sayısı gösteriliyor; üzerine basınca tarihler listeleniyor.
+- Elle devamsızlık eklerken tarih soruluyor; silerken hangisinin silineceği seçiliyor.
+- Katılım bildiriminde "Hayır" denince devamsızlık o oturum için kaydediliyor.
+- Ana ekranda görev olmayan günleri gizleme ayarı eklendi.
+- Yedek dosyası adındaki tarih düzeltildi.

@@ -1,0 +1,136 @@
+{
+  "lang": "en",
+  "lang_button": "🇺🇸 English",
+  "back_to_home_button": "Return to Support Home",
+  "terms_title": "MyPrograms Terms of Use",
+  "last_updated": "Last Updated: April 22, 2026",
+  "footer_copyright": "© 2026 MyPrograms Development",
+  "content_sections": [
+    {
+      "title": "Acceptance of Terms",
+      "body": [
+        {
+          "type": "p",
+          "content": "These Terms of Use define the legal conditions regarding the use of the MyPrograms mobile application. By downloading, installing, or using the application, you are deemed to have accepted these terms. If you do not accept these terms, you must not use the application."
+        }
+      ]
+    },
+    {
+      "title": "Description of the Service",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms is an academic planning application designed to help students organize their class schedules, exam dates, and assignments. The application operates based on data entered by users and is not an official educational institution or academic record system."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Creating and editing class schedules",
+            "Tracking exams and assignments",
+            "Reminders and planning tools"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Academic Disclaimer",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms is only an auxiliary tool and does not replace official academic records. The accuracy of the information entered by the user is entirely the user's responsibility."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "The developer is not responsible for consequences arising from incorrect or incomplete data entry",
+            "The developer cannot be held responsible if notifications (reminders) fail due to device settings, battery optimization, or technical reasons",
+            "The developer is not responsible for academic failure, missed exams, or similar outcomes"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Security and Backup",
+      "body": [
+        {
+          "type": "p",
+          "content": "The MyPrograms application stores user data locally on the device. The application does not send any data to a central server."
+        },
+        {
+          "type": "p",
+          "content": "Responsibility for data security and backups lies entirely with the user."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Data may be permanently lost if the application is deleted",
+            "There is no guarantee of data recovery if the device is lost or reset",
+            "The user agrees to take regular backups"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Intellectual Property Rights",
+      "body": [
+        {
+          "type": "p",
+          "content": "The MyPrograms application is provided as open source and is licensed under the GNU Affero General Public License (AGPL). The source code of the application is publicly available and may be used, modified, and distributed in accordance with the license terms."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "The source code of the application is accessible via GitHub and is subject to AGPL license terms",
+            "Modifications and derivative works must be shared under the same license (AGPL)",
+            "Modified versions made available over a network must also provide their source code",
+            "Failure to comply with license terms may result in legal liability"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Prohibited Uses",
+      "body": [
+        {
+          "type": "p",
+          "content": "Users are obligated to use the application in accordance with applicable laws and these Terms of Use."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Using the application for illegal purposes",
+            "Attempting to disrupt the security or operation of the application",
+            "Trying to gain unauthorized access",
+            "Misusing or harming the application"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Changes",
+      "body": [
+        {
+          "type": "p",
+          "content": "The developer reserves the right to update these Terms of Use at any time. Changes become effective as of the date they are updated."
+        },
+        {
+          "type": "p",
+          "content": "Users are advised to review the current terms regularly. Continued use of the application constitutes acceptance of the updated terms."
+        }
+      ]
+    },
+    {
+      "title": "Contact",
+      "body": [
+        {
+          "type": "p",
+          "content": "If you have any questions regarding these Terms of Use, you may contact us."
+        },
+        {
+          "type": "p",
+          "content": "Email: <a href='mailto:sabahattincck@outlook.com'>sabahattincck@outlook.com</a>"
+        }
+      ]
+    }
+  ]
+}

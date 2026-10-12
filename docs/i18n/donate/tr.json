@@ -1,0 +1,27 @@
+{
+  "lang": "tr",
+  "lang_button": "🇹🇷 Türkçe",
+  "donate_page_title": "Geliştiriciyi Destekle - MyPrograms",
+  "back_to_home_button": "Destek Ana Sayfasına Dön",
+  "profile_greeting": "Merhaba, Ben Sabahattin!",
+  "profile_sub": "Bağımsız Geliştirici & Öğrenci",
+  "support_title": "Yolculuğu Destekleyin",
+  "support_desc": "Eğer MyPrograms organize olmanıza yardımcı olduysa, Kreosus üzerinden bana bir kahve ısmarlamayı düşünebilirsiniz!",
+  "footer_signature": "© 2026 MyPrograms Development",
+  "story_sections": [
+    {
+      "title": "MyPrograms'ın Hikayesi",
+      "body": [
+        "<strong>MyPrograms</strong>'ı geliştirmeye başladım çünkü kendi akademik hayatımı yönetmek için basit, hızlı ve gizliliğe saygılı bir yola ihtiyacım vardı. Bir öğrenci olarak; her hareketi takip eden karmaşık bulut sistemlerinden, pahalı aboneliklerden ve reklamlarla dolu uygulamalardan yorulmuştum.",
+        "Farklı bir şey inşa etmeye karar verdim: <strong>%100 ücretsiz</strong>, <strong>reklamsız</strong> ve <strong>yerel-öncelikli</strong> bir akademik planlayıcı. Bu projedeki her bir satır kod, dersler ve sınavlar arasındaki boş zamanlarımda tarafımdan yazıldı."
+      ]
+    },
+    {
+      "title": "Neden Destek Olmalısınız?",
+      "body": [
+        "Tek bir geliştirici olarak bir uygulamayı geliştirmek ve sürdürmek çok fazla zaman ve emek gerektiriyor. Hedefim, MyPrograms'ı tüm öğrenciler için sonsuza kadar ücretsiz tutmak.",
+        "Desteğiniz, temel maliyetleri karşılamama yardımcı oluyor ve bulut senkronizasyonu gibi yeni özellikler eklemem için beni motive ediyor."
+      ]
+    }
+  ]
+}

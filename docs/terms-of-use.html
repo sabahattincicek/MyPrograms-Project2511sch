@@ -6,90 +6,23 @@
     <title>Terms of Use - MyPrograms</title>
     <link rel="icon" type="image/png" href="assets/ic_launcher-playstore.png">
     <style>
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #24292e;
-            --secondary-text: #586069;
-            --accent-color: #0366d6;
-            --border-color: #e1e4e8;
-            --card-bg: #fafafa;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #0d1117;
-                --text-color: #c9d1d9;
-                --secondary-text: #8b949e;
-                --accent-color: #58a6ff;
-                --border-color: #30363d;
-                --card-bg: #161b22;
-            }
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
-
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        .nav-back {
-            margin-bottom: 0;
-        }
-        .nav-back a {
-            text-decoration: none;
-            color: var(--accent-color);
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .lang-switcher {
-            text-align: right;
-            margin-bottom: 0;
-            font-size: 0.9rem;
-        }
-        .lang-link {
-            padding: 5px 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            text-decoration: none;
-            color: var(--text-color);
-        }
-        .lang-link:hover { background-color: var(--card-bg); }
-
+        :root { --bg-color: #ffffff; --text-color: #24292e; --secondary-text: #586069; --accent-color: #0366d6; --border-color: #e1e4e8; --card-bg: #fafafa; }
+        @media (prefers-color-scheme: dark) { :root { --bg-color: #0d1117; --text-color: #c9d1d9; --secondary-text: #8b949e; --accent-color: #58a6ff; --border-color: #30363d; --card-bg: #161b22; } }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 40px 20px; background-color: var(--bg-color); color: var(--text-color); }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .nav-back a { text-decoration: none; color: var(--accent-color); font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .dropdown { position: relative; display: inline-block; }
+        .dropbtn { padding: 8px 16px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--card-bg); color: var(--text-color); font-weight: 600; cursor: pointer; }
+        .dropdown-content { display: none; position: absolute; right: 0; background-color: var(--card-bg); min-width: 140px; box-shadow: 0px 8px 16px rgba(0,0,0,0.2); z-index: 100; border-radius: 8px; border: 1px solid var(--border-color); top: 100%; padding: 5px 0; }
+        .dropdown-content button { color: var(--text-color); padding: 12px 16px; border: none; background: none; width: 100%; text-align: left; cursor: pointer; }
+        .dropdown-content button:hover { background-color: var(--border-color); }
+        .dropdown:hover .dropdown-content { display: block; }
         h1 { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        h2 { margin-top: 40px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+        h2 { margin-top: 40px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;}
         h3 { margin-top: 30px; }
-
         hr { border: 0; border-top: 1px solid var(--border-color); margin: 40px 0; }
-
-        .last-updated { color: var(--secondary-text); font-style: italic; }
-        .important-note {
-            background-color: var(--card-bg);
-            border-left: 5px solid #d73a49;
-            padding: 15px;
-            margin: 20px 0;
-        }
-
-        ul { padding-left: 20px; }
-        li { margin-bottom: 8px; }
-
-        footer {
-            margin-top: 60px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--secondary-text);
-        }
+        .last-updated { color: var(--secondary-text); font-style: italic; margin-bottom: 20px; display: block; }
+        footer { margin-top: 60px; text-align: center; font-size: 0.9rem; color: var(--secondary-text); border-top: 1px solid var(--border-color); padding-top: 20px; }
     </style>
 </head>
 <body>
@@ -101,83 +34,97 @@
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
-            Back to Support Home
+            <span data-i18n="back_to_home_button"></span>
         </a>
     </div>
 
     <div class="lang-switcher">
-        <a href="tr/terms-of-use.html" class="lang-link">🇹🇷 Türkçe</a>
+        <div class="dropdown">
+            <button class="dropbtn" id="current-lang" data-i18n="lang_button"></button>
+            <div class="dropdown-content">
+                <button onclick="changeLang('tr')">🇹🇷 Türkçe</button>
+                <button onclick="changeLang('en')">🇺🇸 English</button>
+            </div>
+        </div>
     </div>
 </div>
+<h1 data-i18n="terms_title"></h1>
+<p class="last-updated" data-i18n="last_updated"></p>
 
-<h1>Terms of Use for MyPrograms</h1>
-<p class="last-updated">Last Updated: March 26, 2026</p>
-
-<section>
-    <h2>1. Acceptance of Terms</h2>
-    <p>By accessing or using the <strong>MyPrograms</strong> mobile application (the "Service"), you agree to be bound by these Terms of Use. If you disagree with any part of these terms, you may not access the Service.</p>
-</section>
-
-<section>
-    <h2>2. Nature of the Service</h2>
-    <p>MyPrograms is an academic organization tool designed to help students manage their courses, lessons, exams, and homework.</p>
-    <ul>
-        <li><strong>As-Is Basis:</strong> The application is provided on an "AS IS" and "AS AVAILABLE" basis.</li>
-        <li><strong>Local Execution:</strong> Currently, the Service operates as a local-first application, meaning all data processing and storage occur on your physical device.</li>
-    </ul>
-</section>
-
-<section>
-    <h2>3. Academic Responsibility and Disclaimer</h2>
-    <div class="important-note">
-        <strong>IMPORTANT:</strong> MyPrograms is intended to be used as a supplementary aid for your academic organization. It is NOT an official academic record.
-    </div>
-    <ul>
-        <li><strong>No Guarantee on Reminders:</strong> While the app allows you to set reminders for lessons and exams, we do not guarantee that notifications will always fire correctly. Factors such as OS battery optimizations, device restarts, or technical glitches may prevent notifications.</li>
-        <li><strong>Limitation of Liability:</strong> The developer of MyPrograms shall NOT be held responsible for missed classes, forgotten exams, assignment deadlines, academic failure, or any financial/personal damages resulting from the use of the application.</li>
-        <li><strong>User Duty:</strong> You are solely responsible for cross-checking your schedule with official university or school announcements.</li>
-    </ul>
-</section>
-
-<section>
-    <h2>4. Data Loss and Backups</h2>
-    <p>Because MyPrograms stores data in a local Room/SQLite database:</p>
-    <ul>
-        <li><strong>No Cloud Recovery:</strong> If you lose your phone, uninstall the app, or clear app data, the developer cannot recover your lost data.</li>
-        <li><strong>Backup Responsibility:</strong> The app provides an Export/Import feature. It is your sole responsibility to use this feature regularly to back up your data to a secure external location.</li>
-        <li><strong>File Attachments:</strong> The developer is not responsible for the availability of files attached via the Storage Access Framework (SAF) if the original files are moved or deleted from your device storage.</li>
-    </ul>
-</section>
-
-<section>
-    <h2>5. Future Changes and Firebase</h2>
-    <p>We reserve the right to introduce cloud-based features in the future, such as cloud synchronization via Firebase and collaborative features. You will be notified of these changes, and your continued use of the app will signify your acceptance of any new terms related to these features.</p>
-</section>
-
-<section>
-    <h2>6. Prohibited Use</h2>
-    <p>You agree not to attempt to reverse engineer, decompile, or extract the source code of the application. You may not use the Service for any illegal activities or interfere with the security-related features of the application.</p>
-</section>
-
-<section>
-    <h2>7. Intellectual Property</h2>
-    <p>The application's design, logo, original source code, and assets are the intellectual property of the developer and are protected by international copyright laws.</p>
-</section>
-
-<section>
-    <h2>8. Changes to Terms</h2>
-    <p>We reserve the right to modify or replace these Terms at any time. Continued use of the app after changes constitutes acceptance of the new terms.</p>
-</section>
-
-<section>
-    <h2>9. Contact</h2>
-    <p>If you have any questions about these Terms, please contact us at:</p>
-    <p>Email: <a href="mailto:sabahattincck@outlook.com">sabahattincck@outlook.com</a></p>
-</section>
+<div id="terms-content"></div>
 
 <footer>
-    <p>© 2026 MyPrograms Development</p>
+    <p data-i18n="footer_copyright"></p>
 </footer>
+
+<script>
+    async function loadLanguage(lang) {
+        // Dosya yolunu Kullanım Koşulları klasörüne göre ayarla
+        const fetchPath = `i18n/terms_of_use/${lang}.json`;
+
+        try {
+            const response = await fetch(fetchPath);
+            if (!response.ok) throw new Error(`Dosya bulunamadı: ${fetchPath}`);
+            const translations = await response.json();
+
+            // 1. Sabit alanları (Title, Button, Footer) doldur
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[key]) el.innerHTML = translations[key];
+            });
+
+            // 2. Dinamik İçerik (terms-content)
+            const container = document.getElementById('terms-content');
+            container.innerHTML = ""; // Temizle
+
+            if (translations.content_sections) {
+                translations.content_sections.forEach((section, index) => {
+                    const sectionEl = document.createElement('section');
+
+                    if (section.title) {
+                        sectionEl.innerHTML += `<h2>${section.title}</h2>`;
+                    }
+
+                    section.body.forEach(item => {
+                        // Linkleri (mailto veya http) tıklanabilir yapmak için basit fonksiyon
+                        const linkify = (text) => {
+                            const urlRegex = /(https?:\/\/[^\s]+|mailto:[^\s]+)/g;
+                            return text.replace(urlRegex, (url) => {
+                                const label = url.replace('mailto:', '');
+                                return `<a href="${url}" target="_blank">${label}</a>`;
+                            });
+                        };
+
+                        if (item.type === 'p') {
+                            sectionEl.innerHTML += `<p>${linkify(item.content)}</p>`;
+                        } else if (item.type === 'h3') {
+                            sectionEl.innerHTML += `<h3>${item.content}</h3>`;
+                        } else if (item.type === 'ul') {
+                            const lis = item.content.map(li => `<li>${linkify(li)}</li>`).join('');
+                            sectionEl.innerHTML += `<ul>${lis}</ul>`;
+                        }
+                    });
+
+                    container.appendChild(sectionEl);
+
+                    if (index < translations.content_sections.length - 1) {
+                        container.appendChild(document.createElement('hr'));
+                    }
+                });
+            }
+
+            document.documentElement.lang = lang;
+            localStorage.setItem('preferredLang', lang);
+        } catch (error) {
+            console.error('Yükleme Hatası:', error);
+        }
+    }
+
+    function changeLang(lang) { loadLanguage(lang); }
+
+    const initialLang = localStorage.getItem('preferredLang') || (navigator.language.startsWith('tr') ? 'tr' : 'en');
+    loadLanguage(initialLang);
+</script>
 
 </body>
 </html>

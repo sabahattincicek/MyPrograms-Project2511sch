@@ -1,0 +1,212 @@
+{
+  "lang": "en",
+  "lang_button": "🇺🇸 English",
+  "back_to_home_button": "Return to Support Home",
+  "privacy_policy_title": "MyPrograms Privacy Policy",
+  "last_updated": "Last Updated: April 22, 2026",
+  "footer_copyright": "© 2026 MyPrograms Development",
+  "content_sections": [
+    {
+      "title": "Introduction",
+      "body": [
+        {
+          "type": "p",
+          "content": "The MyPrograms application is a mobile app developed to help students manage their academic processes (class schedules, exams, and assignments) more efficiently. This Privacy Policy explains in a transparent way what data the application processes, how it stores it, and how it protects it."
+        },
+        {
+          "type": "p",
+          "content": "By using the application, you are deemed to have accepted the data processing and privacy practices described herein. MyPrograms adopts user privacy as a core principle and operates with a minimal data approach whenever possible."
+        }
+      ]
+    },
+    {
+      "title": "Information Collection and Local Storage",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms uses a ‘Local-First’ architecture. Under this approach, all user data is stored only on the user’s device and is not transmitted to external servers."
+        },
+        {
+          "type": "h3",
+          "content": "Locally Stored Data"
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Course schedules and class information",
+            "Exam dates and reminders",
+            "Assignments and personal notes",
+            "User-created planning data"
+          ]
+        },
+        {
+          "type": "p",
+          "content": "All this data is stored locally on Android devices using a SQLite (Room) database. The application does not transmit any user data over the internet in its current version."
+        },
+        {
+          "type": "p",
+          "content": "The application does not include advertisements, analytics, or user behavior tracking SDKs."
+        }
+      ]
+    },
+    {
+      "title": "File Access (Storage Access Framework - SAF)",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms allows users to attach PDF, image, or other files related to their courses. This is done using the Android Storage Access Framework (SAF)."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "The application does not access all device files",
+            "Only files explicitly selected by the user are accessed",
+            "Files are not uploaded to any third-party servers",
+            "File access always requires user permission"
+          ]
+        },
+        {
+          "type": "p",
+          "content": "This SAF-based approach ensures user privacy and follows a minimum-permission principle."
+        }
+      ]
+    },
+    {
+      "title": "Notifications",
+      "body": [
+        {
+          "type": "p",
+          "content": "The application uses a local notification system for class and exam reminders. These notifications are generated on the device and are not sent to any external server."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Notifications run only on the user’s device",
+            "No internet connection is required",
+            "Notifications can be disabled by the user at any time"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Backup, Export and Data Responsibility",
+      "body": [
+        {
+          "type": "p",
+          "content": "Users can export or import their data at any time within the application. This provides full control over personal data."
+        },
+        {
+          "type": "p",
+          "content": "Since all data is stored locally on the device, the responsibility for data security and backups lies entirely with the user."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Data may be permanently lost if the device is deleted or reset",
+            "Users are responsible for making regular backups",
+            "The application cannot be held responsible for data loss"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Third-Party Services and Donation System",
+      "body": [
+        {
+          "type": "p",
+          "content": "The MyPrograms application does not use any third-party analytics, advertising, or data collection services. However, certain third-party services may be used through the official website."
+        },
+        {
+          "type": "h3",
+          "content": "Donation System"
+        },
+        {
+          "type": "p",
+          "content": "Users can optionally support the project via donations on the official website. This process is handled through a third-party payment provider called Kreosus."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Kreosus service: <a href='https://kreosus.com' target='_blank'>https://kreosus.com</a>",
+            "Payments are processed directly through Kreosus infrastructure",
+            "MyPrograms does not store or access user payment information",
+            "All payment transactions are subject to Kreosus privacy policy: <a href='https://kreosus.com/privacy' target='_blank'>https://kreosus.com/privacy</a>"
+          ]
+        },
+        {
+          "type": "h3",
+          "content": "Website and Hosting"
+        },
+        {
+          "type": "p",
+          "content": "The official MyPrograms website is hosted on GitHub Pages: <a href='https://pages.github.com' target='_blank'>https://pages.github.com</a>"
+        },
+        {
+          "type": "ul",
+          "content": [
+            "The site is deployed as a static website via GitHub Pages",
+            "No server-side user data is processed",
+            "GitHub’s privacy policy applies: <a href='https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement' target='_blank'>https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement</a>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Future Plans (Cloud and Cross-Platform)",
+      "body": [
+        {
+          "type": "p",
+          "content": "In the future, MyPrograms may introduce optional cloud synchronization and cross-platform support features."
+        },
+        {
+          "type": "ul",
+          "content": [
+            "Cloud synchronization will be completely optional (opt-in)",
+            "Offline/local usage will remain available",
+            "User data will only be synced to the cloud with explicit user consent",
+            "Cross-platform support may allow synchronization across multiple devices"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Children’s Privacy",
+      "body": [
+        {
+          "type": "p",
+          "content": "MyPrograms is an education-focused application that may be used by different age groups. However, since the application does not transmit user data to servers, it does not directly collect personal data."
+        },
+        {
+          "type": "p",
+          "content": "Users under the age of 18 are encouraged to use the application under parental or legal guardian supervision."
+        }
+      ]
+    },
+    {
+      "title": "Data Deletion",
+      "body": [
+        {
+          "type": "p",
+          "content": "Users can manually delete all their data from within the application. Since no data is sent to a central server, deletion occurs entirely on the local device."
+        },
+        {
+          "type": "p",
+          "content": "Data deletion is permanent and cannot be undone."
+        }
+      ]
+    },
+    {
+      "title": "Contact Us",
+      "body": [
+        {
+          "type": "p",
+          "content": "If you have any questions or suggestions regarding this Privacy Policy, feel free to contact us."
+        },
+        {
+          "type": "p",
+          "content": "Email: <a href='mailto:sabahattincck@outlook.com'>sabahattincck@outlook.com</a>"
+        }
+      ]
+    }
+  ]
+}

@@ -25,12 +25,25 @@ import com.saboon.project_2511sch.util.SwipeRevealLayout
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
+/**
+ * RecyclerView adapter for the home screen timeline.
+ *
+ * Renders three row types from [DisplayItemHome]: a header per day, the tasks of that day
+ * (lesson sessions, exams, homeworks) and a summary footer. Lesson rows can be swiped to
+ * reveal the absence counter with its "+" and "-" buttons.
+ *
+ * A lesson row represents one session: its task is a copy of the lesson whose `date` is the
+ * date of that session, not the lesson's own start date. The adapter only reports user actions
+ * through its listeners; it never changes a task itself.
+ */
 class RecyclerAdapterHome :
     ListAdapter<DisplayItemHome, BaseViewHolder>(BaseDiffCallback()) {
 
     var onContentItemClickListener:((Course) -> Unit)? = null
 
-    var onAbsenceButtonClickListener: ((Course, Task.Lesson) -> Unit)? = null
+    var onAbsenceIncreaseClickListener: ((Task.Lesson) -> Unit)? = null
+
+    var onAbsenceDecreaseClickListener: ((Task.Lesson) -> Unit)? = null
 
     private var openedLayout: SwipeRevealLayout? = null
 
@@ -47,6 +60,9 @@ class RecyclerAdapterHome :
             notifyDataSetChanged()
         }
 
+    /**
+     * Inflates the row layout that matches the given view type.
+     */
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -69,6 +85,9 @@ class RecyclerAdapterHome :
         }
     }
 
+    /**
+     * Binds the item at [position] to its view holder.
+     */
     override fun onBindViewHolder(
         holder: BaseViewHolder,
         position: Int
@@ -76,11 +95,22 @@ class RecyclerAdapterHome :
         val item = getItem(position)
         holder.bind(item)
     }
+
+    /**
+     * Returns the row type (header, content or footer) declared by the item itself.
+     */
     override fun getItemViewType(position: Int): Int {
         return getItem(position).viewType
     }
+
+    /**
+     * Day header row: the date and how far it is from today. Past days are dimmed.
+     */
     inner class HeaderHomeViewHolder(private val binding: RowHomeHeaderBinding) :
         BaseViewHolder(binding.root) {
+        /**
+         * Shows the day's date and its distance from today.
+         */
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemHome.HeaderItemHome){
@@ -110,8 +140,15 @@ class RecyclerAdapterHome :
         }
     }
 
+    /**
+     * Task row of a day. Lessons additionally expose the swipeable absence counter.
+     */
     inner class ContentViewHolder(private val binding: RowMainContentBinding) :
         BaseViewHolder(binding.root) {
+        /**
+         * Fills the row according to the task type, applies the color setting and wires its
+         * click and absence buttons. Past tasks are dimmed.
+         */
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemHome.ContentItemHome) {
@@ -161,20 +198,10 @@ class RecyclerAdapterHome :
                         binding.slSwipe.isSwipeable = true
                         binding.tvAbsenceCount.text = task.absence.size.toString()
                         binding.btnAbsenceDecrease.setOnClickListener {
-                            val absenceDateList = item.task.absence.toMutableList()
-                            absenceDateList.remove(item.task.date)
-                            val updatedTask = item.task.copy(
-                                absence = absenceDateList
-                            )
-                            onAbsenceButtonClickListener?.invoke(course, updatedTask)
+                            onAbsenceDecreaseClickListener?.invoke(task)
                         }
                         binding.btnAbsenceIncrease.setOnClickListener {
-                            val absenceDateList = item.task.absence.toMutableList()
-                            absenceDateList.add(item.task.date)
-                            val updatedTask = item.task.copy(
-                                absence = absenceDateList
-                            )
-                            onAbsenceButtonClickListener?.invoke(course, updatedTask)
+                            onAbsenceIncreaseClickListener?.invoke(task)
                         }
                     }
 
@@ -250,7 +277,13 @@ class RecyclerAdapterHome :
             }
         }
     }
+    /**
+     * Summary footer row: today's date, the shown date range and the number of shown tasks.
+     */
     inner class FooterHomeViewHolder(private val binding: RowHomeFooterBinding): BaseViewHolder(binding.root){
+        /**
+         * Shows the summary texts of the footer.
+         */
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemHome.FooterItemHome){
@@ -271,6 +304,9 @@ class RecyclerAdapterHome :
         }
     }
 
+    /**
+     * Returns the list position of today's header, or -1 when today is not in the shown range.
+     */
     fun getTodayPosition(): Int{
         val today = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)

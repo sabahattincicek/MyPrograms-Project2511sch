@@ -77,6 +77,12 @@ class ViewModelSettings @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = SettingsConstants.OnboardingCompleted.DEFAULT
         )
+    val homeEmptyHeaderHideEnabledState: StateFlow<Boolean> = settingsRepository.getHomeEmptyHeaderHideEnabled()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = SettingsConstants.HomeEmptyHeaderHideEnabled.DEFAULT
+        )
 
     //ACTIONS
     fun onDarkModeSelected(darkModeValue: String){
@@ -125,6 +131,11 @@ class ViewModelSettings @Inject constructor(
     fun isOnoardingCompleted(completed: Boolean){
         viewModelScope.launch {
             settingsRepository.setOnboardingComplete(completed)
+        }
+    }
+    fun onHomeEmptyHeaderHideEnabledChanged(enabled: Boolean){
+        viewModelScope.launch {
+            settingsRepository.setHomeEmptyHeaderHideEnabled(enabled)
         }
     }
 }

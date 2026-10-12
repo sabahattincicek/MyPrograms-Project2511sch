@@ -9,7 +9,7 @@ import com.saboon.project_2511sch.domain.repository.ITagRepository
 import com.saboon.project_2511sch.domain.repository.ISFileRepository
 import com.saboon.project_2511sch.domain.repository.ISettingsRepository
 import com.saboon.project_2511sch.domain.repository.ITaskRepository
-import com.saboon.project_2511sch.presentation.profile.DataTransferPackage
+import com.saboon.project_2511sch.domain.model.DataTransferPackage
 import com.saboon.project_2511sch.util.Resource
 import com.saboon.project_2511sch.util.ZipUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
