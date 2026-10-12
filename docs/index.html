@@ -256,7 +256,7 @@
         }
         /* Keep Android Open Banner Stilleri */
         .keep-android-open-banner {
-            margin-bottom: 40px;
+            margin-top: 60px;
             padding: 20px;
             background-color: var(--card-bg);
             border: 2px solid var(--accent-color);
@@ -323,16 +323,6 @@
             <button onclick="changeLang('en')">🇺🇸 English</button>
         </div>
     </div>
-</div>
-
-<!-- Keep Android Open Banner Section (Artık Header Üstünde) -->
-<div class="keep-android-open-banner">
-    <!-- Resmi Banner Script Container (Artık en üstte) -->
-    <div id="keepandroidopen-banner" style="margin-bottom: 15px; width: 100%; align-self: stretch;"></div>
-    <!-- Banner script'i, sayfanın diline göre JavaScript tarafından dinamik olarak yüklenecektir. -->
-
-    <p data-i18n="kao_info_text"></p>
-    <a href="https://keepandroidopen.org/tr/" target="_blank" style="font-weight: 600; text-decoration: underline;" data-i18n="kao_more_info_link"></a>
 </div>
 
 <header>
@@ -443,6 +433,15 @@
     </a>
 </div>
 
+<!-- Keep Android Open Banner Section (Sayfanın en altında, footer'ın hemen üstünde) -->
+<div class="keep-android-open-banner">
+    <!-- Resmi Banner Script Container -->
+    <div id="keepandroidopen-banner" style="margin-bottom: 15px; width: 100%; align-self: stretch;"></div>
+    <!-- Banner script'i, sayfanın diline göre JavaScript tarafından dinamik olarak yüklenecektir. -->
+
+    <p data-i18n="kao_info_text"></p>
+    <a href="https://keepandroidopen.org/tr/" target="_blank" style="font-weight: 600; text-decoration: underline;" data-i18n="kao_more_info_link"></a>
+</div>
 
 <footer>
     <p data-i18n="footer_copyright"></p>
