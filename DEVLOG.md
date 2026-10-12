@@ -7,6 +7,29 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 17:10 — Release imzalama kuruldu, 1.1.0 yayınlandı
+
+**Yapılanlar**
+
+- `app/build.gradle.kts` içine isteğe bağlı release imzalama eklendi: `keystore/properties` dosyası varsa release derlemesi imzalanıyor, yoksa imzasız kalıyor.
+- `keystore/` ve `keystore.properties` `.gitignore`'a eklendi.
+- `1.1.0` release APK'sı imzalandı; imza doğrulandı ve sertifikasının GitHub'daki `1.0.0` APK'sıyla aynı olduğu görüldü (SHA-256 `a7c902d9…b05d`).
+- GitHub'da `1.1.0` sürüm sayfası imzalı APK ve sürüm notlarıyla oluşturuldu.
+
+**Kararlar**
+
+- Şifreler depoda ve sohbette tutulmuyor; yalnızca depo sahibinin bilgisayarındaki git dışı dosyada duruyor ve onu yalnızca Gradle okuyor.
+- Dosya elle ayrıştırılıyor (`java.util.Properties` ile değil): Windows yolundaki ters eğik çizgiler ve tırnak işaretleri öyle bozuluyordu.
+- GitHub'daki otomatik derleme ve F-Droid imzasız derlemeye devam ediyor; anahtar oralarda yok.
+- APK, `1.1.0` etiketiyle aynı uygulama kodundan derlendi (etiketten sonra `app/src` değişmedi; tek fark derleme betiğindeki imzalama ayarı).
+
+**Tespitler**
+
+- İmzalı APK telefona kurulmadı: paket adı mağaza sürümüyle aynı ve mağaza sürümüne dokunulmuyor.
+- GitHub'daki `1.0.0` sürümünde `debug` adlı APK da release sertifikasıyla imzalanmış.
+
+---
+
 ## 2026-10-12 16:50 — 1.1.0 etiketlendi
 
 **Yapılanlar**

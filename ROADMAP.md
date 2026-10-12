@@ -59,7 +59,7 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 - [x] `1.0.0` sonrası `main`'de biriken değişiklikleri (ana ekranda boş gün başlıklarını gizleme ayarı vb.) sürüm notlarına dök
 - [x] `versionCode` / `versionName` değerlerini yeni sürüm için güncelle
 - [x] `main` → `production` birleştir ve `1.1.0` etiketini at (#69)
-- [ ] `1.1.0` için imzalı APK ile GitHub Release oluştur
+- [x] `1.1.0` için imzalı APK ile GitHub Release oluştur
 - [x] F-Droid hazırlığı: bağımlılık bilgisi bloğunu kapat, sürüm notu, simge ve ekran görüntülerini `fastlane` altına ekle, tarif dosyasını yaz (`fdroid/com.saboon.project_2511sch.yml`)
 - [x] `1.1.0` etiketi atıldıktan sonra tarif dosyasındaki `commit` alanına etiketin commit'ini yaz
 - [ ] GitLab hesabı aç ve `fdroiddata` deposuna merge request gönder (depo sahibi; hesap doğrulama kodu gelmediği için bekliyor)
