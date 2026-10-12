@@ -7,6 +7,22 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 15:30 — GitHub Actions ile otomatik derleme, test ve lint
+
+**Yapılanlar**
+
+- `.github/workflows/ci.yml` eklendi: her PR'da ve `main` / `production`'a her push'ta debug derlemesi, birim testleri ve lint çalışıyor; raporlar çıktı olarak yükleniyor.
+- Lint'i kıran tek hata giderildi: hiçbir yerde kullanılmayan, Türkçe çevirisi olmayan şablon metni `hello_blank_fragment` silindi.
+- `gradlew` git'te çalıştırılabilir olarak işaretlendi; `.gitattributes` ile satır sonlarının LF kalması sabitlendi (Linux'ta çalışabilmesi için).
+
+**Kararlar**
+
+- Lint hata verirse CI kırmızı olur; uyarılar (405 adet) CI'yı kırmaz.
+- Cihaz gerektiren DAO testleri CI'da çalıştırılmıyor; emülatör kurulumu ayrı bir iş.
+- CI kontrolü henüz zorunlu yapılmadı; birkaç PR'da sorunsuz çalıştığı görüldükten sonra zorunlu yapılacak.
+
+---
+
 ## 2026-10-12 15:10 — Branch koruması açıldı, domain katmanı ekran sınıflarından ayrıldı
 
 **Yapılanlar**
