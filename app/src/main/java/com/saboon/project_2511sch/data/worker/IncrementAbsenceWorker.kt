@@ -1,102 +1,69 @@
 package com.saboon.project_2511sch.data.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.saboon.project_2511sch.domain.model.Task
-import com.saboon.project_2511sch.domain.usecase.task.TaskReadUseCase
-import com.saboon.project_2511sch.domain.usecase.task.TaskWriteUseCase
+import com.saboon.project_2511sch.domain.usecase.task.LessonAbsenceWriteUseCase
 import com.saboon.project_2511sch.util.Resource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.first
+import timber.log.Timber
 
 /**
- * A worker responsible for incrementing the absence count for a specific lesson.
- * It fetches the task from the repository, checks if it's a Lesson, 
- * and adds the current date to its absence list.
+ * A worker that records an absence for a specific session of a lesson.
+ *
+ * It is enqueued by NotificationActionReceiver when the user answers "Missed" on the absence
+ * check notification. The input carries the lesson id ([KEY_TASK_ID]) and the date of the
+ * session the notification belonged to ([KEY_SESSION_DATE]); that date is what gets stored,
+ * so the absence list shows when the lesson was actually missed.
+ *
+ * The update itself is done by [LessonAbsenceWriteUseCase], the same code path the manual
+ * "+" button uses.
  */
 @HiltWorker
 class IncrementAbsenceWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val taskReadUseCase: TaskReadUseCase,
-    private val taskWriteUseCase: TaskWriteUseCase
+    private val lessonAbsenceWriteUseCase: LessonAbsenceWriteUseCase
 ): CoroutineWorker(appContext, workerParams) {
 
-    private val TAG = "IncrementAbsenceWorker"
-
     /**
-     * Executes the background work to increment absence.
-     * @return Result of the operation (Success, Failure, or Retry).
+     * Executes the background work to record the absence.
+     * @return Success when saved, Failure when the input is incomplete or the lesson is gone,
+     * Retry when saving failed for another reason.
      */
     override suspend fun doWork(): Result {
-        Log.i(TAG, "--- IncrementAbsenceWorker Process Started ---")
-        
-        // Retrieve the task ID from input data
-        val taskId = inputData.getString("KEY_TASK_ID")
-        
-        // Log basic input verification
+        val taskId = inputData.getString(KEY_TASK_ID)
         if (taskId == null) {
-            Log.e(TAG, "Worker failed: 'KEY_TASK_ID' is missing in inputData.")
+            Timber.e("Worker failed: '%s' is missing in inputData.", KEY_TASK_ID)
             return Result.failure()
         }
-        
-        Log.d(TAG, "Target Task ID received: $taskId")
+        // Work enqueued by an older app version carries no session date; fall back to now.
+        val sessionDate = inputData.getLong(KEY_SESSION_DATE, System.currentTimeMillis())
+        Timber.i("Recording absence: taskId=%s, sessionDate=%d", taskId, sessionDate)
 
         return try {
-            Log.d(TAG, "Fetching task from repository...")
-            // Get the task by ID and wait for the first non-loading resource state
-            val resource = taskReadUseCase.getById(taskId).first { it !is Resource.Loading }
-            
-            Log.d(TAG, "Resource state received: ${resource::class.java.simpleName}")
-
-            // Check if the task was successfully fetched and if it is of type 'Lesson'
-            if (resource is Resource.Success && resource.data is Task.Lesson) {
-                val lesson = resource.data
-                Log.i(TAG, "Lesson found: '${lesson.title}'. Initial absences: ${lesson.absence.size}")
-
-                // Prepare updated absence list by adding the lesson's date
-                val absenceDateList = lesson.absence.toMutableList()
-                absenceDateList.add(lesson.date)
-                
-                // Create a copy of the lesson with the updated absence list
-                val updatedTask = lesson.copy(
-                    absence = absenceDateList
-                )
-                
-                Log.d(TAG, "Sending update request to TaskWriteUseCase...")
-                val updateResult = taskWriteUseCase.update(updatedTask)
-                Log.d(TAG, "Update operation resource state: ${updateResult::class.java.simpleName}")
-
-                // Evaluate the update result
-                if (updateResult is Resource.Success){
-                    Log.i(TAG, "Successfully updated absences for lesson ID: $taskId")
+            when (val result = lessonAbsenceWriteUseCase.add(taskId, sessionDate)) {
+                is Resource.Success -> {
+                    Timber.i("Absence recorded: taskId=%s", taskId)
                     Result.success()
-                } else {
-                    // Log the error message if the resource is an Error type
-                    val errorMsg = (updateResult as? Resource.Error)?.message ?: "Unknown error"
-                    Log.w(TAG, "Update failed: $errorMsg. Retrying work...")
-                    Result.retry()
                 }
-            } else {
-                // Determine the reason for failure (Not found, Error state, or wrong type)
-                val failureReason = when (resource) {
-                    is Resource.Error -> "Repository error: ${resource.message}"
-                    is Resource.Success -> "Task is not a Lesson (found: ${resource.data?.let { it::class.java.simpleName } ?: "null"})"
-                    else -> "Unexpected resource state"
+                else -> {
+                    Timber.w("Absence not recorded: taskId=%s, message=%s", taskId, result.message)
+                    // A missing lesson will not come back, so retrying only makes sense for other errors.
+                    if (result.message == LessonAbsenceWriteUseCase.LESSON_NOT_FOUND) Result.failure()
+                    else Result.retry()
                 }
-                Log.e(TAG, "Process aborted: $failureReason")
-                Result.failure()
             }
         } catch (e: Exception) {
-            // Catch and log any unexpected exceptions during the process
-            Log.e(TAG, "Critical failure in doWork: ${e.localizedMessage}", e)
+            Timber.e(e, "Critical failure in doWork: taskId=%s", taskId)
             Result.failure()
-        } finally {
-            Log.i(TAG, "--- IncrementAbsenceWorker Process Finished ---")
         }
+    }
+
+    companion object {
+        const val KEY_TASK_ID = "KEY_TASK_ID"
+        const val KEY_SESSION_DATE = "KEY_SESSION_DATE"
     }
 }

@@ -149,5 +149,10 @@
     <string name="support_developer">Support the Developer</string>
     <string name="hide_headers_for_empty_days">Hide headers for empty days</string>
     <string name="if_enabled_dates_with_no_tasks_or_lessons_will_not_be_displayed_on_the_home_screen">If enabled, dates with no tasks or lessons will not be displayed on the home screen.</string>
+    <string name="sessions">sessions</string>
+    <string name="absence_dates">Absence dates</string>
+    <string name="no_absence_recorded">No absence recorded.</string>
+    <string name="absence_date">Absence date</string>
+    <string name="remove_absence">Remove absence</string>
 
 </resources>

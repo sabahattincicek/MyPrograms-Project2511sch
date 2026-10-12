@@ -17,15 +17,29 @@ import com.saboon.project_2511sch.util.ModelColorConstats
 import com.saboon.project_2511sch.util.SwipeRevealLayout
 import com.saboon.project_2511sch.util.toFormattedString
 
+/**
+ * RecyclerView adapter for the task list of a single course (course details screen).
+ *
+ * Renders three row types from [DisplayItemTask]: a section header per task type, the task
+ * rows themselves (lesson, exam or homework) and a footer. Lesson rows can be swiped to reveal
+ * the absence counter with its "+" and "-" buttons.
+ *
+ * The adapter only reports user actions through its listeners; it never changes a task itself.
+ */
 class RecyclerAdapterTask:
     ListAdapter<DisplayItemTask, BaseViewHolder>(BaseDiffCallback<DisplayItemTask>()) {
 
     var onContentItemClickListener:((Task) -> Unit)? = null
 
-    var onAbsenceButtonClickListener: ((Task.Lesson) -> Unit)? = null
+    var onAbsenceIncreaseClickListener: ((Task.Lesson) -> Unit)? = null
+
+    var onAbsenceDecreaseClickListener: ((Task.Lesson) -> Unit)? = null
 
     private var openedLayout: SwipeRevealLayout? = null
 
+    /**
+     * Inflates the row layout that matches the given view type.
+     */
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -48,6 +62,9 @@ class RecyclerAdapterTask:
         }
     }
 
+    /**
+     * Binds the item at [position] and forwards row clicks on task rows to [onContentItemClickListener].
+     */
     override fun onBindViewHolder(
         holder: BaseViewHolder,
         position: Int
@@ -61,11 +78,20 @@ class RecyclerAdapterTask:
         holder.bind(item)
     }
 
+    /**
+     * Returns the row type (header, content or footer) declared by the item itself.
+     */
     override fun getItemViewType(position: Int): Int {
         return getItem(position).viewType
     }
 
+    /**
+     * Section header row showing the localized name of a task type.
+     */
     inner class HeaderTaskViewHolder(private val binding: RowSingleTextViewLeftBinding): BaseViewHolder(binding.root){
+        /**
+         * Shows the title that belongs to the header's task type.
+         */
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item) //for click logic
             if (item is DisplayItemTask.HeaderTask){
@@ -78,7 +104,13 @@ class RecyclerAdapterTask:
             }
         }
     }
+    /**
+     * Task row. Lessons additionally expose the swipeable absence counter.
+     */
     inner class ContentTaskViewHolder(private val binding: RowMainContentBinding) : BaseViewHolder(binding.root){
+        /**
+         * Fills the row according to the task type and wires its click and absence buttons.
+         */
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
             if (item is DisplayItemTask.ContentTask){
@@ -97,20 +129,10 @@ class RecyclerAdapterTask:
                         binding.slSwipe.isSwipeable = true
                         binding.tvAbsenceCount.text = task.absence.size.toString()
                         binding.btnAbsenceDecrease.setOnClickListener {
-                            val absenceDateList = item.task.absence.toMutableList()
-                            absenceDateList.remove(item.task.date)
-                            val updatedTask = item.task.copy(
-                                absence = absenceDateList
-                            )
-                            onAbsenceButtonClickListener?.invoke(updatedTask)
+                            onAbsenceDecreaseClickListener?.invoke(task)
                         }
                         binding.btnAbsenceIncrease.setOnClickListener {
-                            val absenceDateList = item.task.absence.toMutableList()
-                            absenceDateList.add(item.task.date)
-                            val updatedTask = item.task.copy(
-                                absence = absenceDateList
-                            )
-                            onAbsenceButtonClickListener?.invoke(updatedTask)
+                            onAbsenceIncreaseClickListener?.invoke(task)
                         }
                     }
                     is Task.Exam -> {
@@ -152,7 +174,13 @@ class RecyclerAdapterTask:
         }
     }
 
+    /**
+     * Footer row. Currently left empty; it only keeps space below the last task.
+     */
     inner class FooterTaskViewHolder(private val binding: RowSingleTextViewBinding): BaseViewHolder(binding.root){
+        /**
+         * Clears the footer text.
+         */
         override fun bind(item: BaseDisplayListItem) {
             super.bind(item)
 //            if (item is DisplayItemTask.FooterTask){

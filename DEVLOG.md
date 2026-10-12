@@ -7,6 +7,62 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 13:50 — Devamsızlık doğru tarihle kaydediliyor
+
+**Yapılanlar**
+
+- `LessonAbsenceWriteUseCase` eklendi: devamsızlık ekleme ve silmenin tek yeri. Dersi id ile veritabanından yeniden okuyup yalnızca devamsızlık listesini değiştiriyor.
+- Bildirim: `AlarmReceiver` devamsızlık bildirimine oturum tarihini ekliyor, `NotificationActionReceiver` bunu `IncrementAbsenceWorker`'a iletiyor, worker o tarihle kaydediyor.
+- Elle ekleme: "+" düğmesi artık tarih seçici açıyor (`AbsenceDialogs`). Ana ekranda varsayılan tarih o satırın oturumu, ders detayında dersin en son başlamış oturumu (`GetDefaultAbsenceDateUseCase`).
+- Silme: "-" düğmesi o ders saatinin kayıtlı devamsızlıklarını listeliyor, seçilen siliniyor.
+- `ViewModelTask`'a `addAbsence`, `removeAbsence`, `getDefaultAbsenceDate` eklendi. Adaptörler artık görevi kendileri değiştirmiyor, yalnızca tıklamayı bildiriyor.
+- Dokunulan dosyalarda `android.util.Log` Timber'a çevrildi (`FragmentHome`, `AlarmReceiver`, `NotificationActionReceiver`, `IncrementAbsenceWorker`), KDoc'lar tamamlandı.
+- Testler: `TestLessonAbsenceWriteUseCase` (10), `TestGetDefaultAbsenceDateUseCase` (6), `TestAbsenceDialogs` (4), `TestViewModelTask` (7). `testDebugUnitTest`: 37 testin 37'si geçti.
+- Telefonda denendi: ders detayında "+" ile 05.10.2026 eklendi, listede göründü, "-" ile silindi; ana ekranda "+" tarih seçiciyi açtı.
+
+**Kararlar**
+
+- Bildirimin oturum tarihi olarak bildirimin gösterildiği an kullanılıyor. Devamsızlık alarmı oturum bittiğinde çaldığı için bu an o oturumun gününe denk geliyor; kullanıcı günler sonra cevaplasa da tarih değişmiyor.
+- Eski sürümün gösterdiği, tarih taşımayan bildirimler cevaplanırsa cevaplandığı an kaydediliyor.
+- "-" için hangi kaydın silineceği soruluyor. Eski davranış (dersin kayıtlı tarihiyle eşleşeni sil) elle seçilen tarihlerle çalışmazdı.
+- Devamsızlık değişince alarmlar yeniden kurulmuyor; devamsızlık dersin saatini değiştirmiyor.
+- Tarih seçiciden gelen gün, yerel saatle öğlen 12:00 olarak kaydediliyor; böylece her saat diliminde seçilen günde kalıyor.
+- Ana ekranda da tarih soruluyor (istek "elle eklemede tarih sorsun" olduğu için), ama o satırın günü hazır seçili geliyor.
+
+**Tespitler**
+
+- Eski kodda ana ekrandaki "+" / "-" dersin kayıtlı tarihini o haftanın tarihiyle değiştirerek kaydediyordu; yeni akışta bu yol kullanılmıyor.
+- Bildirim akışı cihazda gerçek bildirimle denenmedi; alıcı dışarıya kapalı olduğu için adb ile tetiklenemedi.
+- `IncrementAbsenceWorker`, `AlarmReceiver`, `NotificationActionReceiver`, `FragmentHome` ve adaptörler için birim testi yazılmadı (Android'e bağlı sınıflar); mantıkları test edilen use case'lere taşındı.
+- Bu değişiklikten önce kaydedilmiş devamsızlıkların tarihleri olduğu gibi kaldı.
+
+## 2026-10-12 13:30 — Devamsızlık tarihleri listesi eklendi
+
+**Yapılanlar**
+
+- `AbsenceRecord` domain modeli ve `GetCourseAbsenceRecordsUseCase` eklendi: bir dersin görevlerinden devamsızlık kayıtlarını çıkarır, yeniden eskiye sıralar.
+- `ViewModelTask` içine `absenceRecordsState` eklendi (`tasksState`'ten türetiliyor).
+- `FragmentCourseDetails`: devamsızlık yazısına basınca tarihleri ve ders saatinin adını gösteren bir pencere açılıyor; kayıt yoksa "Kayıtlı devamsızlık yok." yazıyor. Toplam sayı artık aynı kaynaktan hesaplanıyor.
+- Dokunulan dosyalara KDoc ve Timber logları eklendi; `ViewModelTask`'taki kullanılmayan import'lar kaldırıldı.
+- Testler: `TestGetCourseAbsenceRecordsUseCase` (6), `TestViewModelTask` (5), ortak örnek veriler için `TestBaseTask`. `testDebugUnitTest`: 15 testin 15'i geçti.
+- Debug uygulamasının veritabanına adb ile örnek veri eklendi (Fizik, Programlama, Türk Dili; ders saatleri, devamsızlıklar, bir sınav, bir ödev).
+- Telefonda denendi: Fizik dersinde "Devamsızlık: 3 oturum" ve pencerede 3 tarih doğru göründü.
+
+**Kararlar**
+
+- Devamsızlık hesabı fragment'tan alınıp use case'e taşındı; fragment yalnızca gösteriyor, mantık birim testiyle korunuyor.
+- Use case veritabanına gitmiyor, ViewModel'in elindeki görev listesini kullanıyor; böylece liste ekrandaki görevlerle her zaman aynı.
+- Aynı tarih iki kez kayıtlıysa iki satır gösteriliyor, çünkü sayı da iki sayıyor.
+- Pencere için ayrı bir DialogFragment yazılmadı; salt okunur kısa bir liste için `MaterialAlertDialogBuilder` yeterli.
+- Kayıtlı tarihlerin doğruluğu bu işte düzeltilmedi; ayrı iş olarak ROADMAP'e yazıldı.
+
+**Tespitler**
+
+- Kayıtlı devamsızlık tarihleri her zaman gerçek devamsızlık günü değil. Ders detayındaki "+" düğmesi ve bildirimdeki "Katılmadım" (`IncrementAbsenceWorker`) dersin kayıtlı tarihini (`lesson.date`) ekliyor. Yalnızca ana ekrandaki "+" o haftanın tarihini ekliyor.
+- Ana ekrandaki "+" / "-" düğmeleri dersi `date = o haftanın tarihi` olarak güncellemeye gönderiyor; bu, dersin kayıtlı tarihini değiştiriyor olabilir. Koddan görüldü, cihazda doğrulanmadı.
+- "-" düğmesi yalnızca `task.date` ile eşleşen kaydı siliyor.
+- `GetCourseAbsenceRecordsUseCase` ilk yüklemede boş listeyle bir kez fazladan çalışıyor (logda `tasks=0`); zararsız.
+
 ## 2026-10-12 13:10 — PR'lar birleşti, debug sürümü telefonda çalışıyor
 
 **Yapılanlar**
