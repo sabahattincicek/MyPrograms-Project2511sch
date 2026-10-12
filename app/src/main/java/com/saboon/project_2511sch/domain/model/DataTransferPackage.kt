@@ -22,5 +22,10 @@ data class DataTransferPackage(
     val courses: List<Course>,
     val tasks: List<Task>,
     val sFiles: List<SFile>,
-    val exportDate: String = System.currentTimeMillis().toFormattedString("yyyyMMdd_HHddss")
-)
+    val exportDate: String = System.currentTimeMillis().toFormattedString(EXPORT_DATE_FORMAT)
+) {
+    companion object {
+        /** Date pattern of [exportDate] and of the backup file name: year, month, day, hour, minute, second. */
+        const val EXPORT_DATE_FORMAT = "yyyyMMdd_HHmmss"
+    }
+}

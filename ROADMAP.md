@@ -30,7 +30,7 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 - [ ] Domain modellerindeki `Parcelable` bağımlılığı için karar ver (ekranlar arası taşıma için kullanılıyor; şimdilik kabul edilen istisna)
 - [ ] Data katmanının presentation'a bağımlılığını kaldır: `SettingsRepositoryImp` → `SettingsConstants`, `WidgetUpdateWorker` → `WidgetHome`
 - [ ] `ViewModelTag` ve `ViewModelCourse` içinde repository'lere doğrudan erişimi use case'e taşı (`syncAlarms`)
-- [ ] Yedek dosyası adındaki ve `exportDate` alanındaki tarih biçimi hatasını düzelt (`HHddss` → `HHmmss`)
+- [x] Yedek dosyası adındaki ve `exportDate` alanındaki tarih biçimi hatasını düzelt (`HHddss` → `HHmmss`)
 - [ ] Dokunulan dosyalara sınıf ve fonksiyon KDoc'larını ekle (sürekli iş)
 
 ## Aşama 2 — Test altyapısı
