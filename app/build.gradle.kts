@@ -15,6 +15,18 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+// Release signing is optional. The values come from the git-ignored keystore/properties file
+// (storeFile, storePassword, keyAlias, keyPassword). Where the file is missing, as on CI and
+// F-Droid, the release build is left unsigned. The file is parsed by hand because Windows
+// paths contain backslashes, which java.util.Properties would treat as escape characters.
+val releaseSigning: Map<String, String> = rootProject.file("keystore/properties").let { file ->
+    if (!file.exists()) emptyMap()
+    else file.readLines()
+        .filter { it.contains("=") && !it.trimStart().startsWith("#") }
+        .associate { it.substringBefore("=").trim() to it.substringAfter("=").trim().removeSurrounding("\"") }
+}
+val hasReleaseKeystore = releaseSigning.isNotEmpty()
+
 android {
     namespace = "com.saboon.project_2511sch"
     compileSdk {
@@ -31,6 +43,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            create("release") {
+                storeFile = file(releaseSigning.getValue("storeFile"))
+                storePassword = releaseSigning.getValue("storePassword")
+                keyAlias = releaseSigning.getValue("keyAlias")
+                keyPassword = releaseSigning.getValue("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         debug {
             // Installs next to the store build instead of replacing it, so its data stays untouched.
@@ -39,6 +62,7 @@ android {
         }
         release {
             isMinifyEnabled = true
+            if (hasReleaseKeystore) signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
