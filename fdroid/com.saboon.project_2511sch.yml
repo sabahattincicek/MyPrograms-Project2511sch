@@ -3,8 +3,7 @@
 # metadata/com.saboon.project_2511sch.yml in a merge request to
 # https://gitlab.com/fdroid/fdroiddata
 #
-# Before submitting: replace the value of "commit" below with the full commit
-# hash that the 1.1.0 tag points to (git rev-parse 1.1.0^{commit}).
+# "commit" is the commit the 1.1.0 tag points to (git rev-parse 1.1.0^{commit}).
 
 Categories:
   - Science & Education
@@ -25,7 +24,7 @@ Repo: https://github.com/sabahattincicek/MyPrograms-Project2511sch.git
 Builds:
   - versionName: 1.1.0
     versionCode: 6
-    commit: REPLACE_WITH_COMMIT_HASH_OF_TAG_1.1.0
+    commit: eeae583f95bc5cdc831b115c142fa3974769fe87
     subdir: app
     gradle:
       - yes

@@ -7,6 +7,20 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 16:50 — 1.1.0 etiketlendi
+
+**Yapılanlar**
+
+- `main` → `production` birleştirildi (#69) ve birleştirme commit'ine `1.1.0` etiketi atıldı (`eeae583`).
+- F-Droid tarif dosyasındaki `commit` alanına etiketin commit'i yazıldı.
+
+**Kararlar**
+
+- Sürüm numarası `1.1.0` depo sahibi tarafından onaylandı.
+- GitHub Release henüz oluşturulmadı; imzalı APK gerekiyor ve imza anahtarı depo sahibinde.
+
+---
+
 ## 2026-10-12 16:30 — F-Droid hazırlığı ve 1.1.0 sürüm numarası
 
 **Yapılanlar**
