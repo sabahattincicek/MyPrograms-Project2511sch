@@ -40,7 +40,9 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 - [ ] DAO testlerini cihazda veya emülatörde çalıştır (`connectedDebugAndroidTest`); şimdiye kadar yalnızca derlendikleri doğrulandı
 - [ ] Dokunulan dosyalar için birim testlerini yaz (sürekli iş)
 - [ ] Dokunulan dosyalardaki `android.util.Log` çağrılarını Timber'a çevir (sürekli iş; 15 dosyada kullanım var)
-- [ ] PR'larda derleme, test ve lint çalıştıran GitHub Actions iş akışı ekle
+- [x] PR'larda derleme, test ve lint çalıştıran GitHub Actions iş akışı ekle
+- [ ] CI kontrolünü `main` ve `production` için zorunlu yap (branch korumasında "required status check")
+- [ ] Lint uyarılarını azalt (405 uyarı; hata yok)
 
 ## Aşama 3 — Sıradaki sürüm
 
