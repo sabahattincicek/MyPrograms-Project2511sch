@@ -63,7 +63,7 @@ Yalnızca veri taşıyan sınıflara (model, entity, DisplayItem, sabitler) log 
 
 Düzenlenen her dosya için birim testi yazılır veya mevcut testi güncellenir. Bütün kod tabanı için sıfırdan test yazılmaz; kapsam dokunulan dosyalarla büyür.
 
-- Önce mevcut testlere bakılır. Daha önce yazılmış testler `main-test` branch'indedir (DAO testleri, `TestUserRepository`, `TestBaseDao`, `TestBaseRepository`); `main`'e alınana kadar oradan örnek alınır ve tekrar yazılmaz.
+- Önce mevcut testlere bakılır ve onların üzerine eklenir: DAO testleri `app/src/androidTest/.../data/local/dao` altında (`TestBaseDao`, `TestCourseDao`, `TestTaskDao`, `TestTagDao`, `TestSFileDao`, `TestUserDao`), repository testleri `app/src/test/.../data/repository` altında (`TestBaseRepository`, `TestUserRepository`).
 - Test edilecekler: use case, repository implementasyonu, mapper, ViewModel ve `util` içindeki mantık. Saf Android arayüz sınıfları (Fragment, DialogFragment, RecyclerAdapter, Application, özel View) için birim testi zorunlu değildir; içlerindeki mantık test edilebilir bir sınıfa çıkarılabiliyorsa çıkarılır.
 - Birim testleri `app/src/test`, cihaz gerektirenler (Room DAO) `app/src/androidTest` altında, kaynak dosyayla aynı pakette durur.
 - Mevcut üslup korunur: JUnit4, MockK, Truth, `kotlinx-coroutines-test` (`runTest`); sınıf adı `TestX`, test adı ters tırnak içinde cümle, gövde `GIVEN / WHEN / THEN` bölümlü, ortak örnek veriler `TestBase...` sınıfında.
@@ -103,6 +103,7 @@ Düzenlenen her dosya için birim testi yazılır veya mevcut testi güncellenir
 ./gradlew assembleDebug
 ./gradlew testDebugUnitTest
 ./gradlew lintDebug
+./gradlew connectedDebugAndroidTest   # DAO testleri; bağlı cihaz veya emülatör gerekir
 ```
 
 Room şeması `app/schemas` altında tutulur; veritabanı değişikliğinde sürüm artırılır ve migration yazılır.

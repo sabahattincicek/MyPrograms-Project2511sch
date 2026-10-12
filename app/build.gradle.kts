@@ -82,9 +82,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.glance.preview)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+
 
     //hilt
     implementation("com.google.dagger:hilt-android:2.57.2")
@@ -100,7 +98,8 @@ dependencies {
     implementation("androidx.room:room-ktx:${room_version}")
 
     //coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    val coroutines_version = "1.10.2"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutines_version}")
 
     // ViewModel
     val lifecycle_version = "2.10.0"
@@ -135,4 +134,18 @@ dependencies {
 
     //timber for logging
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    //test
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.runner)
+    testImplementation("com.google.truth:truth:1.4.5")
+    androidTestImplementation("com.google.truth:truth:1.4.5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${coroutines_version}")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${coroutines_version}")
+    testImplementation("androidx.room:room-testing:${room_version}")
+    androidTestImplementation("androidx.room:room-testing:${room_version}")
+    testImplementation("io.mockk:mockk:1.14.9")
+    androidTestImplementation("io.mockk:mockk:1.14.9")
 }

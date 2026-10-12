@@ -7,6 +7,28 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 12:10 — Test altyapısı alındı, branch'ler toparlandı, site düzenlendi
+
+**Yapılanlar**
+
+- `main-test` branch'i `chore/test-infrastructure` içine birleştirildi: test bağımlılıkları (MockK, Truth, `kotlinx-coroutines-test`, `room-testing`), 5 DAO testi, `TestUserRepository` ve temel test sınıfları geldi. Örnek testler (`ExampleUnitTest`, `ExampleInstrumentedTest`) silindi.
+- Aynı birleştirmeyle hiçbir yerden çağrılmayan fonksiyonlar kaldırıldı: course ve tag için `activationById`, course için `getAllByProgramTableIds` (DAO, repository, arayüz ve use case katmanlarında).
+- `app/build.gradle.kts` çakışması çözüldü; Timber ve test bağımlılıkları birlikte duruyor.
+- `androidx.test:runner` bağımlılığı `implementation` yerine `androidTestImplementation` yapıldı.
+- `testDebugUnitTest` çalıştırıldı: 4 testin 4'ü geçti (`TestUserRepository`). DAO testleri derlendi ama çalıştırılmadı (cihaz gerekiyor).
+- `fdroid` branch'i silindi.
+- `absence-view`, `feature/course-absence-count` adıyla güncel `main` üzerine alındı ve PR açıldı.
+- Site: `docs/index.html` içindeki "Keep Android Open" bölümü sayfanın en üstünden footer'ın hemen üstüne taşındı (PR #61).
+
+**Kararlar**
+
+- `main-test` elle taşınmadı, doğrudan birleştirildi. Önceki kayıttaki "elle taşınması gerekecek" tespiti yanlıştı: branch'in ana koddaki tek değişikliği kullanılmayan fonksiyonları silmekti ve tek çakışma `build.gradle.kts` içindeydi. Birleştirme, özgün commit geçmişini de korudu.
+- Test runner'ı uygulama bağımlılığından çıkarıldı; release APK'sına test kütüphanesi girmemeli.
+- PR'lar asistan tarafından birleştirilmedi; birleştirme kararı depo sahibinde. Bu yüzden `chore/test-infrastructure`, `chore/project-workflow-docs` üzerine kurulu ve PR'lar sırayla birleştirilmeli.
+- `main-test`, test altyapısı PR'ı birleşene kadar silinmedi.
+- Devamsızlık özelliği cihazda denenmeden birleştirilmeyecek; arayüz değişikliği içeriyor.
+- Sitedeki bölüm kaldırılmadı, yalnızca aşağı alındı; metinler aynı.
+
 ## 2026-10-12 11:20 — Log, test ve commit kuralları eklendi, Timber kuruldu
 
 **Yapılanlar**

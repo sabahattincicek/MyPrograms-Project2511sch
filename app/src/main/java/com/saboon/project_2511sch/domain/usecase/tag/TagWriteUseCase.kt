@@ -25,7 +25,4 @@ class TagWriteUseCase @Inject constructor(
         courseRepository.removeTagFromCourses(tag.id)
         return tagRepository.delete(tag)
     }
-    suspend fun activationById(id: String, isActive: Boolean): Resource<Unit>{
-        return tagRepository.activationById(id, isActive)
-    }
 }
