@@ -56,10 +56,13 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 - [ ] Bildirimden "Katılmadım" akışını cihazda gerçek bir bildirimle dene (yalnızca birim testleriyle doğrulandı)
 - [ ] Ders düzenleme penceresindeki tarih seçici de seçilen günü UTC gece yarısı olarak kaydediyor; Greenwich'in batısındaki saat dilimlerinde bir gün önceyi gösterir (`Picker.pickDateMillis`)
 - [x] Sitedeki "Keep Android Open" bölümünü sayfanın altına taşı (#61)
-- [ ] `1.0.0` sonrası `main`'de biriken değişiklikleri (ana ekranda boş gün başlıklarını gizleme ayarı vb.) sürüm notlarına dök
-- [ ] `versionCode` / `versionName` değerlerini yeni sürüm için güncelle
+- [x] `1.0.0` sonrası `main`'de biriken değişiklikleri (ana ekranda boş gün başlıklarını gizleme ayarı vb.) sürüm notlarına dök
+- [x] `versionCode` / `versionName` değerlerini yeni sürüm için güncelle
 - [ ] `main` → `production` birleştir, etiketle, GitHub Release oluştur
-- [ ] F-Droid yayınını tamamla (README'de "Coming Soon")
+- [x] F-Droid hazırlığı: bağımlılık bilgisi bloğunu kapat, sürüm notu, simge ve ekran görüntülerini `fastlane` altına ekle, tarif dosyasını yaz (`fdroid/com.saboon.project_2511sch.yml`)
+- [ ] `1.1.0` etiketi atıldıktan sonra tarif dosyasındaki `commit` alanına etiketin commit'ini yaz
+- [ ] GitLab hesabı aç ve `fdroiddata` deposuna merge request gönder (depo sahibi; hesap doğrulama kodu gelmediği için bekliyor)
+- [ ] F-Droid inceleyenlerinin sorularını yanıtla; kabul edilince README'deki "Coming Soon" yazısını güncelle
 
 ## Aşama 4 — Yeni özellikler
 
