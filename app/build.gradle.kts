@@ -32,6 +32,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Installs next to the store build instead of replacing it, so its data stays untouched.
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+        }
         release {
             isMinifyEnabled = true
             proguardFiles(
