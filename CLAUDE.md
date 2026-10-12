@@ -106,4 +106,15 @@ Düzenlenen her dosya için birim testi yazılır veya mevcut testi güncellenir
 ./gradlew connectedDebugAndroidTest   # DAO testleri; bağlı cihaz veya emülatör gerekir
 ```
 
+## Telefonda çalıştırma
+
+Uygulamayı etkileyen her değişiklikten sonra debug sürümü depo sahibinin telefonuna kurulur ve açılır (kablosuz hata ayıklama ile bağlı).
+
+- `adb`, `local.properties` içindeki `sdk.dir` altında `platform-tools/adb.exe` yolundadır. Önce `adb devices` ile bağlantı doğrulanır; cihaz görünmüyorsa depo sahibinden kablosuz hata ayıklamayı açması istenir.
+- Kurulum: `./gradlew installDebug`. Açma: `adb shell am start -n com.saboon.project_2511sch.debug/com.saboon.project_2511sch.presentation.main.MainActivity`.
+- Açıldıktan sonra `adb logcat` ile çökme (`FATAL EXCEPTION`) olup olmadığına bakılır ve sonuç raporlanır.
+- Debug sürümünün paket adı `com.saboon.project_2511sch.debug`'dır ve mağaza sürümünün (`com.saboon.project_2511sch`) yanına ayrı uygulama olarak kurulur.
+- Mağaza sürümü **asla** kaldırılmaz ve verisi silinmez (`adb uninstall`, `pm clear` yok); içinde depo sahibinin gerçek verisi var.
+- `connectedDebugAndroidTest` test bitince debug sürümünü kaldırır ve debug verisini siler; çalıştırmadan önce sorulur.
+
 Room şeması `app/schemas` altında tutulur; veritabanı değişikliğinde sürüm artırılır ve migration yazılır.

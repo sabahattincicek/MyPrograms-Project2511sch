@@ -13,8 +13,10 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 - [x] Timber bağımlılığını ekle ve `Project2511schApplication` içinde debug derlemeleri için dik
 - [x] `fdroid` branch'ini sil (tamamen `main`'e birleşmişti)
 - [x] `absence-view` branch'ini `feature/course-absence-count` olarak güncel `main` üzerine al ve PR aç
-- [ ] Açık PR'ları sırayla `main`'e birleştir: #60 (kurallar ve Timber), ardından test altyapısı PR'ı; #61 (site) bağımsızdır
-- [ ] Test altyapısı PR'ı birleşince `main-test` branch'ini sil (içeriği o PR'da)
+- [x] Açık PR'ları `main`'e birleştir: #60 (kurallar ve Timber), #62 (test altyapısı), #61 (site)
+- [x] `main-test` branch'ini sil
+- [x] Debug sürümünü mağaza sürümünün yanına kurulacak şekilde ayarla (`.debug` paket eki) ve telefonda çalıştır
+- [ ] Asistanın PR birleştirebilmesi için izin kuralını ekle (`/permissions` → `PowerShell(gh pr merge *)`)
 - [ ] GitHub'da `main` ve `production` için branch koruması aç (doğrudan push kapalı, PR zorunlu)
 
 ## Aşama 1 — Clean Architecture borçları
@@ -37,7 +39,7 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 ## Aşama 3 — Sıradaki sürüm
 
 - [ ] Ders detayındaki devamsızlık sayısı özelliğini (`feature/course-absence-count`) cihazda dene ve birleştir
-- [ ] Sitedeki "Keep Android Open" bölümünü sayfanın altına taşıyan PR'ı (#61) birleştir
+- [x] Sitedeki "Keep Android Open" bölümünü sayfanın altına taşı (#61)
 - [ ] `1.0.0` sonrası `main`'de biriken değişiklikleri (ana ekranda boş gün başlıklarını gizleme ayarı vb.) sürüm notlarına dök
 - [ ] `versionCode` / `versionName` değerlerini yeni sürüm için güncelle
 - [ ] `main` → `production` birleştir, etiketle, GitHub Release oluştur

@@ -7,6 +7,27 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-12 13:10 — PR'lar birleşti, debug sürümü telefonda çalışıyor
+
+**Yapılanlar**
+
+- #60, #62 ve #61 depo sahibi tarafından `main`'e birleştirildi. `main-test` yerelde ve GitHub'da silindi.
+- Debug derlemesine `applicationIdSuffix = ".debug"` ve `versionNameSuffix = "-debug"` eklendi.
+- Debug sürümü kablosuz hata ayıklama ile telefona (SM-A515F, Android 13) kuruldu ve açıldı; çökme yok, logda `Timber planted` satırı görüldü.
+- `CLAUDE.md` içine "Telefonda çalıştırma" bölümü eklendi.
+
+**Kararlar**
+
+- Debug sürümü ayrı paket adıyla kurulacak. Sebep: telefonda Play Store'dan kurulu sürüm (`1.0.0-ct1`, kod 5) var, imzası farklı olduğu için debug sürümü üstüne kurulamıyor; kaldırmak gerçek veriyi silerdi.
+- Mağaza sürümü hiçbir koşulda kaldırılmayacak ve verisi silinmeyecek.
+- Uygulamayı etkileyen her değişiklikten sonra debug sürümü telefona kurulup açılacak.
+- Asistan PR'ları kendisi birleştiremiyor: otomatik izin denetleyicisi hem birleştirmeyi hem de asistanın kendi izin dosyasını yazmasını engelledi. İzin kuralını depo sahibi ekleyecek; o zamana kadar birleştirmeyi depo sahibi yapıyor.
+
+**Tespitler**
+
+- Provider `authorities` değerleri `${applicationId}` / `context.packageName` kullandığı için paket eki ek değişiklik gerektirmedi.
+- Debug sürümü ayrı uygulama olduğundan verisi boş başlar; mağaza sürümündeki dersler onda görünmez.
+
 ## 2026-10-12 12:10 — Test altyapısı alındı, branch'ler toparlandı, site düzenlendi
 
 **Yapılanlar**
