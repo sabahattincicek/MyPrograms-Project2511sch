@@ -7,6 +7,31 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-14 17:35 — Profil sayfası yenilendi
+
+**Yapılanlar**
+
+- Profil sayfasının üstüne profil kartı kondu: adın baş harfleriyle yuvarlak avatar, ad, "Unvan · Sınıf · Okul" satırı ve doluysa "Hakkımda" metni. Ad boşsa avatarda kişi simgesi, bilgiler boşsa "kaleme dokun" ipucu çıkıyor.
+- Bilgiler artık sayfanın içinde değil, kalem düğmesiyle açılan "Profili düzenle" penceresinde (Material çerçeveli kutular) düzenleniyor.
+- Atatürk sözü kartı sade, italik bir alıntıya dönüştü.
+- Seçenekler "Genel", "Veriler" ve "Hakkında" başlıklı kartlarda gruplandı; her satırın sonunda ok var. "Geliştiriciyi Destekle" ayrı, vurgulu bir kartta.
+- Sayfanın altındaki sürüm yazısı hiç doldurulmuyordu; artık "Sürüm 1.1.0" görünüyor.
+- Yükleniyor perdesi kaydırma alanının altında kalıyordu; üste alındı ve arkasındaki dokunuşları engelliyor.
+- Baş harf ve bilgi satırı kuralları `ProfileHeaderFormatter` sınıfına çıkarıldı ve birim testleri yazıldı (`TestProfileHeaderFormatter`).
+- `ProfileFragment`'e KDoc ve Timber logları eklendi; `android.util.Log` kaldırıldı. Kullanılmayan karakter kodu ve yorum satırına alınmış animasyon silindi.
+- Dışa aktarma hata verirse artık kullanıcıya uyarı gösteriliyor; link açacak uygulama yoksa uygulama çökmüyor.
+
+**Kararlar**
+
+- Depo sahibine iki tasarım yönü gösterildi; "profil kartı + gruplu liste" seçildi.
+- Düzenleme ayrı bir `DialogFragment` yerine `MaterialAlertDialog` ile yapıldı; uygulama dikey kullanıldığı için yeterli.
+
+**Tespitler**
+
+- Telefonda (koyu tema) sayfa ve düzenleme penceresi açıldı, çökme yok. Kaydetme telefonda denenmedi.
+
+---
+
 ## 2026-10-12 17:10 — Release imzalama kuruldu, 1.1.0 yayınlandı
 
 **Yapılanlar**

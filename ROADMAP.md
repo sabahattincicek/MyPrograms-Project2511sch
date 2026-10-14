@@ -64,6 +64,8 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 - [x] `1.1.0` etiketi atıldıktan sonra tarif dosyasındaki `commit` alanına etiketin commit'ini yaz
 - [ ] GitLab hesabı aç ve `fdroiddata` deposuna merge request gönder (depo sahibi; hesap doğrulama kodu gelmediği için bekliyor)
 - [ ] F-Droid inceleyenlerinin sorularını yanıtla; kabul edilince README'deki "Coming Soon" yazısını güncelle
+- [x] Profil sayfasının arayüzünü yenile: profil kartı, düzenleme penceresi, başlıklı seçenek grupları
+- [ ] Yeni profil sayfasının açık temada ve diğer renk temalarında görünüşünü kontrol et (yalnızca koyu temada denendi)
 
 ## Aşama 4 — Yeni özellikler
 
