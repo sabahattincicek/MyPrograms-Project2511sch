@@ -152,4 +152,17 @@
     <string name="no_absence_recorded">Kayıtlı devamsızlık yok.</string>
     <string name="absence_date">Devamsızlık tarihi</string>
     <string name="remove_absence">Devamsızlığı sil</string>
+
+    <string name="edit_profile">Profili düzenle</string>
+    <string name="hint_full_name">Ad Soyad</string>
+    <string name="hint_role">Unvan</string>
+    <string name="hint_academic_level">Sınıf</string>
+    <string name="hint_school">Okul</string>
+    <string name="hint_about_me">Hakkımda</string>
+    <string name="profile_name_placeholder">Adını ekle</string>
+    <string name="profile_details_placeholder">Unvan, sınıf ve okulunu eklemek için kaleme dokun.</string>
+    <string name="profile_section_general">Genel</string>
+    <string name="profile_section_data">Veriler</string>
+    <string name="profile_section_about">Hakkında</string>
+    <string name="version_label">Sürüm %1$s</string>
 </resources>

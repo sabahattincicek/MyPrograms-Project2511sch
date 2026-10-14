@@ -154,4 +154,16 @@
     <string name="absence_date">Absence date</string>
     <string name="remove_absence">Remove absence</string>
 
+    <string name="edit_profile">Edit profile</string>
+    <string name="hint_full_name">Full name</string>
+    <string name="hint_role">Title</string>
+    <string name="hint_academic_level">Class</string>
+    <string name="hint_school">School</string>
+    <string name="hint_about_me">About me</string>
+    <string name="profile_name_placeholder">Add your name</string>
+    <string name="profile_details_placeholder">Tap the pencil to add your title, class and school.</string>
+    <string name="profile_section_general">General</string>
+    <string name="profile_section_data">Data</string>
+    <string name="profile_section_about">About</string>
+    <string name="version_label">Version %1$s</string>
 </resources>
