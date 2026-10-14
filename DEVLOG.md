@@ -7,6 +7,32 @@ Kayıt biçimi: `## YYYY-AA-GG SS:DD — Başlık`, altında **Yapılanlar** ve 
 
 ---
 
+## 2026-10-14 18:05 — Compose'a geçiş için tema hazırlığı
+
+**Yapılanlar**
+
+- ROADMAP'e "Aşama 5 — Jetpack Compose'a geçiş" eklendi.
+- Compose kütüphaneleri eklendi: BOM `2026.06.00` (ui 1.11.3, material3 1.4.0) ve `lifecycle-runtime-compose` 2.10.0.
+- `presentation/theme` paketi yazıldı:
+  - `AppTheme`: Compose ekranlarını saran tema. Renkleri o anki XML temasından (seçili renk teması, açık / koyu) okuyor.
+  - `appColorScheme`: okunan renkleri Compose renk şemasına çeviriyor; tanımlanmamış renk varsa Material 3 varsayılanı kalıyor.
+  - `appComposeView`: Fragment'in görünümü olarak `AppTheme` içinde bir Compose ekranı oluşturuyor.
+- `TestAppColorScheme` birim testleri yazıldı.
+- Profil sayfasının açık temada ve diğer renk temalarında çalıştığı depo sahibi tarafından doğrulandı.
+
+**Kararlar**
+
+- Renkler Kotlin'de ikinci kez yazılmadı: geçiş boyunca XML temaları tek kaynak. Böylece 6 tema × açık / koyu renklerini iki yerde eşitlemek gerekmiyor. Tüm ekranlar Compose olunca renkler Kotlin'e taşınacak.
+- Yazı tipleri ve köşe şekilleri Material 3 varsayılanında bırakıldı; XML teması da bunları değiştirmiyor.
+- BOM `2026.09.00` SDK 37 ve AGP 9.1 istediği için kullanılmadı; proje yükseltmesi ayrı bir iş olarak ROADMAP'e yazıldı.
+
+**Tespitler**
+
+- Telefonda (koyu kahve teması) geçici bir log satırıyla 34 rengin hepsinin okunduğu ve değerlerin XML ile aynı olduğu görüldü (`primary #FFB5A0`, `surfaceContainer #291D1A`). Satır commit'lenmedi.
+- Henüz hiçbir ekran Compose kullanmıyor; uygulamanın görünüşü değişmedi.
+
+---
+
 ## 2026-10-14 17:35 — Profil sayfası yenilendi
 
 **Yapılanlar**
