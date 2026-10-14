@@ -65,10 +65,23 @@ Yapılanların ayrıntısı ve alınan kararlar için: [DEVLOG.md](DEVLOG.md)
 - [ ] GitLab hesabı aç ve `fdroiddata` deposuna merge request gönder (depo sahibi; hesap doğrulama kodu gelmediği için bekliyor)
 - [ ] F-Droid inceleyenlerinin sorularını yanıtla; kabul edilince README'deki "Coming Soon" yazısını güncelle
 - [x] Profil sayfasının arayüzünü yenile: profil kartı, düzenleme penceresi, başlıklı seçenek grupları
-- [ ] Yeni profil sayfasının açık temada ve diğer renk temalarında görünüşünü kontrol et (yalnızca koyu temada denendi)
+- [x] Yeni profil sayfasının açık temada ve diğer renk temalarında görünüşünü kontrol et (yalnızca koyu temada denendi)
 
 ## Aşama 4 — Yeni özellikler
 
 - [ ] Bulut senkronizasyonu: isteğe bağlı ve güvenli cihazlar arası eşitleme
 - [ ] Program paylaşımı: ders programını başka kullanıcıyla paylaşma
 - [ ] Performans analizleri: çalışma alışkanlıkları ve sınav ilerlemesi için görsel istatistikler
+
+## Aşama 5 — Jetpack Compose'a geçiş
+
+Ekranlar XML'den Compose'a tek tek taşınır. Her ekran mevcut Fragment'in içinde `ComposeView` olarak çalışır; gezinme (Navigation) değişmez. Her adım ayrı dal ve PR'dır ve telefonda denenir.
+
+- [x] Hazırlık: Compose kütüphanelerini ekle; renkleri XML temalarından okuyan `AppTheme` ve Fragment için `appComposeView` yardımcısını yaz
+- [ ] Pilot: profil sayfası
+- [ ] Basit ekranlar: ayarlar, onboarding, "kendinden bahset"
+- [ ] Listeli ekranlar: dersler, dosyalar, ana sayfa (`RecyclerAdapter`'lar `LazyColumn` olur)
+- [ ] Diyaloglar: etiket, ders, sınav, ödev, devamsızlık
+- [ ] Tüm ekranlar Compose olunca XML temalarını Compose renk şemalarına taşı ve kullanılmayan XML düzenlerini sil
+- [ ] (İsteğe bağlı) Fragment'leri kaldırıp Navigation Compose'a geç
+- [ ] Android Gradle eklentisini 9.1'e ve `compileSdk`'yı 37'ye yükselt; ardından Compose BOM'u güncelle (`2026.09.00` bunları istiyor)
